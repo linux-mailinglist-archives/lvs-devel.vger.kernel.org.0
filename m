@@ -2,131 +2,122 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCDA13F5A
-	for <lists+lvs-devel@lfdr.de>; Sun,  5 May 2019 14:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878E1157B3
+	for <lists+lvs-devel@lfdr.de>; Tue,  7 May 2019 04:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbfEEMP5 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 5 May 2019 08:15:57 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:56756 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726524AbfEEMP5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Sun, 5 May 2019 08:15:57 -0400
-Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x45CFiQS016496;
-        Sun, 5 May 2019 15:15:44 +0300
-Received: (from root@localhost)
-        by ja.home.ssi.bg (8.15.2/8.15.2/Submit) id x45CFiXE016495;
-        Sun, 5 May 2019 15:15:44 +0300
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        netfilter-devel@vger.kernel.org, Jacky Hu <hengqing.hu@gmail.com>,
-        jacky.hu@walmart.com, jason.niesz@walmart.com
-Subject: [PATCHv2 net-next 3/3] ipvs: strip udp tunnel headers from icmp errors
-Date:   Sun,  5 May 2019 15:14:40 +0300
-Message-Id: <20190505121440.16389-4-ja@ssi.bg>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190505121440.16389-1-ja@ssi.bg>
-References: <20190505121440.16389-1-ja@ssi.bg>
+        id S1726347AbfEGCfV (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 6 May 2019 22:35:21 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7729 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726145AbfEGCfV (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 6 May 2019 22:35:21 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 2DDAC64E83715B669A24;
+        Tue,  7 May 2019 10:35:18 +0800 (CST)
+Received: from [127.0.0.1] (10.184.191.73) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Tue, 7 May 2019
+ 10:35:07 +0800
+To:     <wensong@linux-vs.org>, <horms@verge.net.au>, <ja@ssi.bg>,
+        <pablo@netfilter.org>, <kadlec@blackhole.kfki.hu>, <fw@strlen.de>,
+        <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        <lvs-devel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     <mingfangsen@huawei.com>, <wangxiaogang3@huawei.com>,
+        <zhangwenhao8@huawei.com>
+From:   hujunwei <hujunwei4@huawei.com>
+Subject: Subject: [PATCH netfilter] ipvs: Fix crash when ipv6 route unreach
+Message-ID: <f40bae44-a4b1-868c-3572-3e89c4cadb6a@huawei.com>
+Date:   Tue, 7 May 2019 10:34:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.184.191.73]
+X-CFilter-Loop: Reflected
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Recognize UDP tunnels in received ICMP errors and
-properly strip the tunnel headers. GUE is what we
-have for now.
+From: Junwei Hu <hujunwei4@huawei.com>
 
-Signed-off-by: Julian Anastasov <ja@ssi.bg>
+When Tcp send RST packet in ipvs, crash occurs with the following
+stack trace:
+
+BUG: unable to handle kernel NULL pointer dereference at 0000000000000018
+PID: 0 COMMAND: "swapper/2"
+TASK: ffff9ec83889bf40  (1 of 4)  [THREAD_INFO: ffff9ec8388b0000]
+CPU: 2  STATE: TASK_RUNNING (PANIC)
+ [exception RIP: __ip_vs_get_out_rt_v6+1250]
+RIP: ffffffffc0d566f2  RSP: ffff9ec83ed03c68  RFLAGS: 00010246
+RAX: 0000000000000000  RBX: ffff9ec835e85000  RCX: 000000000005e1f9
+RDX: 000000000005e1f8  RSI: 0000000000000200  RDI: ffff9ec83e801b00
+RBP: ffff9ec83ed03cd8   R8: 000000000001bb40   R9: ffffffffc0d5673f
+R10: ffff9ec83ed1bb40  R11: ffffe2d384d4fdc0  R12: ffff9ec7b7ad5900
+R13: 0000000000000000  R14: 0000000000000007  R15: ffff9ec8353f7580
+ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+ [ffff9ec83ed03ce0] ip_vs_fnat_xmit_v6 at ffffffffc0d5b42c [ip_vs]
+ [ffff9ec83ed03d70] tcp_send_rst_ipv6 at ffffffffc0d6542a [ip_vs]
+ [ffff9ec83ed03df8] tcp_conn_expire_handler at ffffffffc0d65823 [ip_vs]
+ [ffff9ec83ed03e20] ip_vs_conn_expire at ffffffffc0d42373 [ip_vs]
+ [ffff9ec83ed03e70] call_timer_fn at ffffffffae0a6b58
+ [ffff9ec83ed03ea8] run_timer_softirq at ffffffffae0a904d
+ [ffff9ec83ed03f20] __do_softirq at ffffffffae09fa85
+ [ffff9ec83ed03f90] call_softirq at ffffffffae739dac
+ [ffff9ec83ed03fa8] do_softirq at ffffffffae02e62b
+ [ffff9ec83ed03fc0] irq_exit at ffffffffae09fe25
+ [ffff9ec83ed03fd8] smp_apic_timer_interrupt at ffffffffae73b158
+ [ffff9ec83ed03ff0] apic_timer_interrupt at ffffffffae737872
+
+TCP connection timeout and send a RST packet, the skb is alloc
+by alloc_skb, the pointer skb->dev and skb_dst(skb) is NULL,
+however, ipv6 route unreach at that time, so go into err_unreach.
+In err_unreach, crash occurs when skb->dev and skb_dst(skb) is NULL.
+
+The code is added by the following patch:
+commit 326bf17ea5d4 ("ipvs: fix ipv6 route unreach panic")
+because the ip6_link_failure function requires the skb->dev
+in icmp6_send with that version.
+
+This patch only fix the problem in specific scene, and icmp6_send in
+current version is robust against null skb->dev by adding the
+following patch.
+commit 8d9336704521
+("ipv6: make icmp6_send() robust against null skb->dev")
+
+So I delete the code, make __ip_vs_get_out_rt_v6() robust, when
+skb->dev and skb_dst(skb) is NULL.
+
+Fixes: 326bf17ea5d4 ("ipvs: fix ipv6 route unreach panic")
+Signed-off-by: Junwei Hu <hujunwei4@huawei.com>
+Reported-by: Wenhao Zhang <zhangwenhao8@huawei.com>
 ---
- net/netfilter/ipvs/ip_vs_core.c | 60 +++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ net/netfilter/ipvs/ip_vs_xmit.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index 4447ee512b88..d1d7b2483fd7 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -39,6 +39,7 @@
- #include <net/tcp.h>
- #include <net/udp.h>
- #include <net/icmp.h>                   /* for icmp_send */
-+#include <net/gue.h>
- #include <net/route.h>
- #include <net/ip6_checksum.h>
- #include <net/netns/generic.h>		/* net_generic() */
-@@ -1579,6 +1580,41 @@ ip_vs_try_to_schedule(struct netns_ipvs *ipvs, int af, struct sk_buff *skb,
- 	return 1;
+diff --git a/net/netfilter/ipvs/ip_vs_xmit.c b/net/netfilter/ipvs/ip_vs_xmit.c
+index 175349fcf91f..e2bb6c223396 100644
+--- a/net/netfilter/ipvs/ip_vs_xmit.c
++++ b/net/netfilter/ipvs/ip_vs_xmit.c
+@@ -561,13 +561,6 @@ __ip_vs_get_out_rt_v6(struct netns_ipvs *ipvs, int skb_af, struct sk_buff *skb,
+ 	return -1;
+
+ err_unreach:
+-	/* The ip6_link_failure function requires the dev field to be set
+-	 * in order to get the net (further for the sake of fwmark
+-	 * reflection).
+-	 */
+-	if (!skb->dev)
+-		skb->dev = skb_dst(skb)->dev;
+-
+ 	dst_link_failure(skb);
+ 	return -1;
  }
- 
-+/* Check the UDP tunnel and return its header length */
-+static int ipvs_udp_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
-+			  unsigned int offset, __u16 af,
-+			  const union nf_inet_addr *daddr, __u8 *proto)
-+{
-+	struct udphdr _udph, *udph;
-+	struct ip_vs_dest *dest;
-+
-+	udph = skb_header_pointer(skb, offset, sizeof(_udph), &_udph);
-+	if (!udph)
-+		goto unk;
-+	offset += sizeof(struct udphdr);
-+	dest = ip_vs_find_tunnel(ipvs, af, daddr, udph->dest);
-+	if (!dest)
-+		goto unk;
-+	if (dest->tun_type == IP_VS_CONN_F_TUNNEL_TYPE_GUE) {
-+		struct guehdr _gueh, *gueh;
-+
-+		gueh = skb_header_pointer(skb, offset, sizeof(_gueh), &_gueh);
-+		if (!gueh)
-+			goto unk;
-+		if (gueh->control != 0 || gueh->version != 0)
-+			goto unk;
-+		/* Later we can support also IPPROTO_IPV6 */
-+		if (gueh->proto_ctype != IPPROTO_IPIP)
-+			goto unk;
-+		*proto = gueh->proto_ctype;
-+		return sizeof(struct udphdr) + sizeof(struct guehdr) +
-+		       (gueh->hlen << 2);
-+	}
-+
-+unk:
-+	return 0;
-+}
-+
- /*
-  *	Handle ICMP messages in the outside-to-inside direction (incoming).
-  *	Find any that might be relevant, check against existing connections,
-@@ -1658,6 +1694,30 @@ ip_vs_in_icmp(struct netns_ipvs *ipvs, struct sk_buff *skb, int *related,
- 		if (cih == NULL)
- 			return NF_ACCEPT; /* The packet looks wrong, ignore */
- 		ipip = true;
-+	} else if (cih->protocol == IPPROTO_UDP &&	/* Can be UDP encap */
-+		   /* Error for our tunnel must arrive at LOCAL_IN */
-+		   (skb_rtable(skb)->rt_flags & RTCF_LOCAL)) {
-+		__u8 iproto;
-+		int ulen;
-+
-+		/* Non-first fragment has no UDP header */
-+		if (unlikely(cih->frag_off & htons(IP_OFFSET)))
-+			return NF_ACCEPT;
-+		offset2 = offset + cih->ihl * 4;
-+		ulen = ipvs_udp_decap(ipvs, skb, offset2, AF_INET, raddr,
-+				      &iproto);
-+		if (ulen > 0) {
-+			/* Skip IP and UDP tunnel headers */
-+			offset = offset2 + ulen;
-+			/* Now we should be at the original IP header */
-+			cih = skb_header_pointer(skb, offset, sizeof(_ciph),
-+						 &_ciph);
-+			if (cih && cih->version == 4 && cih->ihl >= 5 &&
-+			    iproto == IPPROTO_IPIP)
-+				ipip = true;
-+			else
-+				return NF_ACCEPT;
-+		}
- 	}
- 
- 	pd = ip_vs_proto_data_get(ipvs, cih->protocol);
 -- 
-2.17.1
+2.21.GIT
+
 
