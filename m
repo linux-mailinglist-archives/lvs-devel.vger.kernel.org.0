@@ -2,27 +2,27 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C7615C85
-	for <lists+lvs-devel@lfdr.de>; Tue,  7 May 2019 08:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4806915BD4
+	for <lists+lvs-devel@lfdr.de>; Tue,  7 May 2019 07:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbfEGFeo (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 7 May 2019 01:34:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54718 "EHLO mail.kernel.org"
+        id S1728322AbfEGFh0 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 7 May 2019 01:37:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726718AbfEGFek (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Tue, 7 May 2019 01:34:40 -0400
+        id S1727732AbfEGFhZ (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 7 May 2019 01:37:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7156021479;
-        Tue,  7 May 2019 05:34:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04E04205ED;
+        Tue,  7 May 2019 05:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557207279;
-        bh=cpAQRyQizKc+uI1xsCT+jLz2R7htXM93DFsEV8hVXZE=;
+        s=default; t=1557207445;
+        bh=3b4zzr5LfvdAV+NCulPVgMQ2AuGASKw4w0VVbW1Kpag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IggPmiHQhFz/MMju6cpjbzeNvh2Nlo1oqV2L47nthNdfz0D2AU1ND56fXYD++vX8d
-         7PXGBIsF2IMXltpUG+KwpUjyODisb9P+ygsR4+iVrX3DInYry3CZDYMkqkliJseB6V
-         ApJV/3JynkY01VlBK1OsEfbZF3kJwxfGKFZztDKs=
+        b=AfbDK5XxRoU1UbMgxfH+88gE6mF8uCoRhkhfwHrMyX8iObIuIhZOICIJyXBiarbrv
+         KigZFg4b5eaMe62k7o4avIUj3p+327p89lDJq0wV5XZliDTOV7hjcVtCEhjwomdyPP
+         PamkXL7JCYFmKyaWvbqSafCly7tE+7dMR9oovIVg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>,
@@ -30,12 +30,12 @@ Cc:     Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         coreteam@netfilter.org
-Subject: [PATCH AUTOSEL 5.0 62/99] ipvs: do not schedule icmp errors from tunnels
-Date:   Tue,  7 May 2019 01:31:56 -0400
-Message-Id: <20190507053235.29900-62-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 44/81] ipvs: do not schedule icmp errors from tunnels
+Date:   Tue,  7 May 2019 01:35:15 -0400
+Message-Id: <20190507053554.30848-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190507053235.29900-1-sashal@kernel.org>
-References: <20190507053235.29900-1-sashal@kernel.org>
+In-Reply-To: <20190507053554.30848-1-sashal@kernel.org>
+References: <20190507053554.30848-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -65,7 +65,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index 235205c93e14..df112b27246a 100644
+index 3f963ea22277..a42c1bc7c698 100644
 --- a/net/netfilter/ipvs/ip_vs_core.c
 +++ b/net/netfilter/ipvs/ip_vs_core.c
 @@ -1647,7 +1647,7 @@ ip_vs_in_icmp(struct netns_ipvs *ipvs, struct sk_buff *skb, int *related,
