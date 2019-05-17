@@ -2,19 +2,19 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C38C20E89
-	for <lists+lvs-devel@lfdr.de>; Thu, 16 May 2019 20:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932042144D
+	for <lists+lvs-devel@lfdr.de>; Fri, 17 May 2019 09:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbfEPSV1 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 16 May 2019 14:21:27 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:35382 "EHLO ja.ssi.bg"
+        id S1727610AbfEQHbP (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 17 May 2019 03:31:15 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:39360 "EHLO ja.ssi.bg"
         rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726648AbfEPSV1 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 16 May 2019 14:21:27 -0400
+        id S1727361AbfEQHbP (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Fri, 17 May 2019 03:31:15 -0400
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x4GIKjoZ004285;
-        Thu, 16 May 2019 21:20:45 +0300
-Date:   Thu, 16 May 2019 21:20:45 +0300 (EEST)
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x4H7UTUr005700;
+        Fri, 17 May 2019 10:30:30 +0300
+Date:   Fri, 17 May 2019 10:30:29 +0300 (EEST)
 From:   Julian Anastasov <ja@ssi.bg>
 To:     YueHaibing <yuehaibing@huawei.com>
 cc:     davem@davemloft.net, wensong@linux-vs.org, horms@verge.net.au,
@@ -24,7 +24,7 @@ cc:     davem@davemloft.net, wensong@linux-vs.org, horms@verge.net.au,
         coreteam@netfilter.org
 Subject: Re: [PATCH] ipvs: Fix use-after-free in ip_vs_in
 In-Reply-To: <20190515093614.21176-1-yuehaibing@huawei.com>
-Message-ID: <alpine.LFD.2.21.1905162106550.3687@ja.home.ssi.bg>
+Message-ID: <alpine.LFD.2.21.1905171015040.2233@ja.home.ssi.bg>
 References: <20190515093614.21176-1-yuehaibing@huawei.com>
 User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
@@ -165,7 +165,20 @@ On Wed, 15 May 2019, YueHaibing wrote:
 > Another scene is ops_free_list call ops_free to free the
 > net_generic directly while __ip_vs_cleanup finished, then
 > calling ip_vs_in will triggers use-after-free.
-> 
+
+	OK, can you instead test and post a patch that moves
+nf_unregister_net_hooks from __ip_vs_cleanup() to
+__ip_vs_dev_cleanup()? You can add commit efe41606184e
+in Fixes line. There is rcu_barrier() in unregister_pernet_device ->
+unregister_pernet_operations that will do the needed grace
+period.
+
+	In a followup patch for net-next I'll drop the
+ipvs->enable flag and will move the nf_register_net_hooks()
+call to ip_vs_add_service() just before the 'svc = kzalloc'
+part. So, for now you do not need to move nf_register_net_hooks.
+As result, hooks will be registered when there are IPVS rules.
+
 > Reported-by: Hulk Robot <hulkci@huawei.com>
 > Fixes: efe41606184e ("ipvs: convert to use pernet nf_hook api")
 > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
@@ -182,27 +195,8 @@ On Wed, 15 May 2019, YueHaibing wrote:
 >  	ip_vs_estimator_net_cleanup(ipvs);
 >  	IP_VS_DBG(2, "ipvs netns %d released\n", ipvs->gen);
 > +	synchronize_net();
-
-	Grace period in net_exit handler should be avoided.
-It can be added to ip_vs_cleanup() but may be we have to
-reorder the operations, so that we can have single grace
-period. Note that ip_vs_conn_cleanup() already includes
-rcu_barrier() and we can use it to split the cleanups to
-two steps: 1: unregister hooks (__ip_vs_dev_cleanup) to
-stop traffic and 2: cleanups when traffic is stopped.
-
-	Note that the problem should be only when module
-is removed, the case with netns exit in cleanup_net()
-should not cause problem.
-
-	I'll have more time this weekend to reorganize the
-code...
-
 >  	net->ipvs = NULL;
 >  }
->  
-> -- 
-> 2.7.4
 
 Regards
 
