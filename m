@@ -2,140 +2,104 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6112A957
-	for <lists+lvs-devel@lfdr.de>; Sun, 26 May 2019 13:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921322AA5B
+	for <lists+lvs-devel@lfdr.de>; Sun, 26 May 2019 17:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727635AbfEZLJ5 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 26 May 2019 07:09:57 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:54718 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727621AbfEZLJ5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Sun, 26 May 2019 07:09:57 -0400
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x4QB9R0T010742;
-        Sun, 26 May 2019 14:09:27 +0300
-Date:   Sun, 26 May 2019 14:09:27 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Jacky Hu <hengqing.hu@gmail.com>
-cc:     brouer@redhat.com, horms@verge.net.au, lvs-devel@vger.kernel.org,
+        id S1726744AbfEZPDD (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 26 May 2019 11:03:03 -0400
+Received: from mail-pg1-f169.google.com ([209.85.215.169]:43977 "EHLO
+        mail-pg1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726622AbfEZPDD (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 26 May 2019 11:03:03 -0400
+Received: by mail-pg1-f169.google.com with SMTP id f25so7627391pgv.10
+        for <lvs-devel@vger.kernel.org>; Sun, 26 May 2019 08:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MJH8yOdBYSQpJIiPGRwtg0joAHpICqlf8Kg5oBlh5Kc=;
+        b=jBzguhtPPETQGpgwUEAKHQnAvkXpOegttwv7BLoqIl30Edr3MiRrC7DmB0Ru2onzCm
+         QW27jwjf4pT/EjdC2Ig6tmhm0Xjri+mpGQguOXaRNOVWrx3dItbX+ROHgiK1JyRABT8z
+         jNxrBj7eAWuabkdZe3j/Tp+M6Pto6w0tFGvEkPGnu25Vm6YO3wXCHa7wofoNbmpu1WIM
+         Pbk3019eciu8V2IpADFkwPaI6thfwBRqsn1HAO7ocuCbLyVefOoiEgTb+dyp5zB353ah
+         y3JaMkKVJjzuytKoPsYli2Y0Wz12nR/cvA5ynmePTle0XMHp1Fow+s1IblhQ4Nrtb8Zt
+         HR6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MJH8yOdBYSQpJIiPGRwtg0joAHpICqlf8Kg5oBlh5Kc=;
+        b=GwIUb3Mt3ru9S0UQWJfFrlSgLvtwRJ1JX2oJoA3phg2DoD0YClGUY8ol5UGDkxsEfC
+         v4kzE4RqNVqOcUx6ak5StX/2kT8PO8Sjhnz3qbduGSPDfoP0UJgHR/DCxOgqaLHQOXBN
+         ThLl3tJJPEnhOS5Z+IoPyfSU4MU3/pvXwjzSF6e/cgKJom5HCPkxNFpe1Z+qrv9PlG3+
+         bbZXBZty9HkrWKFC3w61pUWf+y2t9lUuy81vNLiqxWoRGO0XIx5x0/MDX6LKamzlTZH7
+         CY5je/iDMYGh2OnzhFT6su8BAU+Jb3zFpPTF6Dp6pgR9VfQQ7+CXUml5VPXS3v2/P6Y/
+         Hs+g==
+X-Gm-Message-State: APjAAAWqr4oUCyMek51IH20ucCJjCQt2sBopcAMUVrTppIWRUwHvl2i7
+        KJdcEUbyH1rBUmcflDzGdw==
+X-Google-Smtp-Source: APXvYqyE6GtCQqYeR4CY1eAS89S3xjKz6+aBeLXL90cOxH4wmaz/Zwp+gq8thejN7smpxLbLRSCd4w==
+X-Received: by 2002:aa7:9ab0:: with SMTP id x16mr120303563pfi.201.1558882983021;
+        Sun, 26 May 2019 08:03:03 -0700 (PDT)
+Received: from localhost (2.172.220.35.bc.googleusercontent.com. [35.220.172.2])
+        by smtp.gmail.com with ESMTPSA id e73sm10670509pfh.59.2019.05.26.08.03.01
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 26 May 2019 08:03:01 -0700 (PDT)
+From:   Jacky Hu <hengqing.hu@gmail.com>
+To:     hengqing.hu@gmail.com
+Cc:     brouer@redhat.com, horms@verge.net.au, lvs-devel@vger.kernel.org,
         lvs-users@linuxvirtualserver.org, jacky.hu@walmart.com,
         jason.niesz@walmart.com
-Subject: Re: [PATCH v6 2/2] ipvsadm: allow tunneling with gue encapsulation
-In-Reply-To: <20190526065038.17067-2-hengqing.hu@gmail.com>
-Message-ID: <alpine.LFD.2.21.1905261242050.6354@ja.home.ssi.bg>
-References: <20190526065038.17067-1-hengqing.hu@gmail.com> <20190526065038.17067-2-hengqing.hu@gmail.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+Subject: [PATCH v7 0/2] Allow tunneling with gue encapsulation
+Date:   Sun, 26 May 2019 23:01:04 +0800
+Message-Id: <20190526150106.18622-1-hengqing.hu@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+This patchset allows tunneling with gue encapsulation.
 
-	Hello,
+v7->v6:
+  1) fix type of local variable in parse_tun_type
+  2) use up to 4 letters in the comments
+  3) document new options
 
-On Sun, 26 May 2019, Jacky Hu wrote:
+v6->v5:
+  1) split the patch into two:
+     - ipvsadm: convert options to unsigned long long
+     - ipvsadm: allow tunneling with gue encapsulation
+  2) do not mix static and dynamic allocation in fwd_tun_info
+  3) use correct nla_get/put function for tun_flags
+  4) fixed || style
+  5) use correct return value for parse_tun_type
 
-> Added the following options with adding and editing destinations for
-> tunneling servers:
-> --tun-type
-> --tun-port
-> --tun-nocsum
-> --tun-csum
-> --tun-remcsum
-> 
-> Added the following options with listing services for tunneling servers:
-> --tun-info
-> 
-> Signed-off-by: Jacky Hu <hengqing.hu@gmail.com>
+v5->v4:
+  1) add checksum support for gue encapsulation
 
-	Patch v6 1/2 looks ok.
+v4->v3:
+  1) removed changes to setsockopt interface
+  2) use correct nla_get/put function for tun_port
 
-> @@ -259,21 +277,63 @@ static const char* optnames[] = {
->   */
->  static const char commands_v_options[NUMBER_OF_CMD][NUMBER_OF_OPT] =
->  {
-> -	/*   -n   -c   svc  -s   -p   -M   -r   fwd  -w   -x   -y   -mc  tot  dmn  -st  -rt  thr  -pc  srt  sid  -ex  ops  -pe  -b   grp  port ttl  size */
-> -/*ADD*/     {'x', 'x', '+', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x'},
-> -/*EDIT*/    {'x', 'x', '+', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x'},
-> -/*DEL*/     {'x', 'x', '+', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*FLUSH*/   {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*LIST*/    {' ', '1', '1', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', '1', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*ADDSRV*/  {'x', 'x', '+', 'x', 'x', 'x', '+', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*DELSRV*/  {'x', 'x', '+', 'x', 'x', 'x', '+', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*EDITSRV*/ {'x', 'x', '+', 'x', 'x', 'x', '+', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*TIMEOUT*/ {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*STARTD*/  {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '},
-> -/*STOPD*/   {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*RESTORE*/ {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*SAVE*/    {' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> -/*ZERO*/    {'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-> +	/*   -n   -c   svc  -s   -p   -M   -r   fwd  -w   -x   -y   -mc  tot  dmn  -st  -rt  thr  -pc  srt  sid  -ex  ops  -pe  -b   grp  port ttl  size  tun-info  tun-type  tun-port  tun-nocsum  tun-csum  tun-remcsum */
+v3->v2:
+  1) added missing break statements to a few switch cases
 
-	We can use up to 4 letters in the comments, eg:
+v2->v1:
+  1) pass tun_type and tun_port as new optional parameters
+     instead of a few bits in existing conn_flags parameters
 
-tinf type tprt nocs csum remc
+Jacky Hu (2):
+  ipvsadm: convert options to unsigned long long
+  ipvsadm: allow tunneling with gue encapsulation
 
-	Otherwise, we can not match the column names with data
+ ipvsadm.8         |  72 ++++++++
+ ipvsadm.c         | 427 +++++++++++++++++++++++++++++++++++++++-------
+ libipvs/ip_vs.h   |  28 +++
+ libipvs/libipvs.c |  15 ++
+ 4 files changed, 476 insertions(+), 66 deletions(-)
 
-> +		case TAG_TUN_NOCSUM:
-> +			set_option(options, OPTC_TUN_NOCSUM);
-> +			ce->dest.tun_flags = IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM;
+-- 
+2.21.0
 
-	Lets use |= for the flags, it will help in the future
-if new flags are added.
-
-> +			break;
-> +		case TAG_TUN_CSUM:
-> +			set_option(options, OPTC_TUN_CSUM);
-> +			ce->dest.tun_flags |= IP_VS_TUNNEL_ENCAP_FLAG_CSUM;
-> +			break;
-> +		case TAG_TUN_REMCSUM:
-> +			set_option(options, OPTC_TUN_REMCSUM);
-> +			ce->dest.tun_flags |= IP_VS_TUNNEL_ENCAP_FLAG_REMCSUM;
-> +			break;
->  		default:
-
-> +static int parse_tun_type(const char *tun_type)
-> +{
-> +	unsigned int type = -1;
-
-	This can be 'int' too
-
-> +
-> +	if (!strcmp(tun_type, "ipip"))
-> +		type = IP_VS_CONN_F_TUNNEL_TYPE_IPIP;
-> +	else if (!strcmp(tun_type, "gue"))
-> +		type = IP_VS_CONN_F_TUNNEL_TYPE_GUE;
-> +	else
-> +		type = -1;
-> +
-> +	return type;
-> +}
-> +
-
-	May be we can also add info for the new options in
-ipvsadm.8, may be after the --ipip option and before the -m.
-It can work this way if you don't have better syntax:
-
-.ti +8
-.B --tun-type \fIipip | gue\fP
-.ti +16
-Info...
-.sp
-.ti +8
-.B --tun-port \fIport\fP
-.ti +16
-Port used for GUE .....
-.sp
-
-	One example below would be helpful too.
-
-	When posting next version always include all patches
-in the patchset, also having 0/2 info is recommended.
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
