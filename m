@@ -2,787 +2,212 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 007E52AA5D
-	for <lists+lvs-devel@lfdr.de>; Sun, 26 May 2019 17:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EECC2C908
+	for <lists+lvs-devel@lfdr.de>; Tue, 28 May 2019 16:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726773AbfEZPDQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 26 May 2019 11:03:16 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35326 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbfEZPDQ (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 26 May 2019 11:03:16 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t1so7646333pgc.2
-        for <lvs-devel@vger.kernel.org>; Sun, 26 May 2019 08:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3hbg0w2FRJl/7wKhBeXyl9S3jdQLynomUfDQjaMmeOA=;
-        b=n9IZxnsPXUZsbWYZXC1aKU8HEBGJ2AjCSoKqat2//ultl1dUyZGU0jEmfB/3umOJHf
-         qeFyj84FvJV2ol5mQRRWak+hHC2OqklaPFwCBJMBx4bnFEH0NiFwW3BP1QivGexbuCek
-         CbwzmdqvKFxEDg+t74G3yF2PLw85e0NERyuD+y+nuu7WJmk5RqWsBllIvmkdoJy/rXBD
-         z9Qs+V0v+A6RZEPkzXJWps3eB22xRBPSUmM77L0DQnLMje1dtrp6rl5EXZ39z6fsc2S5
-         05J1O930jgqMBNnij9W4AsyAoWCpa/OH8WjoPP84lsFKq3/DsNhUtt78zizktrhEBFze
-         pTMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3hbg0w2FRJl/7wKhBeXyl9S3jdQLynomUfDQjaMmeOA=;
-        b=Z4YMoAVRHyOf/rCYEW6mWkR21xPv4VsDzBWd9PADrGFxFLoEkQREFoLMy3m3W/lnH7
-         x3gTFqz13TWJbvhmMsWRfdT+onzpBb1ZOgzFQER5drJjzIdOw66+p8cSxNTsBnf/fJ3r
-         wtLmfI7w0vQ5i+2Hy5qaKtGHx6ZhINe7Ot9g55AjwT17OqzhIJwpnMCgm3dflLdhcdPT
-         jgHTL3hgY5DURNPnXaWHFxCMislup0x42p1sHXszI2q8dTkLA5jkhgFYj1CuxMa67PEM
-         7i+ShN/lHMxwoMz0w+OHEstytM35+uJwh5ej5GsrE8eMmmzSMCEAH3a3rJhdOXOC7ROv
-         OmQQ==
-X-Gm-Message-State: APjAAAUF8bRuklABJedjWsTEqbyOAj/aD+tRn9CVb7Tht64jvKCrNtWU
-        ldF/I1Q/cmTamNMFk/nejQ==
-X-Google-Smtp-Source: APXvYqyGda71qa6yocP1RnClSb8Ic99xy/rnfFfoai63Z/cKRUBsBKUAPgOZ8ZW5LhVNp7VmuCwaaQ==
-X-Received: by 2002:a17:90a:dc86:: with SMTP id j6mr23872447pjv.141.1558882994867;
-        Sun, 26 May 2019 08:03:14 -0700 (PDT)
-Received: from localhost (2.172.220.35.bc.googleusercontent.com. [35.220.172.2])
-        by smtp.gmail.com with ESMTPSA id q19sm9702471pff.96.2019.05.26.08.03.13
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 26 May 2019 08:03:14 -0700 (PDT)
-From:   Jacky Hu <hengqing.hu@gmail.com>
-To:     hengqing.hu@gmail.com
-Cc:     brouer@redhat.com, horms@verge.net.au, lvs-devel@vger.kernel.org,
-        lvs-users@linuxvirtualserver.org, jacky.hu@walmart.com,
-        jason.niesz@walmart.com
-Subject: [PATCH v7 2/2] ipvsadm: allow tunneling with gue encapsulation
-Date:   Sun, 26 May 2019 23:01:06 +0800
-Message-Id: <20190526150106.18622-3-hengqing.hu@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190526150106.18622-1-hengqing.hu@gmail.com>
-References: <20190526150106.18622-1-hengqing.hu@gmail.com>
+        id S1726723AbfE1Omb (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 28 May 2019 10:42:31 -0400
+Received: from [198.50.183.10] ([198.50.183.10]:59096 "EHLO mahatta.net"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726609AbfE1Omb (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 28 May 2019 10:42:31 -0400
+X-Greylist: delayed 8683 seconds by postgrey-1.27 at vger.kernel.org; Tue, 28 May 2019 10:42:30 EDT
+From:   aishatu@mahatta.net
+To:     lvs-devel@vger.kernel.org
+Subject: Purchase_rfq
+Date:   28 May 2019 16:42:26 +0200
+Message-ID: <20190528164226.B219724B628484BE@mahatta.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed;
+        boundary="----=_NextPart_000_0012_7EC7B490.E87A89DE"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Added the following options with adding and editing destinations for
-tunneling servers:
---tun-type
---tun-port
---tun-nocsum
---tun-csum
---tun-remcsum
+This is a multi-part message in MIME format.
 
-Added the following options with listing services for tunneling servers:
---tun-info
+------=_NextPart_000_0012_7EC7B490.E87A89DE
 
-Signed-off-by: Jacky Hu <hengqing.hu@gmail.com>
----
- ipvsadm.8         |  72 +++++++++++
- ipvsadm.c         | 318 ++++++++++++++++++++++++++++++++++++++++++----
- libipvs/ip_vs.h   |  28 ++++
- libipvs/libipvs.c |  15 +++
- 4 files changed, 411 insertions(+), 22 deletions(-)
+------=_NextPart_000_0012_7EC7B490.E87A89DE
+Content-Type: application/octet-stream; name="INQUIRY_4178916..xlsx"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="INQUIRY_4178916..xlsx"
 
-diff --git a/ipvsadm.8 b/ipvsadm.8
-index 1b25888..92326e1 100644
---- a/ipvsadm.8
-+++ b/ipvsadm.8
-@@ -339,6 +339,36 @@ the request sent to the virtual service.
- .sp
- \fB-i, --ipip\fR  Use ipip encapsulation (tunneling).
- .sp
-+.ti +8
-+.B --tun-type \fItun-type\fP
-+.ti +16
-+\fItun-type\fP is one of \fIipip\fP|\fIgue\fP.
-+The default value of \fItun-type\fP is \fIipip\fP.
-+.sp
-+.ti +8
-+.B --tun-port \fItun-port\fP
-+.ti +16
-+\fItun-port\fP is an integer specifying the destination port.
-+Only valid for \fItun-type\fP \fIgue\fP.
-+.sp
-+.ti +8
-+.B --tun-nocsum
-+.ti +16
-+Specify that UDP checksums are disabled. This is the default.
-+Only valid for \fItun-type\fP \fIgue\fP.
-+.sp
-+.ti +8
-+.B --tun-csum
-+.ti +16
-+Specify that UDP checksums are enabled.
-+Only valid for \fItun-type\fP \fIgue\fP.
-+.sp
-+.ti +8
-+.B --tun-remcsum
-+.ti +16
-+Specify that Remote Checksum Offload is enabled.
-+Only valid for \fItun-type\fP \fIgue\fP.
-+.sp
- \fB-m, --masquerading\fR  Use masquerading (network access translation, or NAT).
- .sp
- \fBNote:\fR  Regardless of the packet-forwarding mechanism specified,
-@@ -416,6 +446,11 @@ The \fIlist\fP command with the -c, --connection option and this option
- will include persistence engine data, if any is present, when listing
- connections.
- .TP
-+.B --tun-info
-+Output of tunneling information. The \fIlist\fP command with this
-+option will display the tunneling information of services and their
-+servers.
-+.TP
- .B --sort
- Sort the list of virtual services and real servers. The virtual
- service entries are sorted in ascending order by <protocol, address,
-@@ -553,6 +588,43 @@ modprobe ip_tables
- iptables  -A PREROUTING -t mangle -d 207.175.44.110/31 -j MARK --set-mark 1
- modprobe ip_vs_ftp
- .fi
-+.SH EXAMPLE 3 - Virtual Service with GUE Tunneling
-+The following commands configure a Linux Director to distribute
-+incoming requests addressed to port 80 on 207.175.44.110 equally to
-+port 80 on five real servers. The forwarding method used in this
-+example is tunneling with gue encapsulation.
-+.PP
-+.nf
-+ipvsadm -A -t 207.175.44.110:80 -s rr
-+ipvsadm -a -t 207.175.44.110:80 -r 192.168.10.1:80 -i --tun-type gue \
-+--tun-port 6080 --tun-csum
-+ipvsadm -a -t 207.175.44.110:80 -r 192.168.10.2:80 -i --tun-type gue \
-+--tun-port 6080 --tun-csum
-+ipvsadm -a -t 207.175.44.110:80 -r 192.168.10.3:80 -i --tun-type gue \
-+--tun-port 6080 --tun-csum
-+ipvsadm -a -t 207.175.44.110:80 -r 192.168.10.4:80 -i --tun-type gue \
-+--tun-port 6080 --tun-csum
-+ipvsadm -a -t 207.175.44.110:80 -r 192.168.10.5:80 -i --tun-type gue \
-+--tun-port 6080 --tun-csum
-+.fi
-+.PP
-+Alternatively, this could be achieved in a single ipvsadm command.
-+.PP
-+.nf
-+echo "
-+-A -t 207.175.44.110:80 -s rr
-+-a -t 207.175.44.110:80 -r 192.168.10.1:80 -i --tun-type gue --tun-port 6080 \
-+--tun-csum
-+-a -t 207.175.44.110:80 -r 192.168.10.2:80 -i --tun-type gue --tun-port 6080 \
-+--tun-csum
-+-a -t 207.175.44.110:80 -r 192.168.10.3:80 -i --tun-type gue --tun-port 6080 \
-+--tun-csum
-+-a -t 207.175.44.110:80 -r 192.168.10.4:80 -i --tun-type gue --tun-port 6080 \
-+--tun-csum
-+-a -t 207.175.44.110:80 -r 192.168.10.5:80 -i --tun-type gue --tun-port 6080 \
-+--tun-csum
-+" | ipvsadm -R
-+.fi
- .SH IPv6
- IPv6 addresses should be surrounded by square brackets ([ and ]).
- .PP
-diff --git a/ipvsadm.c b/ipvsadm.c
-index 9e7a448..fee0442 100644
---- a/ipvsadm.c
-+++ b/ipvsadm.c
-@@ -187,7 +187,13 @@ static const char* cmdnames[] = {
- #define OPT_MCAST_PORT		0x02000000
- #define OPT_MCAST_TTL		0x04000000
- #define OPT_SYNC_MAXLEN	0x08000000
--#define NUMBER_OF_OPT		28
-+#define OPT_TUN_INFO		0x10000000
-+#define OPT_TUN_TYPE		0x20000000
-+#define OPT_TUN_PORT		0x40000000
-+#define OPT_TUN_NOCSUM		0x80000000
-+#define OPT_TUN_CSUM		0x100000000
-+#define OPT_TUN_REMCSUM		0x200000000
-+#define NUMBER_OF_OPT		34
- 
- #define OPTC_NUMERIC		0
- #define OPTC_CONNECTION		1
-@@ -217,6 +223,12 @@ static const char* cmdnames[] = {
- #define OPTC_MCAST_PORT		25
- #define OPTC_MCAST_TTL		26
- #define OPTC_SYNC_MAXLEN	27
-+#define OPTC_TUN_INFO		28
-+#define OPTC_TUN_TYPE		29
-+#define OPTC_TUN_PORT		30
-+#define OPTC_TUN_NOCSUM		31
-+#define OPTC_TUN_CSUM		32
-+#define OPTC_TUN_REMCSUM	33
- 
- static const char* optnames[] = {
- 	"numeric",
-@@ -247,6 +259,12 @@ static const char* optnames[] = {
- 	"mcast-port",
- 	"mcast-ttl",
- 	"sync-maxlen",
-+	"tun-info",
-+	"tun-type",
-+	"tun-port",
-+	"tun-nocsum",
-+	"tun-csum",
-+	"tun-remcsum",
- };
- 
- /*
-@@ -259,21 +277,63 @@ static const char* optnames[] = {
-  */
- static const char commands_v_options[NUMBER_OF_CMD][NUMBER_OF_OPT] =
- {
--	/*   -n   -c   svc  -s   -p   -M   -r   fwd  -w   -x   -y   -mc  tot  dmn  -st  -rt  thr  -pc  srt  sid  -ex  ops  -pe  -b   grp  port ttl  size */
--/*ADD*/     {'x', 'x', '+', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x'},
--/*EDIT*/    {'x', 'x', '+', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x'},
--/*DEL*/     {'x', 'x', '+', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*FLUSH*/   {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*LIST*/    {' ', '1', '1', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', '1', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*ADDSRV*/  {'x', 'x', '+', 'x', 'x', 'x', '+', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*DELSRV*/  {'x', 'x', '+', 'x', 'x', 'x', '+', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*EDITSRV*/ {'x', 'x', '+', 'x', 'x', 'x', '+', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*TIMEOUT*/ {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*STARTD*/  {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' '},
--/*STOPD*/   {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*RESTORE*/ {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*SAVE*/    {' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
--/*ZERO*/    {'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+	/*   -n   -c   svc  -s   -p   -M   -r   fwd  -w   -x   -y   -mc  tot  dmn  -st  -rt  thr  -pc  srt  sid  -ex  ops  -pe  -b   grp  port ttl  size tinf type tprt nocs csum remc */
-+/*ADD*/     {'x', 'x', '+', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*EDIT*/    {'x', 'x', '+', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*DEL*/     {'x', 'x', '+', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*FLUSH*/   {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*LIST*/    {' ', '1', '1', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', '1', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x'},
-+/*ADDSRV*/  {'x', 'x', '+', 'x', 'x', 'x', '+', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '},
-+/*DELSRV*/  {'x', 'x', '+', 'x', 'x', 'x', '+', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*EDITSRV*/ {'x', 'x', '+', 'x', 'x', 'x', '+', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', ' '},
-+/*TIMEOUT*/ {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*STARTD*/  {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', ' ', ' ', ' ', ' ', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*STOPD*/   {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*RESTORE*/ {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*SAVE*/    {' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+/*ZERO*/    {'x', 'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-+};
-+
-+static const char * const tunnames[] = {
-+	"ipip",
-+	"gue",
-+};
-+
-+static const char * const tunflags[] = {
-+	"-c",		/* without checksum */
-+	"+c",		/* with checksum */
-+	"r+c",		/* with remote checksum */
-+};
-+
-+static const char * const tun_flags_opts[] = {
-+	"--tun-nocsum",
-+	"--tun-csum",
-+	"--tun-remcsum",
-+};
-+
-+static const int tunopts[] = {
-+	OPTC_TUN_PORT,
-+	OPTC_TUN_NOCSUM,
-+	OPTC_TUN_CSUM,
-+	OPTC_TUN_REMCSUM,
-+};
-+
-+#define NUMBER_OF_TUN_OPT		4
-+#define NA				"n/a"
-+
-+/*
-+ * Table of legal combinations of tunnel types and options.
-+ * Key:
-+ *  '+'  compulsory
-+ *  'x'  illegal
-+ *  '1'  exclusive (only one '1' option can be supplied)
-+ *  ' '  optional
-+ */
-+static const char
-+tunnel_types_v_options[IP_VS_CONN_F_TUNNEL_TYPE_MAX][NUMBER_OF_TUN_OPT] = {
-+	/* tun-port tun-nocsum tun-csum tun-remcsum */
-+/* ipip */ {'x', 'x', 'x', 'x'},
-+/* gue */  {'+', '1', '1', '1'},
- };
- 
- /* printing format flags */
-@@ -286,6 +346,7 @@ static const char commands_v_options[NUMBER_OF_CMD][NUMBER_OF_OPT] =
- #define FMT_PERSISTENTCONN	0x0020
- #define FMT_NOSORT		0x0040
- #define FMT_EXACT		0x0080
-+#define FMT_TUN_INFO		0x0100
- 
- #define SERVICE_NONE		0x0000
- #define SERVICE_ADDR		0x0001
-@@ -294,6 +355,9 @@ static const char commands_v_options[NUMBER_OF_CMD][NUMBER_OF_OPT] =
- /* default scheduler */
- #define DEF_SCHED		"wlc"
- 
-+/* default tunnel type */
-+#define DEF_TUNNEL_TYPE	"ipip"
-+
- /* default multicast interface name */
- #define DEF_MCAST_IFN		"eth0"
- 
-@@ -329,6 +393,12 @@ enum {
- 	TAG_MCAST_PORT,
- 	TAG_MCAST_TTL,
- 	TAG_SYNC_MAXLEN,
-+	TAG_TUN_INFO,
-+	TAG_TUN_TYPE,
-+	TAG_TUN_PORT,
-+	TAG_TUN_NOCSUM,
-+	TAG_TUN_CSUM,
-+	TAG_TUN_REMCSUM,
- };
- 
- /* various parsing helpers & parsing functions */
-@@ -347,12 +417,16 @@ static int parse_netmask(char *buf, u_int32_t *addr);
- static int parse_timeout(char *buf, int min, int max);
- static unsigned int parse_fwmark(char *buf);
- static unsigned int parse_sched_flags(const char *sched, char *optarg);
-+static int parse_tun_type(const char *name);
- 
- /* check the options based on the commands_v_options table */
- static void generic_opt_check(int command, unsigned long long options);
- static void set_command(int *cmd, const int newcmd);
- static void set_option(unsigned long long *options, int optc);
- 
-+/* check the options based on the tunnel_types_v_options table */
-+static void tunnel_opt_check(int tun_type, unsigned long long options);
-+
- static void tryhelp_exit(const char *program, const int exit_status);
- static void usage_exit(const char *program, const int exit_status);
- static void version_exit(int exit_status);
-@@ -524,6 +598,18 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
- 		  TAG_MCAST_TTL, NULL, NULL },
- 		{ "sync-maxlen", '\0', POPT_ARG_STRING, &optarg,
- 		  TAG_SYNC_MAXLEN, NULL, NULL },
-+		{ "tun-info", '\0', POPT_ARG_NONE, NULL, TAG_TUN_INFO,
-+		  NULL, NULL },
-+		{ "tun-type", '\0', POPT_ARG_STRING, &optarg, TAG_TUN_TYPE,
-+		  NULL, NULL },
-+		{ "tun-port", '\0', POPT_ARG_STRING, &optarg, TAG_TUN_PORT,
-+		  NULL, NULL },
-+		{ "tun-nocsum", '\0', POPT_ARG_NONE, NULL, TAG_TUN_NOCSUM,
-+		  NULL, NULL },
-+		{ "tun-csum", '\0', POPT_ARG_NONE, NULL, TAG_TUN_CSUM,
-+		  NULL, NULL },
-+		{ "tun-remcsum", '\0', POPT_ARG_NONE, NULL, TAG_TUN_REMCSUM,
-+		  NULL, NULL },
- 		{ NULL, 0, 0, NULL, 0, NULL, NULL }
- 	};
- 
-@@ -802,6 +888,36 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
- 				fail(2, "illegal sync-maxlen specified");
- 			ce->daemon.sync_maxlen = parse;
- 			break;
-+		case TAG_TUN_INFO:
-+			set_option(options, OPTC_TUN_INFO);
-+			*format |= FMT_TUN_INFO;
-+			break;
-+		case TAG_TUN_TYPE:
-+			set_option(options, OPTC_TUN_TYPE);
-+			parse = parse_tun_type(optarg);
-+			if (parse == -1)
-+				fail(2, "illegal tunnel type specified");
-+			ce->dest.tun_type = parse;
-+			break;
-+		case TAG_TUN_PORT:
-+			set_option(options, OPTC_TUN_PORT);
-+			parse = string_to_number(optarg, 1, 65535);
-+			if (parse == -1)
-+				fail(2, "illegal tunnel port specified");
-+			ce->dest.tun_port = htons(parse);
-+			break;
-+		case TAG_TUN_NOCSUM:
-+			set_option(options, OPTC_TUN_NOCSUM);
-+			ce->dest.tun_flags |= IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM;
-+			break;
-+		case TAG_TUN_CSUM:
-+			set_option(options, OPTC_TUN_CSUM);
-+			ce->dest.tun_flags |= IP_VS_TUNNEL_ENCAP_FLAG_CSUM;
-+			break;
-+		case TAG_TUN_REMCSUM:
-+			set_option(options, OPTC_TUN_REMCSUM);
-+			ce->dest.tun_flags |= IP_VS_TUNNEL_ENCAP_FLAG_REMCSUM;
-+			break;
- 		default:
- 			fail(2, "invalid option `%s'",
- 			     poptBadOption(context, POPT_BADOPTION_NOALIAS));
-@@ -876,12 +992,19 @@ static int process_options(int argc, char **argv, int reading_stdin)
- 	struct ipvs_command_entry ce;
- 	unsigned long long options = OPT_NONE;
- 	unsigned int format = FMT_NONE;
-+	unsigned int fwd_method;
- 	int result = 0;
- 
- 	memset(&ce, 0, sizeof(struct ipvs_command_entry));
- 	ce.cmd = CMD_NONE;
- 	/* Set the default weight 1 */
- 	ce.dest.weight = 1;
-+	/* Set the default tunnel type 0(ipip) */
-+	ce.dest.tun_type = 0;
-+	/* Set the default tunnel port 0(n/a) */
-+	ce.dest.tun_port = 0;
-+	/* Set the default tunnel flags 0(nocsum) */
-+	ce.dest.tun_flags = 0;
- 	/* Set direct routing as default forwarding method */
- 	ce.dest.conn_flags = IP_VS_CONN_F_DROUTE;
- 	/* Set the default persistent granularity to /32 mask */
-@@ -912,6 +1035,8 @@ static int process_options(int argc, char **argv, int reading_stdin)
- 	if (ce.cmd == CMD_STARTDAEMON && strlen(ce.daemon.mcast_ifn) == 0)
- 		strcpy(ce.daemon.mcast_ifn, DEF_MCAST_IFN);
- 
-+	fwd_method = ce.dest.conn_flags & IP_VS_CONN_F_FWD_MASK;
-+
- 	if (ce.cmd == CMD_ADDDEST || ce.cmd == CMD_EDITDEST) {
- 		/*
- 		 * The destination port must be equal to the service port
-@@ -919,15 +1044,25 @@ static int process_options(int argc, char **argv, int reading_stdin)
- 		 * Don't worry about this if fwmark is used.
- 		 */
- 		if (!ce.svc.fwmark &&
--		    (ce.dest.conn_flags == IP_VS_CONN_F_TUNNEL
--		     || ce.dest.conn_flags == IP_VS_CONN_F_DROUTE))
-+		    (fwd_method == IP_VS_CONN_F_TUNNEL ||
-+		     fwd_method == IP_VS_CONN_F_DROUTE))
- 			ce.dest.port = ce.svc.port;
- 
- 		/* Tunneling allows different address family */
- 		if (ce.dest.af != ce.svc.af &&
--		    ce.dest.conn_flags != IP_VS_CONN_F_TUNNEL)
-+		    fwd_method != IP_VS_CONN_F_TUNNEL)
- 			fail(2, "Different address family is allowed only "
- 			     "for tunneling servers");
-+
-+		/* Only tunneling allows tunnel options */
-+		if (((options & (OPT_TUN_TYPE|OPT_TUN_PORT)) ||
-+		     (options & (OPT_TUN_NOCSUM|OPT_TUN_CSUM)) ||
-+		     (options & OPT_TUN_REMCSUM)) &&
-+		    fwd_method != IP_VS_CONN_F_TUNNEL)
-+			fail(2,
-+			     "Tunnel options conflict with forward method");
-+
-+		tunnel_opt_check(ce.dest.tun_type, options);
- 	}
- 
- 	switch (ce.cmd) {
-@@ -1192,6 +1327,20 @@ static unsigned int parse_sched_flags(const char *sched, char *optarg)
- 	return flags;
- }
- 
-+static int parse_tun_type(const char *tun_type)
-+{
-+	int type = -1;
-+
-+	if (!strcmp(tun_type, "ipip"))
-+		type = IP_VS_CONN_F_TUNNEL_TYPE_IPIP;
-+	else if (!strcmp(tun_type, "gue"))
-+		type = IP_VS_CONN_F_TUNNEL_TYPE_GUE;
-+	else
-+		type = -1;
-+
-+	return type;
-+}
-+
- static void
- generic_opt_check(int command, unsigned long long options)
- {
-@@ -1226,6 +1375,41 @@ generic_opt_check(int command, unsigned long long options)
- 	}
- }
- 
-+static void
-+tunnel_opt_check(int tun_type, unsigned long long options)
-+{
-+	int i, j, k;
-+	int last = 0, count = 0;
-+
-+	/* Check that tunnel types are valid with options. */
-+	i = tun_type;
-+
-+	for (j = 0; j < NUMBER_OF_TUN_OPT; j++) {
-+		k = tunopts[j];
-+		if (!(options & (1ULL<<k))) {
-+			if (tunnel_types_v_options[i][j] == '+')
-+				fail(2, "You need to supply the '%s' "
-+				     "option for the '%s' tunnel type",
-+				     optnames[k], tunnames[i]);
-+		} else {
-+			if (tunnel_types_v_options[i][j] == 'x')
-+				fail(2, "Illegal '%s' option with "
-+				     "the '%s' tunnel type",
-+				     optnames[k], tunnames[i]);
-+			if (tunnel_types_v_options[i][j] == '1') {
-+				count++;
-+				if (count == 1) {
-+					last = k;
-+					continue;
-+				}
-+				fail(2, "The option '%s' conflicts with the "
-+				     "'%s' option in the '%s' tunnel type",
-+				     optnames[k], optnames[last], tunnames[i]);
-+			}
-+		}
-+	}
-+}
-+
- static void
- set_command(int *cmd, const int newcmd)
- {
-@@ -1322,6 +1506,12 @@ static void usage_exit(const char *program, const int exit_status)
- 		"  --gatewaying   -g                   gatewaying (direct routing) (default)\n"
- 		"  --ipip         -i                   ipip encapsulation (tunneling)\n"
- 		"  --masquerading -m                   masquerading (NAT)\n"
-+		"  --tun-type      type                one of ipip|gue,\n"
-+		"                                      the default tunnel type is %s.\n"
-+		"  --tun-port      port                tunnel destination port\n"
-+		"  --tun-nocsum                        tunnel encapsulation without checksum\n"
-+		"  --tun-csum                          tunnel encapsulation with checksum\n"
-+		"  --tun-remcsum                       tunnel encapsulation with remote checksum\n"
- 		"  --weight       -w weight            capacity of real server\n"
- 		"  --u-threshold  -x uthreshold        upper threshold of connections\n"
- 		"  --l-threshold  -y lthreshold        lower threshold of connections\n"
-@@ -1333,12 +1523,13 @@ static void usage_exit(const char *program, const int exit_status)
- 		"  --exact                             expand numbers (display exact values)\n"
- 		"  --thresholds                        output of thresholds information\n"
- 		"  --persistent-conn                   output of persistent connection info\n"
-+		"  --tun-info                          output of tunnel information\n"
- 		"  --nosort                            disable sorting output of service/server entries\n"
- 		"  --sort                              does nothing, for backwards compatibility\n"
- 		"  --ops          -o                   one-packet scheduling\n"
- 		"  --numeric      -n                   numeric output of addresses and ports\n"
- 		"  --sched-flags  -b flags             scheduler flags (comma-separated)\n",
--		DEF_SCHED);
-+		DEF_SCHED, DEF_TUNNEL_TYPE);
- 
- 	fprintf(stream,
- 		"Daemon Options:\n"
-@@ -1586,6 +1777,37 @@ static inline char *fwd_switch(unsigned flags)
- }
- 
- 
-+static inline char *fwd_tun_info(ipvs_dest_entry_t *e)
-+{
-+	char *info = malloc(16);
-+
-+	if (!info)
-+		return NULL;
-+
-+	switch (e->conn_flags & IP_VS_CONN_F_FWD_MASK) {
-+	case IP_VS_CONN_F_TUNNEL:
-+		switch (e->tun_type) {
-+		case IP_VS_CONN_F_TUNNEL_TYPE_IPIP:
-+			snprintf(info, 16, "%s", tunnames[e->tun_type]);
-+			break;
-+		case IP_VS_CONN_F_TUNNEL_TYPE_GUE:
-+			snprintf(info, 16, "%s:%d:%s",
-+				 tunnames[e->tun_type], ntohs(e->tun_port),
-+				 tunflags[e->tun_flags]);
-+			break;
-+		default:
-+			free(info);
-+			return NULL;
-+		}
-+		break;
-+	default:
-+		free(info);
-+		return NULL;
-+	}
-+	return info;
-+}
-+
-+
- static void print_largenum(unsigned long long i, unsigned int format)
- {
- 	if (format & FMT_EXACT) {
-@@ -1662,12 +1884,47 @@ static void print_title(unsigned int format)
- 		       "  -> RemoteAddress:Port\n",
- 		       "Prot LocalAddress:Port",
- 		       "Weight", "PersistConn", "ActiveConn", "InActConn");
-+	else if ((format & FMT_TUN_INFO))
-+		printf("Prot LocalAddress:Port Scheduler Flags\n"
-+		       "  -> RemoteAddress:Port           Forward TunnelInfo    Weight ActiveConn InActConn\n");
- 	else if (!(format & FMT_RULE))
- 		printf("Prot LocalAddress:Port Scheduler Flags\n"
- 		       "  -> RemoteAddress:Port           Forward Weight ActiveConn InActConn\n");
- }
- 
- 
-+static inline void
-+print_tunnel_rule(char *svc_name, char *dname, ipvs_dest_entry_t *e)
-+{
-+	switch (e->tun_type) {
-+	case IP_VS_CONN_F_TUNNEL_TYPE_GUE:
-+		printf("-a %s -r %s %s -w %d --tun-type %s --tun-port %d %s\n",
-+		       svc_name,
-+		       dname,
-+		       fwd_switch(e->conn_flags),
-+		       e->weight,
-+		       tunnames[e->tun_type],
-+		       ntohs(e->tun_port),
-+		       tun_flags_opts[e->tun_flags]);
-+		break;
-+	case IP_VS_CONN_F_TUNNEL_TYPE_IPIP:
-+		printf("-a %s -r %s %s -w %d --tun-type %s\n",
-+		       svc_name,
-+		       dname,
-+		       fwd_switch(e->conn_flags),
-+		       e->weight,
-+		       tunnames[e->tun_type]);
-+		break;
-+	default:
-+		printf("-a %s -r %s %s -w %d\n",
-+		       svc_name,
-+		       dname,
-+		       fwd_switch(e->conn_flags),
-+		       e->weight);
-+		break;
-+	}
-+}
-+
- static void
- print_service_entry(ipvs_service_entry_t *se, unsigned int format)
- {
-@@ -1789,6 +2046,7 @@ print_service_entry(ipvs_service_entry_t *se, unsigned int format)
- 	for (i = 0; i < d->num_dests; i++) {
- 		char *dname;
- 		ipvs_dest_entry_t *e = &d->entrytable[i];
-+		unsigned int fwd_method = e->conn_flags & IP_VS_CONN_F_FWD_MASK;
- 
- 		if (!(dname = addrport_to_anyname(e->af, &(e->addr), ntohs(e->port),
- 						  se->protocol, format))) {
-@@ -1799,8 +2057,15 @@ print_service_entry(ipvs_service_entry_t *se, unsigned int format)
- 			dname[28] = '\0';
- 
- 		if (format & FMT_RULE) {
--			printf("-a %s -r %s %s -w %d\n", svc_name, dname,
--			       fwd_switch(e->conn_flags), e->weight);
-+			if (fwd_method == IP_VS_CONN_F_TUNNEL) {
-+				print_tunnel_rule(svc_name, dname, e);
-+			} else {
-+				printf("-a %s -r %s %s -w %d\n",
-+				       svc_name,
-+				       dname,
-+				       fwd_switch(e->conn_flags),
-+				       e->weight);
-+			}
- 		} else if (format & FMT_STATS) {
- 			printf("  -> %-28s", dname);
- 			print_largenum(e->stats64.conns, format);
-@@ -1825,6 +2090,15 @@ print_service_entry(ipvs_service_entry_t *se, unsigned int format)
- 			printf("  -> %-28s %-9u %-11u %-10u %-10u\n", dname,
- 			       e->weight, e->persistconns,
- 			       e->activeconns, e->inactconns);
-+		} else if (format & FMT_TUN_INFO) {
-+			char *ti = fwd_tun_info(e);
-+
-+			printf("  -> %-28s %-7s %-13s %-6d %-10u %-10u\n",
-+			       dname, fwd_name(e->conn_flags),
-+			       ti ? : NA,
-+			       e->weight, e->activeconns, e->inactconns);
-+
-+			free(ti);
- 		} else
- 			printf("  -> %-28s %-7s %-6d %-10u %-10u\n",
- 			       dname, fwd_name(e->conn_flags),
-diff --git a/libipvs/ip_vs.h b/libipvs/ip_vs.h
-index ad0141c..ef9e0a7 100644
---- a/libipvs/ip_vs.h
-+++ b/libipvs/ip_vs.h
-@@ -107,6 +107,18 @@
- 
- #define IP_VS_PEDATA_MAXLEN	255
- 
-+/* Tunnel types */
-+enum {
-+	IP_VS_CONN_F_TUNNEL_TYPE_IPIP = 0,	/* IPIP */
-+	IP_VS_CONN_F_TUNNEL_TYPE_GUE,		/* GUE */
-+	IP_VS_CONN_F_TUNNEL_TYPE_MAX,
-+};
-+
-+/* Tunnel encapsulation flags */
-+#define IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM		(0)
-+#define IP_VS_TUNNEL_ENCAP_FLAG_CSUM		(1<<0)
-+#define IP_VS_TUNNEL_ENCAP_FLAG_REMCSUM		(1<<1)
-+
- union nf_inet_addr {
-         __u32           all[4];
-         __be32          ip;
-@@ -178,6 +190,11 @@ struct ip_vs_dest_user {
- 	u_int32_t		l_threshold;	/* lower threshold */
- 	u_int16_t		af;
- 	union nf_inet_addr	addr;
-+
-+	/* tunnel info */
-+	u_int16_t		tun_type;	/* tunnel type */
-+	__be16			tun_port;	/* tunnel port */
-+	u_int16_t		tun_flags;	/* tunnel flags */
- };
- 
- /*
-@@ -313,6 +330,11 @@ struct ip_vs_dest_entry {
- 
- 	/* statistics, 64-bit */
- 	struct ip_vs_stats64	stats64;
-+
-+	/* tunnel info */
-+	u_int16_t		tun_type;	/* tunnel type */
-+	__be16			tun_port;	/* tunnel port */
-+	u_int16_t		tun_flags;	/* tunnel flags */
- };
- 
- /* The argument to IP_VS_SO_GET_DESTS */
-@@ -527,6 +549,12 @@ enum {
- 
- 	IPVS_DEST_ATTR_STATS64,		/* nested attribute for dest stats */
- 
-+	IPVS_DEST_ATTR_TUN_TYPE,	/* tunnel type */
-+
-+	IPVS_DEST_ATTR_TUN_PORT,	/* tunnel port */
-+
-+	IPVS_DEST_ATTR_TUN_FLAGS,	/* tunnel flags */
-+
- 	__IPVS_DEST_ATTR_MAX,
- };
- 
-diff --git a/libipvs/libipvs.c b/libipvs/libipvs.c
-index 9be7700..067306a 100644
---- a/libipvs/libipvs.c
-+++ b/libipvs/libipvs.c
-@@ -390,6 +390,9 @@ static int ipvs_nl_fill_dest_attr(struct nl_msg *msg, ipvs_dest_t *dst)
- 	NLA_PUT_U16(msg, IPVS_DEST_ATTR_PORT, dst->port);
- 	NLA_PUT_U32(msg, IPVS_DEST_ATTR_FWD_METHOD, dst->conn_flags & IP_VS_CONN_F_FWD_MASK);
- 	NLA_PUT_U32(msg, IPVS_DEST_ATTR_WEIGHT, dst->weight);
-+	NLA_PUT_U8(msg, IPVS_DEST_ATTR_TUN_TYPE, dst->tun_type);
-+	NLA_PUT_U16(msg, IPVS_DEST_ATTR_TUN_PORT, dst->tun_port);
-+	NLA_PUT_U16(msg, IPVS_DEST_ATTR_TUN_FLAGS, dst->tun_flags);
- 	NLA_PUT_U32(msg, IPVS_DEST_ATTR_U_THRESH, dst->u_threshold);
- 	NLA_PUT_U32(msg, IPVS_DEST_ATTR_L_THRESH, dst->l_threshold);
- 
-@@ -856,6 +859,9 @@ static int ipvs_dests_parse_cb(struct nl_msg *msg, void *arg)
- 	struct nlattr *attrs[IPVS_CMD_ATTR_MAX + 1];
- 	struct nlattr *dest_attrs[IPVS_DEST_ATTR_MAX + 1];
- 	struct nlattr *attr_addr_family = NULL;
-+	struct nlattr *attr_tun_type = NULL;
-+	struct nlattr *attr_tun_port = NULL;
-+	struct nlattr *attr_tun_flags = NULL;
- 	struct ip_vs_get_dests **dp = (struct ip_vs_get_dests **)arg;
- 	struct ip_vs_get_dests *d = (struct ip_vs_get_dests *)*dp;
- 	int i = d->num_dests;
-@@ -888,6 +894,15 @@ static int ipvs_dests_parse_cb(struct nl_msg *msg, void *arg)
- 	d->entrytable[i].port = nla_get_u16(dest_attrs[IPVS_DEST_ATTR_PORT]);
- 	d->entrytable[i].conn_flags = nla_get_u32(dest_attrs[IPVS_DEST_ATTR_FWD_METHOD]);
- 	d->entrytable[i].weight = nla_get_u32(dest_attrs[IPVS_DEST_ATTR_WEIGHT]);
-+	attr_tun_type = dest_attrs[IPVS_DEST_ATTR_TUN_TYPE];
-+	if (attr_tun_type)
-+		d->entrytable[i].tun_type = nla_get_u8(attr_tun_type);
-+	attr_tun_port = dest_attrs[IPVS_DEST_ATTR_TUN_PORT];
-+	if (attr_tun_port)
-+		d->entrytable[i].tun_port = nla_get_u16(attr_tun_port);
-+	attr_tun_flags = dest_attrs[IPVS_DEST_ATTR_TUN_FLAGS];
-+	if (attr_tun_flags)
-+		d->entrytable[i].tun_flags = nla_get_u16(attr_tun_flags);
- 	d->entrytable[i].u_threshold = nla_get_u32(dest_attrs[IPVS_DEST_ATTR_U_THRESH]);
- 	d->entrytable[i].l_threshold = nla_get_u32(dest_attrs[IPVS_DEST_ATTR_L_THRESH]);
- 	d->entrytable[i].activeconns = nla_get_u32(dest_attrs[IPVS_DEST_ATTR_ACTIVE_CONNS]);
--- 
-2.21.0
+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
+AAB6IAAAAAA=
 
+------=_NextPart_000_0012_7EC7B490.E87A89DE--
