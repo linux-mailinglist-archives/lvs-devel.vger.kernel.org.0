@@ -2,99 +2,59 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA593020C
-	for <lists+lvs-devel@lfdr.de>; Thu, 30 May 2019 20:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1503830714
+	for <lists+lvs-devel@lfdr.de>; Fri, 31 May 2019 05:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfE3SiN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 30 May 2019 14:38:13 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:39348 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726029AbfE3SiM (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 30 May 2019 14:38:12 -0400
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x4UIbY0L005957;
-        Thu, 30 May 2019 21:37:34 +0300
-Date:   Thu, 30 May 2019 21:37:34 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Jacky Hu <hengqing.hu@gmail.com>
-cc:     brouer@redhat.com, horms@verge.net.au, lvs-devel@vger.kernel.org,
-        lvs-users@linuxvirtualserver.org, jacky.hu@walmart.com,
-        jason.niesz@walmart.com
-Subject: Re: [PATCH v8 0/2] Allow tunneling with gue encapsulation
-In-Reply-To: <20190530080057.8218-1-hengqing.hu@gmail.com>
-Message-ID: <alpine.LFD.2.21.1905302130360.4725@ja.home.ssi.bg>
-References: <20190530080057.8218-1-hengqing.hu@gmail.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1726535AbfEaDm5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Thu, 30 May 2019 23:42:57 -0400
+Received: from smtp.tjto.jus.br ([189.10.44.215]:49762 "EHLO smtp.tjto.jus.br"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726531AbfEaDm5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Thu, 30 May 2019 23:42:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.tjto.jus.br (Postfix) with ESMTP id 070FE3EF85E;
+        Thu, 30 May 2019 20:55:49 -0300 (BRT)
+Received: from smtp.tjto.jus.br ([127.0.0.1])
+        by localhost (mta-in.tjto.jus.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id FPBpixZbo-J7; Thu, 30 May 2019 20:55:48 -0300 (BRT)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.tjto.jus.br (Postfix) with ESMTP id 361DF3EEEBA;
+        Thu, 30 May 2019 20:34:06 -0300 (BRT)
+X-Virus-Scanned: amavisd-new at mta-in.tjto.jus.br
+Received: from smtp.tjto.jus.br ([127.0.0.1])
+        by localhost (mta-in.tjto.jus.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4jzFzxyhpMpv; Thu, 30 May 2019 20:34:06 -0300 (BRT)
+Received: from [192.99.135.118] (ip118.ip-192-99-135.net [192.99.135.118])
+        (Authenticated sender: nelsonsena@tjto.jus.br)
+        by smtp.tjto.jus.br (Postfix) with ESMTPSA id B80403ED715;
+        Thu, 30 May 2019 20:16:38 -0300 (BRT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?b?UmU6IOKCrCAyLDAwMCwwMDAuMDAgRXVybw==?=
+To:     Recipients <nelsonsena@tjto.jus.br>
+From:   nelsonsena@tjto.jus.br
+Date:   Thu, 30 May 2019 16:16:33 -0700
+Reply-To: myburghhugohendrik@gmail.com
+Message-Id: <20190530231639.B80403ED715@smtp.tjto.jus.br>
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Lieber Freund,
 
-	Hello,
+Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
 
-On Thu, 30 May 2019, Jacky Hu wrote:
+UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
 
-> This patchset allows tunneling with gue encapsulation.
-> 
-> v8->v7:
->   1) fixed a few style issues from scripts/checkpatch.pl --strict
->   2) use up to 4 letters in the comments
->   3) updated document for new options
-> 
-> v7->v6:
->   1) fix type of local variable in parse_tun_type
->   2) use up to 4 letters in the comments
->   3) document new options
-> 
-> v6->v5:
->   1) split the patch into two:
->      - ipvsadm: convert options to unsigned long long
->      - ipvsadm: allow tunneling with gue encapsulation
->   2) do not mix static and dynamic allocation in fwd_tun_info
->   3) use correct nla_get/put function for tun_flags
->   4) fixed || style
->   5) use correct return value for parse_tun_type
-> 
-> v5->v4:
->   1) add checksum support for gue encapsulation
-> 
-> v4->v3:
->   1) removed changes to setsockopt interface
->   2) use correct nla_get/put function for tun_port
-> 
-> v3->v2:
->   1) added missing break statements to a few switch cases
-> 
-> v2->v1:
->   1) pass tun_type and tun_port as new optional parameters
->      instead of a few bits in existing conn_flags parameters
-> 
-> Jacky Hu (2):
->   ipvsadm: convert options to unsigned long long
->   ipvsadm: allow tunneling with gue encapsulation
-> 
->  ipvsadm.8         |  70 ++++++++
->  ipvsadm.c         | 426 +++++++++++++++++++++++++++++++++++++++-------
->  libipvs/ip_vs.h   |  28 +++
->  libipvs/libipvs.c |  15 ++
->  4 files changed, 473 insertions(+), 66 deletions(-)
-> 
-> -- 
-> 2.21.0
+Das ist dein Spendencode: [DF00430342018]
 
-	Both patches look ok to me, thanks!
+Antworten Sie mit dem Spendencode auf diese E-Mail: wahlfoundationorg@gmail.com
 
-Acked-by: Julian Anastasov <ja@ssi.bg>
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
 
-	Jesper, this patchset is based on the kernel patch
-"[PATCH v4] ipvs: add checksum support for gue encapsulation"
-which is to be applied to kernel trees. If needed, I can ping
-you when the patch is accepted.
+Grüße
 
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
+Herr Richard Wahl
