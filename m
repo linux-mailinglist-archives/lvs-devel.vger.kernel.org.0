@@ -2,57 +2,59 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F2F2F82D
-	for <lists+lvs-devel@lfdr.de>; Thu, 30 May 2019 10:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5382F82E
+	for <lists+lvs-devel@lfdr.de>; Thu, 30 May 2019 10:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbfE3IBF (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 30 May 2019 04:01:05 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42704 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbfE3IBF (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 30 May 2019 04:01:05 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r22so3438657pfh.9
-        for <lvs-devel@vger.kernel.org>; Thu, 30 May 2019 01:01:04 -0700 (PDT)
+        id S1726515AbfE3IBN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 30 May 2019 04:01:13 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34470 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbfE3IBN (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 30 May 2019 04:01:13 -0400
+Received: by mail-pf1-f194.google.com with SMTP id c14so1040084pfi.1
+        for <lvs-devel@vger.kernel.org>; Thu, 30 May 2019 01:01:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UQ3actLmmuqUwQwFAEcEF4VMFgQyCFWm/OW+Ly/yVrE=;
-        b=SOXVW86l6W2dkUD2y1GEnM8d/Pj/uOelwzuBmoA9vrAaPeYRl0W9FeyRZCaT/kyOKn
-         IyZsr4/ZToztaGYpxM1TAgVi7Vr5A4LR3CA1w3u7+Dph+PufJ8nYAcCG/duJSIYqRqk5
-         c1VXJFZuqW1ccD3mjV6RmJi+IyBnVxsaDOvtFXv/64TKJt2j53XuSkhAmGTOQF9ZtE30
-         C7wtx23MrGqHfGxUNCWwNiQiIj1sJ+D42csxNwRwzGA7stmJZVXR9MwoTSSAZY/zGgJa
-         pr3j2RM6UTQpt4c5jTyRQXA/tFwe+VnY8ENIMuUmt1itWsga+I0MmoZwLjvTOPSJUm4g
-         zSXg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6mdw9QVgiQnbj3Rn2vxuBJzBKCkKgbeAaerPv94UXag=;
+        b=HliXawdEcD4big7f83fs6pI8LmrxXyOekcFa92Uy6w5dD66fP0B33SDvs4HY3vro+k
+         pHtI+E4UtFmbYnjv40LiXzYvb8YT1GIdNsKBTp4d6gaG8AviGgajh0RIbObH5MhqW6NM
+         cvY/84bPv/QOBHKYVxaEFbyqQ18BXwzpkN7ROCMJubPdcpr4MZ8k+CxIaLTQJ1IZmMFH
+         UYUBu2Nq0KzmdvKAREYK1UpFSlzWcB3FoS0AirvkrGblVV5WKAHibSxgpcwkfJQiURuV
+         oUzhLj/zBiYomh6oXCB+AiS5TAeP3wwTpoiXcrLecTpwhmqMh+JHEa1koWeeDbnL+NaE
+         ma9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UQ3actLmmuqUwQwFAEcEF4VMFgQyCFWm/OW+Ly/yVrE=;
-        b=AdcMnuuFL2ciZGIJQnXNjVnvjoHXCXyWKZ5Y6DFbWQaG4DVFR8E6r0CS54yUj0lR+n
-         hcb1t9IeYInucCKjA0mr7jnuESufh/Tzhdx/PztHuPR0rDfrm2d3ccbzvTVmRckIZTWZ
-         yx0BLo/69xhk4VM4Ec9UM6ig2iko2/+tiKaChMAwyJ0iht8ALFw5f0QQ+h2D6tc4qfHB
-         VTu2H0zI0QHNNEAyZGi1p5RxdAIEwrW7zuizDFdFgswl3lnk2PYyJUFGfxKD36bVNKGM
-         /W9NVS+NhSU4Qi+Eogg836JIWwEWUV5L4+bz63MFc4dp6njwRSBaXwl8j5ewFJRK/yjF
-         1kUg==
-X-Gm-Message-State: APjAAAVaftTN2i2bjcRjlbtIwadgv8nN902YPmACIaKvvcGnSG6x7/xE
-        0bBDQhpNvTFs3VLrUSSFoQ==
-X-Google-Smtp-Source: APXvYqwKn+9mu8Hrm3h+qynQmaKzniaKIrIrW3JO2Mf+73FY6H7Fn6BSKbhi/GAZx+1p0wi5Dr/9pQ==
-X-Received: by 2002:a62:b40a:: with SMTP id h10mr2486906pfn.216.1559203264378;
-        Thu, 30 May 2019 01:01:04 -0700 (PDT)
-Received: from localhost ([2001:19f0:7001:54c5:5400:1ff:fec8:7fc2])
-        by smtp.gmail.com with ESMTPSA id f11sm8124229pjg.1.2019.05.30.01.01.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6mdw9QVgiQnbj3Rn2vxuBJzBKCkKgbeAaerPv94UXag=;
+        b=Ysra4JeqTLgnSJ2ocAJqO525fD8pCOA966bHZ0++ZAPfEb5LwbJhJgBa6I1nf9b+aA
+         WLmVEfjU/eaGzohgtdFW0D7vy3vnuE1O7fYyzdwAX8zwC82TOCRIJLq1hFuy+8hsMYZ1
+         uOsOWZ8GWJkeqXHVrLe2YqVQSnuhQK0Of/pKslGfeonTizMnIrosYqwhbWFrSQpN9tmM
+         aIZW65R5xF3tq7N7wWVelOds+hhc1DgM30LNSanVElJEGg7/ZQaYK9/1+U9MeKU51SAf
+         25fRU60QqylDp5vBAgH9PH4D/rCtcVPMm3EfTUC7NVSQJWqxMN/LszuQIn3MlgrUOzNx
+         RG0g==
+X-Gm-Message-State: APjAAAX0CHStNXa/0IwJSxtIW3DKIocMthngsvLsZxZY4l385vF40V5C
+        ZHK36GlfXJ6+G98Cu/fx1A==
+X-Google-Smtp-Source: APXvYqzOX+aJUFzV9RFp83gbiTvwRl3guAovVPr8v0je/yFBFYvw2wcuWSGbo2P72jG0oDdQ7rfY9g==
+X-Received: by 2002:a17:90a:1aa8:: with SMTP id p37mr2309789pjp.17.1559203272211;
+        Thu, 30 May 2019 01:01:12 -0700 (PDT)
+Received: from localhost (2.172.220.35.bc.googleusercontent.com. [35.220.172.2])
+        by smtp.gmail.com with ESMTPSA id f11sm8124881pjg.1.2019.05.30.01.01.10
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 30 May 2019 01:01:03 -0700 (PDT)
+        Thu, 30 May 2019 01:01:11 -0700 (PDT)
 From:   Jacky Hu <hengqing.hu@gmail.com>
 To:     hengqing.hu@gmail.com
 Cc:     brouer@redhat.com, horms@verge.net.au, lvs-devel@vger.kernel.org,
         lvs-users@linuxvirtualserver.org, jacky.hu@walmart.com,
         jason.niesz@walmart.com
-Subject: [PATCH v8 0/2] Allow tunneling with gue encapsulation
-Date:   Thu, 30 May 2019 16:00:55 +0800
-Message-Id: <20190530080057.8218-1-hengqing.hu@gmail.com>
+Subject: [PATCH v8 1/2] ipvsadm: convert options to unsigned long long
+Date:   Thu, 30 May 2019 16:00:56 +0800
+Message-Id: <20190530080057.8218-2-hengqing.hu@gmail.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190530080057.8218-1-hengqing.hu@gmail.com>
+References: <20190530080057.8218-1-hengqing.hu@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
@@ -60,51 +62,335 @@ Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-This patchset allows tunneling with gue encapsulation.
+To allow up to 64 options to be specified.
+Add calculated logarithm constants for existing options.
+Remove opt2name function to avoid recalculation.
 
-v8->v7:
-  1) fixed a few style issues from scripts/checkpatch.pl --strict
-  2) use up to 4 letters in the comments
-  3) updated document for new options
+Signed-off-by: Jacky Hu <hengqing.hu@gmail.com>
+---
+ ipvsadm.c | 117 ++++++++++++++++++++++++++++++++----------------------
+ 1 file changed, 69 insertions(+), 48 deletions(-)
 
-v7->v6:
-  1) fix type of local variable in parse_tun_type
-  2) use up to 4 letters in the comments
-  3) document new options
-
-v6->v5:
-  1) split the patch into two:
-     - ipvsadm: convert options to unsigned long long
-     - ipvsadm: allow tunneling with gue encapsulation
-  2) do not mix static and dynamic allocation in fwd_tun_info
-  3) use correct nla_get/put function for tun_flags
-  4) fixed || style
-  5) use correct return value for parse_tun_type
-
-v5->v4:
-  1) add checksum support for gue encapsulation
-
-v4->v3:
-  1) removed changes to setsockopt interface
-  2) use correct nla_get/put function for tun_port
-
-v3->v2:
-  1) added missing break statements to a few switch cases
-
-v2->v1:
-  1) pass tun_type and tun_port as new optional parameters
-     instead of a few bits in existing conn_flags parameters
-
-Jacky Hu (2):
-  ipvsadm: convert options to unsigned long long
-  ipvsadm: allow tunneling with gue encapsulation
-
- ipvsadm.8         |  70 ++++++++
- ipvsadm.c         | 426 +++++++++++++++++++++++++++++++++++++++-------
- libipvs/ip_vs.h   |  28 +++
- libipvs/libipvs.c |  15 ++
- 4 files changed, 473 insertions(+), 66 deletions(-)
-
+diff --git a/ipvsadm.c b/ipvsadm.c
+index 0cb2b68..3cca20e 100644
+--- a/ipvsadm.c
++++ b/ipvsadm.c
+@@ -189,6 +189,35 @@ static const char* cmdnames[] = {
+ #define OPT_SYNC_MAXLEN	0x08000000
+ #define NUMBER_OF_OPT		28
+ 
++#define OPTC_NUMERIC		0
++#define OPTC_CONNECTION		1
++#define OPTC_SERVICE		2
++#define OPTC_SCHEDULER		3
++#define OPTC_PERSISTENT		4
++#define OPTC_NETMASK		5
++#define OPTC_SERVER		6
++#define OPTC_FORWARD		7
++#define OPTC_WEIGHT		8
++#define OPTC_UTHRESHOLD		9
++#define OPTC_LTHRESHOLD		10
++#define OPTC_MCAST		11
++#define OPTC_TIMEOUT		12
++#define OPTC_DAEMON		13
++#define OPTC_STATS		14
++#define OPTC_RATE		15
++#define OPTC_THRESHOLDS		16
++#define OPTC_PERSISTENTCONN	17
++#define OPTC_NOSORT		18
++#define OPTC_SYNCID		19
++#define OPTC_EXACT		20
++#define OPTC_ONEPACKET		21
++#define OPTC_PERSISTENCE_ENGINE	22
++#define OPTC_SCHED_FLAGS	23
++#define OPTC_MCAST_GROUP	24
++#define OPTC_MCAST_PORT		25
++#define OPTC_MCAST_TTL		26
++#define OPTC_SYNC_MAXLEN	27
++
+ static const char* optnames[] = {
+ 	"numeric",
+ 	"connection",
+@@ -320,9 +349,9 @@ static unsigned int parse_fwmark(char *buf);
+ static unsigned int parse_sched_flags(const char *sched, char *optarg);
+ 
+ /* check the options based on the commands_v_options table */
+-static void generic_opt_check(int command, int options);
++static void generic_opt_check(int command, unsigned long long options);
+ static void set_command(int *cmd, const int newcmd);
+-static void set_option(unsigned int *options, unsigned int option);
++static void set_option(unsigned long long *options, int optc);
+ 
+ static void tryhelp_exit(const char *program, const int exit_status);
+ static void usage_exit(const char *program, const int exit_status);
+@@ -416,7 +445,7 @@ static char *protocol_name(int proto)
+ 
+ static int
+ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+-	      unsigned int *options, unsigned int *format)
++	      unsigned long long *options, unsigned int *format)
+ {
+ 	int c, parse;
+ 	poptContext context;
+@@ -575,7 +604,7 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 		case 't':
+ 		case 'u':
+ 		case TAG_SCTP_SERVICE:
+-			set_option(options, OPT_SERVICE);
++			set_option(options, OPTC_SERVICE);
+ 			ce->svc.protocol = option_to_protocol(c);
+ 			parse = parse_service(optarg, &ce->svc);
+ 			if (!(parse & SERVICE_ADDR))
+@@ -583,7 +612,7 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 				     "address[:port] specified");
+ 			break;
+ 		case 'f':
+-			set_option(options, OPT_SERVICE);
++			set_option(options, OPTC_SERVICE);
+ 			/*
+ 			 * Set protocol to a sane values, even
+ 			 * though it is not used
+@@ -593,18 +622,18 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 			ce->svc.fwmark = parse_fwmark(optarg);
+ 			break;
+ 		case 's':
+-			set_option(options, OPT_SCHEDULER);
++			set_option(options, OPTC_SCHEDULER);
+ 			strncpy(ce->svc.sched_name,
+ 				optarg, IP_VS_SCHEDNAME_MAXLEN - 1);
+ 			break;
+ 		case 'p':
+-			set_option(options, OPT_PERSISTENT);
++			set_option(options, OPTC_PERSISTENT);
+ 			ce->svc.flags |= IP_VS_SVC_F_PERSISTENT;
+ 			ce->svc.timeout =
+ 				parse_timeout(optarg, 1, MAX_TIMEOUT);
+ 			break;
+ 		case 'M':
+-			set_option(options, OPT_NETMASK);
++			set_option(options, OPTC_NETMASK);
+ 			if (ce->svc.af != AF_INET6) {
+ 				parse = parse_netmask(optarg, &ce->svc.netmask);
+ 				if (parse != 1)
+@@ -617,7 +646,7 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 			}
+ 			break;
+ 		case 'r':
+-			set_option(options, OPT_SERVER);
++			set_option(options, OPTC_SERVER);
+ 			ipvs_service_t t_dest = ce->svc;
+ 			parse = parse_service(optarg, &t_dest);
+ 			ce->dest.af = t_dest.af;
+@@ -631,84 +660,84 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 				ce->dest.port = ce->svc.port;
+ 			break;
+ 		case 'i':
+-			set_option(options, OPT_FORWARD);
++			set_option(options, OPTC_FORWARD);
+ 			ce->dest.conn_flags = IP_VS_CONN_F_TUNNEL;
+ 			break;
+ 		case 'g':
+-			set_option(options, OPT_FORWARD);
++			set_option(options, OPTC_FORWARD);
+ 			ce->dest.conn_flags = IP_VS_CONN_F_DROUTE;
+ 			break;
+ 		case 'm':
+-			set_option(options, OPT_FORWARD);
++			set_option(options, OPTC_FORWARD);
+ 			ce->dest.conn_flags = IP_VS_CONN_F_MASQ;
+ 			break;
+ 		case 'w':
+-			set_option(options, OPT_WEIGHT);
++			set_option(options, OPTC_WEIGHT);
+ 			if ((ce->dest.weight =
+ 			     string_to_number(optarg, 0, 65535)) == -1)
+ 				fail(2, "illegal weight specified");
+ 			break;
+ 		case 'x':
+-			set_option(options, OPT_UTHRESHOLD);
++			set_option(options, OPTC_UTHRESHOLD);
+ 			if ((ce->dest.u_threshold =
+ 			     string_to_number(optarg, 0, INT_MAX)) == -1)
+ 				fail(2, "illegal u_threshold specified");
+ 			break;
+ 		case 'y':
+-			set_option(options, OPT_LTHRESHOLD);
++			set_option(options, OPTC_LTHRESHOLD);
+ 			if ((ce->dest.l_threshold =
+ 			     string_to_number(optarg, 0, INT_MAX)) == -1)
+ 				fail(2, "illegal l_threshold specified");
+ 			break;
+ 		case 'c':
+-			set_option(options, OPT_CONNECTION);
++			set_option(options, OPTC_CONNECTION);
+ 			break;
+ 		case 'n':
+-			set_option(options, OPT_NUMERIC);
++			set_option(options, OPTC_NUMERIC);
+ 			*format |= FMT_NUMERIC;
+ 			break;
+ 		case TAG_MCAST_INTERFACE:
+-			set_option(options, OPT_MCAST);
++			set_option(options, OPTC_MCAST);
+ 			strncpy(ce->daemon.mcast_ifn,
+ 				optarg, IP_VS_IFNAME_MAXLEN - 1);
+ 			break;
+ 		case 'I':
+-			set_option(options, OPT_SYNCID);
++			set_option(options, OPTC_SYNCID);
+ 			if ((ce->daemon.syncid =
+ 			     string_to_number(optarg, 0, 255)) == -1)
+ 				fail(2, "illegal syncid specified");
+ 			break;
+ 		case TAG_TIMEOUT:
+-			set_option(options, OPT_TIMEOUT);
++			set_option(options, OPTC_TIMEOUT);
+ 			break;
+ 		case TAG_DAEMON:
+-			set_option(options, OPT_DAEMON);
++			set_option(options, OPTC_DAEMON);
+ 			break;
+ 		case TAG_STATS:
+-			set_option(options, OPT_STATS);
++			set_option(options, OPTC_STATS);
+ 			*format |= FMT_STATS;
+ 			break;
+ 		case TAG_RATE:
+-			set_option(options, OPT_RATE);
++			set_option(options, OPTC_RATE);
+ 			*format |= FMT_RATE;
+ 			break;
+ 		case TAG_THRESHOLDS:
+-			set_option(options, OPT_THRESHOLDS);
++			set_option(options, OPTC_THRESHOLDS);
+ 			*format |= FMT_THRESHOLDS;
+ 			break;
+ 		case TAG_PERSISTENTCONN:
+-			set_option(options, OPT_PERSISTENTCONN);
++			set_option(options, OPTC_PERSISTENTCONN);
+ 			*format |= FMT_PERSISTENTCONN;
+ 			break;
+ 		case TAG_NO_SORT:
+-			set_option(options, OPT_NOSORT	);
++			set_option(options, OPTC_NOSORT);
+ 			*format |= FMT_NOSORT;
+ 			break;
+ 		case TAG_SORT:
+ 			/* Sort is the default, this is a no-op for compatibility */
+ 			break;
+ 		case 'X':
+-			set_option(options, OPT_EXACT);
++			set_option(options, OPTC_EXACT);
+ 			*format |= FMT_EXACT;
+ 			break;
+ 		case '6':
+@@ -720,20 +749,20 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 			}
+ 			break;
+ 		case 'o':
+-			set_option(options, OPT_ONEPACKET);
++			set_option(options, OPTC_ONEPACKET);
+ 			ce->svc.flags |= IP_VS_SVC_F_ONEPACKET;
+ 			break;
+ 		case TAG_PERSISTENCE_ENGINE:
+-			set_option(options, OPT_PERSISTENCE_ENGINE);
++			set_option(options, OPTC_PERSISTENCE_ENGINE);
+ 			strncpy(ce->svc.pe_name, optarg, IP_VS_PENAME_MAXLEN);
+ 			break;
+ 		case 'b':
+-			set_option(options, OPT_SCHED_FLAGS);
++			set_option(options, OPTC_SCHED_FLAGS);
+ 			snprintf(sched_flags_arg, sizeof(sched_flags_arg),
+ 				"%s", optarg);
+ 			break;
+ 		case TAG_MCAST_GROUP:
+-			set_option(options, OPT_MCAST_GROUP);
++			set_option(options, OPTC_MCAST_GROUP);
+ 			if (strchr(optarg, ':')) {
+ 				if (inet_pton(AF_INET6, optarg,
+ 					      &ce->daemon.mcast_group) <= 0 ||
+@@ -753,21 +782,21 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
+ 			}
+ 			break;
+ 		case TAG_MCAST_PORT:
+-			set_option(options, OPT_MCAST_PORT);
++			set_option(options, OPTC_MCAST_PORT);
+ 			parse = string_to_number(optarg, 1, 65535);
+ 			if (parse == -1)
+ 				fail(2, "illegal mcast-port specified");
+ 			ce->daemon.mcast_port = parse;
+ 			break;
+ 		case TAG_MCAST_TTL:
+-			set_option(options, OPT_MCAST_TTL);
++			set_option(options, OPTC_MCAST_TTL);
+ 			parse = string_to_number(optarg, 1, 255);
+ 			if (parse == -1)
+ 				fail(2, "illegal mcast-ttl specified");
+ 			ce->daemon.mcast_ttl = parse;
+ 			break;
+ 		case TAG_SYNC_MAXLEN:
+-			set_option(options, OPT_SYNC_MAXLEN);
++			set_option(options, OPTC_SYNC_MAXLEN);
+ 			parse = string_to_number(optarg, 1, 65535 - 20 - 8);
+ 			if (parse == -1)
+ 				fail(2, "illegal sync-maxlen specified");
+@@ -845,7 +874,7 @@ static int restore_table(int argc, char **argv, int reading_stdin)
+ static int process_options(int argc, char **argv, int reading_stdin)
+ {
+ 	struct ipvs_command_entry ce;
+-	unsigned int options = OPT_NONE;
++	unsigned long long options = OPT_NONE;
+ 	unsigned int format = FMT_NONE;
+ 	int result = 0;
+ 
+@@ -1164,7 +1193,7 @@ static unsigned int parse_sched_flags(const char *sched, char *optarg)
+ }
+ 
+ static void
+-generic_opt_check(int command, int options)
++generic_opt_check(int command, unsigned long long options)
+ {
+ 	int i, j;
+ 	int last = 0, count = 0;
+@@ -1173,7 +1202,7 @@ generic_opt_check(int command, int options)
+ 	i = command - CMD_NONE -1;
+ 
+ 	for (j = 0; j < NUMBER_OF_OPT; j++) {
+-		if (!(options & (1<<j))) {
++		if (!(options & (1ULL << j))) {
+ 			if (commands_v_options[i][j] == '+')
+ 				fail(2, "You need to supply the '%s' "
+ 				     "option for the '%s' command",
+@@ -1197,15 +1226,6 @@ generic_opt_check(int command, int options)
+ 	}
+ }
+ 
+-static inline const char *
+-opt2name(int option)
+-{
+-	const char **ptr;
+-	for (ptr = optnames; option > 1; option >>= 1, ptr++);
+-
+-	return *ptr;
+-}
+-
+ static void
+ set_command(int *cmd, const int newcmd)
+ {
+@@ -1215,10 +1235,11 @@ set_command(int *cmd, const int newcmd)
+ }
+ 
+ static void
+-set_option(unsigned int *options, unsigned int option)
++set_option(unsigned long long *options, int optc)
+ {
++	unsigned long long option = 1ULL << optc;
+ 	if (*options & option)
+-		fail(2, "multiple '%s' options specified", opt2name(option));
++		fail(2, "multiple '%s' options specified", optnames[optc]);
+ 	*options |= option;
+ }
+ 
 -- 
 2.21.0
 
