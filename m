@@ -2,67 +2,68 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5D0308F8
-	for <lists+lvs-devel@lfdr.de>; Fri, 31 May 2019 08:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612F330A72
+	for <lists+lvs-devel@lfdr.de>; Fri, 31 May 2019 10:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbfEaGuG (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 31 May 2019 02:50:06 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39184 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726330AbfEaGuG (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 31 May 2019 02:50:06 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6E4A93082E21;
-        Fri, 31 May 2019 06:50:05 +0000 (UTC)
-Received: from carbon (unknown [10.36.112.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F30F2B5A6;
-        Fri, 31 May 2019 06:49:57 +0000 (UTC)
-Date:   Fri, 31 May 2019 08:49:55 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Jacky Hu <hengqing.hu@gmail.com>, horms@verge.net.au,
-        lvs-devel@vger.kernel.org, lvs-users@linuxvirtualserver.org,
-        jacky.hu@walmart.com, jason.niesz@walmart.com, brouer@redhat.com
-Subject: Re: [PATCH v8 0/2] Allow tunneling with gue encapsulation
-Message-ID: <20190531084955.7cd4af00@carbon>
-In-Reply-To: <alpine.LFD.2.21.1905302130360.4725@ja.home.ssi.bg>
-References: <20190530080057.8218-1-hengqing.hu@gmail.com>
-        <alpine.LFD.2.21.1905302130360.4725@ja.home.ssi.bg>
+        id S1726515AbfEaIhr (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 31 May 2019 04:37:47 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:41224 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726002AbfEaIhq (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 31 May 2019 04:37:46 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id D0BED25AE77;
+        Fri, 31 May 2019 18:37:43 +1000 (AEST)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id C0941940461; Fri, 31 May 2019 10:37:41 +0200 (CEST)
+Date:   Fri, 31 May 2019 10:37:41 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Jacky Hu <hengqing.hu@gmail.com>, jacky.hu@walmart.com,
+        jason.niesz@walmart.com, Wensong Zhang <wensong@linux-vs.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jozsef Kadlecsik <kadlec@blackhole.kfki.hu>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCH v4] ipvs: add checksum support for gue encapsulation
+Message-ID: <20190531083741.dxsat27bnsy72wdv@verge.net.au>
+References: <20190530001641.504-1-hengqing.hu@gmail.com>
+ <alpine.LFD.2.21.1905301008470.4257@ja.home.ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 31 May 2019 06:50:06 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LFD.2.21.1905301008470.4257@ja.home.ssi.bg>
+Organisation: Horms Solutions BV
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-
-On Thu, 30 May 2019 21:37:34 +0300 (EEST) Julian Anastasov <ja@ssi.bg> wrote:
-
+On Thu, May 30, 2019 at 10:10:15AM +0300, Julian Anastasov wrote:
+> 
+> 	Hello,
+> 
 > On Thu, 30 May 2019, Jacky Hu wrote:
 > 
-> > This patchset allows tunneling with gue encapsulation.
+> > Add checksum support for gue encapsulation with the tun_flags parameter,
+> > which could be one of the values below:
+> > IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM
+> > IP_VS_TUNNEL_ENCAP_FLAG_CSUM
+> > IP_VS_TUNNEL_ENCAP_FLAG_REMCSUM
 > > 
-[...]
+> > Signed-off-by: Jacky Hu <hengqing.hu@gmail.com>
 > 
-> 	Both patches look ok to me, thanks!
+> 	Looks good to me, thanks!
 > 
-> Acked-by: Julian Anastasov <ja@ssi.bg>
-> 
-> 	Jesper, this patchset is based on the kernel patch
-> "[PATCH v4] ipvs: add checksum support for gue encapsulation"
-> which is to be applied to kernel trees. If needed, I can ping
-> you when the patch is accepted.
+> Signed-off-by: Julian Anastasov <ja@ssi.bg>
 
-Yes, that would be great!  I'll apply it as soon as the kernel patch is
-accepted.
+Likewise, thanks.
 
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+Pablo, pleas consider applying this to nf-next.
+
+Signed-off-by: Simon Horman <horms@verge.net.au>
