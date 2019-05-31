@@ -2,59 +2,67 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1503830714
-	for <lists+lvs-devel@lfdr.de>; Fri, 31 May 2019 05:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5D0308F8
+	for <lists+lvs-devel@lfdr.de>; Fri, 31 May 2019 08:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfEaDm5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Thu, 30 May 2019 23:42:57 -0400
-Received: from smtp.tjto.jus.br ([189.10.44.215]:49762 "EHLO smtp.tjto.jus.br"
+        id S1726413AbfEaGuG (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 31 May 2019 02:50:06 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:39184 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726531AbfEaDm5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 30 May 2019 23:42:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.tjto.jus.br (Postfix) with ESMTP id 070FE3EF85E;
-        Thu, 30 May 2019 20:55:49 -0300 (BRT)
-Received: from smtp.tjto.jus.br ([127.0.0.1])
-        by localhost (mta-in.tjto.jus.br [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id FPBpixZbo-J7; Thu, 30 May 2019 20:55:48 -0300 (BRT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.tjto.jus.br (Postfix) with ESMTP id 361DF3EEEBA;
-        Thu, 30 May 2019 20:34:06 -0300 (BRT)
-X-Virus-Scanned: amavisd-new at mta-in.tjto.jus.br
-Received: from smtp.tjto.jus.br ([127.0.0.1])
-        by localhost (mta-in.tjto.jus.br [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4jzFzxyhpMpv; Thu, 30 May 2019 20:34:06 -0300 (BRT)
-Received: from [192.99.135.118] (ip118.ip-192-99-135.net [192.99.135.118])
-        (Authenticated sender: nelsonsena@tjto.jus.br)
-        by smtp.tjto.jus.br (Postfix) with ESMTPSA id B80403ED715;
-        Thu, 30 May 2019 20:16:38 -0300 (BRT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726330AbfEaGuG (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Fri, 31 May 2019 02:50:06 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6E4A93082E21;
+        Fri, 31 May 2019 06:50:05 +0000 (UTC)
+Received: from carbon (unknown [10.36.112.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F30F2B5A6;
+        Fri, 31 May 2019 06:49:57 +0000 (UTC)
+Date:   Fri, 31 May 2019 08:49:55 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Jacky Hu <hengqing.hu@gmail.com>, horms@verge.net.au,
+        lvs-devel@vger.kernel.org, lvs-users@linuxvirtualserver.org,
+        jacky.hu@walmart.com, jason.niesz@walmart.com, brouer@redhat.com
+Subject: Re: [PATCH v8 0/2] Allow tunneling with gue encapsulation
+Message-ID: <20190531084955.7cd4af00@carbon>
+In-Reply-To: <alpine.LFD.2.21.1905302130360.4725@ja.home.ssi.bg>
+References: <20190530080057.8218-1-hengqing.hu@gmail.com>
+        <alpine.LFD.2.21.1905302130360.4725@ja.home.ssi.bg>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?b?UmU6IOKCrCAyLDAwMCwwMDAuMDAgRXVybw==?=
-To:     Recipients <nelsonsena@tjto.jus.br>
-From:   nelsonsena@tjto.jus.br
-Date:   Thu, 30 May 2019 16:16:33 -0700
-Reply-To: myburghhugohendrik@gmail.com
-Message-Id: <20190530231639.B80403ED715@smtp.tjto.jus.br>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 31 May 2019 06:50:06 +0000 (UTC)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Lieber Freund,
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
+On Thu, 30 May 2019 21:37:34 +0300 (EEST) Julian Anastasov <ja@ssi.bg> wrote:
 
-UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
+> On Thu, 30 May 2019, Jacky Hu wrote:
+> 
+> > This patchset allows tunneling with gue encapsulation.
+> > 
+[...]
+> 
+> 	Both patches look ok to me, thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
+> 
+> 	Jesper, this patchset is based on the kernel patch
+> "[PATCH v4] ipvs: add checksum support for gue encapsulation"
+> which is to be applied to kernel trees. If needed, I can ping
+> you when the patch is accepted.
 
-Das ist dein Spendencode: [DF00430342018]
+Yes, that would be great!  I'll apply it as soon as the kernel patch is
+accepted.
 
-Antworten Sie mit dem Spendencode auf diese E-Mail: wahlfoundationorg@gmail.com
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-
-Herr Richard Wahl
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
