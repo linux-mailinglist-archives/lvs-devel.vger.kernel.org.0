@@ -2,111 +2,93 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6349A4EC66
-	for <lists+lvs-devel@lfdr.de>; Fri, 21 Jun 2019 17:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2224F727
+	for <lists+lvs-devel@lfdr.de>; Sat, 22 Jun 2019 18:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbfFUPoY (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 21 Jun 2019 11:44:24 -0400
-Received: from mail.us.es ([193.147.175.20]:54000 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726010AbfFUPoY (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 21 Jun 2019 11:44:24 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 7DA00EDB0F
-        for <lvs-devel@vger.kernel.org>; Fri, 21 Jun 2019 17:44:22 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 6D00EDA70A
-        for <lvs-devel@vger.kernel.org>; Fri, 21 Jun 2019 17:44:22 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 62939DA706; Fri, 21 Jun 2019 17:44:22 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 2E747DA702;
-        Fri, 21 Jun 2019 17:44:20 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Fri, 21 Jun 2019 17:44:20 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (sys.soleta.eu [212.170.55.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 0D7014265A31;
-        Fri, 21 Jun 2019 17:44:20 +0200 (CEST)
-Date:   Fri, 21 Jun 2019 17:44:19 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH net] ipvs: defer hook registration to avoid leaks
-Message-ID: <20190621154419.lx5aw255h4rd5gli@salvia>
-References: <20190604185635.16823-1-ja@ssi.bg>
- <20190620133929.mzzeexyk7yaaslh5@verge.net.au>
+        id S1726317AbfFVQr2 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 22 Jun 2019 12:47:28 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45042 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbfFVQr2 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 22 Jun 2019 12:47:28 -0400
+Received: by mail-ot1-f65.google.com with SMTP id b7so9358198otl.11
+        for <lvs-devel@vger.kernel.org>; Sat, 22 Jun 2019 09:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Un5Ke0Ru3iTFXv9DrHEizflVlYGBaDhARoB+8+C5nXM=;
+        b=RMJHXYImW7OLq+rwo446FaPg0i4o1Hk71MXY4d7+jj5Pnvicc1ncM2BoqldENcy9BD
+         D2sz8AcwimErzmTXIh08F00LoT4K0Q2DQd4dF0HeJfZ028cJ2BJC7srk1iV+6lfpszpE
+         zQ2MwKlBzCZDZjK1byRM8L0J56yH+S1nTmNAaqOC+BXlt+RqpzdH6xXad5Kkhc3Wgr/M
+         GsWRl/fQnk/dJlYMoQaYhCr4RBD2NuJa11wnWzWPLHoj6nrz8ZVWz50OkL9E97DQTHPn
+         wdjONPCRaURAPytOSo7MW2mHSVj9raPsONSuMuNX7wz9BB48jb3u4gVD/qNSMrlbS9nt
+         G6TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Un5Ke0Ru3iTFXv9DrHEizflVlYGBaDhARoB+8+C5nXM=;
+        b=oDLcM7dCJi5AEgQ31zvTVvzo4EPm117D93O+YXBCvH7aXW+SxaH0hz/1YCSDUP+dDU
+         mueAF3UpbStur8EFaKQtEaCT7DGUgoNhhbveCQqafE5XOBGho+N+w0Xwwemrs1DDeuNP
+         auqvpo6BmvDoq6G04vGPgYm52cfP3MaLftUCaZFHihLnFSj/8zEwVmpUJc7R+BHdGTVT
+         3PhNz7Eo2N2u9FBuMByWHNrkvU81dLngdZfICELOCW1Q2rM+zH99bWIwKSuXvD1EBOss
+         js6rhy0i1PW+4hVXU1UJGVZd2Z/PsQzfKhA1HdFD/E1T0iLwa7TRPjuGAl+9k51bxxp9
+         /Gnw==
+X-Gm-Message-State: APjAAAVW9MGR9o+WI3DQqZmY6fpRYFkouHIDRtzXLAeuDDJOVVupBOEy
+        /WdWUxv/jVeopXCmzB3a3hP2Ckgh29dKotcnJCY=
+X-Google-Smtp-Source: APXvYqx6l10IvN5UY3DRPdNEiXIZD18wHuwsIEo1dD6yAhBKiDCERtbrOuyhZu88FBLNV3THutcQogal/G9sbBEL4lE=
+X-Received: by 2002:a05:6830:210f:: with SMTP id i15mr24813193otc.250.1561222047890;
+ Sat, 22 Jun 2019 09:47:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190620133929.mzzeexyk7yaaslh5@verge.net.au>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Received: by 2002:a4a:3bc7:0:0:0:0:0 with HTTP; Sat, 22 Jun 2019 09:47:27
+ -0700 (PDT)
+Reply-To: miss.fatimayusuf11@gmail.com
+From:   "Miss.Fatima Yusuf" <alice.coulibally@gmail.com>
+Date:   Sat, 22 Jun 2019 16:47:27 +0000
+Message-ID: <CAPMPULQWOV+ZVwdkaF0yq=RH_cBQuxfDuK0wbiae8xvgKu06xg@mail.gmail.com>
+Subject: From:Miss: Fatima Yusuf.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 03:39:31PM +0200, Simon Horman wrote:
-> On Tue, Jun 04, 2019 at 09:56:35PM +0300, Julian Anastasov wrote:
-> > syzkaller reports for memory leak when registering hooks [1]
-> > 
-> > As we moved the nf_unregister_net_hooks() call into
-> > __ip_vs_dev_cleanup(), defer the nf_register_net_hooks()
-> > call, so that hooks are allocated and freed from same
-> > pernet_operations (ipvs_core_dev_ops).
-> > 
-> > [1]
-> > BUG: memory leak
-> > unreferenced object 0xffff88810acd8a80 (size 96):
-> >  comm "syz-executor073", pid 7254, jiffies 4294950560 (age 22.250s)
-> >  hex dump (first 32 bytes):
-> >    02 00 00 00 00 00 00 00 50 8b bb 82 ff ff ff ff  ........P.......
-> >    00 00 00 00 00 00 00 00 00 77 bb 82 ff ff ff ff  .........w......
-> >  backtrace:
-> >    [<0000000013db61f1>] kmemleak_alloc_recursive include/linux/kmemleak.h:55 [inline]
-> >    [<0000000013db61f1>] slab_post_alloc_hook mm/slab.h:439 [inline]
-> >    [<0000000013db61f1>] slab_alloc_node mm/slab.c:3269 [inline]
-> >    [<0000000013db61f1>] kmem_cache_alloc_node_trace+0x15b/0x2a0 mm/slab.c:3597
-> >    [<000000001a27307d>] __do_kmalloc_node mm/slab.c:3619 [inline]
-> >    [<000000001a27307d>] __kmalloc_node+0x38/0x50 mm/slab.c:3627
-> >    [<0000000025054add>] kmalloc_node include/linux/slab.h:590 [inline]
-> >    [<0000000025054add>] kvmalloc_node+0x4a/0xd0 mm/util.c:431
-> >    [<0000000050d1bc00>] kvmalloc include/linux/mm.h:637 [inline]
-> >    [<0000000050d1bc00>] kvzalloc include/linux/mm.h:645 [inline]
-> >    [<0000000050d1bc00>] allocate_hook_entries_size+0x3b/0x60 net/netfilter/core.c:61
-> >    [<00000000e8abe142>] nf_hook_entries_grow+0xae/0x270 net/netfilter/core.c:128
-> >    [<000000004b94797c>] __nf_register_net_hook+0x9a/0x170 net/netfilter/core.c:337
-> >    [<00000000d1545cbc>] nf_register_net_hook+0x34/0xc0 net/netfilter/core.c:464
-> >    [<00000000876c9b55>] nf_register_net_hooks+0x53/0xc0 net/netfilter/core.c:480
-> >    [<000000002ea868e0>] __ip_vs_init+0xe8/0x170 net/netfilter/ipvs/ip_vs_core.c:2280
-> >    [<000000002eb2d451>] ops_init+0x4c/0x140 net/core/net_namespace.c:130
-> >    [<000000000284ec48>] setup_net+0xde/0x230 net/core/net_namespace.c:316
-> >    [<00000000a70600fa>] copy_net_ns+0xf0/0x1e0 net/core/net_namespace.c:439
-> >    [<00000000ff26c15e>] create_new_namespaces+0x141/0x2a0 kernel/nsproxy.c:107
-> >    [<00000000b103dc79>] copy_namespaces+0xa1/0xe0 kernel/nsproxy.c:165
-> >    [<000000007cc008a2>] copy_process.part.0+0x11fd/0x2150 kernel/fork.c:2035
-> >    [<00000000c344af7c>] copy_process kernel/fork.c:1800 [inline]
-> >    [<00000000c344af7c>] _do_fork+0x121/0x4f0 kernel/fork.c:2369
-> > 
-> > Reported-by: syzbot+722da59ccb264bc19910@syzkaller.appspotmail.com
-> > Fixes: 719c7d563c17 ("ipvs: Fix use-after-free in ip_vs_in")
-> > Signed-off-by: Julian Anastasov <ja@ssi.bg>
-> 
-> Thanks Julian.
-> 
-> Pablo, please consider applying this to nf.
-> 
-> Acked-by: Simon Horman <horms@verge.net.au>
+From:Miss: Fatima Yusuf.
 
-Applied, thanks!
+For sure this mail would definitely come to you as a surprise, but do
+take your good time to go through it, My name is Ms. Fatima Yusuf,i am
+from Ivory Coast.
+
+I lost my parents a year and couple of months ago. My father was a
+serving director of the Agro-exporting board until his death. He was
+assassinated by his business partners.Before his death, he made a
+deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for
+the purchase of cocoa processing machine and development of another
+factory before his untimely death.
+
+Being that this part of the world experiences political and crises
+time without number, there is no guarantee of lives and properties. I
+cannot invest this money here any long, despite the fact it had been
+my late father's industrial plans.
+
+I want you to do me a favor to receive this funds into your country or
+any safer place as the beneficiary, I have plans to invest this money
+in continuation with the investment vision of my late father, but not
+in this place again rather in your country. I have the vision of going
+into real estate and industrial production or any profitable business
+venture.
+
+I will be ready to compensate you with 20% of the total Amount, now
+all my hope is banked on you and i really wants to invest this money
+in your country, where there is stability of Government, political and
+economic welfare.
+
+My greatest worry now is how to move out of this country because my
+uncle is threatening to kill me as he killed my father,Please do not
+let anybody hear about this, it is between me and you alone because of
+my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
