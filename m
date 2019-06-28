@@ -2,55 +2,53 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D250459E2B
-	for <lists+lvs-devel@lfdr.de>; Fri, 28 Jun 2019 16:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF91C5A4A5
+	for <lists+lvs-devel@lfdr.de>; Fri, 28 Jun 2019 20:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbfF1Osg (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 28 Jun 2019 10:48:36 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43461 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbfF1Osf (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 28 Jun 2019 10:48:35 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f25so2686400pgv.10
-        for <lvs-devel@vger.kernel.org>; Fri, 28 Jun 2019 07:48:35 -0700 (PDT)
+        id S1726885AbfF1S51 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 28 Jun 2019 14:57:27 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:37975 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726882AbfF1S50 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 28 Jun 2019 14:57:26 -0400
+Received: by mail-pl1-f196.google.com with SMTP id 9so2960515ple.5
+        for <lvs-devel@vger.kernel.org>; Fri, 28 Jun 2019 11:57:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4+9BQ/9qN/HEB5jYhHOcTVXcrlmUmZtAOZVfYv7/QOA=;
-        b=ofGc0v9hZZwUxfhb5r0SX5BCHeOcj3Ym+G17847226BPeApHLQt5lHVJGZPjPCl6mJ
-         R9yEA1WaiRHbrYKbycxmjkd9zcIuG73DJH0UQtlrraeon+eWgyD9ND/T5MTW0MQaCyTR
-         T/8ILMD0OYRqTF/FvjRgFsB3BtZtKPQ5aqUdQ=
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=GEJr3AqvHre2EqiUp9wkeTIrlXFQndtx5Gxgp/CLC/Y=;
+        b=XoArU2Aw8uy6yHzMzOQ8pchviB6L+RP4fgA/8H3T5PNGYyVaXqKQqTIwc7a4oy+fnV
+         F1iR3tXMQ34FbQ+fE8PXhJfHqbNf+Sn8tcEf7KYCanV+dVUAQA5PC6ql/3/lkLjzI4Cv
+         BT9bbsuFZ5wsJLWle1D+GKJmmk4aHobb+e2eY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4+9BQ/9qN/HEB5jYhHOcTVXcrlmUmZtAOZVfYv7/QOA=;
-        b=Vc69nXP5pKGe0WobiwTpsVvX5Pv2BSsKIiYz2oy6m19AlDu1W+SubRCvBjndGIM3EL
-         zNPvxMJN7eDTjYpfRd4CcZaT9/smP48xoGcnDA4TKqDUh72Kid+NVw6FzEJM5CU5t5d8
-         L3LSTX9Bu2WJ89qKltkFSDvv8mq4NI60WW6ARDLQ0E1/wlzHGbbV3QW4kLEAwkR1b/Yj
-         e5RC0dCmym2xDOmb/jwm3rHIkCtflFKnQBvueJLFyDtkCjT91ZG7okd6AmZO3yX+DECR
-         XX8t0V0l3kv6pWjm73bSkA/SnUPeIcSpkbfBthTfHUZDaRv6rum1hnWqj1ez0fc0vwUD
-         1YPQ==
-X-Gm-Message-State: APjAAAUH11KOwAkYWJpU5Wgims/vZFWwRlbB0c2UoiY0nOvKFP3JRfZn
-        UxZ4DkVIUyNRzC+u6uIP9FCjpA==
-X-Google-Smtp-Source: APXvYqxuLReGYT1J6pyZqWFjFn4v/IkeCqcW7PORteWScBzJ7GtXkI24Q14wzzAy1SnCsExLh59UaA==
-X-Received: by 2002:a17:90a:29c5:: with SMTP id h63mr13123809pjd.83.1561733315036;
-        Fri, 28 Jun 2019 07:48:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b11sm2896176pfd.18.2019.06.28.07.48.33
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 28 Jun 2019 07:48:33 -0700 (PDT)
-Date:   Fri, 28 Jun 2019 07:48:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Smart <james.smart@broadcom.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=GEJr3AqvHre2EqiUp9wkeTIrlXFQndtx5Gxgp/CLC/Y=;
+        b=UpADfXgDhNhDAcJD466CInlRkBjFK4g6OR8VpVtycuwfjwv41QtS1d/caXmyNVYmgL
+         V3TQZzLrlmdrBI8JZwRyvo4Fkshv/wN4MtT0CLHI9bBGltreZv7UAQUQFxTMCxgEKxEG
+         cU2ONqfXyuuuIcOFI1Cpk0DtB39D7oTZsrvT9QlqRlfR8mTK4SAgKAUIM3Fxn3n8wahn
+         0Lmnv3ez0J2utZ/Hkxe3OGZAdMnaZXLVntQxeIBY1i5OG0eGsA+Aqkgu82tFjAEteclt
+         CSI0PPHEMHTfPp07mDvl69XPw9axBWsILd9wQzbEiH4m9n7kzsyMhoNeLKld4jaQdFfu
+         98Pw==
+X-Gm-Message-State: APjAAAVS9VN0zTCt0QxOUVDplo1OMsTjY+fM1HYlq9B+sbjdLLoujRH7
+        cxHXVYTX6RmPNJRngmFCxT2dYg==
+X-Google-Smtp-Source: APXvYqxFoDW9J1n1b7IoCWK5H6zYvA3wRtWclaCyF1V0DeG5Vz04P8IhMaf+FOo/j1jTbYYohqE2hQ==
+X-Received: by 2002:a17:902:aa03:: with SMTP id be3mr13363364plb.240.1561748246107;
+        Fri, 28 Jun 2019 11:57:26 -0700 (PDT)
+Received: from [10.230.29.90] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b15sm3008737pfi.141.2019.06.28.11.57.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 11:57:25 -0700 (PDT)
+Subject: Re: [PATCH 2/4] lpfc: reduce stack size with
+ CONFIG_GCC_PLUGIN_STRUCTLEAK_VERBOSE
+To:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
         Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "David S . Miller" <davem@davemloft.net>,
@@ -58,119 +56,67 @@ Cc:     James Morris <jmorris@namei.org>,
         Simon Horman <horms@verge.net.au>,
         Julian Anastasov <ja@ssi.bg>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 1/4] [v2] structleak: disable STRUCTLEAK_BYREF in
- combination with KASAN_STACK
-Message-ID: <201906280748.910641F1DD@keescook>
+        James Morris <jmorris@namei.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Hannes Reinecke <hare@suse.com>, Willy Tarreau <w@1wt.eu>,
+        Silvio Cesare <silvio.cesare@gmail.com>
 References: <20190628123819.2785504-1-arnd@arndb.de>
+ <20190628123819.2785504-2-arnd@arndb.de>
+From:   James Smart <james.smart@broadcom.com>
+Message-ID: <3027eebb-e49f-6db6-ae0a-39a61c0e34e1@broadcom.com>
+Date:   Fri, 28 Jun 2019 11:57:22 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190628123819.2785504-1-arnd@arndb.de>
+In-Reply-To: <20190628123819.2785504-2-arnd@arndb.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 02:37:46PM +0200, Arnd Bergmann wrote:
-> The combination of KASAN_STACK and GCC_PLUGIN_STRUCTLEAK_BYREF
-> leads to much larger kernel stack usage, as seen from the warnings
-> about functions that now exceed the 2048 byte limit:
-> 
-> drivers/media/i2c/tvp5150.c:253:1: error: the frame size of 3936 bytes is larger than 2048 bytes
-> drivers/media/tuners/r820t.c:1327:1: error: the frame size of 2816 bytes is larger than 2048 bytes
-> drivers/net/wireless/broadcom/brcm80211/brcmsmac/phy/phy_n.c:16552:1: error: the frame size of 3144 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> fs/ocfs2/aops.c:1892:1: error: the frame size of 2088 bytes is larger than 2048 bytes
-> fs/ocfs2/dlm/dlmrecovery.c:737:1: error: the frame size of 2088 bytes is larger than 2048 bytes
-> fs/ocfs2/namei.c:1677:1: error: the frame size of 2584 bytes is larger than 2048 bytes
-> fs/ocfs2/super.c:1186:1: error: the frame size of 2640 bytes is larger than 2048 bytes
-> fs/ocfs2/xattr.c:3678:1: error: the frame size of 2176 bytes is larger than 2048 bytes
-> net/bluetooth/l2cap_core.c:7056:1: error: the frame size of 2144 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> net/bluetooth/l2cap_core.c: In function 'l2cap_recv_frame':
-> net/bridge/br_netlink.c:1505:1: error: the frame size of 2448 bytes is larger than 2048 bytes
-> net/ieee802154/nl802154.c:548:1: error: the frame size of 2232 bytes is larger than 2048 bytes
-> net/wireless/nl80211.c:1726:1: error: the frame size of 2224 bytes is larger than 2048 bytes
-> net/wireless/nl80211.c:2357:1: error: the frame size of 4584 bytes is larger than 2048 bytes
-> net/wireless/nl80211.c:5108:1: error: the frame size of 2760 bytes is larger than 2048 bytes
-> net/wireless/nl80211.c:6472:1: error: the frame size of 2112 bytes is larger than 2048 bytes
-> 
-> The structleak plugin was previously disabled for CONFIG_COMPILE_TEST,
-> but meant we missed some bugs, so this time we should address them.
-> 
-> The frame size warnings are distracting, and risking a kernel stack
-> overflow is generally not beneficial to performance, so it may be best
-> to disallow that particular combination. This can be done by turning
-> off either one. I picked the dependency in GCC_PLUGIN_STRUCTLEAK_BYREF
-> and GCC_PLUGIN_STRUCTLEAK_BYREF_ALL, as this option is designed to
-> make uninitialized stack usage less harmful when enabled on its own,
-> but it also prevents KASAN from detecting those cases in which it was
-> in fact needed.
-> 
-> KASAN_STACK is currently implied by KASAN on gcc, but could be made a
-> user selectable option if we want to allow combining (non-stack) KASAN
-> with GCC_PLUGIN_STRUCTLEAK_BYREF.
-> 
-> Note that it would be possible to specifically address the files that
-> print the warning, but presumably the overall stack usage is still
-> significantly higher than in other configurations, so this would not
-> address the full problem.
-> 
-> I could not test this with CONFIG_INIT_STACK_ALL, which may or may not
-> suffer from a similar problem.
-> 
+
+
+On 6/28/2019 5:37 AM, Arnd Bergmann wrote:
+> The lpfc_debug_dump_all_queues() function repeatedly calls into
+> lpfc_debug_dump_qe(), which has a temporary 128 byte buffer.
+> This was fine before the introduction of CONFIG_GCC_PLUGIN_STRUCTLEAK_VERBOSE
+> because each instance could occupy the same stack slot. However,
+> now they each get their own copy, which leads to a huge increase
+> in stack usage as seen from the compiler warning:
+>
+> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debug_dump_all_queues':
+> drivers/scsi/lpfc/lpfc_debugfs.c:6474:1: error: the frame size of 1712 bytes is larger than 100 bytes [-Werror=frame-larger-than=]
+>
+> Avoid this by not marking lpfc_debug_dump_qe() as inline so the
+> compiler can choose to emit a static version of this function
+> when it's needed or otherwise silently drop it. As an added benefit,
+> not inlining multiple copies of this function means we save several
+> kilobytes of .text section, reducing the file size from 47kb to 43.
+>
+> It is somewhat unusual to have a function that is static but not
+> inline in a header file, but this does not cause problems here
+> because it is only used by other inline functions. It would
+> however seem reasonable to move all the lpfc_debug_dump_* functions
+> into lpfc_debugfs.c and not mark them inline as a later cleanup.
+
+I agree with this cleanup.
+
+>
 > Fixes: 81a56f6dcd20 ("gcc-plugins: structleak: Generalize to all variable types")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Acked-by: Kees Cook <keescook@chromium.org>
-
--Kees
-
 > ---
-> [v2] do it for both GCC_PLUGIN_STRUCTLEAK_BYREF and GCC_PLUGIN_STRUCTLEAK_BYREF_ALL.
-> ---
->  security/Kconfig.hardening | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index a1ffe2eb4d5f..af4c979b38ee 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -61,6 +61,7 @@ choice
->  	config GCC_PLUGIN_STRUCTLEAK_BYREF
->  		bool "zero-init structs passed by reference (strong)"
->  		depends on GCC_PLUGINS
-> +		depends on !(KASAN && KASAN_STACK=1)
->  		select GCC_PLUGIN_STRUCTLEAK
->  		help
->  		  Zero-initialize any structures on the stack that may
-> @@ -70,9 +71,15 @@ choice
->  		  exposures, like CVE-2017-1000410:
->  		  https://git.kernel.org/linus/06e7e776ca4d3654
->  
-> +		  As a side-effect, this keeps a lot of variables on the
-> +		  stack that can otherwise be optimized out, so combining
-> +		  this with CONFIG_KASAN_STACK can lead to a stack overflow
-> +		  and is disallowed.
-> +
->  	config GCC_PLUGIN_STRUCTLEAK_BYREF_ALL
->  		bool "zero-init anything passed by reference (very strong)"
->  		depends on GCC_PLUGINS
-> +		depends on !(KASAN && KASAN_STACK=1)
->  		select GCC_PLUGIN_STRUCTLEAK
->  		help
->  		  Zero-initialize any stack variables that may be passed
-> -- 
-> 2.20.0
-> 
+>   drivers/scsi/lpfc/lpfc_debugfs.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>
 
--- 
-Kees Cook
+Reviewed-by: James Smart <james.smart@broadcom.com>
+
+-- james
+
