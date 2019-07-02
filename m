@@ -2,133 +2,95 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 945F95C9DE
-	for <lists+lvs-devel@lfdr.de>; Tue,  2 Jul 2019 09:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB075CD7F
+	for <lists+lvs-devel@lfdr.de>; Tue,  2 Jul 2019 12:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbfGBHTI (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 2 Jul 2019 03:19:08 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:52280 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbfGBHTI (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 2 Jul 2019 03:19:08 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id ED07225AF0F;
-        Tue,  2 Jul 2019 17:19:05 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id E81F8940476; Tue,  2 Jul 2019 09:19:03 +0200 (CEST)
-Date:   Tue, 2 Jul 2019 09:19:03 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        id S1726990AbfGBKZR (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 2 Jul 2019 06:25:17 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33512 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725991AbfGBKZR (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 2 Jul 2019 06:25:17 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 5449FC05E77A;
+        Tue,  2 Jul 2019 10:25:06 +0000 (UTC)
+Received: from carbon (ovpn-200-45.brq.redhat.com [10.40.200.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 789496F95D;
+        Tue,  2 Jul 2019 10:24:52 +0000 (UTC)
+Date:   Tue, 2 Jul 2019 12:24:51 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     lvs-devel@vger.kernel.org, lvs-users@linuxvirtualserver.org,
         Julian Anastasov <ja@ssi.bg>
-Cc:     lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Vadim Fedorenko <vfedorenko@yandex-team.ru>
-Subject: Re: [PATCH net-next] ipvs: strip gre tunnel headers from icmp errors
-Message-ID: <20190702071903.4qrs2laft57smz7m@verge.net.au>
-References: <20190701193415.5366-1-ja@ssi.bg>
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        "Ryan O'Hara" <rohara@redhat.com>,
+        Arthur Gautier <baloo@gandi.net>,
+        Quentin Armitage <quentin@armitage.org.uk>,
+        Simon Horman <horms@verge.net.au>,
+        Wensong Zhang <wensong@linux-vs.org>
+Subject: [ANNOUNCE] ipvsadm release v1.30
+Message-ID: <20190702122451.556ceb8c@carbon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190701193415.5366-1-ja@ssi.bg>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Tue, 02 Jul 2019 10:25:17 +0000 (UTC)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Mon, Jul 01, 2019 at 10:34:15PM +0300, Julian Anastasov wrote:
-> Recognize GRE tunnels in received ICMP errors and
-> properly strip the tunnel headers.
-> 
-> Signed-off-by: Julian Anastasov <ja@ssi.bg>
+We are happy to announce the release of ipvsadm v1.30.
 
-Thanks Julian,
+ ipvsadm is a utility to administer the kernels IPVS/LVS load-balancer service
 
-this looks good to me.
+There have not been a ipvsadm release for far too long. This release is
+focused on kernel release v4.18 and below, for adding the missing userspace
+side for the schedulers MH, FO and OVF. There are upcoming change for GUE
+and GRE, that are not part of this release.
 
-Signed-off-by: Simon Horman <horms@verge.net.au>
+There have been very little development on the tool, but this release still
+contains userspace config to kernel side features that span many kernel
+releases. Special thanks to Quentin Armitage for adding this userspace side
+support, that was missing in ipvsadm.
 
-Pablo, please consider including this in nf-next
-along with the dependency listed below.
+This release contains userspace support and/or doc for 3 more schedulers:
+ - mh:  Maglev Hashing: added in kernel v4.18
+ - ovf (doc): Weighted Overflow: added in kernel v4.3
+   - https://git.kernel.org/torvalds/c/eefa32d3f3c5
+ - fo (doc): Weighted FailOver: added in kernel v3.18
+   - https://git.kernel.org/torvalds/c/616a9be25cb9
 
-> ---
->  net/netfilter/ipvs/ip_vs_core.c | 45 ++++++++++++++++++++++++++++++---
->  1 file changed, 41 insertions(+), 4 deletions(-)
-> 
->  This patch is based on:
->  "[PATCH v3] ipvs: allow tunneling with gre encapsulation"
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-> index e8651fd621ef..c2c51bdb889d 100644
-> --- a/net/netfilter/ipvs/ip_vs_core.c
-> +++ b/net/netfilter/ipvs/ip_vs_core.c
-> @@ -1610,6 +1610,38 @@ static int ipvs_udp_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  	return 0;
->  }
->  
-> +/* Check the GRE tunnel and return its header length */
-> +static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
-> +			  unsigned int offset, __u16 af,
-> +			  const union nf_inet_addr *daddr, __u8 *proto)
-> +{
-> +	struct gre_base_hdr _greh, *greh;
-> +	struct ip_vs_dest *dest;
-> +
-> +	greh = skb_header_pointer(skb, offset, sizeof(_greh), &_greh);
-> +	if (!greh)
-> +		goto unk;
-> +	dest = ip_vs_find_tunnel(ipvs, af, daddr, 0);
-> +	if (!dest)
-> +		goto unk;
-> +	if (dest->tun_type == IP_VS_CONN_F_TUNNEL_TYPE_GRE) {
-> +		__be16 type;
-> +
-> +		/* Only support version 0 and C (csum) */
-> +		if ((greh->flags & ~GRE_CSUM) != 0)
-> +			goto unk;
-> +		type = greh->protocol;
-> +		/* Later we can support also IPPROTO_IPV6 */
-> +		if (type != htons(ETH_P_IP))
-> +			goto unk;
-> +		*proto = IPPROTO_IPIP;
-> +		return gre_calc_hlen(gre_flags_to_tnl_flags(greh->flags));
-> +	}
-> +
-> +unk:
-> +	return 0;
-> +}
-> +
->  /*
->   *	Handle ICMP messages in the outside-to-inside direction (incoming).
->   *	Find any that might be relevant, check against existing connections,
-> @@ -1689,7 +1721,8 @@ ip_vs_in_icmp(struct netns_ipvs *ipvs, struct sk_buff *skb, int *related,
->  		if (cih == NULL)
->  			return NF_ACCEPT; /* The packet looks wrong, ignore */
->  		ipip = true;
-> -	} else if (cih->protocol == IPPROTO_UDP &&	/* Can be UDP encap */
-> +	} else if ((cih->protocol == IPPROTO_UDP ||	/* Can be UDP encap */
-> +		    cih->protocol == IPPROTO_GRE) &&	/* Can be GRE encap */
->  		   /* Error for our tunnel must arrive at LOCAL_IN */
->  		   (skb_rtable(skb)->rt_flags & RTCF_LOCAL)) {
->  		__u8 iproto;
-> @@ -1699,10 +1732,14 @@ ip_vs_in_icmp(struct netns_ipvs *ipvs, struct sk_buff *skb, int *related,
->  		if (unlikely(cih->frag_off & htons(IP_OFFSET)))
->  			return NF_ACCEPT;
->  		offset2 = offset + cih->ihl * 4;
-> -		ulen = ipvs_udp_decap(ipvs, skb, offset2, AF_INET, raddr,
-> -				      &iproto);
-> +		if (cih->protocol == IPPROTO_UDP)
-> +			ulen = ipvs_udp_decap(ipvs, skb, offset2, AF_INET,
-> +					      raddr, &iproto);
-> +		else
-> +			ulen = ipvs_gre_decap(ipvs, skb, offset2, AF_INET,
-> +					      raddr, &iproto);
->  		if (ulen > 0) {
-> -			/* Skip IP and UDP tunnel headers */
-> +			/* Skip IP and UDP/GRE tunnel headers */
->  			offset = offset2 + ulen;
->  			/* Now we should be at the original IP header */
->  			cih = skb_header_pointer(skb, offset, sizeof(_ciph),
-> -- 
-> 2.21.0
-> 
+This release is based on the kernel.org git tree:
+  https://git.kernel.org/cgit/utils/kernel/ipvsadm/ipvsadm.git/
+
+You can download the tarballs from:
+ https://kernel.org/pub/linux/utils/kernel/ipvsadm/
+
+Git tree:
+ git://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git
+
+Shortlog:
+
+Arthur Gautier (1):
+      libipvs: discrepancy with libnl genlmsg_put
+
+Jesper Dangaard Brouer (2):
+      Merge: ipvsadm: Document/add support for fo/ovf/mh schedulers
+      Release: Version 1.30
+
+Julian Anastasov (2):
+      ipvsadm: catch the original errno from netlink answer
+      libipvs: fix some buffer sizes
+
+Quentin Armitage (3):
+      Document support of fo scheduler
+      Document support of ovf scheduler
+      Add support for mh scheduler
+
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
