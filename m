@@ -2,76 +2,98 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E870C5D3BC
-	for <lists+lvs-devel@lfdr.de>; Tue,  2 Jul 2019 17:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F23B5D6A7
+	for <lists+lvs-devel@lfdr.de>; Tue,  2 Jul 2019 21:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbfGBP7P (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 2 Jul 2019 11:59:15 -0400
-Received: from mail.us.es ([193.147.175.20]:48246 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726486AbfGBP7P (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Tue, 2 Jul 2019 11:59:15 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 24708B60CC
-        for <lvs-devel@vger.kernel.org>; Tue,  2 Jul 2019 17:59:13 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 16832DA708
-        for <lvs-devel@vger.kernel.org>; Tue,  2 Jul 2019 17:59:13 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id F119ADA4D1; Tue,  2 Jul 2019 17:59:12 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id EFC2A10219C;
-        Tue,  2 Jul 2019 17:59:10 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Tue, 02 Jul 2019 17:59:10 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (sys.soleta.eu [212.170.55.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id CE50A4265A31;
-        Tue,  2 Jul 2019 17:59:10 +0200 (CEST)
-Date:   Tue, 2 Jul 2019 17:59:10 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Vadim Fedorenko <vfedorenko@yandex-team.ru>
-Subject: Re: [PATCH net-next] ipvs: strip gre tunnel headers from icmp errors
-Message-ID: <20190702155910.kaijphjat5jiwqk5@salvia>
-References: <20190701193415.5366-1-ja@ssi.bg>
- <20190702071903.4qrs2laft57smz7m@verge.net.au>
+        id S1727073AbfGBTK7 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 2 Jul 2019 15:10:59 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:58156 "EHLO ja.ssi.bg"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726457AbfGBTK7 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 2 Jul 2019 15:10:59 -0400
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x62JA2LD004538;
+        Tue, 2 Jul 2019 22:10:02 +0300
+Date:   Tue, 2 Jul 2019 22:10:02 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+cc:     Jacky Hu <hengqing.hu@gmail.com>, horms@verge.net.au,
+        lvs-devel@vger.kernel.org, lvs-users@linuxvirtualserver.org,
+        jacky.hu@walmart.com, jason.niesz@walmart.com
+Subject: Re: [PATCH v8 0/2] Allow tunneling with gue encapsulation
+In-Reply-To: <20190702131209.57c018ea@carbon>
+Message-ID: <alpine.LFD.2.21.1907022204510.4236@ja.home.ssi.bg>
+References: <20190530080057.8218-1-hengqing.hu@gmail.com> <alpine.LFD.2.21.1905302130360.4725@ja.home.ssi.bg> <20190531084955.7cd4af00@carbon> <20190702131209.57c018ea@carbon>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190702071903.4qrs2laft57smz7m@verge.net.au>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=US-ASCII
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 09:19:03AM +0200, Simon Horman wrote:
-> On Mon, Jul 01, 2019 at 10:34:15PM +0300, Julian Anastasov wrote:
-> > Recognize GRE tunnels in received ICMP errors and
-> > properly strip the tunnel headers.
-> > 
-> > Signed-off-by: Julian Anastasov <ja@ssi.bg>
-> 
-> Thanks Julian,
-> 
-> this looks good to me.
-> 
-> Signed-off-by: Simon Horman <horms@verge.net.au>
-> 
-> Pablo, please consider including this in nf-next
-> along with the dependency listed below.
 
-Also applied, thanks Simon.
+	Hello,
+
+On Tue, 2 Jul 2019, Jesper Dangaard Brouer wrote:
+
+> > On Thu, 30 May 2019 21:37:34 +0300 (EEST) Julian Anastasov <ja@ssi.bg> wrote:
+> > 
+> > > On Thu, 30 May 2019, Jacky Hu wrote:
+> > >   
+> > > > This patchset allows tunneling with gue encapsulation.
+> > > >   
+> > [...]
+> > > 
+> > > 	Both patches look ok to me, thanks!
+> > > 
+> > > Acked-by: Julian Anastasov <ja@ssi.bg>
+> > > 
+> > > 	Jesper, this patchset is based on the kernel patch
+> > > "[PATCH v4] ipvs: add checksum support for gue encapsulation"
+> > > which is to be applied to kernel trees. If needed, I can ping
+> > > you when the patch is accepted.  
+> 
+> Looks like this commit got applied to the kernel in commit 29930e314da3
+> ("ipvs: add checksum support for gue encapsulation"), but only net-next.
+
+	Yes, I waited net-next to be sent to Linus but it is
+fine to have these patches applied.
+
+> Thus, I've applied this user-side patchset to ipvsadm.
+>  https://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git/
+> 
+> As you might have noticed, I've created a release v1.30 prio to applying
+> these.  As we have to wait for a kernel release, likely kernel v5.3,
+> before making an ipvsadm release with this GUE feature.
+
+	Very good, thanks! The GUE+GRE work can be part of next release.
+
+> It should also make it easier for Julian's GRE work, to build on top.
+> -- 
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+> 
+> commit 29930e314da3833437a2ddc7b17f6a954f38d8fb
+> Author: Jacky Hu <hengqing.hu@gmail.com>
+> Date:   Thu May 30 08:16:40 2019 +0800
+> 
+>     ipvs: add checksum support for gue encapsulation
+>     
+>     Add checksum support for gue encapsulation with the tun_flags parameter,
+>     which could be one of the values below:
+>     IP_VS_TUNNEL_ENCAP_FLAG_NOCSUM
+>     IP_VS_TUNNEL_ENCAP_FLAG_CSUM
+>     IP_VS_TUNNEL_ENCAP_FLAG_REMCSUM
+>     
+>     Signed-off-by: Jacky Hu <hengqing.hu@gmail.com>
+>     Signed-off-by: Julian Anastasov <ja@ssi.bg>
+>     Signed-off-by: Simon Horman <horms@verge.net.au>
+>     Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
