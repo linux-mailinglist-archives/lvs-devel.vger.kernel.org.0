@@ -2,62 +2,105 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B70360D7D
-	for <lists+lvs-devel@lfdr.de>; Fri,  5 Jul 2019 23:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9A4613D7
+	for <lists+lvs-devel@lfdr.de>; Sun,  7 Jul 2019 06:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728062AbfGEV7x (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 5 Jul 2019 17:59:53 -0400
-Received: from out176.e-adjacentdigital.co.uk ([178.156.202.12]:41104 "EHLO
-        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1727876AbfGEV7u (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 5 Jul 2019 17:59:50 -0400
-X-Greylist: delayed 628 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:59:49 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
- bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
- b=Auv1vOlKlN4dNgj51EhV37KgMFv1sS11Q+T/JSfkwO3pKKL5ZEfR/bbSY29d/syusFQ8mbg0O4i+
-   BDoGjlobCN14sJ70a00lF60lFyTBhfDb0EMJnCtX1BmdDVmR63vP4ZO2TRfR4i9cKBm6ftUZ58EM
-   zM/Gwn1IvKrR3+Puxu28dXZRItSEkflX+Gtkk6E5DFwhuwAzo/vhvQWmzFCQvtPhj7OqF4HNsjGK
-   jkp/7BLro+ABphpxA3YsXGz68xw2NjHPwQzWCVmzdt63vyfprcOGXOx0sCBsa6n+UyPJgGqJfqFH
-   eRIg1QEMVZqOe+v+iY18iMseEJHBlRbLwIAVSA==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
- b=kcLjfODjgzetIakvkwIVl+VPdkq9itHwuyUJXzygjGRcq7SHsBCzGJFiVs+7KFWXarWB3SHUCjEa
-   MmAXjzHZ9qdVzCxfBV+844ZXHZXwIQ1RHe8Q5SUKewBxjn8Tav7GQiWAFzLjFMQI1OYxYumEiisK
-   jQroEp9NreQu3aq+qq3kjD8Jd4z4f+HDQyoqpA8h1HJBcTDrECRE68Hl44fkd8AW4busg/KN7NNr
-   u7zhj2mM7ezSxHU74NZPO0MWrnZMSz+LZQKwnuQZ0zUHgc1VfBqkaP26amLRJV+z0hApW5byAon2
-   1SV1z3fAhDWp6wIPcEfJTYV7drbJv3qltHBgRQ==;
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Quotes needed For July Shipments
-To:     Recipients <purchase@mathewsons.ga>
-From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
-Date:   Sat, 06 Jul 2019 00:39:19 +0300
-Reply-To: jpexcc@aol.com
-Message-ID: <0.0.39.668.1D53379E804B052.0@slot0.mathewsons.ga>
+        id S1726265AbfGGEdi (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 7 Jul 2019 00:33:38 -0400
+Received: from m12-13.163.com ([220.181.12.13]:46785 "EHLO m12-13.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725838AbfGGEdi (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Sun, 7 Jul 2019 00:33:38 -0400
+X-Greylist: delayed 906 seconds by postgrey-1.27 at vger.kernel.org; Sun, 07 Jul 2019 00:33:34 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=obkgI72FnkfilFr+aG
+        Iy9W7IsYqdSbTqaaEZ3FLrriA=; b=DEVuW4gyKlk83j4/+KPUpMZpfvcwWzq2jL
+        1jKT8EcZagpc1Rh7oklwAYNQAYfJppkDaiDbK3pK7ZtJV9VO0nv23OoPCsg0mLCP
+        3jJMl0mcxEuny1vsXSA396kC1pv+XznLfDKawI+FzhplcQQQA2Flo9xeUBBkD8Vq
+        URMtsD/hU=
+Received: from localhost.localdomain (unknown [125.82.14.162])
+        by smtp9 (Coremail) with SMTP id DcCowACnI71WciFdP77+AA--.37123S2;
+        Sun, 07 Jul 2019 12:17:27 +0800 (CST)
+From:   xianfengting221@163.com
+To:     wensong@linux-vs.org, horms@verge.net.au, ja@ssi.bg,
+        pablo@netfilter.org, kadlec@blackhole.kfki.hu, fw@strlen.de,
+        davem@davemloft.net
+Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hu Haowen <xianfengting221@163.com>
+Subject: [PATCH] ipvs: Delete some unused space characters in Kconfig
+Date:   Sun,  7 Jul 2019 12:16:49 +0800
+Message-Id: <1562473009-29726-1-git-send-email-xianfengting221@163.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: DcCowACnI71WciFdP77+AA--.37123S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar18JF1Utryfur1ktr43Wrg_yoW8tFyDpr
+        9I9r13KF47Ar1Ykr97uFy8Cryxua93Jw45Gr1kZ3s7Aas8JFn2y3Z5trsrKa4UArZ5ZrW3
+        ZFW5Xw1j93Z0yaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UJfH8UUUUU=
+X-Originating-IP: [125.82.14.162]
+X-CM-SenderInfo: h0ld0wxhqj3xtqjsjii6rwjhhfrp/1tbiMhzqAFWBjw5NGAAAsE
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hello dear,
- =
+From: Hu Haowen <xianfengting221@163.com>
 
-We are in the market for your products after meeting at your stand during l=
-ast expo.
- =
+The space characters at the end of lines are always unused and
+not easy to find. This patch deleted some of them I have found
+in Kconfig.
 
-Please kindly send us your latest catalog and price list so as to start a n=
-ew project/order as promised during the exhibition. =
+Signed-off-by: Hu Haowen <xianfengting221@163.com>
+---
 
- =
+This is my first patch to the Linux kernel, so please forgive
+me if anything went wrong.
 
-I would appreciate your response about the above details required so we can=
- revert back to you asap.
- =
+ net/netfilter/ipvs/Kconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Kind regards
- =
+diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+index f6f1a0d..54afad5 100644
+--- a/net/netfilter/ipvs/Kconfig
++++ b/net/netfilter/ipvs/Kconfig
+@@ -120,7 +120,7 @@ config	IP_VS_RR
+ 
+ 	  If you want to compile it in kernel, say Y. To compile it as a
+ 	  module, choose M here. If unsure, say N.
+- 
++
+ config	IP_VS_WRR
+ 	tristate "weighted round-robin scheduling"
+ 	---help---
+@@ -138,7 +138,7 @@ config	IP_VS_LC
+         tristate "least-connection scheduling"
+ 	---help---
+ 	  The least-connection scheduling algorithm directs network
+-	  connections to the server with the least number of active 
++	  connections to the server with the least number of active
+ 	  connections.
+ 
+ 	  If you want to compile it in kernel, say Y. To compile it as a
+@@ -193,7 +193,7 @@ config  IP_VS_LBLCR
+ 	tristate "locality-based least-connection with replication scheduling"
+ 	---help---
+ 	  The locality-based least-connection with replication scheduling
+-	  algorithm is also for destination IP load balancing. It is 
++	  algorithm is also for destination IP load balancing. It is
+ 	  usually used in cache cluster. It differs from the LBLC scheduling
+ 	  as follows: the load balancer maintains mappings from a target
+ 	  to a set of server nodes that can serve the target. Requests for
+@@ -250,8 +250,8 @@ config	IP_VS_SED
+ 	tristate "shortest expected delay scheduling"
+ 	---help---
+ 	  The shortest expected delay scheduling algorithm assigns network
+-	  connections to the server with the shortest expected delay. The 
+-	  expected delay that the job will experience is (Ci + 1) / Ui if 
++	  connections to the server with the shortest expected delay. The
++	  expected delay that the job will experience is (Ci + 1) / Ui if
+ 	  sent to the ith server, in which Ci is the number of connections
+ 	  on the ith server and Ui is the fixed service rate (weight)
+ 	  of the ith server.
+-- 
+2.7.4
 
-Rhema Zoeh
+
