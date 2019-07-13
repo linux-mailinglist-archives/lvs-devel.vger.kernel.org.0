@@ -2,91 +2,58 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC6B67B00
-	for <lists+lvs-devel@lfdr.de>; Sat, 13 Jul 2019 17:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ECA67BF4
+	for <lists+lvs-devel@lfdr.de>; Sat, 13 Jul 2019 22:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727638AbfGMPia (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 13 Jul 2019 11:38:30 -0400
-Received: from cmccmta2.chinamobile.com ([221.176.66.80]:2141 "EHLO
-        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727656AbfGMPia (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 13 Jul 2019 11:38:30 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.5]) by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee85d29f77052c-3a621; Sat, 13 Jul 2019 23:23:28 +0800 (CST)
-X-RM-TRANSID: 2ee85d29f77052c-3a621
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee35d29f76f5a8-83a47;
-        Sat, 13 Jul 2019 23:23:28 +0800 (CST)
-X-RM-TRANSID: 2ee35d29f76f5a8-83a47
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>
-Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [net-next 2/2] ipvs: batch __ip_vs_dev_cleanup
-Date:   Sat, 13 Jul 2019 23:19:46 +0800
-Message-Id: <1563031186-2101-3-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1563031186-2101-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-References: <1563031186-2101-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        id S1727968AbfGMUow convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Sat, 13 Jul 2019 16:44:52 -0400
+Received: from mail.iara.government.bg ([95.43.208.99]:50024 "EHLO
+        iara.government.bg" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727957AbfGMUow (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 13 Jul 2019 16:44:52 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by iara.government.bg (Postfix) with ESMTP id F3CE82AC942;
+        Sat, 13 Jul 2019 14:45:10 +0300 (EEST)
+Received: from iara.government.bg ([127.0.0.1])
+        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id IVga5q1ERwcV; Sat, 13 Jul 2019 14:45:10 +0300 (EEST)
+Received: from localhost (localhost [127.0.0.1])
+        by iara.government.bg (Postfix) with ESMTP id 219912A9103;
+        Sat, 13 Jul 2019 08:09:34 +0300 (EEST)
+X-Virus-Scanned: amavisd-new at iara.government.bg
+Received: from iara.government.bg ([127.0.0.1])
+        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id TDwZTSMSGvTk; Sat, 13 Jul 2019 08:09:34 +0300 (EEST)
+Received: from [10.108.11.57] (unknown [105.12.6.226])
+        by iara.government.bg (Postfix) with ESMTPSA id D557D2CAF77;
+        Sat, 13 Jul 2019 04:38:44 +0300 (EEST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?b?RndkOiBSZTog4oKsIDIsMDAwLDAwMC4wMCBFdXJv?=
+To:     Recipients <silistra@iara.government.bg>
+From:   silistra@iara.government.bg
+Date:   Fri, 12 Jul 2019 18:38:28 -0700
+Reply-To: carfleon@gmail.com
+Message-Id: <20190713013844.D557D2CAF77@iara.government.bg>
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-It's better to batch __ip_vs_cleanup to speedup ipvs
-devices dismantle.
+Lieber Freund,
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- net/netfilter/ipvs/ip_vs_core.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
 
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index b4d79b7..58af24a 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -2434,14 +2434,20 @@ static int __net_init __ip_vs_dev_init(struct net *net)
- 	return ret;
- }
- 
--static void __net_exit __ip_vs_dev_cleanup(struct net *net)
-+static void __net_exit __ip_vs_dev_cleanup_batch(struct list_head *net_list)
- {
--	struct netns_ipvs *ipvs = net_ipvs(net);
-+	struct netns_ipvs *ipvs;
-+	struct net *net;
-+	LIST_HEAD(list);
-+
- 	EnterFunction(2);
--	nf_unregister_net_hooks(net, ip_vs_ops, ARRAY_SIZE(ip_vs_ops));
--	ipvs->enable = 0;	/* Disable packet reception */
--	smp_wmb();
--	ip_vs_sync_net_cleanup(ipvs);
-+	list_for_each_entry(net, net_list, exit_list) {
-+		ipvs = net_ipvs(net);
-+		nf_unregister_net_hooks(net, ip_vs_ops, ARRAY_SIZE(ip_vs_ops));
-+		ipvs->enable = 0;	/* Disable packet reception */
-+		smp_wmb();
-+		ip_vs_sync_net_cleanup(ipvs);
-+	}
- 	LeaveFunction(2);
- }
- 
-@@ -2454,7 +2460,7 @@ static void __net_exit __ip_vs_dev_cleanup(struct net *net)
- 
- static struct pernet_operations ipvs_core_dev_ops = {
- 	.init = __ip_vs_dev_init,
--	.exit = __ip_vs_dev_cleanup,
-+	.exit_batch = __ip_vs_dev_cleanup_batch,
- };
- 
- /*
--- 
-1.8.3.1
+UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
 
+Das ist dein Spendencode: [DF00430342018]
 
+Antworten Sie mit dem Spendencode auf diese E-Mail: liezlnatashavanessa@gmail.com
 
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+
+Herr Richard Wahl
