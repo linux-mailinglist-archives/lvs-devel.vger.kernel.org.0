@@ -2,58 +2,89 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95ECA67BF4
-	for <lists+lvs-devel@lfdr.de>; Sat, 13 Jul 2019 22:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E72F684A5
+	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 09:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727968AbfGMUow convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Sat, 13 Jul 2019 16:44:52 -0400
-Received: from mail.iara.government.bg ([95.43.208.99]:50024 "EHLO
-        iara.government.bg" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727957AbfGMUow (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 13 Jul 2019 16:44:52 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by iara.government.bg (Postfix) with ESMTP id F3CE82AC942;
-        Sat, 13 Jul 2019 14:45:10 +0300 (EEST)
-Received: from iara.government.bg ([127.0.0.1])
-        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id IVga5q1ERwcV; Sat, 13 Jul 2019 14:45:10 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by iara.government.bg (Postfix) with ESMTP id 219912A9103;
-        Sat, 13 Jul 2019 08:09:34 +0300 (EEST)
-X-Virus-Scanned: amavisd-new at iara.government.bg
-Received: from iara.government.bg ([127.0.0.1])
-        by localhost (iara.government.bg [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TDwZTSMSGvTk; Sat, 13 Jul 2019 08:09:34 +0300 (EEST)
-Received: from [10.108.11.57] (unknown [105.12.6.226])
-        by iara.government.bg (Postfix) with ESMTPSA id D557D2CAF77;
-        Sat, 13 Jul 2019 04:38:44 +0300 (EEST)
-Content-Type: text/plain; charset="utf-8"
+        id S1729362AbfGOH5J (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 15 Jul 2019 03:57:09 -0400
+Received: from mail.us.es ([193.147.175.20]:39294 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729354AbfGOH5I (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 15 Jul 2019 03:57:08 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id B3EFEDA70A
+        for <lvs-devel@vger.kernel.org>; Mon, 15 Jul 2019 09:57:06 +0200 (CEST)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 9CEAF203F1
+        for <lvs-devel@vger.kernel.org>; Mon, 15 Jul 2019 09:57:06 +0200 (CEST)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id 9C12FFF6CC; Mon, 15 Jul 2019 09:57:06 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 7B4A391F4;
+        Mon, 15 Jul 2019 09:57:04 +0200 (CEST)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Mon, 15 Jul 2019 09:57:04 +0200 (CEST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (sys.soleta.eu [212.170.55.40])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 4C59D4265A31;
+        Mon, 15 Jul 2019 09:57:04 +0200 (CEST)
+Date:   Mon, 15 Jul 2019 09:57:03 +0200
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     yangxingwu <xingwu.yang@gmail.com>
+Cc:     wensong@linux-vs.org, horms@verge.net.au, ja@ssi.bg,
+        kadlec@blackhole.kfki.hu, fw@strlen.de, davem@davemloft.net,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org, joe@perches.com
+Subject: Re: [PATCH] ipvs: remove unnecessary space
+Message-ID: <20190715075703.ak6nk3sbnqksjh72@salvia>
+References: <80a4e132f3be48899904eccdc023f5c53229840b.camel@perches.com>
+ <20190712130721.7168-1-xingwu.yang@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?b?RndkOiBSZTog4oKsIDIsMDAwLDAwMC4wMCBFdXJv?=
-To:     Recipients <silistra@iara.government.bg>
-From:   silistra@iara.government.bg
-Date:   Fri, 12 Jul 2019 18:38:28 -0700
-Reply-To: carfleon@gmail.com
-Message-Id: <20190713013844.D557D2CAF77@iara.government.bg>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190712130721.7168-1-xingwu.yang@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Lieber Freund,
+On Fri, Jul 12, 2019 at 09:07:21PM +0800, yangxingwu wrote:
+> this patch removes the extra space and use bitmap_zalloc instead
+> 
+> Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
+> ---
+>  net/netfilter/ipvs/ip_vs_mh.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/net/netfilter/ipvs/ip_vs_mh.c b/net/netfilter/ipvs/ip_vs_mh.c
+> index 94d9d34..3229867 100644
+> --- a/net/netfilter/ipvs/ip_vs_mh.c
+> +++ b/net/netfilter/ipvs/ip_vs_mh.c
+> @@ -174,8 +174,7 @@ static int ip_vs_mh_populate(struct ip_vs_mh_state *s,
+>  		return 0;
+>  	}
+>  
+> -	table =  kcalloc(BITS_TO_LONGS(IP_VS_MH_TAB_SIZE),
+> -			 sizeof(unsigned long), GFP_KERNEL);
+> +	table = bitmap_zalloc(IP_VS_MH_TAB_SIZE, GFP_KERNEL);
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
+By doing:
 
-UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
+        git grep "=  " ...
 
-Das ist dein Spendencode: [DF00430342018]
+on the netfilter folders, I see more of these, it would be good if you
+fix them at once or, probably, you want to use coccinelle for this.
 
-Antworten Sie mit dem Spendencode auf diese E-Mail: liezlnatashavanessa@gmail.com
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-
-Herr Richard Wahl
+Thanks.
