@@ -2,27 +2,27 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2F368F05
-	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 16:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5BD6924A
+	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 16:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387838AbfGOOLV (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 15 Jul 2019 10:11:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43050 "EHLO mail.kernel.org"
+        id S2391613AbfGOOcR (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 15 Jul 2019 10:32:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47024 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388164AbfGOOK5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:10:57 -0400
+        id S2391118AbfGOOcQ (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:32:16 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D6C9206B8;
-        Mon, 15 Jul 2019 14:10:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 27F3E21530;
+        Mon, 15 Jul 2019 14:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199855;
-        bh=bRbLUOSyfxqZ+017XZRvrRjeO6zIZCeb9oOYMXKbOPw=;
+        s=default; t=1563201134;
+        bh=6qc/DsBtf4DUEyKzd/ZKdDJvR33gkFgDAek0Y9xKLos=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hwAXknbSxi9V8H1VugEMfknA5Qcz3g/SZUKDeRaat+YAH4HhLPBucf8up7xFNagJV
-         xEbZ0Ncwi9orYfuQ0ZNxWPBfSwYxbivanefZsfuS2pTqQYvicwi//OfyNan+cFTPJD
-         AgpsBKR6v7F/BB1BwT4CQLitn/AVd+WE3nH7oJ3o=
+        b=cHR3TdEkLQEerHkpNow84HdlToK+MuLnFUOoTxBFLPqEgbv7QRAoHN7/XazZjZ2PK
+         9T4M6ztEX4NS+4JiiD/253xh5qJo4pm+tboCjsCGwdTlcp4gu55LqCgm0afhML49mg
+         qWwOUalFtiyoSssBvTYCck0wSy7QfgOmatYvynLw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Julian Anastasov <ja@ssi.bg>,
@@ -32,12 +32,12 @@ Cc:     Julian Anastasov <ja@ssi.bg>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         coreteam@netfilter.org
-Subject: [PATCH AUTOSEL 5.1 125/219] ipvs: defer hook registration to avoid leaks
-Date:   Mon, 15 Jul 2019 10:02:06 -0400
-Message-Id: <20190715140341.6443-125-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 060/105] ipvs: defer hook registration to avoid leaks
+Date:   Mon, 15 Jul 2019 10:27:54 -0400
+Message-Id: <20190715142839.9896-60-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
-References: <20190715140341.6443-1-sashal@kernel.org>
+In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
+References: <20190715142839.9896-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -102,10 +102,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 14 insertions(+), 7 deletions(-)
 
 diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index 8ebf21149ec3..e72b51157cbb 100644
+index ee97ce176b9a..2156571455db 100644
 --- a/net/netfilter/ipvs/ip_vs_core.c
 +++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -2250,7 +2250,6 @@ static const struct nf_hook_ops ip_vs_ops[] = {
+@@ -2206,7 +2206,6 @@ static const struct nf_hook_ops ip_vs_ops[] = {
  static int __net_init __ip_vs_init(struct net *net)
  {
  	struct netns_ipvs *ipvs;
@@ -113,7 +113,7 @@ index 8ebf21149ec3..e72b51157cbb 100644
  
  	ipvs = net_generic(net, ip_vs_net_id);
  	if (ipvs == NULL)
-@@ -2282,17 +2281,11 @@ static int __net_init __ip_vs_init(struct net *net)
+@@ -2238,17 +2237,11 @@ static int __net_init __ip_vs_init(struct net *net)
  	if (ip_vs_sync_net_init(ipvs) < 0)
  		goto sync_fail;
  
@@ -131,7 +131,7 @@ index 8ebf21149ec3..e72b51157cbb 100644
  sync_fail:
  	ip_vs_conn_net_cleanup(ipvs);
  conn_fail:
-@@ -2322,6 +2315,19 @@ static void __net_exit __ip_vs_cleanup(struct net *net)
+@@ -2278,6 +2271,19 @@ static void __net_exit __ip_vs_cleanup(struct net *net)
  	net->ipvs = NULL;
  }
  
@@ -151,7 +151,7 @@ index 8ebf21149ec3..e72b51157cbb 100644
  static void __net_exit __ip_vs_dev_cleanup(struct net *net)
  {
  	struct netns_ipvs *ipvs = net_ipvs(net);
-@@ -2341,6 +2347,7 @@ static struct pernet_operations ipvs_core_ops = {
+@@ -2297,6 +2303,7 @@ static struct pernet_operations ipvs_core_ops = {
  };
  
  static struct pernet_operations ipvs_core_dev_ops = {
