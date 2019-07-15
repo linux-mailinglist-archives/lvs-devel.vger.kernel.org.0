@@ -2,27 +2,27 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 363FD694FA
-	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 16:55:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3A5695FB
+	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 17:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391408AbfGOO05 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 15 Jul 2019 10:26:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57954 "EHLO mail.kernel.org"
+        id S2388986AbfGOOMU (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 15 Jul 2019 10:12:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50666 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390911AbfGOOY1 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:24:27 -0400
+        id S2388845AbfGOOMT (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:12:19 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1EFA021842;
-        Mon, 15 Jul 2019 14:24:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CEBC4212F5;
+        Mon, 15 Jul 2019 14:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200665;
-        bh=hj4vGmAb84gtpeiOmJFY/Zmxwr42PhWcjIBKg2/kEXE=;
+        s=default; t=1563199939;
+        bh=ypsaCsMy7aKaSPm7oqFu4muO2A/ER6DGzY+uNTxvnzw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2lQ+5tsnJf/kFk3yj10LkHxLQxoeGawxR25a+ZUSr25ys7CsAS4vYOlqb93c+/C5C
-         Ituvbn+0P0QWS2MaeSThUKGw+JDwrkcsv2UCPZD8WNm7nKr9VPvXFSxNs6YytE38Vk
-         jbnn+WH1l7xMS8M2volmGm0h9YaNOgZFzKv3ZXwM=
+        b=ZCYGQah6WcyqsJvDzDC+rtYcLO7/AT1bFUy0kvlCJ5BIcB8pHDP1d0UCl7WOw8f5s
+         pRUfSkw7dc8aC+R5bY8vAQrWjH3rJJHmENb57eqpVk4QlpJZpvNJn4km86kJCdEhYn
+         fnzaBOaOfc3v9oOPKY5WBVtIjUmlwD5wgV4iOrbQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Julian Anastasov <ja@ssi.bg>,
@@ -33,12 +33,12 @@ Cc:     Julian Anastasov <ja@ssi.bg>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         coreteam@netfilter.org
-Subject: [PATCH AUTOSEL 4.19 107/158] ipvs: fix tinfo memory leak in start_sync_thread
-Date:   Mon, 15 Jul 2019 10:17:18 -0400
-Message-Id: <20190715141809.8445-107-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 143/219] ipvs: fix tinfo memory leak in start_sync_thread
+Date:   Mon, 15 Jul 2019 10:02:24 -0400
+Message-Id: <20190715140341.6443-143-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
-References: <20190715141809.8445-1-sashal@kernel.org>
+In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
+References: <20190715140341.6443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -102,10 +102,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 76 insertions(+), 68 deletions(-)
 
 diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-index a0d2e0bb9a94..0e3c0d83bd99 100644
+index 047f9a5ccaad..1790bb41c964 100644
 --- a/include/net/ip_vs.h
 +++ b/include/net/ip_vs.h
-@@ -806,11 +806,12 @@ struct ipvs_master_sync_state {
+@@ -803,11 +803,12 @@ struct ipvs_master_sync_state {
  	struct ip_vs_sync_buff	*sync_buff;
  	unsigned long		sync_queue_len;
  	unsigned int		sync_queue_delay;
@@ -119,7 +119,7 @@ index a0d2e0bb9a94..0e3c0d83bd99 100644
  /* How much time to keep dests in trash */
  #define IP_VS_DEST_TRASH_PERIOD		(120 * HZ)
  
-@@ -941,7 +942,8 @@ struct netns_ipvs {
+@@ -938,7 +939,8 @@ struct netns_ipvs {
  	spinlock_t		sync_lock;
  	struct ipvs_master_sync_state *ms;
  	spinlock_t		sync_buff_lock;
@@ -130,7 +130,7 @@ index a0d2e0bb9a94..0e3c0d83bd99 100644
  	volatile int		sync_state;
  	struct mutex		sync_mutex;
 diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 2d4e048762f6..3df94a499126 100644
+index 053cd96b9c76..179e9d11e41b 100644
 --- a/net/netfilter/ipvs/ip_vs_ctl.c
 +++ b/net/netfilter/ipvs/ip_vs_ctl.c
 @@ -2382,9 +2382,7 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
@@ -143,7 +143,7 @@ index 2d4e048762f6..3df94a499126 100644
  		}
  		goto out_dec;
  	}
-@@ -3492,10 +3490,8 @@ static int ip_vs_genl_del_daemon(struct netns_ipvs *ipvs, struct nlattr **attrs)
+@@ -3490,10 +3488,8 @@ static int ip_vs_genl_del_daemon(struct netns_ipvs *ipvs, struct nlattr **attrs)
  	if (!attrs[IPVS_DAEMON_ATTR_STATE])
  		return -EINVAL;
  
@@ -155,7 +155,7 @@ index 2d4e048762f6..3df94a499126 100644
  }
  
 diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
-index d4020c5e831d..ecb71062fcb3 100644
+index 2526be6b3d90..a4a78c4b06de 100644
 --- a/net/netfilter/ipvs/ip_vs_sync.c
 +++ b/net/netfilter/ipvs/ip_vs_sync.c
 @@ -195,6 +195,7 @@ union ip_vs_sync_conn {
