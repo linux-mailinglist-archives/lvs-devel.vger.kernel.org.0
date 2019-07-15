@@ -2,89 +2,66 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 556BE6852C
-	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 10:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501E4687DA
+	for <lists+lvs-devel@lfdr.de>; Mon, 15 Jul 2019 13:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729396AbfGOI1v (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 15 Jul 2019 04:27:51 -0400
-Received: from mail.us.es ([193.147.175.20]:56832 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729207AbfGOI1v (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 15 Jul 2019 04:27:51 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id C6A9E103247
-        for <lvs-devel@vger.kernel.org>; Mon, 15 Jul 2019 10:27:49 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id B76CE4FA29
-        for <lvs-devel@vger.kernel.org>; Mon, 15 Jul 2019 10:27:49 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id AC931DA732; Mon, 15 Jul 2019 10:27:49 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id A44971150CB;
-        Mon, 15 Jul 2019 10:27:47 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Mon, 15 Jul 2019 10:27:47 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (sys.soleta.eu [212.170.55.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 6F93A4265A2F;
-        Mon, 15 Jul 2019 10:27:47 +0200 (CEST)
-Date:   Mon, 15 Jul 2019 10:27:47 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     yangxingwu <xingwu.yang@gmail.com>, wensong@linux-vs.org,
-        ja@ssi.bg, kadlec@blackhole.kfki.hu, fw@strlen.de,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipvs: remove unnecessary space
-Message-ID: <20190715082747.fdlpvekbqyhwx724@salvia>
-References: <20190710074552.74394-1-xingwu.yang@gmail.com>
- <20190710080609.smxjqe2d5jyro4hv@verge.net.au>
+        id S1729755AbfGOLFl (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 15 Jul 2019 07:05:41 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36921 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729956AbfGOLFl (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 15 Jul 2019 07:05:41 -0400
+Received: by mail-pl1-f194.google.com with SMTP id b3so8123733plr.4
+        for <lvs-devel@vger.kernel.org>; Mon, 15 Jul 2019 04:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=HGS8/iMuetgVtqjxe/M9HccA1zlygCGly7/jeXcDSWx8Saz/Z5MgMrIp2cgdSWY29g
+         K8CFbAm4PHBe01rQAePn9e3nA4kqcb3EqL74HD62Ua3YaotA/UCz2IbHrhvOMRk8dtlu
+         E/P+JDWCY8cDx1Q+nB9qO/puoCtuHmwzZ+Kn5k3VmiMMhYgXHImwVLabvl/cUzW9SSnM
+         pMi2vWUH1YfvVMsB+vDI3TRq9xEa+CJXBTyHDIVMNAuyaQinM1nhnoY99FJ0noODVeBS
+         kt7oqk6LHOEUCN/hpffdtrQYs9cgmVU2Ep++Eq4w/1uVw5NS2iN3IBdpHtsfPH1AHgM/
+         2cAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=Ym03gDEpDtF+lqc5zkZpNWPYc/tUV22J+AyFnLce8ZKbCsOGqshoGbjJYjs7eH/l/1
+         H387m2YvIrvqAkBvr8tFh8EAs4SLMklvDlvY1hyoNS2ttBtei2uuIImXUThVV/EFXD48
+         lug6pxW7ovzBoJETcUtM1GFCW+gkKRz8KgvKCczCnHS0szb2WSzGXH3hX4M7Foq1fiWS
+         eHoCWEathzejqZtyGhJ9Mw+7hSCL8TH7O65VMGq6UP9hEx8fYiqtN0VCWoNBJnpPe8kH
+         3aI2b0f6nbNrYg/+1FyfjcbmMiXRdB8y0yEySktzyKXUpHgnDg4O2ewebk2iEirj2pCs
+         SuyA==
+X-Gm-Message-State: APjAAAW0SGp+gqLud2BlM0T7z5TFUTSOKhRxhItE8B9Pt9lRYl8dT6o2
+        kVFn/7V02ltXLzI7dFbLMvhXV92eF2Hvh96P5R8=
+X-Google-Smtp-Source: APXvYqwOiXbe+a9fRpbpLXTvNPVwsPT1oZ68shKAePpc9r68uLJsEQQtdPnaiZAs6t/7uXs9XbugJ0+3MvDIhFf7bT8=
+X-Received: by 2002:a17:902:82c4:: with SMTP id u4mr27727554plz.196.1563188740213;
+ Mon, 15 Jul 2019 04:05:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190710080609.smxjqe2d5jyro4hv@verge.net.au>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:05:39
+ -0700 (PDT)
+From:   Donald Douglas <ddouglasng@gmail.com>
+Date:   Mon, 15 Jul 2019 04:05:39 -0700
+Message-ID: <CALVR28HVqJxvCvm-YQ-YA+u8OLbgMVNk_HuoUMbqH-o67LhU3A@mail.gmail.com>
+Subject: Kindly Respond
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Jul 10, 2019 at 10:06:09AM +0200, Simon Horman wrote:
-> On Wed, Jul 10, 2019 at 03:45:52PM +0800, yangxingwu wrote:
-> > ---
-> >  net/netfilter/ipvs/ip_vs_mh.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/net/netfilter/ipvs/ip_vs_mh.c b/net/netfilter/ipvs/ip_vs_mh.c
-> > index 94d9d34..98e358e 100644
-> > --- a/net/netfilter/ipvs/ip_vs_mh.c
-> > +++ b/net/netfilter/ipvs/ip_vs_mh.c
-> > @@ -174,8 +174,8 @@ static int ip_vs_mh_populate(struct ip_vs_mh_state *s,
-> >  		return 0;
-> >  	}
-> >  
-> > -	table =  kcalloc(BITS_TO_LONGS(IP_VS_MH_TAB_SIZE),
-> > -			 sizeof(unsigned long), GFP_KERNEL);
-> > +	table =	kcalloc(BITS_TO_LONGS(IP_VS_MH_TAB_SIZE),
-> > +			sizeof(unsigned long), GFP_KERNEL);
+Hello,
+I am Barr Fredrick Mbogo a business consultant i have a lucrative
+business to discuss with you from the Eastern part of Africa Uganda to
+be precise aimed at agreed percentage upon your acceptance of my hand
+in business and friendship. Kindly respond to me if you are interested
+to partner with me for an update. Very important.
 
-May I ask one thing? :-)
-
-Please, remove all unnecessary spaces in one go, search for:
-
-        git grep "=  "
-
-in the netfilter tree, and send a v2 for this one.
-
-Thanks.
+Yours Sincerely,
+Donald Douglas,
+For,
+Barr Frederick Mbogo
+Legal Consultant.
+Reply to: barrfredmbogo@consultant.com
