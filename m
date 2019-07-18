@@ -2,157 +2,239 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F106CF92
-	for <lists+lvs-devel@lfdr.de>; Thu, 18 Jul 2019 16:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250266D3D5
+	for <lists+lvs-devel@lfdr.de>; Thu, 18 Jul 2019 20:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbfGRORX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Thu, 18 Jul 2019 10:17:23 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:2113 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390356AbfGRORX (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 18 Jul 2019 10:17:23 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.1]) by rmmx-syy-dmz-app12-12012 (RichMail) with SMTP id 2eec5d307f28e2e-a11f6; Thu, 18 Jul 2019 22:16:09 +0800 (CST)
-X-RM-TRANSID: 2eec5d307f28e2e-a11f6
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from [10.0.0.249] (unknown[112.22.251.180])
-        by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee15d307f26c3f-095a6;
-        Thu, 18 Jul 2019 22:16:09 +0800 (CST)
-X-RM-TRANSID: 2ee15d307f26c3f-095a6
-Content-Type: text/plain; charset=gb2312
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Subject: Re: [net-next 1/2] ipvs: batch __ip_vs_cleanup
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-In-Reply-To: <alpine.LFD.2.21.1907152333300.5700@ja.home.ssi.bg>
-Date:   Thu, 18 Jul 2019 22:16:05 +0800
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <8441EA26-E197-4F40-A6D7-5B7D59AA7F7F@cmss.chinamobile.com>
-References: <1563031186-2101-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
- <1563031186-2101-2-git-send-email-yanhaishuang@cmss.chinamobile.com>
- <alpine.LFD.2.21.1907152333300.5700@ja.home.ssi.bg>
-To:     Julian Anastasov <ja@ssi.bg>
-X-Mailer: Apple Mail (2.3273)
+        id S1727972AbfGRS0P (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 18 Jul 2019 14:26:15 -0400
+Received: from mail.us.es ([193.147.175.20]:38556 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726715AbfGRS0O (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Thu, 18 Jul 2019 14:26:14 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 475FAB5AA2
+        for <lvs-devel@vger.kernel.org>; Thu, 18 Jul 2019 20:26:12 +0200 (CEST)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 37FB0115108
+        for <lvs-devel@vger.kernel.org>; Thu, 18 Jul 2019 20:26:12 +0200 (CEST)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id 29352115103; Thu, 18 Jul 2019 20:26:12 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 8692FDA704;
+        Thu, 18 Jul 2019 20:26:09 +0200 (CEST)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Thu, 18 Jul 2019 20:26:09 +0200 (CEST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (sys.soleta.eu [212.170.55.40])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 53B7A4265A31;
+        Thu, 18 Jul 2019 20:26:09 +0200 (CEST)
+Date:   Thu, 18 Jul 2019 20:26:08 +0200
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     yangxingwu <xingwu.yang@gmail.com>
+Cc:     wensong@linux-vs.org, horms@verge.net.au, ja@ssi.bg,
+        kadlec@blackhole.kfki.hu, fw@strlen.de, davem@davemloft.net,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org, joe@perches.com
+Subject: Re: [PATCH v2] net/netfilter: remove unnecessary spaces
+Message-ID: <20190718182608.apjgz5xbpsyvxfp6@salvia>
+References: <20190715082747.fdlpvekbqyhwx724@salvia>
+ <20190716021301.27753-1-xingwu.yang@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190716021301.27753-1-xingwu.yang@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Looks good, but you will have to wait until net-next reopens:
 
-> On 2019年7月16日, at 上午4:39, Julian Anastasov <ja@ssi.bg> wrote:
+http://vger.kernel.org/~davem/net-next.html
+
+Will keep this in my patchwork until that happens.
+
+Thanks.
+
+On Tue, Jul 16, 2019 at 10:13:01AM +0800, yangxingwu wrote:
+> this patch removes extra spaces
 > 
+> Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
+> ---
+>  net/netfilter/ipset/ip_set_hash_gen.h  | 2 +-
+>  net/netfilter/ipset/ip_set_list_set.c  | 2 +-
+>  net/netfilter/ipvs/ip_vs_core.c        | 2 +-
+>  net/netfilter/ipvs/ip_vs_mh.c          | 4 ++--
+>  net/netfilter/ipvs/ip_vs_proto_tcp.c   | 2 +-
+>  net/netfilter/nf_conntrack_ftp.c       | 2 +-
+>  net/netfilter/nf_conntrack_proto_tcp.c | 2 +-
+>  net/netfilter/nfnetlink_log.c          | 4 ++--
+>  net/netfilter/nfnetlink_queue.c        | 4 ++--
+>  net/netfilter/xt_IDLETIMER.c           | 2 +-
+>  10 files changed, 13 insertions(+), 13 deletions(-)
 > 
-> 	Hello,
+> diff --git a/net/netfilter/ipset/ip_set_hash_gen.h b/net/netfilter/ipset/ip_set_hash_gen.h
+> index 10f6196..eb907d2 100644
+> --- a/net/netfilter/ipset/ip_set_hash_gen.h
+> +++ b/net/netfilter/ipset/ip_set_hash_gen.h
+> @@ -954,7 +954,7 @@ struct htype {
+>  		mtype_data_netmask(d, NCIDR_GET(h->nets[j].cidr[0]));
+>  #endif
+>  		key = HKEY(d, h->initval, t->htable_bits);
+> -		n =  rcu_dereference_bh(hbucket(t, key));
+> +		n = rcu_dereference_bh(hbucket(t, key));
+>  		if (!n)
+>  			continue;
+>  		for (i = 0; i < n->pos; i++) {
+> diff --git a/net/netfilter/ipset/ip_set_list_set.c b/net/netfilter/ipset/ip_set_list_set.c
+> index 8ada318..5c2be76 100644
+> --- a/net/netfilter/ipset/ip_set_list_set.c
+> +++ b/net/netfilter/ipset/ip_set_list_set.c
+> @@ -289,7 +289,7 @@ struct list_set {
+>  	if (n &&
+>  	    !(SET_WITH_TIMEOUT(set) &&
+>  	      ip_set_timeout_expired(ext_timeout(n, set))))
+> -		n =  NULL;
+> +		n = NULL;
+>  
+>  	e = kzalloc(set->dsize, GFP_ATOMIC);
+>  	if (!e)
+> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
+> index 7138556..6b3ae76 100644
+> --- a/net/netfilter/ipvs/ip_vs_core.c
+> +++ b/net/netfilter/ipvs/ip_vs_core.c
+> @@ -615,7 +615,7 @@ int ip_vs_leave(struct ip_vs_service *svc, struct sk_buff *skb,
+>  		unsigned int flags = (svc->flags & IP_VS_SVC_F_ONEPACKET &&
+>  				      iph->protocol == IPPROTO_UDP) ?
+>  				      IP_VS_CONN_F_ONE_PACKET : 0;
+> -		union nf_inet_addr daddr =  { .all = { 0, 0, 0, 0 } };
+> +		union nf_inet_addr daddr = { .all = { 0, 0, 0, 0 } };
+>  
+>  		/* create a new connection entry */
+>  		IP_VS_DBG(6, "%s(): create a cache_bypass entry\n", __func__);
+> diff --git a/net/netfilter/ipvs/ip_vs_mh.c b/net/netfilter/ipvs/ip_vs_mh.c
+> index 94d9d34..da0280c 100644
+> --- a/net/netfilter/ipvs/ip_vs_mh.c
+> +++ b/net/netfilter/ipvs/ip_vs_mh.c
+> @@ -174,8 +174,8 @@ static int ip_vs_mh_populate(struct ip_vs_mh_state *s,
+>  		return 0;
+>  	}
+>  
+> -	table =  kcalloc(BITS_TO_LONGS(IP_VS_MH_TAB_SIZE),
+> -			 sizeof(unsigned long), GFP_KERNEL);
+> +	table = kcalloc(BITS_TO_LONGS(IP_VS_MH_TAB_SIZE),
+> +			sizeof(unsigned long), GFP_KERNEL);
+>  	if (!table)
+>  		return -ENOMEM;
+>  
+> diff --git a/net/netfilter/ipvs/ip_vs_proto_tcp.c b/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> index 915ac82..c7b46a9 100644
+> --- a/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> +++ b/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> @@ -710,7 +710,7 @@ static int __ip_vs_tcp_init(struct netns_ipvs *ipvs, struct ip_vs_proto_data *pd
+>  							sizeof(tcp_timeouts));
+>  	if (!pd->timeout_table)
+>  		return -ENOMEM;
+> -	pd->tcp_state_table =  tcp_states;
+> +	pd->tcp_state_table = tcp_states;
+>  	return 0;
+>  }
+>  
+> diff --git a/net/netfilter/nf_conntrack_ftp.c b/net/netfilter/nf_conntrack_ftp.c
+> index 8c6c11b..26c1ff8 100644
+> --- a/net/netfilter/nf_conntrack_ftp.c
+> +++ b/net/netfilter/nf_conntrack_ftp.c
+> @@ -162,7 +162,7 @@ static int try_rfc959(const char *data, size_t dlen,
+>  	if (length == 0)
+>  		return 0;
+>  
+> -	cmd->u3.ip =  htonl((array[0] << 24) | (array[1] << 16) |
+> +	cmd->u3.ip = htonl((array[0] << 24) | (array[1] << 16) |
+>  				    (array[2] << 8) | array[3]);
+>  	cmd->u.tcp.port = htons((array[4] << 8) | array[5]);
+>  	return length;
+> diff --git a/net/netfilter/nf_conntrack_proto_tcp.c b/net/netfilter/nf_conntrack_proto_tcp.c
+> index 1e2cc83..48f3a67 100644
+> --- a/net/netfilter/nf_conntrack_proto_tcp.c
+> +++ b/net/netfilter/nf_conntrack_proto_tcp.c
+> @@ -1225,7 +1225,7 @@ static int tcp_to_nlattr(struct sk_buff *skb, struct nlattr *nla,
+>  	[CTA_PROTOINFO_TCP_WSCALE_ORIGINAL] = { .type = NLA_U8 },
+>  	[CTA_PROTOINFO_TCP_WSCALE_REPLY]    = { .type = NLA_U8 },
+>  	[CTA_PROTOINFO_TCP_FLAGS_ORIGINAL]  = { .len = sizeof(struct nf_ct_tcp_flags) },
+> -	[CTA_PROTOINFO_TCP_FLAGS_REPLY]	    = { .len =  sizeof(struct nf_ct_tcp_flags) },
+> +	[CTA_PROTOINFO_TCP_FLAGS_REPLY]	    = { .len = sizeof(struct nf_ct_tcp_flags) },
+>  };
+>  
+>  #define TCP_NLATTR_SIZE	( \
+> diff --git a/net/netfilter/nfnetlink_log.c b/net/netfilter/nfnetlink_log.c
+> index 6dee4f9..d69e186 100644
+> --- a/net/netfilter/nfnetlink_log.c
+> +++ b/net/netfilter/nfnetlink_log.c
+> @@ -651,7 +651,7 @@ static void nfulnl_instance_free_rcu(struct rcu_head *head)
+>  	/* FIXME: do we want to make the size calculation conditional based on
+>  	 * what is actually present?  way more branches and checks, but more
+>  	 * memory efficient... */
+> -	size =    nlmsg_total_size(sizeof(struct nfgenmsg))
+> +	size = nlmsg_total_size(sizeof(struct nfgenmsg))
+>  		+ nla_total_size(sizeof(struct nfulnl_msg_packet_hdr))
+>  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+>  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+> @@ -668,7 +668,7 @@ static void nfulnl_instance_free_rcu(struct rcu_head *head)
+>  		+ nla_total_size(sizeof(struct nfgenmsg));	/* NLMSG_DONE */
+>  
+>  	if (in && skb_mac_header_was_set(skb)) {
+> -		size +=   nla_total_size(skb->dev->hard_header_len)
+> +		size += nla_total_size(skb->dev->hard_header_len)
+>  			+ nla_total_size(sizeof(u_int16_t))	/* hwtype */
+>  			+ nla_total_size(sizeof(u_int16_t));	/* hwlen */
+>  	}
+> diff --git a/net/netfilter/nfnetlink_queue.c b/net/netfilter/nfnetlink_queue.c
+> index 89750f7..a1ef6e3 100644
+> --- a/net/netfilter/nfnetlink_queue.c
+> +++ b/net/netfilter/nfnetlink_queue.c
+> @@ -394,7 +394,7 @@ static int nfqnl_put_bridge(struct nf_queue_entry *entry, struct sk_buff *skb)
+>  	char *secdata = NULL;
+>  	u32 seclen = 0;
+>  
+> -	size =    nlmsg_total_size(sizeof(struct nfgenmsg))
+> +	size = nlmsg_total_size(sizeof(struct nfgenmsg))
+>  		+ nla_total_size(sizeof(struct nfqnl_msg_packet_hdr))
+>  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+>  		+ nla_total_size(sizeof(u_int32_t))	/* ifindex */
+> @@ -453,7 +453,7 @@ static int nfqnl_put_bridge(struct nf_queue_entry *entry, struct sk_buff *skb)
+>  	}
+>  
+>  	if (queue->flags & NFQA_CFG_F_UID_GID) {
+> -		size +=  (nla_total_size(sizeof(u_int32_t))	/* uid */
+> +		size += (nla_total_size(sizeof(u_int32_t))	/* uid */
+>  			+ nla_total_size(sizeof(u_int32_t)));	/* gid */
+>  	}
+>  
+> diff --git a/net/netfilter/xt_IDLETIMER.c b/net/netfilter/xt_IDLETIMER.c
+> index 9cec9ea..f56d3ed 100644
+> --- a/net/netfilter/xt_IDLETIMER.c
+> +++ b/net/netfilter/xt_IDLETIMER.c
+> @@ -283,7 +283,7 @@ static int __init idletimer_tg_init(void)
+>  
+>  	idletimer_tg_kobj = &idletimer_tg_device->kobj;
+>  
+> -	err =  xt_register_target(&idletimer_tg);
+> +	err = xt_register_target(&idletimer_tg);
+>  	if (err < 0) {
+>  		pr_debug("couldn't register xt target\n");
+>  		goto out_dev;
+> -- 
+> 1.8.3.1
 > 
-> On Sat, 13 Jul 2019, Haishuang Yan wrote:
-> 
->> It's better to batch __ip_vs_cleanup to speedup ipvs
->> connections dismantle.
->> 
->> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
->> ---
->> include/net/ip_vs.h             |  2 +-
->> net/netfilter/ipvs/ip_vs_core.c | 29 +++++++++++++++++------------
->> net/netfilter/ipvs/ip_vs_ctl.c  | 13 ++++++++++---
->> 3 files changed, 28 insertions(+), 16 deletions(-)
->> 
->> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
->> index 3759167..93e7a25 100644
->> --- a/include/net/ip_vs.h
->> +++ b/include/net/ip_vs.h
->> @@ -1324,7 +1324,7 @@ static inline void ip_vs_control_del(struct ip_vs_conn *cp)
->> void ip_vs_control_net_cleanup(struct netns_ipvs *ipvs);
->> void ip_vs_estimator_net_cleanup(struct netns_ipvs *ipvs);
->> void ip_vs_sync_net_cleanup(struct netns_ipvs *ipvs);
->> -void ip_vs_service_net_cleanup(struct netns_ipvs *ipvs);
->> +void ip_vs_service_nets_cleanup(struct list_head *net_list);
->> 
->> /* IPVS application functions
->>  * (from ip_vs_app.c)
->> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
->> index 46f06f9..b4d79b7 100644
->> --- a/net/netfilter/ipvs/ip_vs_core.c
->> +++ b/net/netfilter/ipvs/ip_vs_core.c
->> @@ -2402,18 +2402,23 @@ static int __net_init __ip_vs_init(struct net *net)
->> 	return -ENOMEM;
->> }
->> 
->> -static void __net_exit __ip_vs_cleanup(struct net *net)
->> +static void __net_exit __ip_vs_cleanup_batch(struct list_head *net_list)
->> {
->> -	struct netns_ipvs *ipvs = net_ipvs(net);
->> -
->> -	ip_vs_service_net_cleanup(ipvs);	/* ip_vs_flush() with locks */
->> -	ip_vs_conn_net_cleanup(ipvs);
->> -	ip_vs_app_net_cleanup(ipvs);
->> -	ip_vs_protocol_net_cleanup(ipvs);
->> -	ip_vs_control_net_cleanup(ipvs);
->> -	ip_vs_estimator_net_cleanup(ipvs);
->> -	IP_VS_DBG(2, "ipvs netns %d released\n", ipvs->gen);
->> -	net->ipvs = NULL;
->> +	struct netns_ipvs *ipvs;
->> +	struct net *net;
->> +	LIST_HEAD(list);
->> +
->> +	ip_vs_service_nets_cleanup(net_list);	/* ip_vs_flush() with locks */
->> +	list_for_each_entry(net, net_list, exit_list) {
-> 
-> 	How much faster is to replace list_for_each_entry in
-> ops_exit_list() with this one. IPVS can waste time in calls
-> such as kthread_stop() and del_timer_sync() but I'm not sure
-> we can solve it easily. What gain do you see in benchmarks?
-
-Hi, 
-
-As the following benchmark testing results show, there is a little performance improvement:
-
-$  cat add_del_unshare.sh
-#!/bin/bash
-
-for i in `seq 1 100`
-    do
-     (for j in `seq 1 40` ; do  unshare -n ipvsadm -A -t 172.16.$i.$j:80 >/dev/null ; done) &
-    done
-wait; grep net_namespace /proc/slabinfo
-
-Befor patch:
-$  time sh add_del_unshare.sh
-net_namespace       4020   4020   4736    6    8 : tunables    0    0    0 : slabdata    670    670      0
-
-real    0m8.086s
-user    0m2.025s
-sys     0m36.956s
-
-After patch:
-$  time sh add_del_unshare.sh
-net_namespace       4020   4020   4736    6    8 : tunables    0    0    0 : slabdata    670    670      0
-
-real    0m7.623s
-user    0m2.003s
-sys     0m32.935s
-
-
-> 
->> +		ipvs = net_ipvs(net);
->> +		ip_vs_conn_net_cleanup(ipvs);
->> +		ip_vs_app_net_cleanup(ipvs);
->> +		ip_vs_protocol_net_cleanup(ipvs);
->> +		ip_vs_control_net_cleanup(ipvs);
->> +		ip_vs_estimator_net_cleanup(ipvs);
->> +		IP_VS_DBG(2, "ipvs netns %d released\n", ipvs->gen);
->> +		net->ipvs = NULL;
->> +	}
->> }
-> 
-> Regards
-> 
-> --
-> Julian Anastasov <ja@ssi.bg>
-> 
-
-
-
