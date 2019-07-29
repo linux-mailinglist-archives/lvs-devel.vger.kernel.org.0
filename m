@@ -2,31 +2,30 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F3A797E7
-	for <lists+lvs-devel@lfdr.de>; Mon, 29 Jul 2019 22:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCC1799C8
+	for <lists+lvs-devel@lfdr.de>; Mon, 29 Jul 2019 22:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729921AbfG2UDz (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 29 Jul 2019 16:03:55 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:52746 "EHLO ja.ssi.bg"
+        id S1729259AbfG2UUg (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 29 Jul 2019 16:20:36 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:52836 "EHLO ja.ssi.bg"
         rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729843AbfG2UDz (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 29 Jul 2019 16:03:55 -0400
+        id S1729250AbfG2UUg (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 29 Jul 2019 16:20:36 -0400
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x6TK3VOW005690;
-        Mon, 29 Jul 2019 23:03:32 +0300
-Date:   Mon, 29 Jul 2019 23:03:31 +0300 (EEST)
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x6TKK6AN006015;
+        Mon, 29 Jul 2019 23:20:06 +0300
+Date:   Mon, 29 Jul 2019 23:20:06 +0300 (EEST)
 From:   Julian Anastasov <ja@ssi.bg>
-To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-cc:     "David S. Miller" <davem@davemloft.net>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [net-next 1/2] ipvs: batch __ip_vs_cleanup
-In-Reply-To: <8441EA26-E197-4F40-A6D7-5B7D59AA7F7F@cmss.chinamobile.com>
-Message-ID: <alpine.LFD.2.21.1907292300580.2909@ja.home.ssi.bg>
-References: <1563031186-2101-1-git-send-email-yanhaishuang@cmss.chinamobile.com> <1563031186-2101-2-git-send-email-yanhaishuang@cmss.chinamobile.com> <alpine.LFD.2.21.1907152333300.5700@ja.home.ssi.bg>
- <8441EA26-E197-4F40-A6D7-5B7D59AA7F7F@cmss.chinamobile.com>
+To:     Florian Westphal <fw@strlen.de>
+cc:     hujunwei <hujunwei4@huawei.com>, wensong@linux-vs.org,
+        horms@verge.net.au, pablo@netfilter.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        Mingfangsen <mingfangsen@huawei.com>, wangxiaogang3@huawei.com,
+        xuhanbing@huawei.com
+Subject: Re: [PATCH net] ipvs: Improve robustness to the ipvs sysctl
+In-Reply-To: <20190729004958.GA19226@strlen.de>
+Message-ID: <alpine.LFD.2.21.1907292305200.2909@ja.home.ssi.bg>
+References: <1997375e-815d-137f-20c9-0829a8587ee9@huawei.com> <20190729004958.GA19226@strlen.de>
 User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -38,49 +37,32 @@ X-Mailing-List: lvs-devel@vger.kernel.org
 
 	Hello,
 
-On Thu, 18 Jul 2019, Haishuang Yan wrote:
+On Mon, 29 Jul 2019, Florian Westphal wrote:
 
-> As the following benchmark testing results show, there is a little performance improvement:
-
-	OK, can you send v2 after removing the LIST_HEAD(list) from
-both patches, I guess, it is not needed. If you prefer, you can
-include these benchmark results too.
-
-> $  cat add_del_unshare.sh
-> #!/bin/bash
-> 
-> for i in `seq 1 100`
->     do
->      (for j in `seq 1 40` ; do  unshare -n ipvsadm -A -t 172.16.$i.$j:80 >/dev/null ; done) &
->     done
-> wait; grep net_namespace /proc/slabinfo
-> 
-> Befor patch:
-> $  time sh add_del_unshare.sh
-> net_namespace       4020   4020   4736    6    8 : tunables    0    0    0 : slabdata    670    670      0
-> 
-> real    0m8.086s
-> user    0m2.025s
-> sys     0m36.956s
-> 
-> After patch:
-> $  time sh add_del_unshare.sh
-> net_namespace       4020   4020   4736    6    8 : tunables    0    0    0 : slabdata    670    670      0
-> 
-> real    0m7.623s
-> user    0m2.003s
-> sys     0m32.935s
-> 
-> 
+> > diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+> > index 741d91aa4a8d..e78fd05f108b 100644
+> > --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> > +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> > @@ -1680,12 +1680,18 @@ proc_do_defense_mode(struct ctl_table *table, int write,
+> >  	int val = *valp;
+> >  	int rc;
 > > 
-> >> +		ipvs = net_ipvs(net);
-> >> +		ip_vs_conn_net_cleanup(ipvs);
-> >> +		ip_vs_app_net_cleanup(ipvs);
-> >> +		ip_vs_protocol_net_cleanup(ipvs);
-> >> +		ip_vs_control_net_cleanup(ipvs);
-> >> +		ip_vs_estimator_net_cleanup(ipvs);
-> >> +		IP_VS_DBG(2, "ipvs netns %d released\n", ipvs->gen);
-> >> +		net->ipvs = NULL;
+> > -	rc = proc_dointvec(table, write, buffer, lenp, ppos);
+> > +	struct ctl_table tmp = {
+> > +		.data = &val,
+> > +		.maxlen = sizeof(int),
+> > +		.mode = table->mode,
+> > +	};
+> > +
+> > +	rc = proc_dointvec(&tmp, write, buffer, lenp, ppos);
+> 
+> Wouldn't it be better do use proc_dointvec_minmax and set the
+> constraints via .extra1,2 in the sysctl knob definition?
+
+	We store the 'ipvs' back-ptr in extra2, so may be we
+can not use it in the table for proc_do_defense_mode, only for
+tmp. proc_do_sync_mode may use extra1/2 in table for the
+proc_dointvec_minmax call.
 
 Regards
 
