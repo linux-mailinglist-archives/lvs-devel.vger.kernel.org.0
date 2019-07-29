@@ -2,94 +2,87 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F7078E8B
-	for <lists+lvs-devel@lfdr.de>; Mon, 29 Jul 2019 16:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F3A797E7
+	for <lists+lvs-devel@lfdr.de>; Mon, 29 Jul 2019 22:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728653AbfG2O7L (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 29 Jul 2019 10:59:11 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:33374 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726197AbfG2O7K (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 29 Jul 2019 10:59:10 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 1619C9E47522CFEB2C32;
-        Mon, 29 Jul 2019 22:59:08 +0800 (CST)
-Received: from [127.0.0.1] (10.184.191.73) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Mon, 29 Jul 2019
- 22:59:01 +0800
-Subject: Re: [PATCH net] ipvs: Improve robustness to the ipvs sysctl
-To:     Florian Westphal <fw@strlen.de>
-CC:     <wensong@linux-vs.org>, <horms@verge.net.au>, <ja@ssi.bg>,
-        <pablo@netfilter.org>, <lvs-devel@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>,
-        Mingfangsen <mingfangsen@huawei.com>, <wangxiaogang3@huawei.com>,
-        <xuhanbing@huawei.com>
-References: <1997375e-815d-137f-20c9-0829a8587ee9@huawei.com>
- <20190729004958.GA19226@strlen.de>
-From:   hujunwei <hujunwei4@huawei.com>
-Message-ID: <5544dfbc-b291-05f5-ba7f-1cfc9bba013b@huawei.com>
-Date:   Mon, 29 Jul 2019 22:58:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729921AbfG2UDz (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 29 Jul 2019 16:03:55 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:52746 "EHLO ja.ssi.bg"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729843AbfG2UDz (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 29 Jul 2019 16:03:55 -0400
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x6TK3VOW005690;
+        Mon, 29 Jul 2019 23:03:32 +0300
+Date:   Mon, 29 Jul 2019 23:03:31 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+cc:     "David S. Miller" <davem@davemloft.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Simon Horman <horms@verge.net.au>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org
+Subject: Re: [net-next 1/2] ipvs: batch __ip_vs_cleanup
+In-Reply-To: <8441EA26-E197-4F40-A6D7-5B7D59AA7F7F@cmss.chinamobile.com>
+Message-ID: <alpine.LFD.2.21.1907292300580.2909@ja.home.ssi.bg>
+References: <1563031186-2101-1-git-send-email-yanhaishuang@cmss.chinamobile.com> <1563031186-2101-2-git-send-email-yanhaishuang@cmss.chinamobile.com> <alpine.LFD.2.21.1907152333300.5700@ja.home.ssi.bg>
+ <8441EA26-E197-4F40-A6D7-5B7D59AA7F7F@cmss.chinamobile.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20190729004958.GA19226@strlen.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.184.191.73]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hi Julian, thank you for replay.
 
-On 2019/7/29 8:49, Florian Westphal wrote:
-> hujunwei <hujunwei4@huawei.com> wrote:
-> 
-> [ trimmed CC list ]
-> 
->> The ipvs module parse the user buffer and save it to sysctl,
->> then check if the value is valid. invalid value occurs
->> over a period of time.
->> Here, I add a variable, struct ctl_table tmp, used to read
->> the value from the user buffer, and save only when it is valid.
-> 
-> Does this cause any problems?  If so, what are those?
-> 
-For example, when a negative number value occurs over a period of time,
-the func such as ip_vs_sync_conn_v0() will get invalid number
-by sysctl_sync_threshold(), casue judge abnormal in ip_vs_sync_conn_needed().
+	Hello,
 
->> Fixes: f73181c8288f ("ipvs: add support for sync threads")
->> Signed-off-by: Junwei Hu <hujunwei4@huawei.com>
->> ---
->>  net/netfilter/ipvs/ip_vs_ctl.c | 61 +++++++++++++++++++++++-----------
->>  1 file changed, 42 insertions(+), 19 deletions(-)
->>
->> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
->> index 741d91aa4a8d..e78fd05f108b 100644
->> --- a/net/netfilter/ipvs/ip_vs_ctl.c
->> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
->> @@ -1680,12 +1680,18 @@ proc_do_defense_mode(struct ctl_table *table, int write,
->>  	int val = *valp;
->>  	int rc;
->>
->> -	rc = proc_dointvec(table, write, buffer, lenp, ppos);
->> +	struct ctl_table tmp = {
->> +		.data = &val,
->> +		.maxlen = sizeof(int),
->> +		.mode = table->mode,
->> +	};
->> +
->> +	rc = proc_dointvec(&tmp, write, buffer, lenp, ppos);
-> 
-> Wouldn't it be better do use proc_dointvec_minmax and set the
-> constraints via .extra1,2 in the sysctl knob definition?
-> 
-You are right, proc_dointvec_minmax seems like a better choice, I will update the patch.
+On Thu, 18 Jul 2019, Haishuang Yan wrote:
 
-Regards,
-Junwei
+> As the following benchmark testing results show, there is a little performance improvement:
 
+	OK, can you send v2 after removing the LIST_HEAD(list) from
+both patches, I guess, it is not needed. If you prefer, you can
+include these benchmark results too.
+
+> $  cat add_del_unshare.sh
+> #!/bin/bash
+> 
+> for i in `seq 1 100`
+>     do
+>      (for j in `seq 1 40` ; do  unshare -n ipvsadm -A -t 172.16.$i.$j:80 >/dev/null ; done) &
+>     done
+> wait; grep net_namespace /proc/slabinfo
+> 
+> Befor patch:
+> $  time sh add_del_unshare.sh
+> net_namespace       4020   4020   4736    6    8 : tunables    0    0    0 : slabdata    670    670      0
+> 
+> real    0m8.086s
+> user    0m2.025s
+> sys     0m36.956s
+> 
+> After patch:
+> $  time sh add_del_unshare.sh
+> net_namespace       4020   4020   4736    6    8 : tunables    0    0    0 : slabdata    670    670      0
+> 
+> real    0m7.623s
+> user    0m2.003s
+> sys     0m32.935s
+> 
+> 
+> > 
+> >> +		ipvs = net_ipvs(net);
+> >> +		ip_vs_conn_net_cleanup(ipvs);
+> >> +		ip_vs_app_net_cleanup(ipvs);
+> >> +		ip_vs_protocol_net_cleanup(ipvs);
+> >> +		ip_vs_control_net_cleanup(ipvs);
+> >> +		ip_vs_estimator_net_cleanup(ipvs);
+> >> +		IP_VS_DBG(2, "ipvs netns %d released\n", ipvs->gen);
+> >> +		net->ipvs = NULL;
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
