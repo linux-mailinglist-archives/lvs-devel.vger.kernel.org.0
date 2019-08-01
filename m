@@ -2,181 +2,93 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD2E7CB11
-	for <lists+lvs-devel@lfdr.de>; Wed, 31 Jul 2019 19:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79657D9BE
+	for <lists+lvs-devel@lfdr.de>; Thu,  1 Aug 2019 12:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729743AbfGaRye (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 31 Jul 2019 13:54:34 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:60010 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726232AbfGaRye (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 31 Jul 2019 13:54:34 -0400
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x6VHrlOx004195;
-        Wed, 31 Jul 2019 20:53:47 +0300
-Date:   Wed, 31 Jul 2019 20:53:47 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     hujunwei <hujunwei4@huawei.com>
-cc:     wensong@linux-vs.org, horms@verge.net.au, pablo@netfilter.org,
-        kadlec@blackhole.kfki.hu, Florian Westphal <fw@strlen.de>,
-        davem@davemloft.net, Florian Westphal <fw@strlen.de>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, Mingfangsen <mingfangsen@huawei.com>,
-        wangxiaogang3@huawei.com, xuhanbing@huawei.com
-Subject: Re: [PATCH net v3] ipvs: Improve robustness to the ipvs sysctl
-In-Reply-To: <5fd55d18-f4e2-a6b4-5c54-db76c05be5df@huawei.com>
-Message-ID: <alpine.LFD.2.21.1907312052310.3631@ja.home.ssi.bg>
-References: <1997375e-815d-137f-20c9-0829a8587ee9@huawei.com> <4a0476d3-57a4-50e0-cae8-9dffc4f4d556@huawei.com> <5fd55d18-f4e2-a6b4-5c54-db76c05be5df@huawei.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1731290AbfHAK62 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 1 Aug 2019 06:58:28 -0400
+Received: from smtp-out-4.talktalk.net ([62.24.135.68]:37761 "EHLO
+        smtp-out-4.talktalk.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbfHAK61 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 1 Aug 2019 06:58:27 -0400
+X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Thu, 01 Aug 2019 06:58:26 EDT
+Received: from nabal.armitage.org.uk ([92.27.6.192])
+        by smtp.talktalk.net with SMTP
+        id t8kUhmRaznuQZt8kUh4Mxw; Thu, 01 Aug 2019 11:55:55 +0100
+X-Originating-IP: [92.27.6.192]
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by nabal.armitage.org.uk (Postfix) with ESMTP id 598ACE0589;
+        Thu,  1 Aug 2019 11:55:53 +0100 (BST)
+X-Virus-Scanned: amavisd-new at armitage.org.uk
+Received: from nabal.armitage.org.uk ([127.0.0.1])
+        by localhost (nabal.armitage.org.uk [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id slCADr5Vb0wO; Thu,  1 Aug 2019 11:55:50 +0100 (BST)
+Received: from samson1.armitage.org.uk (samson1.armitage.org.uk [IPv6:2001:470:69dd:35::210])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by nabal.armitage.org.uk (Postfix) with ESMTPSA id 90682E010A;
+        Thu,  1 Aug 2019 11:55:50 +0100 (BST)
+Message-ID: <1564656948.3546.66.camel@armitage.org.uk>
+Subject: [PATCH 1/2] Add --pe sip option in ipvsadm(8) man page
+From:   Quentin Armitage <quentin@armitage.org.uk>
+Reply-To: quentin@armitage.org.uk
+To:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Julian Anastasov <ja@ssi.bg>,
+        Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        lvs-users@linuxvirtualserver.org,
+        Inju Song <inju.song@navercorp.com>
+Date:   Thu, 01 Aug 2019 11:55:48 +0100
+In-Reply-To: <1564656793.3546.64.camel@armitage.org.uk>
+References: <1564656793.3546.64.camel@armitage.org.uk>
+Organization: The Armitage family
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.24.6 (3.24.6-1.fc26) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfBRgLx6N0P2Vv6urO7gRCSxGRfNgIb4ZXOLpgNP5fEDoDDZ559nG7iIwRjfWxhwAs1detx1GZclWYRCH9L/Xv6wwqi5khyIlUXtQMI0MrUA/CZC8H22w
+ cbuLqj583BttHabNSrwfDxoYfoi8BfoKVaBjRxMGM5Bxx6Ldm3kIwuj3QJafcDt7aEHT4/nczOgA2Q==
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
+---
+ ipvsadm.8 | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+ 
+diff --git a/ipvsadm.8 b/ipvsadm.8 
+index 256718e..aaee146 100644
+--- a/ipvsadm.8
++++ b/ipvsadm.8
+@@ -94,11 +94,11 @@ The command has two basic formats for execution:
+ The first format manipulates a virtual service and the algorithm for
+ assigning service requests to real servers. Optionally, a persistent
+ timeout and network mask for the granularity of a persistent service
+-may be specified. The second format manipulates a real server that is
+-associated with an existing virtual service. When specifying a real
+-server, the packet-forwarding method and the weight of the real
+-server, relative to other real servers for the virtual service, may be
+-specified, otherwise defaults will be used.
++and a persistence engine may be specified. The second format manipulates
++a real server that is associated with an existing virtual service.
++When specifying a real server, the packet-forwarding method and the
++weight of the real server, relative to other real servers for the
++virtual service, may be specified, otherwise defaults will be used.
+ .SS COMMANDS
+ \fBipvsadm\fR(8) recognises the commands described below. Upper-case
+ commands maintain virtual services. Lower-case commands maintain real
+@@ -313,6 +313,10 @@ resolve problems with non-persistent cache clusters on the client side.
+ IPv6 netmasks should be specified as a prefix length between 1 and 128.
+ The default prefix length is 128.
+ .TP
++.B --pe \fIpersistence-engine\fP
++Specify an alternative persistence engine to be used. Currently the
++only alternative persistence engine available is sip.
++.TP
+ .B -b, --sched-flags \fIsched-flags\fP
+ Set scheduler flags for this virtual server.  \fIsched-flags\fP is a
+ comma-separated list of flags.  See the scheduler descriptions for
+-- 
+2.13.7
 
-	Hello,
-
-On Thu, 1 Aug 2019, hujunwei wrote:
-
-> From: Junwei Hu <hujunwei4@huawei.com>
-> 
-> The ipvs module parse the user buffer and save it to sysctl,
-> then check if the value is valid. invalid value occurs
-> over a period of time.
-> Here, I add a variable, struct ctl_table tmp, used to read
-> the value from the user buffer, and save only when it is valid.
-> I delete proc_do_sync_mode and use extra1/2 in table for the
-> proc_dointvec_minmax call.
-> 
-> Fixes: f73181c8288f ("ipvs: add support for sync threads")
-> Signed-off-by: Junwei Hu <hujunwei4@huawei.com>
-> Acked-by: Julian Anastasov <ja@ssi.bg>
-
-	Yep, Acked-by: Julian Anastasov <ja@ssi.bg>
-
-> ---
-> V1->V2:
-> - delete proc_do_sync_mode and use proc_dointvec_minmax call.
-> V2->V3:
-> - update git version
-> ---
->  net/netfilter/ipvs/ip_vs_ctl.c | 69 +++++++++++++++++-----------------
->  1 file changed, 35 insertions(+), 34 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-> index 060565e7d227..72189559a1cd 100644
-> --- a/net/netfilter/ipvs/ip_vs_ctl.c
-> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
-> @@ -1737,12 +1737,18 @@ proc_do_defense_mode(struct ctl_table *table, int write,
->  	int val = *valp;
->  	int rc;
-> 
-> -	rc = proc_dointvec(table, write, buffer, lenp, ppos);
-> +	struct ctl_table tmp = {
-> +		.data = &val,
-> +		.maxlen = sizeof(int),
-> +		.mode = table->mode,
-> +	};
-> +
-> +	rc = proc_dointvec(&tmp, write, buffer, lenp, ppos);
->  	if (write && (*valp != val)) {
-> -		if ((*valp < 0) || (*valp > 3)) {
-> -			/* Restore the correct value */
-> -			*valp = val;
-> +		if (val < 0 || val > 3) {
-> +			rc = -EINVAL;
->  		} else {
-> +			*valp = val;
->  			update_defense_level(ipvs);
->  		}
->  	}
-> @@ -1756,33 +1762,20 @@ proc_do_sync_threshold(struct ctl_table *table, int write,
->  	int *valp = table->data;
->  	int val[2];
->  	int rc;
-> +	struct ctl_table tmp = {
-> +		.data = &val,
-> +		.maxlen = table->maxlen,
-> +		.mode = table->mode,
-> +	};
-> 
-> -	/* backup the value first */
->  	memcpy(val, valp, sizeof(val));
-> -
-> -	rc = proc_dointvec(table, write, buffer, lenp, ppos);
-> -	if (write && (valp[0] < 0 || valp[1] < 0 ||
-> -	    (valp[0] >= valp[1] && valp[1]))) {
-> -		/* Restore the correct value */
-> -		memcpy(valp, val, sizeof(val));
-> -	}
-> -	return rc;
-> -}
-> -
-> -static int
-> -proc_do_sync_mode(struct ctl_table *table, int write,
-> -		     void __user *buffer, size_t *lenp, loff_t *ppos)
-> -{
-> -	int *valp = table->data;
-> -	int val = *valp;
-> -	int rc;
-> -
-> -	rc = proc_dointvec(table, write, buffer, lenp, ppos);
-> -	if (write && (*valp != val)) {
-> -		if ((*valp < 0) || (*valp > 1)) {
-> -			/* Restore the correct value */
-> -			*valp = val;
-> -		}
-> +	rc = proc_dointvec(&tmp, write, buffer, lenp, ppos);
-> +	if (write) {
-> +		if (val[0] < 0 || val[1] < 0 ||
-> +		    (val[0] >= val[1] && val[1]))
-> +			rc = -EINVAL;
-> +		else
-> +			memcpy(valp, val, sizeof(val));
->  	}
->  	return rc;
->  }
-> @@ -1795,12 +1788,18 @@ proc_do_sync_ports(struct ctl_table *table, int write,
->  	int val = *valp;
->  	int rc;
-> 
-> -	rc = proc_dointvec(table, write, buffer, lenp, ppos);
-> +	struct ctl_table tmp = {
-> +		.data = &val,
-> +		.maxlen = sizeof(int),
-> +		.mode = table->mode,
-> +	};
-> +
-> +	rc = proc_dointvec(&tmp, write, buffer, lenp, ppos);
->  	if (write && (*valp != val)) {
-> -		if (*valp < 1 || !is_power_of_2(*valp)) {
-> -			/* Restore the correct value */
-> +		if (val < 1 || !is_power_of_2(val))
-> +			rc = -EINVAL;
-> +		else
->  			*valp = val;
-> -		}
->  	}
->  	return rc;
->  }
-> @@ -1860,7 +1859,9 @@ static struct ctl_table vs_vars[] = {
->  		.procname	= "sync_version",
->  		.maxlen		= sizeof(int),
->  		.mode		= 0644,
-> -		.proc_handler	= proc_do_sync_mode,
-> +		.proc_handler	= proc_dointvec_minmax,
-> +		.extra1		= SYSCTL_ZERO,
-> +		.extra2		= SYSCTL_ONE,
->  	},
->  	{
->  		.procname	= "sync_ports",
-> -- 
-> 2.21.GIT
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
