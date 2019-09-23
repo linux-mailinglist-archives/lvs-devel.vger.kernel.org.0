@@ -2,128 +2,506 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7F2B8FB4
-	for <lists+lvs-devel@lfdr.de>; Fri, 20 Sep 2019 14:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6872BBB8A1
+	for <lists+lvs-devel@lfdr.de>; Mon, 23 Sep 2019 17:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408958AbfITMZR (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 20 Sep 2019 08:25:17 -0400
-Received: from mtax.cdmx.gob.mx ([187.141.35.197]:13351 "EHLO mtaw.cdmx.gob.mx"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2408945AbfITMZR (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 20 Sep 2019 08:25:17 -0400
-X-NAI-Header: Modified by McAfee Email Gateway (4500)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
-        t=1568966970; h=X-Virus-Scanned:Content-Type:
-         MIME-Version:Content-Transfer-Encoding:Content-Description:
-         Subject:To:From:Date:Reply-To:Message-Id:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
-         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
-         X-NAIMIME-Disclaimer:X-NAIMIME-Modified:X-NAI-Spam-Flag:
-         X-NAI-Spam-Threshold:X-NAI-Spam-Score:X-NAI-Spam-Rules:
-         X-NAI-Spam-Version; bh=p7gWlwfEWOsbONfopC
-        8BPhtqdzKUJiGtXCGJ3YtSNOM=; b=qcA4cMEN4isj+psxPFk/
-        7FGQRJf38nG+Knn4ZnZWVkr4JCsqUazQlVq7Ge1C95fqDyzoBc
-        ZgEssB30gn5+FaiBW57dO8bDP7pIw7yrKjJHKFgOqnH41oVkj8
-        fXcMgCojNCDP3kIVA5kjrONJjB3t5mjzVJZJGjB2o0ZbRxaaQf
-        o=
-Received: from correo.seciti.cdmx.gob.mx (gdf-correo.cdmx.gob.mx [10.250.102.17]) by mtaw.cdmx.gob.mx with smtp
-         id 31db_09c5_530e506e_49cb_4849_9f79_59068bd11484;
-        Fri, 20 Sep 2019 03:09:29 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 849502847;
-        Fri, 20 Sep 2019 03:09:29 -0500 (CDT)
-Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
-        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id SJy2X_bePC6j; Fri, 20 Sep 2019 03:09:29 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTP id 47E002E18;
-        Fri, 20 Sep 2019 03:09:29 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at gdf-correo.df.gob.mx
-Received: from correo.seciti.cdmx.gob.mx ([127.0.0.1])
-        by localhost (gdf-correo.df.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id VcHwDaNU7VD7; Fri, 20 Sep 2019 03:09:29 -0500 (CDT)
-Received: from [100.80.130.141] (8ta-250-0-23.telkomadsl.co.za [102.250.0.23])
-        by gdf-correo.df.gob.mx (Postfix) with ESMTPSA id A94A52847;
-        Fri, 20 Sep 2019 03:09:15 -0500 (CDT)
-Content-Type: text/plain;
-  charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-Content-Description: Mail message body
-Subject: Spende von 5 Millionen Euro
-To:     Recipients <mramirezg@mexicocity.gob.mx>
-From:   "Shane Missler" <mramirezg@mexicocity.gob.mx>
-Date:   Fri, 20 Sep 2019 10:09:21 +0200
-Reply-To: "shanemissler.spende11@gmail.comshanemissler.spende11"@gmail.com
-Message-Id: <20190920080915.A94A52847@gdf-correo.df.gob.mx>
-X-AnalysisOut: [v=2.2 cv=UfEhcOaN c=1 sm=1 tr=0 p=09-KjHS_CW8A:10 p=bEr4i4]
-X-AnalysisOut: [eggGkA:10 p=Lyqu6MUUigPyaOuRX7ce:22 a=KsSCQl7LcZej77FuluUc]
-X-AnalysisOut: [Qw==:117 a=h7CxE45fuSAsiQZVdqGW0A==:17 a=IkcTkHD0fZMA:10 a]
-X-AnalysisOut: [=x7bEGLp0ZPQA:10 a=J70Eh1EUuV4A:10 a=pGLkceISAAAA:8 a=wN7r]
-X-AnalysisOut: [T8hNlMSaUXRpxSgA:9 a=K7tsimcRO30Sg2YH:21 a=QOCYt1FwmxBrUrR]
-X-AnalysisOut: [v:21 a=QEXdDO2ut3YA:10]
-X-SAAS-TrackingID: a39848d5.0.67439631.00-2354.112819385.s12p02m014.mxlogic.net
-X-NAIMIME-Disclaimer: 1
-X-NAIMIME-Modified: 1
-X-NAI-Spam-Flag: NO
-X-NAI-Spam-Threshold: 3
-X-NAI-Spam-Score: -5000
-X-NAI-Spam-Rules: 1 Rules triggered
-        WHITELISTED=-5000
-X-NAI-Spam-Version: 2.3.0.9418 : core <6638> : inlines <7144> : streams
- <1833287> : uri <2907354>
+        id S1728598AbfIWPw6 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 23 Sep 2019 11:52:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45606 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728464AbfIWPw5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 23 Sep 2019 11:52:57 -0400
+Received: from localhost.localdomain (unknown [194.230.155.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 883A620882;
+        Mon, 23 Sep 2019 15:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569253975;
+        bh=wsRw+5OFigXOvW/TmLwyJ0IDVIJ/i3H8mrfAQwzsvho=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EjGht6N2oXaQ0mXXCrzebTxG3WEs0BjDYcTK/vjZkItgfT1eM0NJM6NGyrz/3W3ew
+         51imANnLdrleBNMdNWYLnYtJDjl4SB8TOn6/bzXIRy2HGefTgyVQ2OG0zb0CcI61gj
+         O+F44nzFDpuNQJ6C55sAuE+IxlOfOZFAR27vmGgA=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Jiri Kosina <trivial@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
+        b.a.t.m.a.n@lists.open-mesh.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH trivial 1/2] net: Fix Kconfig indentation
+Date:   Mon, 23 Sep 2019 17:52:42 +0200
+Message-Id: <20190923155243.6997-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-RGllcyBpc3QgZWluZSBwZXJzw7ZubGljaGUgTWFpbCwgZGllIGljaCBhbiBTaWUgYWRyZXNzaWVy
-ZS4gSWNoIGJpbiBTSEFORSBNSVNTTEVSIGF1cyBGbG9yaWRhLCBVU0EuIFdpZSBTaWUgYmVyZWl0
-cyB3aXNzZW4sIGhhYmUgaWNoIGVpbmVuIExvdHRvLUphY2twb3QgaW4gSMO2aGUgdm9uIDQ1MSBN
-aW8uIFVTRCAoMzMwIE1pby4gR0JQKSBnZXdvbm5lbiB1bmQgZGFzIEdlbGQgaGF0IG1laW4gTGVi
-ZW4gdW5kIG1laW4gRmFtaWxpZW5sZWJlbiB2ZXLDpG5kZXJ0LCBhYmVyIGVzIHdpcmQgbWVpbiBI
-ZXJ6IG5pY2h0IHZlcsOkbmRlcm4sIHdpZSBpY2ggYW4gZGVtIFRhZyBzYWd0ZSwgYW4gZGVtIGlj
-aCBtZWluIEdlbGQgaGFiZSwgZGFzIGljaCB2ZXJ3ZW5kZW4gd2VyZGUgRGllc2VzIEdlbGQgZsO8
-ciBkaWUgSGlsZmUgZGVyIE1lbnNjaGhlaXQuIEljaCBoYWJlIGJlc2NobG9zc2VuLCBJaG5lbiB1
-bmQgSWhyZXIgR2VtZWluZGUgZWluZW4gQmV0cmFnIHZvbiA1IE1pbGxpb25lbiBFdXJvIHp1IHNw
-ZW5kZW4sIHVtIGRpZXNlIFNwZW5kZSBhbnp1Zm9yZGVybi4gRS1NYWlsOiAoc2hhbmVtaXNzbGVy
-MEBnbWFpbC5jb20pCgpDZWNpIGVzdCB1biBjb3VycmllciBwZXJzb25uZWwgcXVlIGplIHZvdXMg
-YWRyZXNzZS4gSmUgc3VpcyBTSEFORSBNSVNTTEVSLCBkZSBGbG9yaWRlLCDDiXRhdHMtVW5pcy4g
-Q29tbWUgdm91cyBsZSBzYXZleiBkw6lqw6AsIGonYWkgZ2FnbsOpIDQ1MSBtaWxsaW9ucyBkZSBk
-b2xsYXJzIChMb3R0byBKYWNrcG90KSBldCBsJ2FyZ2VudCBhIGNoYW5nw6kgbWEgdmllIGV0IGNl
-bGxlIGRlIG1hIGZhbWlsbGUsIG1haXMgY2VsYSBuZSBjaGFuZ2VyYSBwYXMgbW9uIGPFk3VyLCBj
-b21tZSBqZSBsJ2FpIGRpdCBsZSBqb3VyIG/DuSBqJ2FpIG1vbiBhcmdlbnQsIGondXRpbGlzZXJh
-aSBjZXQgYXJnZW50IHBvdXIgbCdhaWRlIGRlIGwnaHVtYW5pdMOpLkonYWkgZMOpY2lkw6kgZGUg
-dm91cyBkb25uZXIgbGEgc29tbWUgZGUgNSBtaWxsaW9ucyBkJ2V1cm9zIMOgIHZvdXMgZXQgw6Ag
-dm90cmUgY29tbXVuYXV0w6ksIHBvdXIgcsOpY2xhbWVyIGNlIGRvbiwgZW1haWwtIChzaGFuZW1p
-c3NsZXIwQGdtYWlsLmNvbSkKCgoKLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uCgoKTGEgaW5mb3JtYWNpb24gY29udGVuaWRhIGVuIGVzdGUgY29ycmVvLCBhc2kgY29t
-byBsYSBjb250ZW5pZGEgZW4gbG9zIGRvY3VtZW50b3MgYW5leG9zLCBwdWVkZSBjb250ZW5lciBk
-YXRvcyBwZXJzb25hbGVzLCBwb3IgbG8gcXVlIHN1IGRpZnVzaW9uIGVzIHJlc3BvbnNhYmlsaWRh
-ZCBkZSBxdWllbiBsb3MgdHJhbnNtaXRlIHkgcXVpZW4gbG9zIHJlY2liZSwgZW4gdMOpcm1pbm9z
-IGRlIGxvIGRpc3B1ZXN0byBwb3IgbGFzIGZyYWNjaW9uZXMgSUkgeSBWSUkgZGVsIGFydGljdWxv
-IDQsIHVsdGltbyBwYXJyYWZvIGRlbCBhcnRpY3VsbyA4LCBhcnRpY3VsbyAzNiBwYXJyYWZvIElJ
-LCAzOCBmcmFjY2lvbiBJIHkgZGVtYXMgYXBsaWNhYmxlcyBkZSBsYSBMZXkgZGUgVHJhbnNwYXJl
-bmNpYSB5IEFjY2VzbyBhIGxhIEluZm9ybWFjaW9uIFB1YmxpY2EgZGVsIERpc3RyaXRvIEZlZGVy
-YWwuDQpMb3MgRGF0b3MgUGVyc29uYWxlcyBzZSBlbmN1ZW50cmFuIHByb3RlZ2lkb3MgcG9yIGxh
-IExleSBkZSBQcm90ZWNjaW9uIGRlIERhdG9zIFBlcnNvbmFsZXMgZGVsIERpc3RyaXRvIEZlZGVy
-YWwsIHBvciBsbyBxdWUgc3UgZGlmdXNpb24gc2UgZW5jdWVudHJhIHR1dGVsYWRhIGVuIHN1cyBh
-cnRpY3Vsb3MgMiwgNSwgMTYsIDIxLCA0MSB5IGRlbWFzIHJlbGF0aXZvcyB5IGFwbGljYWJsZXMs
-IGRlYmllbmRvIHN1amV0YXJzZSBlbiBzdSBjYXNvLCBhIGxhcyBkaXNwb3NpY2lvbmVzIHJlbGF0
-aXZhcyBhIGxhIGNyZWFjaW9uLCBtb2RpZmljYWNpb24gbyBzdXByZXNpb24gZGUgZGF0b3MgcGVy
-c29uYWxlcyBwcmV2aXN0b3MuIEFzaW1pc21vLCBkZWJlcmEgZXN0YXJzZSBhIGxvIHNlw7FhbGFk
-byBlbiBsb3MgbnVtZXJhbGVzIDEgLCAzLCAxMiwgMTgsIDE5LCAyMCwgMjEsIDIzLCAyNCwgMjks
-IDM1IHkgZGVtYXMgYXBsaWNhYmxlcyBkZSBsb3MgTGluZWFtaWVudG9zIHBhcmEgbGEgUHJvdGVj
-Y2lvbiBkZSBEYXRvcyBQZXJzb25hbGVzIGVuIGVsIERpc3RyaXRvIEZlZGVyYWwuDQpFbiBlbCB1
-c28gZGUgbGFzIHRlY25vbG9naWFzIGRlIGxhIGluZm9ybWFjaW9uIHkgY29tdW5pY2FjaW9uZXMg
-ZGVsIEdvYmllcm5vIGRlbCBEaXN0cml0byBGZWRlcmFsLCBkZWJlcmEgb2JzZXJ2YXJzZSBwdW50
-dWFsbWVudGUgbG8gZGlzcHVlc3RvIHBvciBsYSBMZXkgR29iaWVybm8gRWxlY3Ryb25pY28gZGVs
-IERpc3RyaXRvIEZlZGVyYWwsIGxhIGxleSBwYXJhIGhhY2VyIGRlIGxhIENpdWRhZCBkZSBNZXhp
-Y28gdW5hIENpdWRhZCBNYXMgQWJpZXJ0YSwgZWwgYXBhcnRhZG8gMTAgZGUgbGEgQ2lyY3VsYXIg
-VW5vIHZpZ2VudGUgeSBsYXMgTm9ybWFzIEdlbmVyYWxlcyBxdWUgZGViZXJhbiBvYnNlcnZhcnNl
-IGVuIG1hdGVyaWEgZGUgU2VndXJpZGFkIGRlIGxhIEluZm9ybWFjaW9uIGVuIGxhIEFkbWluaXN0
-cmFjaW9uIFB1YmxpY2EgZGVsIERpc3RyaXRvIEZlZGVyYWwuCg==
+Adjust indentation from spaces to tab (+optional two spaces) as in
+coding style with command like:
+    $ sed -e 's/^        /\t/' -i */Kconfig
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ net/batman-adv/Kconfig     |  10 +--
+ net/ife/Kconfig            |   2 +-
+ net/ipv4/Kconfig           |   4 +-
+ net/ipv6/netfilter/Kconfig |  16 ++---
+ net/netfilter/Kconfig      |   2 +-
+ net/netfilter/ipvs/Kconfig |   6 +-
+ net/rds/Kconfig            |   4 +-
+ net/sched/Kconfig          | 144 ++++++++++++++++++-------------------
+ 8 files changed, 94 insertions(+), 94 deletions(-)
+
+diff --git a/net/batman-adv/Kconfig b/net/batman-adv/Kconfig
+index a3d188dfbe75..d5028af750d5 100644
+--- a/net/batman-adv/Kconfig
++++ b/net/batman-adv/Kconfig
+@@ -12,11 +12,11 @@ config BATMAN_ADV
+ 	depends on NET
+ 	select LIBCRC32C
+ 	help
+-          B.A.T.M.A.N. (better approach to mobile ad-hoc networking) is
+-          a routing protocol for multi-hop ad-hoc mesh networks. The
+-          networks may be wired or wireless. See
+-          https://www.open-mesh.org/ for more information and user space
+-          tools.
++	  B.A.T.M.A.N. (better approach to mobile ad-hoc networking) is
++	  a routing protocol for multi-hop ad-hoc mesh networks. The
++	  networks may be wired or wireless. See
++	  https://www.open-mesh.org/ for more information and user space
++	  tools.
+ 
+ config BATMAN_ADV_BATMAN_V
+ 	bool "B.A.T.M.A.N. V protocol"
+diff --git a/net/ife/Kconfig b/net/ife/Kconfig
+index 6cd1f6d18f30..bcf650564db4 100644
+--- a/net/ife/Kconfig
++++ b/net/ife/Kconfig
+@@ -5,7 +5,7 @@
+ 
+ menuconfig NET_IFE
+ 	depends on NET
+-        tristate "Inter-FE based on IETF ForCES InterFE LFB"
++	tristate "Inter-FE based on IETF ForCES InterFE LFB"
+ 	default n
+ 	help
+ 	  Say Y here to add support of IFE encapsulation protocol
+diff --git a/net/ipv4/Kconfig b/net/ipv4/Kconfig
+index 974de4d20f25..03381f3e12ba 100644
+--- a/net/ipv4/Kconfig
++++ b/net/ipv4/Kconfig
+@@ -492,8 +492,8 @@ config TCP_CONG_WESTWOOD
+ 	wired networks and throughput over wireless links.
+ 
+ config TCP_CONG_HTCP
+-        tristate "H-TCP"
+-        default m
++	tristate "H-TCP"
++	default m
+ 	---help---
+ 	H-TCP is a send-side only modifications of the TCP Reno
+ 	protocol stack that optimizes the performance of TCP
+diff --git a/net/ipv6/netfilter/Kconfig b/net/ipv6/netfilter/Kconfig
+index 6120a7800975..69443e9a3aa5 100644
+--- a/net/ipv6/netfilter/Kconfig
++++ b/net/ipv6/netfilter/Kconfig
+@@ -170,13 +170,13 @@ config IP6_NF_MATCH_RT
+ 	  To compile it as a module, choose M here.  If unsure, say N.
+ 
+ config IP6_NF_MATCH_SRH
+-        tristate '"srh" Segment Routing header match support'
+-        depends on NETFILTER_ADVANCED
+-        help
+-          srh matching allows you to match packets based on the segment
++	tristate '"srh" Segment Routing header match support'
++	depends on NETFILTER_ADVANCED
++	help
++	  srh matching allows you to match packets based on the segment
+ 	  routing header of the packet.
+ 
+-          To compile it as a module, choose M here.  If unsure, say N.
++	  To compile it as a module, choose M here.  If unsure, say N.
+ 
+ # The targets
+ config IP6_NF_TARGET_HL
+@@ -249,10 +249,10 @@ config IP6_NF_SECURITY
+        depends on SECURITY
+        depends on NETFILTER_ADVANCED
+        help
+-         This option adds a `security' table to iptables, for use
+-         with Mandatory Access Control (MAC) policy.
++	 This option adds a `security' table to iptables, for use
++	 with Mandatory Access Control (MAC) policy.
+ 
+-         If unsure, say N.
++	 If unsure, say N.
+ 
+ config IP6_NF_NAT
+ 	tristate "ip6tables NAT support"
+diff --git a/net/netfilter/Kconfig b/net/netfilter/Kconfig
+index 34ec7afec116..91efae88e8c2 100644
+--- a/net/netfilter/Kconfig
++++ b/net/netfilter/Kconfig
+@@ -697,7 +697,7 @@ config NF_FLOW_TABLE_INET
+ 	tristate "Netfilter flow table mixed IPv4/IPv6 module"
+ 	depends on NF_FLOW_TABLE
+ 	help
+-          This option adds the flow table mixed IPv4/IPv6 support.
++	  This option adds the flow table mixed IPv4/IPv6 support.
+ 
+ 	  To compile it as a module, choose M here.
+ 
+diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+index f6f1a0d5c47d..5b672e05d758 100644
+--- a/net/netfilter/ipvs/Kconfig
++++ b/net/netfilter/ipvs/Kconfig
+@@ -135,7 +135,7 @@ config	IP_VS_WRR
+ 	  module, choose M here. If unsure, say N.
+ 
+ config	IP_VS_LC
+-        tristate "least-connection scheduling"
++	tristate "least-connection scheduling"
+ 	---help---
+ 	  The least-connection scheduling algorithm directs network
+ 	  connections to the server with the least number of active 
+@@ -145,7 +145,7 @@ config	IP_VS_LC
+ 	  module, choose M here. If unsure, say N.
+ 
+ config	IP_VS_WLC
+-        tristate "weighted least-connection scheduling"
++	tristate "weighted least-connection scheduling"
+ 	---help---
+ 	  The weighted least-connection scheduling algorithm directs network
+ 	  connections to the server with the least active connections
+@@ -333,7 +333,7 @@ config	IP_VS_NFCT
+ 
+ config	IP_VS_PE_SIP
+ 	tristate "SIP persistence engine"
+-        depends on IP_VS_PROTO_UDP
++	depends on IP_VS_PROTO_UDP
+ 	depends on NF_CONNTRACK_SIP
+ 	---help---
+ 	  Allow persistence based on the SIP Call-ID
+diff --git a/net/rds/Kconfig b/net/rds/Kconfig
+index 38ea7f0f2699..c64e154bc18f 100644
+--- a/net/rds/Kconfig
++++ b/net/rds/Kconfig
+@@ -23,6 +23,6 @@ config RDS_TCP
+ 	  This transport does not support RDMA operations.
+ 
+ config RDS_DEBUG
+-        bool "RDS debugging messages"
++	bool "RDS debugging messages"
+ 	depends on RDS
+-        default n
++	default n
+diff --git a/net/sched/Kconfig b/net/sched/Kconfig
+index b3faafeafab9..5b044ae6dc1e 100644
+--- a/net/sched/Kconfig
++++ b/net/sched/Kconfig
+@@ -324,7 +324,7 @@ config NET_SCH_CAKE
+ 	tristate "Common Applications Kept Enhanced (CAKE)"
+ 	help
+ 	  Say Y here if you want to use the Common Applications Kept Enhanced
+-          (CAKE) queue management algorithm.
++	  (CAKE) queue management algorithm.
+ 
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called sch_cake.
+@@ -730,8 +730,8 @@ config NET_CLS_ACT
+ 
+ config NET_ACT_POLICE
+ 	tristate "Traffic Policing"
+-        depends on NET_CLS_ACT
+-        ---help---
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here if you want to do traffic policing, i.e. strict
+ 	  bandwidth limiting. This action replaces the existing policing
+ 	  module.
+@@ -740,9 +740,9 @@ config NET_ACT_POLICE
+ 	  module will be called act_police.
+ 
+ config NET_ACT_GACT
+-        tristate "Generic actions"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "Generic actions"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to take generic actions such as dropping and
+ 	  accepting packets.
+ 
+@@ -750,15 +750,15 @@ config NET_ACT_GACT
+ 	  module will be called act_gact.
+ 
+ config GACT_PROB
+-        bool "Probability support"
+-        depends on NET_ACT_GACT
+-        ---help---
++	bool "Probability support"
++	depends on NET_ACT_GACT
++	---help---
+ 	  Say Y here to use the generic action randomly or deterministically.
+ 
+ config NET_ACT_MIRRED
+-        tristate "Redirecting and Mirroring"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "Redirecting and Mirroring"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to allow packets to be mirrored or redirected to
+ 	  other devices.
+ 
+@@ -766,10 +766,10 @@ config NET_ACT_MIRRED
+ 	  module will be called act_mirred.
+ 
+ config NET_ACT_SAMPLE
+-        tristate "Traffic Sampling"
+-        depends on NET_CLS_ACT
+-        select PSAMPLE
+-        ---help---
++	tristate "Traffic Sampling"
++	depends on NET_CLS_ACT
++	select PSAMPLE
++	---help---
+ 	  Say Y here to allow packet sampling tc action. The packet sample
+ 	  action consists of statistically choosing packets and sampling
+ 	  them using the psample module.
+@@ -778,9 +778,9 @@ config NET_ACT_SAMPLE
+ 	  module will be called act_sample.
+ 
+ config NET_ACT_IPT
+-        tristate "IPtables targets"
+-        depends on NET_CLS_ACT && NETFILTER && IP_NF_IPTABLES
+-        ---help---
++	tristate "IPtables targets"
++	depends on NET_CLS_ACT && NETFILTER && IP_NF_IPTABLES
++	---help---
+ 	  Say Y here to be able to invoke iptables targets after successful
+ 	  classification.
+ 
+@@ -788,9 +788,9 @@ config NET_ACT_IPT
+ 	  module will be called act_ipt.
+ 
+ config NET_ACT_NAT
+-        tristate "Stateless NAT"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "Stateless NAT"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to do stateless NAT on IPv4 packets.  You should use
+ 	  netfilter for NAT unless you know what you are doing.
+ 
+@@ -798,18 +798,18 @@ config NET_ACT_NAT
+ 	  module will be called act_nat.
+ 
+ config NET_ACT_PEDIT
+-        tristate "Packet Editing"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "Packet Editing"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here if you want to mangle the content of packets.
+ 
+ 	  To compile this code as a module, choose M here: the
+ 	  module will be called act_pedit.
+ 
+ config NET_ACT_SIMP
+-        tristate "Simple Example (Debug)"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "Simple Example (Debug)"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to add a simple action for demonstration purposes.
+ 	  It is meant as an example and for debugging purposes. It will
+ 	  print a configured policy string followed by the packet count
+@@ -821,9 +821,9 @@ config NET_ACT_SIMP
+ 	  module will be called act_simple.
+ 
+ config NET_ACT_SKBEDIT
+-        tristate "SKB Editing"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "SKB Editing"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to change skb priority or queue_mapping settings.
+ 
+ 	  If unsure, say N.
+@@ -832,10 +832,10 @@ config NET_ACT_SKBEDIT
+ 	  module will be called act_skbedit.
+ 
+ config NET_ACT_CSUM
+-        tristate "Checksum Updating"
+-        depends on NET_CLS_ACT && INET
+-        select LIBCRC32C
+-        ---help---
++	tristate "Checksum Updating"
++	depends on NET_CLS_ACT && INET
++	select LIBCRC32C
++	---help---
+ 	  Say Y here to update some common checksum after some direct
+ 	  packet alterations.
+ 
+@@ -854,9 +854,9 @@ config NET_ACT_MPLS
+ 	  module will be called act_mpls.
+ 
+ config NET_ACT_VLAN
+-        tristate "Vlan manipulation"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "Vlan manipulation"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to push or pop vlan headers.
+ 
+ 	  If unsure, say N.
+@@ -865,9 +865,9 @@ config NET_ACT_VLAN
+ 	  module will be called act_vlan.
+ 
+ config NET_ACT_BPF
+-        tristate "BPF based action"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "BPF based action"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to execute BPF code on packets. The BPF code will decide
+ 	  if the packet should be dropped or not.
+ 
+@@ -877,10 +877,10 @@ config NET_ACT_BPF
+ 	  module will be called act_bpf.
+ 
+ config NET_ACT_CONNMARK
+-        tristate "Netfilter Connection Mark Retriever"
+-        depends on NET_CLS_ACT && NETFILTER && IP_NF_IPTABLES
+-        depends on NF_CONNTRACK && NF_CONNTRACK_MARK
+-        ---help---
++	tristate "Netfilter Connection Mark Retriever"
++	depends on NET_CLS_ACT && NETFILTER && IP_NF_IPTABLES
++	depends on NF_CONNTRACK && NF_CONNTRACK_MARK
++	---help---
+ 	  Say Y here to allow retrieving of conn mark
+ 
+ 	  If unsure, say N.
+@@ -889,10 +889,10 @@ config NET_ACT_CONNMARK
+ 	  module will be called act_connmark.
+ 
+ config NET_ACT_CTINFO
+-        tristate "Netfilter Connection Mark Actions"
+-        depends on NET_CLS_ACT && NETFILTER && IP_NF_IPTABLES
+-        depends on NF_CONNTRACK && NF_CONNTRACK_MARK
+-        help
++	tristate "Netfilter Connection Mark Actions"
++	depends on NET_CLS_ACT && NETFILTER && IP_NF_IPTABLES
++	depends on NF_CONNTRACK && NF_CONNTRACK_MARK
++	help
+ 	  Say Y here to allow transfer of a connmark stored information.
+ 	  Current actions transfer connmark stored DSCP into
+ 	  ipv4/v6 diffserv and/or to transfer connmark to packet
+@@ -906,21 +906,21 @@ config NET_ACT_CTINFO
+ 	  module will be called act_ctinfo.
+ 
+ config NET_ACT_SKBMOD
+-        tristate "skb data modification action"
+-        depends on NET_CLS_ACT
+-        ---help---
+-         Say Y here to allow modification of skb data
++	tristate "skb data modification action"
++	depends on NET_CLS_ACT
++	---help---
++	 Say Y here to allow modification of skb data
+ 
+-         If unsure, say N.
++	 If unsure, say N.
+ 
+-         To compile this code as a module, choose M here: the
+-         module will be called act_skbmod.
++	 To compile this code as a module, choose M here: the
++	 module will be called act_skbmod.
+ 
+ config NET_ACT_IFE
+-        tristate "Inter-FE action based on IETF ForCES InterFE LFB"
+-        depends on NET_CLS_ACT
+-        select NET_IFE
+-        ---help---
++	tristate "Inter-FE action based on IETF ForCES InterFE LFB"
++	depends on NET_CLS_ACT
++	select NET_IFE
++	---help---
+ 	  Say Y here to allow for sourcing and terminating metadata
+ 	  For details refer to netdev01 paper:
+ 	  "Distributing Linux Traffic Control Classifier-Action Subsystem"
+@@ -930,9 +930,9 @@ config NET_ACT_IFE
+ 	  module will be called act_ife.
+ 
+ config NET_ACT_TUNNEL_KEY
+-        tristate "IP tunnel metadata manipulation"
+-        depends on NET_CLS_ACT
+-        ---help---
++	tristate "IP tunnel metadata manipulation"
++	depends on NET_CLS_ACT
++	---help---
+ 	  Say Y here to set/release ip tunnel metadata.
+ 
+ 	  If unsure, say N.
+@@ -941,9 +941,9 @@ config NET_ACT_TUNNEL_KEY
+ 	  module will be called act_tunnel_key.
+ 
+ config NET_ACT_CT
+-        tristate "connection tracking tc action"
+-        depends on NET_CLS_ACT && NF_CONNTRACK && NF_NAT
+-        help
++	tristate "connection tracking tc action"
++	depends on NET_CLS_ACT && NF_CONNTRACK && NF_NAT
++	help
+ 	  Say Y here to allow sending the packets to conntrack module.
+ 
+ 	  If unsure, say N.
+@@ -952,16 +952,16 @@ config NET_ACT_CT
+ 	  module will be called act_ct.
+ 
+ config NET_IFE_SKBMARK
+-        tristate "Support to encoding decoding skb mark on IFE action"
+-        depends on NET_ACT_IFE
++	tristate "Support to encoding decoding skb mark on IFE action"
++	depends on NET_ACT_IFE
+ 
+ config NET_IFE_SKBPRIO
+-        tristate "Support to encoding decoding skb prio on IFE action"
+-        depends on NET_ACT_IFE
++	tristate "Support to encoding decoding skb prio on IFE action"
++	depends on NET_ACT_IFE
+ 
+ config NET_IFE_SKBTCINDEX
+-        tristate "Support to encoding decoding skb tcindex on IFE action"
+-        depends on NET_ACT_IFE
++	tristate "Support to encoding decoding skb tcindex on IFE action"
++	depends on NET_ACT_IFE
+ 
+ config NET_TC_SKB_EXT
+ 	bool "TC recirculation support"
+-- 
+2.17.1
+
