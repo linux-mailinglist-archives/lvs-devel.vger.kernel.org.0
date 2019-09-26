@@ -2,72 +2,54 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5825EBC236
-	for <lists+lvs-devel@lfdr.de>; Tue, 24 Sep 2019 09:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7CFBEC3A
+	for <lists+lvs-devel@lfdr.de>; Thu, 26 Sep 2019 08:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409164AbfIXHDJ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 24 Sep 2019 03:03:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55814 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409158AbfIXHDJ (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Tue, 24 Sep 2019 03:03:09 -0400
-Received: from localhost (unknown [193.47.165.251])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D8F720673;
-        Tue, 24 Sep 2019 07:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569308588;
-        bh=AlEW8CxXuFn8P/oDpAqEk3frXBsRLiuf+egkL9mACt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NgPhsXprAhfXfXBMPmhNi6zDCC8P+Lv1t1OJaBYYq/OuXI2l+wTr48atArBd4iujI
-         pEiGSyKx2TzTQHYLZDzoFRzF7eIxparEi1i+IHrr5h2FzyssV4vjBmgrl3X4i81jMA
-         Gpzm0UZN6E6YR5znnHJXZueTNcgVSqzF9xZTqB1c=
-Date:   Tue, 24 Sep 2019 10:03:05 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jiri Kosina <trivial@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        b.a.t.m.a.n@lists.open-mesh.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com
-Subject: Re: [PATCH trivial 2/2] drivers: net: Fix Kconfig indentation
-Message-ID: <20190924070305.GP14368@unreal>
+        id S1726974AbfIZG4J (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 26 Sep 2019 02:56:09 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:44486 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725823AbfIZG4J (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 26 Sep 2019 02:56:09 -0400
+Received: from localhost (unknown [65.39.69.237])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id C396F1264DCC8;
+        Wed, 25 Sep 2019 23:56:03 -0700 (PDT)
+Date:   Thu, 26 Sep 2019 08:56:02 +0200 (CEST)
+Message-Id: <20190926.085602.2172736725970238315.davem@davemloft.net>
+To:     krzk@kernel.org
+Cc:     m.grzeschik@pengutronix.de, wg@grandegger.com, mkl@pengutronix.de,
+        andrew@lunn.ch, f.fainelli@gmail.com, hkallweit1@gmail.com,
+        kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, trivial@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        lvs-devel@vger.kernel.org, rds-devel@oss.oracle.com
+Subject: Re: [PATCH trivial 1/2] net: Fix Kconfig indentation
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190923155243.6997-1-krzk@kernel.org>
 References: <20190923155243.6997-1-krzk@kernel.org>
- <20190923155243.6997-2-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190923155243.6997-2-krzk@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Mailer: Mew version 6.8 on Emacs 26.2
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 25 Sep 2019 23:56:08 -0700 (PDT)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 05:52:43PM +0200, Krzysztof Kozlowski wrote:
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Date: Mon, 23 Sep 2019 17:52:42 +0200
+
 > Adjust indentation from spaces to tab (+optional two spaces) as in
 > coding style with command like:
 >     $ sed -e 's/^        /\t/' -i */Kconfig
->
+> 
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-<--->
-
->  .../net/ethernet/mellanox/mlx5/core/Kconfig   |  36 +++---
-
-Thanks,
-Reviewed-by: Leon Romanovsky <leonro@mellanox.com>
+Ok, I'll apply these to 'net'.
