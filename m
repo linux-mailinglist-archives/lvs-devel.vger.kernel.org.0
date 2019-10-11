@@ -2,110 +2,74 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F16D2CEE
-	for <lists+lvs-devel@lfdr.de>; Thu, 10 Oct 2019 16:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38754D3CA1
+	for <lists+lvs-devel@lfdr.de>; Fri, 11 Oct 2019 11:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbfJJOwC (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 10 Oct 2019 10:52:02 -0400
-Received: from cmccmta1.chinamobile.com ([221.176.66.79]:2391 "EHLO
-        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbfJJOwC (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 10 Oct 2019 10:52:02 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee25d9f4569809-229e5; Thu, 10 Oct 2019 22:51:21 +0800 (CST)
-X-RM-TRANSID: 2ee25d9f4569809-229e5
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75d9f4566e8f-c4fb8;
-        Thu, 10 Oct 2019 22:51:20 +0800 (CST)
-X-RM-TRANSID: 2ee75d9f4566e8f-c4fb8
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
+        id S1727167AbfJKJpb (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 11 Oct 2019 05:45:31 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:45280 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726585AbfJKJpb (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 11 Oct 2019 05:45:31 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id E7B3125AD5C;
+        Fri, 11 Oct 2019 20:45:28 +1100 (AEDT)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id ED00E940958; Fri, 11 Oct 2019 11:45:26 +0200 (CEST)
+Date:   Fri, 11 Oct 2019 11:45:26 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
+        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH v6 3/3] selftests: netfilter: add ipvs tunnel test case
-Date:   Thu, 10 Oct 2019 22:50:55 +0800
-Message-Id: <1570719055-25110-4-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] selftests: netfilter: introduce test cases for
+ ipvs
+Message-ID: <20191011094524.ruopnvvh6bedhhgl@verge.net.au>
 References: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+Organisation: Horms Solutions BV
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Test virtual server via ipip tunnel.
+On Thu, Oct 10, 2019 at 10:50:52PM +0800, Haishuang Yan wrote:
+> This series patch include test cases for ipvs.
+> 
+> The test topology is who as below:
+> +--------------------------------------------------------------+
+> |                      |                                       |
+> |         ns0          |         ns1                           |
+> |      -----------     |     -----------    -----------        |
+> |      | veth01  | --------- | veth10  |    | veth12  |        |
+> |      -----------    peer   -----------    -----------        |
+> |           |          |                        |              |
+> |      -----------     |                        |              |
+> |      |  br0    |     |-----------------  peer |--------------|
+> |      -----------     |                        |              |
+> |           |          |                        |              |
+> |      ----------     peer   ----------      -----------       |
+> |      |  veth02 | --------- |  veth20 |     | veth12  |       |
+> |      ----------      |     ----------      -----------       |
+> |                      |         ns2                           |
+> |                      |                                       |
+> +--------------------------------------------------------------+
+> 
+> Test results:
+> # selftests: netfilter: ipvs.sh
+> # Testing DR mode...
+> # Testing NAT mode...
+> # Testing Tunnel mode...
+> # ipvs.sh: PASS
+> ok 6 selftests: netfilter: ipvs.sh
+> 
+> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
 
-Tested:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# Testing Tunnel mode...
-# ipvs.sh: PASS
-ok 6 selftests: netfilter: ipvs.sh
-
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
-v2: optimize test script
----
- tools/testing/selftests/netfilter/ipvs.sh | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
-
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index 8b2e618..c3b8f90 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -168,6 +168,30 @@ test_nat() {
- 	test_service
- }
- 
-+test_tun() {
-+	ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
-+
-+	ip netns exec ns1 modprobe ipip
-+	ip netns exec ns1 ip link set tunl0 up
-+	ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=0
-+	ip netns exec ns1 sysctl -qw net.ipv4.conf.all.send_redirects=0
-+	ip netns exec ns1 sysctl -qw net.ipv4.conf.default.send_redirects=0
-+	ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
-+	ip netns exec ns1 ipvsadm -a -i -t ${vip_v4}:${port} -r ${rip_v4}:${port}
-+	ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
-+
-+	ip netns exec ns2 modprobe ipip
-+	ip netns exec ns2 ip link set tunl0 up
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.veth21.rp_filter=0
-+	ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
-+
-+	test_service
-+}
-+
- run_tests() {
- 	local errors=
- 
-@@ -183,6 +207,12 @@ run_tests() {
- 	test_nat
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing Tunnel mode..."
-+	cleanup
-+	setup
-+	test_tun
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
--- 
-1.8.3.1
-
-
-
+Thanks, applied to ipvs-next.
