@@ -2,62 +2,76 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AFDD526C
-	for <lists+lvs-devel@lfdr.de>; Sat, 12 Oct 2019 22:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0290D7028
+	for <lists+lvs-devel@lfdr.de>; Tue, 15 Oct 2019 09:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729556AbfJLUew (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 12 Oct 2019 16:34:52 -0400
-Received: from [206.81.8.171] ([206.81.8.171]:45334 "EHLO varon.localdomain"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729543AbfJLUew (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Sat, 12 Oct 2019 16:34:52 -0400
-X-Greylist: delayed 94547 seconds by postgrey-1.27 at vger.kernel.org; Sat, 12 Oct 2019 16:34:51 EDT
-Received: from 127.0.0.1 (varon [127.0.0.1])
-        by varon.localdomain (Postfix) with SMTP id ED58E561AF4;
-        Fri, 11 Oct 2019 10:21:22 +0000 (UTC)
-Received: from [10.181.192.51] by 127.0.0.1 for <luvsluts@hotmail.com>; Fri, 11 Oct 2019 03:21:24 -0700
-Message-ID: <oe-$-q$-g$$8@he10fpv>
-From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
-Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
-To:     luvsluts@hotmail.com
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA ??
-Date:   Fri, 11 Oct 19 03:21:24 GMT
-X-Mailer: Microsoft Outlook Express 5.50.4522.1200
-MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="_7D4.D0FC9E..5BD4FD0_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+        id S1727667AbfJOHc7 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 15 Oct 2019 03:32:59 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:42146 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbfJOHc7 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 15 Oct 2019 03:32:59 -0400
+Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 7423825B818;
+        Tue, 15 Oct 2019 18:32:54 +1100 (AEDT)
+Received: by penelope.horms.nl (Postfix, from userid 7100)
+        id 6BF3AE2046E; Tue, 15 Oct 2019 09:32:52 +0200 (CEST)
+From:   Simon Horman <horms@verge.net.au>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        Wensong Zhang <wensong@linux-vs.org>,
+        Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>
+Subject: [PATCH 0/6] [GIT PULL ipvs-next] IPVS updates for v5.5
+Date:   Tue, 15 Oct 2019 09:32:06 +0200
+Message-Id: <20191015073212.19394-1-horms@verge.net.au>
+X-Mailer: git-send-email 2.11.0
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Hi Pablo,
 
---_7D4.D0FC9E..5BD4FD0_
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Please consider these IPVS updates for v5.5.
 
-Greetings
+As there are a few more changes than usual I'm sending a pull request
+rather than asking you to apply the patches directly.
 
-My name is Barrister Hans Erich.
+This pull request is based on nf-next.
 
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
+The following changes since commit f8615bf8a3dabd84bf844c6f888929495039d389:
 
-Your full nameS -----------
+  netfilter: ipset: move ip_set_get_ip_port() to ip_set_bitmap_port.c. (2019-10-07 23:59:02 +0200)
 
+are available in the git repository at:
 
-Your urgent response will be appreciated
+  https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs-next.git tags/ipvs-next-for-v5.5
 
-Thank you and God bless you.
+for you to fetch changes up to 176a52043ab853f1db7581ed02e1096aba78b4d1:
 
-Barrister Hans Erich
+  selftests: netfilter: add ipvs tunnel test case (2019-10-11 10:05:27 +0200)
 
-Yours sincerely,
-Barrister Hans Erich
+----------------------------------------------------------------
+Haishuang Yan (5):
+      ipvs: batch __ip_vs_cleanup
+      ipvs: batch __ip_vs_dev_cleanup
+      selftests: netfilter: add ipvs test script
+      selftests: netfilter: add ipvs nat test case
+      selftests: netfilter: add ipvs tunnel test case
 
---_7D4.D0FC9E..5BD4FD0_--
+zhang kai (1):
+      ipvs: no need to update skb route entry for local destination packets.
+
+ include/net/ip_vs.h                        |   2 +-
+ net/netfilter/ipvs/ip_vs_core.c            |  47 +++---
+ net/netfilter/ipvs/ip_vs_ctl.c             |  12 +-
+ net/netfilter/ipvs/ip_vs_xmit.c            |  18 +--
+ tools/testing/selftests/netfilter/Makefile |   2 +-
+ tools/testing/selftests/netfilter/ipvs.sh  | 228 +++++++++++++++++++++++++++++
+ 6 files changed, 273 insertions(+), 36 deletions(-)
+ create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
+
+-- 
+2.11.0
 
