@@ -2,78 +2,74 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F6DDA875
-	for <lists+lvs-devel@lfdr.de>; Thu, 17 Oct 2019 11:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4967EDBEAC
+	for <lists+lvs-devel@lfdr.de>; Fri, 18 Oct 2019 09:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388709AbfJQJhv (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 17 Oct 2019 05:37:51 -0400
-Received: from correo.us.es ([193.147.175.20]:58188 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387953AbfJQJhv (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 17 Oct 2019 05:37:51 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 65D8DA0AEE3
-        for <lvs-devel@vger.kernel.org>; Thu, 17 Oct 2019 11:37:47 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 4491621FE5
-        for <lvs-devel@vger.kernel.org>; Thu, 17 Oct 2019 11:37:47 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 2FF26CE17F; Thu, 17 Oct 2019 11:37:47 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id B4048B7FFB;
-        Thu, 17 Oct 2019 11:37:44 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Thu, 17 Oct 2019 11:37:44 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (sys.soleta.eu [212.170.55.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 647474251481;
-        Thu, 17 Oct 2019 11:37:44 +0200 (CEST)
-Date:   Thu, 17 Oct 2019 11:37:44 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Wensong Zhang <wensong@linux-vs.org>,
-        Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 0/6] [GIT PULL ipvs-next] IPVS updates for v5.5
-Message-ID: <20191017093744.3dmcwnicf5r76yir@salvia>
-References: <20191015073212.19394-1-horms@verge.net.au>
+        id S2404288AbfJRHrI (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 18 Oct 2019 03:47:08 -0400
+Received: from schoolmoda.ru ([88.200.194.99]:35104 "EHLO usrv.lan"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731319AbfJRHrI (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Fri, 18 Oct 2019 03:47:08 -0400
+X-Greylist: delayed 39351 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Oct 2019 03:47:07 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by usrv.lan (Postfix) with SMTP id AD990184B33;
+        Thu, 17 Oct 2019 17:04:25 +0400 (MSD)
+Received: from [227.155.81.95] by 127.0.0.1 with ESMTP id D00FEA3BBD9; Thu, 17 Oct 2019 16:55:13 +0400
+Message-ID: <04-5$cf5-zwee$$02-7720$6@i9fuf.5b.sf38y>
+From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+To:     lvfengyuan@yeah.net
+Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
+Date:   Thu, 17 Oct 19 16:55:13 GMT
+X-Mailer: Microsoft Outlook Express 5.50.4522.1200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191015073212.19394-1-horms@verge.net.au>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: multipart/alternative;
+        boundary="EFA7_FB09FAD2"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 09:32:06AM +0200, Simon Horman wrote:
-> Hi Pablo,
-> 
-> Please consider these IPVS updates for v5.5.
-> 
-> As there are a few more changes than usual I'm sending a pull request
-> rather than asking you to apply the patches directly.
-> 
-> This pull request is based on nf-next.
-> 
-> The following changes since commit f8615bf8a3dabd84bf844c6f888929495039d389:
-> 
->   netfilter: ipset: move ip_set_get_ip_port() to ip_set_bitmap_port.c. (2019-10-07 23:59:02 +0200)
-> 
-> are available in the git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs-next.git tags/ipvs-next-for-v5.5
 
-Pulled, thanks.
+--EFA7_FB09FAD2
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
+
+Dear Sir / Madam
+
+
+
+Since ever we left your country back to Canada , we have gotten Government=
+ approval and we have been busying planning for the less privilege Childre=
+n projects.
+
+We are planning to release first batch of the funds $2,990,000.00 within 1=
+4 days for building an estate for motherless children in your city.
+
+I want you to use my mother;s company name to register this charity projec=
+t in your country after receiving the project funds.
+
+It must be registered as { Bayraktar Group Homeless Children Ltd }.
+
+
+Can you handle and supervise this big project ?
+Can you manager all the workers as a senior supervisor ?
+We want to be sure you can handle it before we proceed with this project.
+
+
+Please call me if you want to hear from us + 1-917 580 4919.
+Please can you manage such project please Kindly reply for further details=
+.
+
+Your full names-----------
+
+
+
+Ekrem Bayraktar.
+Bayraktar Shipping Group
+
+--EFA7_FB09FAD2--
+
