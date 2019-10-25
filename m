@@ -2,65 +2,71 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DA21E433A
-	for <lists+lvs-devel@lfdr.de>; Fri, 25 Oct 2019 08:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F879E4977
+	for <lists+lvs-devel@lfdr.de>; Fri, 25 Oct 2019 13:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394211AbfJYGHy (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 25 Oct 2019 02:07:54 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:46780 "EHLO
+        id S2436502AbfJYLM1 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 25 Oct 2019 07:12:27 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:33356 "EHLO
         kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393713AbfJYGHx (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 25 Oct 2019 02:07:53 -0400
+        with ESMTP id S1726364AbfJYLM1 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 25 Oct 2019 07:12:27 -0400
 Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id CBE3D25B765;
-        Fri, 25 Oct 2019 17:07:50 +1100 (AEDT)
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 164F025B820;
+        Fri, 25 Oct 2019 22:12:25 +1100 (AEDT)
 Received: by penelope.horms.nl (Postfix, from userid 7100)
-        id B0070376C; Fri, 25 Oct 2019 08:00:03 +0200 (CEST)
-Date:   Fri, 25 Oct 2019 08:00:03 +0200
+        id 71847376C; Fri, 25 Oct 2019 13:12:20 +0200 (CEST)
 From:   Simon Horman <horms@verge.net.au>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
         Wensong Zhang <wensong@linux-vs.org>,
-        Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jiri Kosina <trivial@kernel.org>, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH trivial] net: Fix various misspellings of "connect"
-Message-ID: <20191025060000.GA3009@verge.net.au>
-References: <20191024152323.29987-1-geert+renesas@glider.be>
+        Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>
+Subject: [GIT PULL] IPVS fixes for v5.4
+Date:   Fri, 25 Oct 2019 13:12:03 +0200
+Message-Id: <20191025111205.30555-1-horms@verge.net.au>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191024152323.29987-1-geert+renesas@glider.be>
-Organisation: Horms Solutions BV
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 05:23:23PM +0200, Geert Uytterhoeven wrote:
-> Fix misspellings of "disconnect", "disconnecting", "connections", and
-> "disconnected".
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/net/wimax/i2400m/usb.c                      | 2 +-
->  drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.c | 4 ++--
->  include/net/cfg80211.h                              | 2 +-
->  net/netfilter/ipvs/ip_vs_ovf.c                      | 2 +-
->  net/wireless/reg.h                                  | 2 +-
->  5 files changed, 6 insertions(+), 6 deletions(-)
+Hi Pablo,
 
-Thanks Geert,
+please consider these IPVS fixes for v5.4.
 
-for the IPVS portion:
+* Eric Dumazet resolves a race condition in switching the defense level
 
-Acked-by: Simon Horman <horms@verge.net.au>
+* Davide Caratti resolves a race condition in module removal
 
+This pull request is based on nf.
+
+
+The following changes since commit 085461c8976e6cb4d5b608a7b7062f394c51a253:
+
+  netfilter: nf_tables_offload: restore basechain deletion (2019-10-23 13:14:50 +0200)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/horms/ipvs.git tags/ipvs-fixes-for-v5.4
+
+for you to fetch changes up to c24b75e0f9239e78105f81c5f03a751641eb07ef:
+
+  ipvs: move old_secure_tcp into struct netns_ipvs (2019-10-24 11:56:02 +0200)
+
+----------------------------------------------------------------
+Davide Caratti (1):
+      ipvs: don't ignore errors in case refcounting ip_vs module fails
+
+Eric Dumazet (1):
+      ipvs: move old_secure_tcp into struct netns_ipvs
+
+ include/net/ip_vs.h              |  1 +
+ net/netfilter/ipvs/ip_vs_app.c   | 12 ++++++++++--
+ net/netfilter/ipvs/ip_vs_ctl.c   | 29 +++++++++++------------------
+ net/netfilter/ipvs/ip_vs_pe.c    |  3 ++-
+ net/netfilter/ipvs/ip_vs_sched.c |  3 ++-
+ net/netfilter/ipvs/ip_vs_sync.c  | 13 ++++++++++---
+ 6 files changed, 36 insertions(+), 25 deletions(-)
