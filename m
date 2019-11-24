@@ -2,77 +2,78 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43023FE423
-	for <lists+lvs-devel@lfdr.de>; Fri, 15 Nov 2019 18:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC4610836C
+	for <lists+lvs-devel@lfdr.de>; Sun, 24 Nov 2019 14:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727548AbfKORhX (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 15 Nov 2019 12:37:23 -0500
-Received: from mail.hgs.gob.ec ([190.214.19.83]:43240 "HELO mail.hgs.gob.ec"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with SMTP
-        id S1727540AbfKORhX (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 15 Nov 2019 12:37:23 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hgs.gob.ec (Postfix) with ESMTP id 2D6A8A252C8;
-        Thu, 14 Nov 2019 16:25:44 -0500 (-05)
-Received: from mail.hgs.gob.ec ([127.0.0.1])
-        by localhost (mail.hgs.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id vCrs2UGWnfl8; Thu, 14 Nov 2019 16:25:41 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hgs.gob.ec (Postfix) with ESMTP id 6FD39A23448;
-        Thu, 14 Nov 2019 16:25:03 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.hgs.gob.ec 6FD39A23448
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hgs.gob.ec;
-        s=DD120D66-D63F-11E9-9729-9452E74E1CB4; t=1573766703;
-        bh=oYeOwTtTK4mcRNNK0JGL7ZOgP8mm7StpJG1pujYq4Z0=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=UZEpOXyBw05xBy8o8YC0sgBhYQ53CbQJ5W09emyVH88y13hbl586yEJz3rpJircCP
-         wTIUI++D3zrckmKvBjbjzHVns/twB7V6KTOIjd0OiezMxtYaFGaBlQvd0mFM26a/mq
-         mc7097klRKPaco8SU4uhB7GLhyheOre/ux8Jzf+F1me3zG0iGp3pNuG6lw2dypNEO+
-         ypwbn1AdI9QWtmE7DnnZd6LSNG7wx+YUNvt1BTgLtMjqlzMUYRMtQV/tfk4qWKUKHo
-         9yot3IhEJxoo6ays7lXncXkSBJSqTU0M7IZGKXbV5tJwsIPL6ZpLRBf9ilFx9CD+DT
-         Q5vTM35PBjCMg==
-X-Virus-Scanned: amavisd-new at hgs.gob.ec
-Received: from mail.hgs.gob.ec ([127.0.0.1])
-        by localhost (mail.hgs.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hs__A0kolYZe; Thu, 14 Nov 2019 16:25:03 -0500 (-05)
-Received: from [10.32.142.65] (unknown [105.4.7.6])
-        by mail.hgs.gob.ec (Postfix) with ESMTPSA id 70698A23466;
-        Thu, 14 Nov 2019 16:24:22 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726767AbfKXN3P (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 24 Nov 2019 08:29:15 -0500
+Received: from mail-io1-f66.google.com ([209.85.166.66]:35766 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726740AbfKXN3P (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 24 Nov 2019 08:29:15 -0500
+Received: by mail-io1-f66.google.com with SMTP id x21so13189415ior.2
+        for <lvs-devel@vger.kernel.org>; Sun, 24 Nov 2019 05:29:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=pI7cV3FDgc1XH+A619u5I2fUvKpFMBjQiQlWPO2Scvc=;
+        b=qx8DLDlWc8NNSIaydIiQKW7g0h9GmT8nEzXndlUAjmX5dBsr7C0B6FNps0lTI16YvZ
+         h04AKYIBw4KismPVKYPlMp61YCmfWnXjGgsBmYdNYG9iHA5AWjdJ+/8+UwI0zahBbkuS
+         sdHGMuuuLUVpBlRIXNRN0g31BGVLpymAYNOUwq2thVcH6jbNZgMR0OWh4BNogWUnbWeM
+         CnAPqyL8u3V6fACdQqYj5cGHh6QHNnCZ8xw5O6rG4ixnaeP9EEGVboYIX6Y2UxX7l1Q2
+         bfI/uEHl7MFPdMyRtCdUHbUKD99VlzOL6vztUMi6yhJyYCXhbS+7ZhxpvdFnpY8lVh2v
+         v3oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=pI7cV3FDgc1XH+A619u5I2fUvKpFMBjQiQlWPO2Scvc=;
+        b=A3bFebkSPySPfwcZsplcgvHFP/ytpJMDBYpvy0Ui0FFrpWClwJA4pOx0n4WO581s6R
+         JsMErolFwuCtY6xyP6Os8GpDbPkbSwAQNkguDdG7FP9JUnGqWVG8eFgzjblzyUdAh0vn
+         noZaBrs3qyb8qNQxUKDSbIbphoEdGx+tzUfrkEGiYddO+8hiRNafGzD2+9xREP9TXCob
+         yerYpBmQOwbqEqlk2KUkCh87Fx254nuuFCS8bPnzv3ybHYBrSIbQFm0qQ4TW7j++tdBM
+         MWC4orkQHl2szMZ10KanjJJ9uQHUdfRarF8KKZZjAEvMprWF8VrldhqDWdnoVrwVh1cV
+         nGEQ==
+X-Gm-Message-State: APjAAAXV+/81yf5F6zXOqgoLA5s4qhnQRg6p8YHKhLZMDLEnYkxyqzKz
+        D37+n6t9PGQHHNezLHWOfd0Da8E4o8QWwOpQPMQ=
+X-Google-Smtp-Source: APXvYqybx2/dgBiAWbOdq2vR9EEcolLI5DF5fgJLg1i9ud7rdMKBKVVjyFq8kpteGpC8DkYv21Lm3zDnyNNkk8NIqho=
+X-Received: by 2002:a05:6602:251a:: with SMTP id i26mr21555562ioe.302.1574602154837;
+ Sun, 24 Nov 2019 05:29:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000=2E000_Euro?=
-To:     Recipients <dietetica@hgs.gob.ec>
-From:   ''Charles jackson'' <dietetica@hgs.gob.ec>
-Date:   Thu, 14 Nov 2019 23:24:14 +0200
-Reply-To: charlesjacksonjr001@gmail.com
-Message-Id: <20191114212423.70698A23466@mail.hgs.gob.ec>
+Received: by 2002:a4f:4fd0:0:0:0:0:0 with HTTP; Sun, 24 Nov 2019 05:29:14
+ -0800 (PST)
+Reply-To: afginvestmentbrokers@al-faisaliah.org
+From:   "Mr. Joon-Kyu Lin" <johnpfox60@gmail.com>
+Date:   Sun, 24 Nov 2019 05:29:14 -0800
+Message-ID: <CAHLmmYOYTB_fENaVKB_mmR1SNF1OH-=yZCuin3NR32Nkz5z4+A@mail.gmail.com>
+Subject: Venture Capital & Private Investors
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Lieber Freund,
+Attention:
 
-Ich bin Herr Charles W Jackson, North Carolina, Vereinigte Staaten von Amer=
-ika, der Mega-Gewinner von 344 Millionen US-Dollar. Beim Mega-Millions-Jack=
-pot spende ich an 5 zuf&auml;llige Personen. Wenn Sie diese E-Mail erhalten=
-, wurde Ihre E-Mail zu einem Spinball, den ich am h&auml;ufigsten verteilt =
-habe von meinem Verm&ouml;gen an eine Reihe von Wohlt&auml;tigkeitsorganisa=
-tionen. Ich habe mich freiwillig entschlossen, Ihnen als einer der ausgew&a=
-uml;hlten 5 einen Betrag von &euro; 2.000.000,00 zu spenden, um meine Gewin=
-ne zu &uuml;berpr&uuml;fen.
-Dies ist Ihr Spendencode: [CJ530342019]
+I am an investor that can provide funding for any viable business idea or
+venture.
 
-www.youtube.com/watch?v=3DBSr8myiLPMQ
-
-Antworten Sie auf diese E-Mail mit dem SPENDER-CODE: =
+Please do let me know if you have fund management abilities, credible
+projects in need of funding or advanced stage projects requiring Bank
+Guarantees, Loans or Partnership, Joint Venture, Equity, we would be
+delighted to work with you.
 
 
-charlesjacksonjr001@gmail.com
+Best Regards,
+Mr. Joon-Kyu Lim
+Al Faisaliah Group (AFG)
+Venture Capital & Private Investors
 
-Ich hoffe, Sie und Ihre Familie gl&uuml;cklich zu machen
-
-Sch&ouml;ne Gr&uuml;&szlig;e
-Mr. Charles Jackson
+--
+*This email and any attachments are intended for the named recipients only
+and contain confidential materials. Any unauthorized copying, reviewing,
+dissemination or other use by anyone other than the named recipients of
+this communication is strictly prohibited. If you received this email in
+error and/or are not a named recipient, please notify the sender (Al
+Faisaliah Group) and delete all copies of this email. Thank you.
