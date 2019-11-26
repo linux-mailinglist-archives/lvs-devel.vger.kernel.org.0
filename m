@@ -2,78 +2,71 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC4610836C
-	for <lists+lvs-devel@lfdr.de>; Sun, 24 Nov 2019 14:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A7810A168
+	for <lists+lvs-devel@lfdr.de>; Tue, 26 Nov 2019 16:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbfKXN3P (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 24 Nov 2019 08:29:15 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:35766 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbfKXN3P (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 24 Nov 2019 08:29:15 -0500
-Received: by mail-io1-f66.google.com with SMTP id x21so13189415ior.2
-        for <lvs-devel@vger.kernel.org>; Sun, 24 Nov 2019 05:29:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pI7cV3FDgc1XH+A619u5I2fUvKpFMBjQiQlWPO2Scvc=;
-        b=qx8DLDlWc8NNSIaydIiQKW7g0h9GmT8nEzXndlUAjmX5dBsr7C0B6FNps0lTI16YvZ
-         h04AKYIBw4KismPVKYPlMp61YCmfWnXjGgsBmYdNYG9iHA5AWjdJ+/8+UwI0zahBbkuS
-         sdHGMuuuLUVpBlRIXNRN0g31BGVLpymAYNOUwq2thVcH6jbNZgMR0OWh4BNogWUnbWeM
-         CnAPqyL8u3V6fACdQqYj5cGHh6QHNnCZ8xw5O6rG4ixnaeP9EEGVboYIX6Y2UxX7l1Q2
-         bfI/uEHl7MFPdMyRtCdUHbUKD99VlzOL6vztUMi6yhJyYCXhbS+7ZhxpvdFnpY8lVh2v
-         v3oA==
+        id S1728626AbfKZPrC (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 26 Nov 2019 10:47:02 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:37448 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728616AbfKZPrC (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 26 Nov 2019 10:47:02 -0500
+Received: by mail-io1-f71.google.com with SMTP id p2so13646777iof.4
+        for <lvs-devel@vger.kernel.org>; Tue, 26 Nov 2019 07:47:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pI7cV3FDgc1XH+A619u5I2fUvKpFMBjQiQlWPO2Scvc=;
-        b=A3bFebkSPySPfwcZsplcgvHFP/ytpJMDBYpvy0Ui0FFrpWClwJA4pOx0n4WO581s6R
-         JsMErolFwuCtY6xyP6Os8GpDbPkbSwAQNkguDdG7FP9JUnGqWVG8eFgzjblzyUdAh0vn
-         noZaBrs3qyb8qNQxUKDSbIbphoEdGx+tzUfrkEGiYddO+8hiRNafGzD2+9xREP9TXCob
-         yerYpBmQOwbqEqlk2KUkCh87Fx254nuuFCS8bPnzv3ybHYBrSIbQFm0qQ4TW7j++tdBM
-         MWC4orkQHl2szMZ10KanjJJ9uQHUdfRarF8KKZZjAEvMprWF8VrldhqDWdnoVrwVh1cV
-         nGEQ==
-X-Gm-Message-State: APjAAAXV+/81yf5F6zXOqgoLA5s4qhnQRg6p8YHKhLZMDLEnYkxyqzKz
-        D37+n6t9PGQHHNezLHWOfd0Da8E4o8QWwOpQPMQ=
-X-Google-Smtp-Source: APXvYqybx2/dgBiAWbOdq2vR9EEcolLI5DF5fgJLg1i9ud7rdMKBKVVjyFq8kpteGpC8DkYv21Lm3zDnyNNkk8NIqho=
-X-Received: by 2002:a05:6602:251a:: with SMTP id i26mr21555562ioe.302.1574602154837;
- Sun, 24 Nov 2019 05:29:14 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=NMIhDQ1/TzZzQjr2wWUncjr9UXV8W0Q6CWNH9QCoYyc=;
+        b=SZAh/Th93oa/8gwaxzjRAiIoqBzjJouQyheuLpXIUAReEzHcyx9A6hlc+IaFH7vnWU
+         vJMHpY1PSwRjwlNwf0uxBs4yVdG7E83xs6FxhWWvGix1AzQnoyN57+E24UbdxB+H6Jzi
+         JYgQk7mqQ9Wjk9Nl329D7zNEOr6Du9iuPlLIoSoLFPaqSajEfAMf51GA3bA/EsQll4RM
+         bOvjKVXqWv/xHf2lA+npCbPKxI6ktSELkSsQtGSJB4wySCj2Ys7gCaab9TC0p67PLKvd
+         dt64LMkiDHC+zgtzkx9Jq47x3EF3sSDMMPldlbX2KgTlcWPQxU5LjLVxdtqE1eKBGX+v
+         CrZw==
+X-Gm-Message-State: APjAAAV0963u3dWeclesKpYHqDkSTiNOl57mANt6fNMBKdClnOXDIJKe
+        1GsXpny6rceR6xxPdzVXELVb3NJOI68fNrNIB8tn65afdZiN
+X-Google-Smtp-Source: APXvYqwGLVmd6lBzBXRckmAQHo5bBkT8ic7o+qm5KSqWVZbE1t3yqtpg3LGxYvDX6Q2q+YWCGwHbZNwPiZQhQ+pyU2BTIV7K7AFJ
 MIME-Version: 1.0
-Received: by 2002:a4f:4fd0:0:0:0:0:0 with HTTP; Sun, 24 Nov 2019 05:29:14
- -0800 (PST)
-Reply-To: afginvestmentbrokers@al-faisaliah.org
-From:   "Mr. Joon-Kyu Lin" <johnpfox60@gmail.com>
-Date:   Sun, 24 Nov 2019 05:29:14 -0800
-Message-ID: <CAHLmmYOYTB_fENaVKB_mmR1SNF1OH-=yZCuin3NR32Nkz5z4+A@mail.gmail.com>
-Subject: Venture Capital & Private Investors
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a6b:3b06:: with SMTP id i6mr14691402ioa.185.1574783220874;
+ Tue, 26 Nov 2019 07:47:00 -0800 (PST)
+Date:   Tue, 26 Nov 2019 07:47:00 -0800
+In-Reply-To: <94eb2c059ce0bca273056940d77d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007a85c4059841ca66@google.com>
+Subject: Re: INFO: task hung in do_ip_vs_set_ctl (2)
+From:   syzbot <syzbot+7810ed2e0cb359580c17@syzkaller.appspotmail.com>
+To:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
+        horms@verge.net.au, ja@ssi.bg, kadlec@blackhole.kfki.hu,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvs-devel@vger.kernel.org, mmarek@suse.com, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
+        wensong@linux-vs.org, yamada.masahiro@socionext.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Attention:
+syzbot has bisected this bug to:
 
-I am an investor that can provide funding for any viable business idea or
-venture.
+commit 6f7da290413ba713f0cdd9ff1a2a9bb129ef4f6c
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun Jul 2 23:07:02 2017 +0000
 
-Please do let me know if you have fund management abilities, credible
-projects in need of funding or advanced stage projects requiring Bank
-Guarantees, Loans or Partnership, Joint Venture, Equity, we would be
-delighted to work with you.
+     Linux 4.12
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11a2b78ce00000
+start commit:   17dec0a9 Merge branch 'userns-linus' of git://git.kernel.o..
+git tree:       net-next
+kernel config:  https://syzkaller.appspot.com/x/.config?x=da08d02b86752ade
+dashboard link: https://syzkaller.appspot.com/bug?extid=7810ed2e0cb359580c17
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130abb47800000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=150a15bb800000
 
-Best Regards,
-Mr. Joon-Kyu Lim
-Al Faisaliah Group (AFG)
-Venture Capital & Private Investors
+Reported-by: syzbot+7810ed2e0cb359580c17@syzkaller.appspotmail.com
+Fixes: 6f7da290413b ("Linux 4.12")
 
---
-*This email and any attachments are intended for the named recipients only
-and contain confidential materials. Any unauthorized copying, reviewing,
-dissemination or other use by anyone other than the named recipients of
-this communication is strictly prohibited. If you received this email in
-error and/or are not a named recipient, please notify the sender (Al
-Faisaliah Group) and delete all copies of this email. Thank you.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
