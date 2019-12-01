@@ -2,80 +2,89 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 763F810AA9F
-	for <lists+lvs-devel@lfdr.de>; Wed, 27 Nov 2019 07:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80A210E2F8
+	for <lists+lvs-devel@lfdr.de>; Sun,  1 Dec 2019 19:19:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbfK0GTh (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 27 Nov 2019 01:19:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34938 "EHLO mail.kernel.org"
+        id S1727252AbfLAST3 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 1 Dec 2019 13:19:29 -0500
+Received: from mtax.cdmx.gob.mx ([187.141.35.197]:8821 "EHLO mtax.cdmx.gob.mx"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726061AbfK0GTh (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 27 Nov 2019 01:19:37 -0500
-Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD3C9206F0;
-        Wed, 27 Nov 2019 06:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574835576;
-        bh=J3d4dyh/vmhHMv1z2Fxba6OHbvFsy8II4ba8oQdw1ds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=012LBpBnwXDLUs/AxQ9KCJ+ro+73bPuGidZmwL51Y1G1wFUz82jMDsEC3AZPZNlLp
-         zKMl9X7c8VwwoX8SGtD6cwvtM6JbFyoYnkP1VpAoXxtoVDcKQV72G4r6wX7CFrefXh
-         mdfn5Scpjb8BspQSEsVwTRvLFGL59DbMU7AOMuwI=
-Date:   Tue, 26 Nov 2019 22:19:34 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     syzbot <syzbot+7810ed2e0cb359580c17@syzkaller.appspotmail.com>
-Cc:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
-        horms@verge.net.au, ja@ssi.bg, kadlec@blackhole.kfki.hu,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvs-devel@vger.kernel.org, mmarek@suse.com, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        wensong@linux-vs.org, yamada.masahiro@socionext.com
-Subject: Re: INFO: task hung in do_ip_vs_set_ctl (2)
-Message-ID: <20191127061934.GC227319@sol.localdomain>
-References: <94eb2c059ce0bca273056940d77d@google.com>
- <0000000000007a85c4059841ca66@google.com>
+        id S1727231AbfLAST3 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Sun, 1 Dec 2019 13:19:29 -0500
+X-Greylist: delayed 6543 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Dec 2019 13:19:28 EST
+X-NAI-Header: Modified by McAfee Email Gateway (4500)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
+        t=1575217589; h=DKIM-Filter:X-Virus-Scanned:
+         Content-Type:MIME-Version:Content-Transfer-Encoding:
+         Content-Description:Subject:To:From:Date:Message-Id:
+         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
+         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
+         X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
+         X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=M
+        8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs4
+        8=; b=LPuKPPHQJYnOC5EJDt5eEIRmV94r9QWeicWTiVuMZiIe
+        c0HfuSkcuZt533uh9GxUnu7lPy2cF8bguPC4Pem2M2B3aL0Q9g
+        ubyli3Xezoqvo9k83HVn8loS847x9wLwZ2n0ZQLdp/mWXm/Ixj
+        8cLoOElHYttNHq1af+iCN3JsQGU=
+Received: from cdmx.gob.mx (correo.cdmx.gob.mx [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
+        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
+         id 28cd_46c3_0308a282_08ec_4293_b82d_4adf00b029c2;
+        Sun, 01 Dec 2019 10:26:29 -0600
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id 2BFDE1E21C2;
+        Sun,  1 Dec 2019 10:18:12 -0600 (CST)
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id cqw_gK_4nMsN; Sun,  1 Dec 2019 10:18:11 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id C1AC91E25F7;
+        Sun,  1 Dec 2019 10:12:59 -0600 (CST)
+DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx C1AC91E25F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
+        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1575216779;
+        bh=M8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs48=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Message-Id;
+        b=cswIt16xkCTpJIfm6OUBS8bYILaPdtNWz7ape1IZijiwV0sZFb+HIdWIMww5LBt/1
+         XhmoqfaECkZG73j2UtjfRxJY8zm0YG2i7NEqqFFT5aTsPzlcOC3CdwhhN3U0jolZ6h
+         bVmT645wAq/6/50COFhbJFIWP9YSCLO0wJHHNHCo=
+X-Virus-Scanned: amavisd-new at cdmx.gob.mx
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id SKEXODyZSZNq; Sun,  1 Dec 2019 10:12:59 -0600 (CST)
+Received: from [192.168.0.104] (unknown [188.125.168.160])
+        by cdmx.gob.mx (Postfix) with ESMTPSA id 852CF1E2DB4;
+        Sun,  1 Dec 2019 10:04:18 -0600 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000007a85c4059841ca66@google.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Congratulations
+To:     Recipients <aac-styfe@cdmx.gob.mx>
+From:   "Bishop Johnr" <aac-styfe@cdmx.gob.mx>
+Date:   Sun, 01 Dec 2019 17:04:11 +0100
+Message-Id: <20191201160418.852CF1E2DB4@cdmx.gob.mx>
+X-AnalysisOut: [v=2.2 cv=U7TiNaju c=1 sm=1 tr=0 p=6K-Ig8iNAUou4E5wYCEA:9 p]
+X-AnalysisOut: [=zRI05YRXt28A:10 a=T6zFoIZ12MK39YzkfxrL7A==:117 a=9152RP8M]
+X-AnalysisOut: [6GQqDhC/mI/QXQ==:17 a=8nJEP1OIZ-IA:10 a=pxVhFHJ0LMsA:10 a=]
+X-AnalysisOut: [pGLkceISAAAA:8 a=wPNLvfGTeEIA:10 a=M8O0W8wq6qAA:10 a=Ygvjr]
+X-AnalysisOut: [iKHvHXA2FhpO6d-:22]
+X-SAAS-TrackingID: 3b9e3ed5.0.105000161.00-2378.176568746.s12p02m005.mxlogic.net
+X-NAI-Spam-Flag: NO
+X-NAI-Spam-Threshold: 3
+X-NAI-Spam-Score: -5000
+X-NAI-Spam-Rules: 1 Rules triggered
+        WHITELISTED=-5000
+X-NAI-Spam-Version: 2.3.0.9418 : core <6686> : inlines <7165> : streams
+ <1840193> : uri <2949749>
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Nov 26, 2019 at 07:47:00AM -0800, syzbot wrote:
-> syzbot has bisected this bug to:
-> 
-> commit 6f7da290413ba713f0cdd9ff1a2a9bb129ef4f6c
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Sun Jul 2 23:07:02 2017 +0000
-> 
->     Linux 4.12
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11a2b78ce00000
-> start commit:   17dec0a9 Merge branch 'userns-linus' of git://git.kernel.o..
-> git tree:       net-next
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=da08d02b86752ade
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7810ed2e0cb359580c17
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130abb47800000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=150a15bb800000
-> 
-> Reported-by: syzbot+7810ed2e0cb359580c17@syzkaller.appspotmail.com
-> Fixes: 6f7da290413b ("Linux 4.12")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Money was donated to you by Mr and Mrs Allen and Violet Large, just contact=
+ them with this email for more information =
 
-This bisection is obviously bogus, though oddly enough the bisection log shows
-that v4.12 crashed 10/10 times, while v4.12~1 crashed 0/10 times...
 
-Anyway, this bug looks extremely stale, as it only occurred for a 2-week period
-in 2018.  Commit 5c64576a77 ("ipvs: fix rtnl_lock lockups caused by
-start_sync_thread") might have been the fix, but I'm just invalidating this:
-
-#syz invalid
-
-- Eric
+EMail: allenandvioletlargeaward@gmail.com
