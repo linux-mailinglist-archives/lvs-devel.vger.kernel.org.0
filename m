@@ -2,110 +2,107 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24069112B3F
-	for <lists+lvs-devel@lfdr.de>; Wed,  4 Dec 2019 13:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E11A2114029
+	for <lists+lvs-devel@lfdr.de>; Thu,  5 Dec 2019 12:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727446AbfLDMVz (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 4 Dec 2019 07:21:55 -0500
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:39731 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbfLDMVz (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 4 Dec 2019 07:21:55 -0500
-Received: by mail-ed1-f67.google.com with SMTP id v16so6443246edy.6
-        for <lvs-devel@vger.kernel.org>; Wed, 04 Dec 2019 04:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=ZrmMUGc6qUd6lVfHraeKinlUq26M+1kgUrjiOz4/2sakhNasUp66g8zp5OYgaqnnN6
-         ikQh7DHgkXWYKHRIfF6p9f5qsHtoTEyNwTfC80LmnxtbOwgb83k64BxYLm8mGVtLWgr2
-         HKqItrDa8qhaF+3Bew23wHE7QM34t3Yb7i6V+Am/vQWxTSyyIGTRiVXZBWjV2VFpMWzS
-         DsEYmD1F1y+xg57Z321fjvg/jyRauaFOTbmHlWymd3i0zh2GXFLD6SR/ZzNbjkZVCQ//
-         2e+h51EwDuxQ3dJCBBWiDE4XRXnhkTv0ZA3j3dNzwS7FdPA9JBJ9D8yJWzOkd3HEKtPW
-         P0bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=pe359O1HI6GNE/KtFfT7c44yHh3oBx0q/fqK4S6kGHuNUm+TCx1Nm2olIXXEWarKkD
-         PYLxOSx/42I6Yq0En4VzmLxSWbhqR8GD0wX3HNgHw4MQMX9Slpl23NRznzJvnZE39tXx
-         xAhKOiDphYzgSi62oNS9lAUhunXC+W+qfTNtUbSfKDLQVhuTkGgpHN7nsLe/hNVLSzkY
-         9gfCvo/7cMDBW6+Ob8JlTQn3Yww3HsIgkqs1p0S+MT9L9t+IEKVKeRzlr5zvpJPrDOFI
-         +7fl67yVekuzkQcZpBqST0k7oTfufes/zGus+qgpQXTFgAqhHfgM7P9hJTi0T1ZzAhSY
-         V8BA==
-X-Gm-Message-State: APjAAAUf9SSCDQSbesu+ttxNgGveSSbIY4wcyM7YkuwBpeTEoOl1p2X0
-        y/k3N0azrJJjdR5kjFT7JB2QPE7O9ZzndLD35lI=
-X-Google-Smtp-Source: APXvYqyrIVXeC8giDQcd4QOxywER1Bfu67zWpX0M2WdTelLXkcRrHbjCIWIQqkRJisfM6jfWKWMJAdixJ5Vypp+tdcs=
-X-Received: by 2002:a05:6402:1484:: with SMTP id e4mr3761444edv.286.1575462113159;
- Wed, 04 Dec 2019 04:21:53 -0800 (PST)
+        id S1729087AbfLELe6 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 5 Dec 2019 06:34:58 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:59424 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729048AbfLELe6 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 5 Dec 2019 06:34:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1575545697;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MKtp+WpNbuhLdMOTzJSR1yYLCXWsbks7EQnS7Btik7w=;
+        b=Uc8fP9nqzDDzX4PPoHcP433zo+CfPP2U4jeres1/Lwo6BYeTD5J5dLSTtYSeyzf3ha7xwJ
+        ZLciMSdyMw11nD8tB2F6v00uRBELECI2FcTpgKMstWd6rYas7YxCyHfDrsH4S8pjKiF8x4
+        DBBZmjLrV/AA8woAPjqtculdsF6tHdU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-385-xbE10sRQP4q31QuuOc3OMw-1; Thu, 05 Dec 2019 06:34:54 -0500
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 55601107ACC4;
+        Thu,  5 Dec 2019 11:34:51 +0000 (UTC)
+Received: from carbon (ovpn-200-56.brq.redhat.com [10.40.200.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 94F2B1D1;
+        Thu,  5 Dec 2019 11:34:45 +0000 (UTC)
+Date:   Thu, 5 Dec 2019 12:34:43 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        lvs-users@linuxvirtualserver.org, netfilter-devel@vger.kernel.org,
+        Vadim Fedorenko <vfedorenko@yandex-team.ru>,
+        Jacky Hu <hengqing.hu@gmail.com>, brouer@redhat.com,
+        Quentin Armitage <quentin@armitage.org.uk>
+Subject: Re: [PATCH] ipvsadm: allow tunneling with gre encapsulation
+Message-ID: <20191205123443.75eeb03c@carbon>
+In-Reply-To: <alpine.LFD.2.21.1907022210200.4236@ja.home.ssi.bg>
+References: <20190701192537.4991-1-ja@ssi.bg>
+        <20190702134442.2c646c76@carbon>
+        <alpine.LFD.2.21.1907022210200.4236@ja.home.ssi.bg>
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:21:52
- -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
-Date:   Wed, 4 Dec 2019 13:21:52 +0100
-Message-ID: <CAOE+jABJuMMiCcVnWE9RLGhKXYGWMJcCkpG853KzpEEhObUA9Q@mail.gmail.com>
-Subject: God has remembered your prayers I have already sent you Money Gram
- payment of $5000.00 today, MG 1029-8096
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MC-Unique: xbE10sRQP4q31QuuOc3OMw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Attn, dear Beneficiary.
+On Tue, 2 Jul 2019 22:21:01 +0300 (EEST)
+Julian Anastasov <ja@ssi.bg> wrote:
 
-God has remembered your prayers
-I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
-This is because we have finally concluded to effect your transfer
-funds of $4.8,000.000usd
-through MONEY GRAM International Fund transfer Service
-Each payment will be sending to you by $5000.00 daily until the
-($4.8,000.000usd) is completely transferred
-we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
-So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
+> 	Hello,
+> 
+> On Tue, 2 Jul 2019, Jesper Dangaard Brouer wrote:
+> 
+> > On Mon,  1 Jul 2019 22:25:37 +0300
+> > Julian Anastasov <ja@ssi.bg> wrote:
+> >   
+> > > Add support for real server tunnels with GRE encapsulation:
+> > > --tun-type gre [--tun-nocsum|--tun-csum]
+> > > 
+> > > Co-developed-by: Vadim Fedorenko <vfedorenko@yandex-team.ru>
+> > > Signed-off-by: Vadim Fedorenko <vfedorenko@yandex-team.ru>
+> > > Signed-off-by: Julian Anastasov <ja@ssi.bg>
+> > > ---
+> > >  ipvsadm.8       | 19 ++++++++++++++-----
+> > >  ipvsadm.c       | 20 +++++++++++++++++++-
+> > >  libipvs/ip_vs.h |  1 +
+> > >  3 files changed, 34 insertions(+), 6 deletions(-)
+> > > 
+> > > 	Jesper, this will follow the other patchset from 30-MAY-2019,
+> > > "Allow tunneling with gue encapsulation".  
+> > 
+> > I've applied Jacky's patches, which this patch builds on top of, to the
+> > ipvsadm kernel.org git tree[1].
+> > 
+> > Simon already signed off on your kernel side patch, but it's not
+> > applied to a kernel git tree yet... Do you want me to apply this, or
+> > wait for this to hit a kernel tree?  
+> 
+> 	The both GRE patches are already part of nf-next, so
+> it is fine to apply this ipvsadm patch for GRE now. It would be
+> better in case one wants to test the new features...
 
-Contact person Mrs. Alan Ude
-Dir. MONEY GRAM Service,Benin
-Phone number: +229 98856728
-E-mail: moneygram.1820@outlook.fr
+I noticed that I had applied this patch, but forgot to push the ipvsadm
+git tree[1] on kernel.org.  I've now pushed this...
 
-Ask him to give you the complete mtcn, sender name, question and
-answer to enable you
-pick up the $5000.00 sent today,
-Also you are instructed to re-confirm your information's
-to Mrs.Alan Ude as listed below to avoid wrong transactions.
+https://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git/commit/?id=4a72198e7a3f9f275ff5752
 
-(1Your Full name:............................................
-(2 Phone number.....................................................
-(3 Contact address:.....................................
-(4 Age:..................................................................
-(5 Country..............................................
-(6) Sex .................................................................
-(7) your occupation...........................................
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
-(8)Passport/By Attach or Drivers License Number:
-Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
-Note please: I have paid service fees for you but the only money you
-are required
-to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
-pick up your transfer today.
+[1] https://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git/
 
-Send it to via Money Gram
-Receiver's Name-----Alan Ude
-Country----------Benin
-Address-----------Cotonou
-Quest--------Honest
-Ans-----------Trust
-
-I done all my best for you to receive your transfer now ok.
-We need your urgent reply
-Best Regards
-Rev.Dr Emmanuel Okoye
-CEO Ecobank-benin
-
-If we did not receive it urgent from you today,
-I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
-representative.
