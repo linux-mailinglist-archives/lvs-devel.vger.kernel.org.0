@@ -2,76 +2,46 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 349A51140FC
-	for <lists+lvs-devel@lfdr.de>; Thu,  5 Dec 2019 13:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E82A11B570
+	for <lists+lvs-devel@lfdr.de>; Wed, 11 Dec 2019 16:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729099AbfLEMre (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 5 Dec 2019 07:47:34 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:39291 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729096AbfLEMre (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 5 Dec 2019 07:47:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1575550053;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dCSP+OWY5s+EVxPlUvbauvM3zknf/JnJy1iXOn3yG3Q=;
-        b=DarjII+4eX5lzlHqCHlyaqvVFkD7btWoRZfhx5y5dw8RhZ8/OBEQCEusqn84bxu8vZQSnx
-        BGh+2dIBSicW603KCN1WseJq4RbbC88cBwCmKRdzajiUVvezq0fMl262KYUHouVvEouVMk
-        qb8ILffaAXpzTtIvha5QOU1grnhNk84=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-196--XpydwjjMXCE3quoMuqOmg-1; Thu, 05 Dec 2019 07:47:30 -0500
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3261C911BD;
-        Thu,  5 Dec 2019 12:47:29 +0000 (UTC)
-Received: from carbon (ovpn-200-56.brq.redhat.com [10.40.200.56])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 198C21001B28;
-        Thu,  5 Dec 2019 12:47:23 +0000 (UTC)
-Date:   Thu, 5 Dec 2019 13:47:22 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Quentin Armitage <quentin@armitage.org.uk>
-Cc:     Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>,
-        lvs-devel@vger.kernel.org, lvs-users@linuxvirtualserver.org,
-        Inju Song <inju.song@navercorp.com>, brouer@redhat.com
-Subject: Re: [PATCH 0/2] Add missing options to ipvsadm(8)
-Message-ID: <20191205134722.128a9c15@carbon>
-In-Reply-To: <1564656793.3546.64.camel@armitage.org.uk>
-References: <1564656793.3546.64.camel@armitage.org.uk>
+        id S1732156AbfLKPxu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Wed, 11 Dec 2019 10:53:50 -0500
+Received: from mailout02.3bbmail.com ([110.164.252.195]:48196 "EHLO
+        mailout03.3bb.co.th" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1732692AbfLKPxn (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 11 Dec 2019 10:53:43 -0500
+X-Greylist: delayed 2072 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 10:53:42 EST
+Authentication-Results: 3bb.co.th;
+        spf=fail smtp.mailfrom=infoccfoundation@amazon.com
+Received: from appserv (mx-ll-110.164.149-9.static.3bb.co.th [110.164.149.9] (may be forged))
+        by mailout03.3bb.co.th (8.16.0.27/8.16.0.27) with ESMTP id xBBFFFkR021471;
+        Wed, 11 Dec 2019 22:15:15 +0700
+Message-ID: <41451-2201912311151525480@appserv>
+To:     "a" <skyteamsbiz@gmail.com>
+Reply-To: "CCULVERT FOUNDATION" <skyteamsbiz@gmail.com>
+From:   "CCULVERT FOUNDATION" <infoccfoundation@amazon.com>
+Subject: Mein letzter Wunsch.
+Date:   Wed, 11 Dec 2019 22:15:25 +0700
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-MC-Unique: -XpydwjjMXCE3quoMuqOmg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-type: text/plain; charset=windows-874
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-SPF-Result: fail
+X-Proofpoint-SPF-Record: v=spf1 include:spf1.amazon.com include:spf2.amazon.com
+ include:amazonses.com -all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-11-25_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=40 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=353
+ adultscore=0 classifier=spam adjust=40 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1911260048
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, 01 Aug 2019 11:53:13 +0100
-Quentin Armitage <quentin@armitage.org.uk> wrote:
-
-> Quentin Armitage (2):
->   Add --pe sip option in ipvsadm(8) man page
->   In ipvsadm(8) add using nft or an eBPF program to set a packet mark
-> 
->  ipvsadm.8 | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
-
-This patchset is now applied to ipvsadm kernel.org git tree.
-Sorry for not doing this sooner.
-
-https://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git/commit/?id=e904a8cd1d7712
-https://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git/commit/?id=089387716f0252
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+Wenn Sie sich für die Finanzierung der STIFTUNG interessieren, schreiben Sie bitte heute über meinen Anwalt zurück
+Grüße,
+Mrs. Cindy Culvert.
+skyteamsbiz@gmail.com
 
