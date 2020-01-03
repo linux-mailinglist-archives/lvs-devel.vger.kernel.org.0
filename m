@@ -2,105 +2,100 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC1E12A1CE
-	for <lists+lvs-devel@lfdr.de>; Tue, 24 Dec 2019 14:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A8F12FDB5
+	for <lists+lvs-devel@lfdr.de>; Fri,  3 Jan 2020 21:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbfLXNh7 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 24 Dec 2019 08:37:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:33217 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726128AbfLXNh7 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 24 Dec 2019 08:37:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1577194678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RllTSQBanYIj2a+FOREw/6tP9C+MekKkoK3DQ2qokOM=;
-        b=Wz7NIdSvyoB0yKqr0eJtEiU7evuz/r0ssXbV/GAf642LRgY2IwEVgliLOTg6M0Dx/RpUDI
-        e5jBG0W3630jWt1lg2NjliCTcIfBwzDp5U6QfHXb8f15LITM05g33ov4WYvUATYgCf2qbr
-        CxWnoOsSlX1P64ws9c7JMP83DUGpNc0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-296-Vdn3x1bCOkaGyF9Fu5OQeg-1; Tue, 24 Dec 2019 08:37:56 -0500
-X-MC-Unique: Vdn3x1bCOkaGyF9Fu5OQeg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5BF711005502;
-        Tue, 24 Dec 2019 13:37:54 +0000 (UTC)
-Received: from carbon (ovpn-200-18.brq.redhat.com [10.40.200.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CAB025C1C3;
-        Tue, 24 Dec 2019 13:37:47 +0000 (UTC)
-Date:   Tue, 24 Dec 2019 14:37:45 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     lvs-devel@vger.kernel.org, lvs-users@linuxvirtualserver.org,
-        Julian Anastasov <ja@ssi.bg>, Jacky Hu <hengqing.hu@gmail.com>,
-        Quentin Armitage <quentin@armitage.org.uk>
-Cc:     brouer@redhat.com,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Ryan O'Hara <rohara@redhat.com>,
-        Simon Horman <horms@verge.net.au>,
-        Wensong Zhang <wensong@linux-vs.org>
-Subject: [ANNOUNCE] ipvsadm release v1.31
-Message-ID: <20191224143745.6bafce3f@carbon>
+        id S1728755AbgACUUN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 3 Jan 2020 15:20:13 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36446 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728789AbgACUUL (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 3 Jan 2020 15:20:11 -0500
+Received: by mail-qk1-f196.google.com with SMTP id a203so35086147qkc.3
+        for <lvs-devel@vger.kernel.org>; Fri, 03 Jan 2020 12:20:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
+         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
+         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
+         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
+         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
+         hUyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=JAeQdwVbXWJ+MalkI0lx5xzg4+9x3KHvpD1Zi23ZhbdudubLwzmV57tRK9CJoGnEz3
+         TlDYzhWFfY1mrgaRGEwDnFICo0JFp+DaBYjhVPd/z/mxKBRhdxKeEEsVmnQk77BPQGvF
+         udyANNu8Pl3pyZCRuHwtwMmnl6Obu2uFhHvHjOX1/g1Qs5BUj9wr42k2C68d993JxX1w
+         JsXiICmJTxIjln2C8fMJyWkGv7R8PYgn4q9yJpWrJApAU+GW1MA0jmm+Tyx1Xke9u0qo
+         ZSLAdGT4j0pLEwnL5pH3AxIrE+W4zaYjbm+fKltrDZDbfS4NLRDMfNkY/dmS/1ea5U7M
+         ZKSw==
+X-Gm-Message-State: APjAAAUDkvR9epPP4J+WEp0KECfkg8Afb/AIUkzzJF5I5ioPrwy+YzZz
+        mnTRM4CxQh9Ik1LmvWHfx24dY5mWdlREfj5NaF2ueOqPc2g=
+X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
+X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
+ Fri, 03 Jan 2020 12:20:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 3 Jan 2020 21:20:08 +0100
+Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
+Subject: I promise you must be happy today, God has uplifted you and your
+ family ok
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Merry Xmas,
+Dear Friend
 
-We are happy to announce the release of ipvsadm v1.31.
+i hope all is well with you,if so, glory be to God almighty. I'm very
+happy to inform you, about my success in getting payment funds under
+the cooperation of a new partner from United States of
+America.Presently I am in uk for investment projects with my own share
+of the total sum. I didn't forget your past efforts. IMF finally
+approved your compensation payment funds this morning by prepaid (ATM)
+Debit card of US$12,500.000.00Million Dollars, Since you not received
+this payment yet, I was not certified
+but it is not your fault and not my fault, I hold nothing against
+you.than bank official whom has been detaining the transfer in the
+bank, trying to claim your funds by themselves.
 
- ipvsadm is a utility to administer the kernels IPVS/LVS load-balancer service
+Therefore, in appreciation of your effort I have raised an
+International prepaid (ATM) Debit card of US$12,500.000.00 in your
+favor as compensation to you.
 
-This release add support for configuring tunneling with GRE or GUE
-encapsulation. See manpage ipvsadm(8) for --tun-type and --tun-info,
-plus more specific --tun-xxxx options for adjustments. Plus some
-manpage adjustments.
+Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
+on His  e-mail Address (mikebenz550@aol.com
 
-The related kernel side commits:
-- v5.3: 6aedd14b25db ("ipvs: strip gre tunnel headers from icmp errors")
-- v5.3: 6f7b841bc939 ("ipvs: allow tunneling with gre encapsulation")
-- v5.3: 29930e314da3 ("ipvs: add checksum support for gue encapsulation")
-- v5.3: 508f744c0de3 ("ipvs: strip udp tunnel headers from icmp errors")
-- v5.3: 2aa3c9f48bc2 ("ipvs: add function to find tunnels")
-- v5.2: 84c0d5e96f3a ("ipvs: allow tunneling with gue encapsulation")
+ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
+the money is in Prepaid (ATM) Debit card, not cash, so you need to
+send to him,
+your full name
+address  where the prepaid (ATM) Debit card will be delivered to you,
+including your cell phone number. Finally, I left explicit
+instructions with him, on how to send the (ATM CARD) to you.
 
-This release is based on the kernel.org git tree:
- https://git.kernel.org/cgit/utils/kernel/ipvsadm/ipvsadm.git/
+The Prepaid (ATM) Debit card, will be send to you through my
+Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
+my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
+Below is his contact information:
 
-You can download the tarballs from:
- https://kernel.org/pub/linux/utils/kernel/ipvsadm/
+NAME : MIKE BENZ
+EMAIL ADDRESS: mikebenz550@aol.com
+Text Him, (256) 284-4886
 
-Git tree:
- git://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git
-
-Shortlog:
-
-Jacky Hu (2):
-      ipvsadm: convert options to unsigned long long
-      ipvsadm: allow tunneling with gue encapsulation
-
-Jesper Dangaard Brouer (2):
-      Merge branch 'GUE-encap'
-      Release: Version 1.31
-
-Julian Anastasov (1):
-      ipvsadm: allow tunneling with gre encapsulation
-
-Quentin Armitage (2):
-      Add --pe sip option in ipvsadm(8) man page
-      In ipvsadm(8) add using nft or an eBPF program to set a packet mark
-
--- 
+Request for Delivery of the Prepaid (ATM) Debit card  to you today.
+Note, please I have paid for the whole service fees for you, so the
+only money you will send to my Diplomatic Agent Mr. Mike Benz is
+$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
+ok.
+Let me know once you receive this Card at your address.
 Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+Rev.Dr, George Adadar
