@@ -2,50 +2,52 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A8F12FDB5
-	for <lists+lvs-devel@lfdr.de>; Fri,  3 Jan 2020 21:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1133B132FF7
+	for <lists+lvs-devel@lfdr.de>; Tue,  7 Jan 2020 20:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728755AbgACUUN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 3 Jan 2020 15:20:13 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:36446 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728789AbgACUUL (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 3 Jan 2020 15:20:11 -0500
-Received: by mail-qk1-f196.google.com with SMTP id a203so35086147qkc.3
-        for <lvs-devel@vger.kernel.org>; Fri, 03 Jan 2020 12:20:11 -0800 (PST)
+        id S1728607AbgAGTyZ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 7 Jan 2020 14:54:25 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:38900 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728669AbgAGTyW (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 7 Jan 2020 14:54:22 -0500
+Received: by mail-ed1-f66.google.com with SMTP id i16so621480edr.5
+        for <lvs-devel@vger.kernel.org>; Tue, 07 Jan 2020 11:54:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
-         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
-         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
-         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
-         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
-         hUyw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
+         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
+         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
+         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
+         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
+         86YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=JAeQdwVbXWJ+MalkI0lx5xzg4+9x3KHvpD1Zi23ZhbdudubLwzmV57tRK9CJoGnEz3
-         TlDYzhWFfY1mrgaRGEwDnFICo0JFp+DaBYjhVPd/z/mxKBRhdxKeEEsVmnQk77BPQGvF
-         udyANNu8Pl3pyZCRuHwtwMmnl6Obu2uFhHvHjOX1/g1Qs5BUj9wr42k2C68d993JxX1w
-         JsXiICmJTxIjln2C8fMJyWkGv7R8PYgn4q9yJpWrJApAU+GW1MA0jmm+Tyx1Xke9u0qo
-         ZSLAdGT4j0pLEwnL5pH3AxIrE+W4zaYjbm+fKltrDZDbfS4NLRDMfNkY/dmS/1ea5U7M
-         ZKSw==
-X-Gm-Message-State: APjAAAUDkvR9epPP4J+WEp0KECfkg8Afb/AIUkzzJF5I5ioPrwy+YzZz
-        mnTRM4CxQh9Ik1LmvWHfx24dY5mWdlREfj5NaF2ueOqPc2g=
-X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
-X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
- Fri, 03 Jan 2020 12:20:08 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=NyLpKIURkRf7q+n7dS0IcpMHwcq/r8RIRvZlZcNE3u720pEym/ObTrc3DqepfmH7Cr
+         lVJZPAsknkZ8mQVMZwTUS+u+0cETFX3NDgQ96hR5Mvb2fCAvqwJYnuP7w80dgyziDHb5
+         36EYc5Vn8nUatanw0kZt9BBmPlOU3MK7jC4UrNl+ixzAM7DiiNV3n4cUgh6+6r76hOQG
+         p4MqZKJSIoydUClX+LfIMVuz1frP9Gs9PxgrgpsT/+Q8aeFMe38FzHvyyFxskaVMyk5D
+         9CiWP59RiFCEcoNHyofMxBIckZlcLnmdwpmU9rOb6GEKm+XNo0OvAOw6FngUDdEi+SXR
+         SBQg==
+X-Gm-Message-State: APjAAAUVWJ0MNk02DJqVujo7536tomTAwGgxndOdx+QSHF59mS2mCu9m
+        6Pu0miXvgqKn1xVbXrfVHF/ZTtKW2tW6gXXCnaU=
+X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
+X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
+ Tue, 07 Jan 2020 11:54:19 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:20:08 +0100
-Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
+Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
+ -0800 (PST)
+Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
+From:   "Dr. William Johnson" <currency1000000@gmail.com>
+Date:   Tue, 7 Jan 2020 20:54:18 +0100
+Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
+Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
+ worth $15.8Million US DOLLARS now.
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
@@ -53,49 +55,25 @@ Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Dear Friend
-
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
-
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
-
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
-
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
-
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
-
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
-
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
+ATTN Dear Beneficiary.
+Goodnews
+I have Registered your Prepaid ATM Master Card
+worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
+to you today.
+So contact Dhl office New York to receive your Prepaid ATM Master Card
+worth $15.8Million US DOLLARS now.
+Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
+Email. dhlexpresscouriercompany.nyusa@gmail.com
+Call the office +(202) 890-8752
+Rec-Confirmed your mailing address to the office as I listed below.
+Your Full Name--------------
+House Address-----------
+Your working Phone Number----------------
+ID copy-------------------------
+Sex-----------------------------
+Note,delivery fee to your address is only $50.00. send it to this
+company urgent on itunes card today so that DHL will deliver this
+Prepaid ATM Master Card to you today according to our finally
+agreement.
+Thanks for coperations,
+Dr. William Johnson
