@@ -2,65 +2,45 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F274146009
-	for <lists+lvs-devel@lfdr.de>; Thu, 23 Jan 2020 01:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8835D154940
+	for <lists+lvs-devel@lfdr.de>; Thu,  6 Feb 2020 17:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbgAWAno (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 22 Jan 2020 19:43:44 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52657 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgAWAno (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 22 Jan 2020 19:43:44 -0500
-Received: from [82.43.126.140] (helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1iuQan-000694-7F; Thu, 23 Jan 2020 00:43:29 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ipvs: fix spelling mistake "to" -> "too"
-Date:   Thu, 23 Jan 2020 00:43:28 +0000
-Message-Id: <20200123004328.2833127-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.24.0
+        id S1727574AbgBFQc3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Thu, 6 Feb 2020 11:32:29 -0500
+Received: from mail.gu.educaltai.ru ([193.105.235.212]:18577 "EHLO
+        mail.gu.educaltai.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727514AbgBFQc2 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 6 Feb 2020 11:32:28 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gu.educaltai.ru (Postfix) with ESMTP id 391C116C6038;
+        Wed,  5 Feb 2020 07:31:20 +0700 (+07)
+Received: from mail.gu.educaltai.ru ([127.0.0.1])
+        by localhost (mail.gu.educaltai.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id bOKgCoo563qF; Wed,  5 Feb 2020 07:31:19 +0700 (+07)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gu.educaltai.ru (Postfix) with ESMTP id B5A7416A4088;
+        Wed,  5 Feb 2020 05:09:27 +0700 (+07)
+X-Virus-Scanned: amavisd-new at gu.educaltai.ru
+Received: from mail.gu.educaltai.ru ([127.0.0.1])
+        by localhost (mail.gu.educaltai.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id R1YlciibPOgU; Wed,  5 Feb 2020 05:09:27 +0700 (+07)
+Received: from APPLE1A02.localdomain (8ta-246-13-13.telkomadsl.co.za [41.246.13.13])
+        by mail.gu.educaltai.ru (Postfix) with ESMTPSA id 3E0771688A77;
+        Wed,  5 Feb 2020 03:54:03 +0700 (+07)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Deal-Vorschlag
+To:     Recipients <LiuZhang@mail.gu.educaltai.ru>
+From:   <LiuZhang@mail.gu.educaltai.ru>, "mailto:xujie"@s-ap.com
+Date:   Wed, 05 Feb 2020 10:57:33 +0200
+Reply-To: liuzhang814@gmail.com
+Message-Id: <20200204205405.3E0771688A77@mail.gu.educaltai.ru>
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
-
-There is a spelling mistake in a IP_VS_ERR_RL message. Fix it.
-
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- net/netfilter/ipvs/ip_vs_sync.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
-index 8dc892a9dc91..605e0f68f8bd 100644
---- a/net/netfilter/ipvs/ip_vs_sync.c
-+++ b/net/netfilter/ipvs/ip_vs_sync.c
-@@ -1239,7 +1239,7 @@ static void ip_vs_process_message(struct netns_ipvs *ipvs, __u8 *buffer,
- 
- 			p = msg_end;
- 			if (p + sizeof(s->v4) > buffer+buflen) {
--				IP_VS_ERR_RL("BACKUP, Dropping buffer, to small\n");
-+				IP_VS_ERR_RL("BACKUP, Dropping buffer, too small\n");
- 				return;
- 			}
- 			s = (union ip_vs_sync_conn *)p;
--- 
-2.24.0
-
+Hallo, ich bin Liu Zhang, Mitarbeiter der Wing Hang Bank. Kann ich Ihnen einen Deal im Wert von anvertrauen mehreren Millionen Dollar ?
+Antwort so schnell wie möglich über meine persönliche E-Mail: liuzhang814@gmail.com
