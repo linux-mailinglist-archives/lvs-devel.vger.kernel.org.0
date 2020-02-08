@@ -2,71 +2,73 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EFA156022
-	for <lists+lvs-devel@lfdr.de>; Fri,  7 Feb 2020 21:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AD6156326
+	for <lists+lvs-devel@lfdr.de>; Sat,  8 Feb 2020 06:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727031AbgBGUr4 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 7 Feb 2020 15:47:56 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:47050 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726947AbgBGUr4 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 7 Feb 2020 15:47:56 -0500
-Received: by mail-io1-f66.google.com with SMTP id t26so932995ioi.13
-        for <lvs-devel@vger.kernel.org>; Fri, 07 Feb 2020 12:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=Gd47Je+fxT8ogxUJwlqqKntIsZOaGVofLr5+ItxJ61YZveH1MSkl5SqMoABCjEftnb
-         kpCRHTRKQmefKIo9/VU42dAb4hYiGyYbIm01t87VqEOsl1CM1hIRFyHMiVNe7VjXRr8C
-         V7ChGNLLH09YYj58r3Hi6ZW1sFitluMCAs1WwBpT/ztdpCEb6f3FGNnIDeGQnKttTldb
-         qrS3Vu+022d/Su/nXifzvxDfINHtJA+h+L32Qmn8xGVLQ/sOiWg9A9xq6PRMejvzRNJd
-         Z87Uuj0PTok3PPrP3MxRFUtuFN64/C1n9xj3mY+qqk3ecYtFikQbM+xfXrL3iRuuPGOx
-         u7Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=J7MpSpBMt926J9/A0Pp+WzGQWfPReaed1T7N2z6Tzbs0rUAFH9/k6Vmn2Fnx6h9eWu
-         u7emJVc/lKrh9te0LqA1lGTx9z32P2X9Ks6XuZ6cod2wdjCoNK2vv2Dlde2z5b3Oc7EW
-         rfOt15pVwMKivZCecfmNEtn5L5v9jtiY00IRl42dcSUA3N9aYJRIDHH2HRF40yhdsU/Q
-         N38otVa71naFjO2MxfHGUMXTQ508tIRXATlkvvVJelkuzaGXbL13Sgt6clj4X9HyQy2b
-         AsUs0Xkbm2gpsYDRqQBEqoCuykkRGW+If0Y/VdXdzbZnauEoJxrvjPyDYWBpecDdT0Ne
-         7JPg==
-X-Gm-Message-State: APjAAAV/16jeCMTv95Na458N1ZdfnH0ivTcsyrRSIfdHOjmxeJpi31ke
-        OQpRpn0n9zxRsEgWDdoC9bBZ0zPAh+Xa0bO2yHw=
-X-Google-Smtp-Source: APXvYqzMvwujw3GEkXBqxPgdAp/iDEHzWFsfwdZN0RnTuKP89IJhM9UhK5tjlHOUF2Vn3YLBihvtLKOrnjajL3FDDq0=
-X-Received: by 2002:a05:6638:34e:: with SMTP id x14mr365842jap.38.1581108475874;
- Fri, 07 Feb 2020 12:47:55 -0800 (PST)
+        id S1727130AbgBHF7Q (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 8 Feb 2020 00:59:16 -0500
+Received: from sonic306-1.consmr.mail.bf2.yahoo.com ([74.6.132.40]:38917 "EHLO
+        sonic306-1.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726714AbgBHF7Q (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 8 Feb 2020 00:59:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581141554; bh=pa1o5VRYWWG3WgDVzwpWeoz/bqhPAQKm9h7htHGAd9k=; h=Date:From:Reply-To:Subject:References:From:Subject; b=laJ91jsl5WPdH6/EJ2jfB5yVGQvNQ5lnOtKgz6Cqay8AzDLcJugTGLF96rATanZ7SvmVYhtSN15bH7GjEhAcbisNapafz7A00K9WAILv0DK90kmEwebTovNsNkVInDnPGpkK1dQ8ARTH/YYzVjwQgaQm9w6b09X0cETZYAzVVpmG731Fkwv6AV6GGdPUQBTPTf2idecHkXe5+t5nd6KznxrSEVqjlDGw8E03koC513KJy7mN++QXPtG0vTorK3ntvC3H6/FNKcaVoRFJK6N8LuC0he8gZNhs+/UcF/qCAhYihrlJikp3IAAkEke7OafIouHFFIKFC3irm3nWDV/qJw==
+X-YMail-OSG: 7NmAkosVM1mz0t8vwJsrOMiB51YXiLYROfQSAbBNoYRVuyZaXFlOmEguHqufTTL
+ v25asHuDaaP2aBtpg1SdWggF97tD4U3sFyY5HEj.0L2FcKiU9E2zpswFASqCpgAu7JBBPa.2WS7x
+ XDSyhcT0De2F5PMcnroYqdrPMg0NniLNHb14rnLBg_EQxpN.AnIvCnDEwawesnJy2edS74ubJqDP
+ eNhr7i0TwlsbUMw6iTS6tvndqiBwmkbNJhWPZOsFzadHgwalvvWPcG6ca8RGmJrka3lunAcBOjry
+ BOcDxZVEuCVc.PUsrFroAcs.FKmsp5XBxZVWSTAEQOeT16M2gka.jcG4zbnInwk_NwgbUQpJLlts
+ FlcNy0jqdmOr7LPc6FPTGjK3HvILOb9TNCyVp0gXa8x8HTbl4tZvd58DPXWNrnBrygdggrplYuow
+ ib4cns3HCeCRm1MJy8U3LBDjHqbdJModefJsAAQGmCoCMTsZmI93an5cIb00A_cdiaDtjvs566EH
+ iIPpklbUNOK63GvABnt7blDSQp2bK1_.klliyb.eiK5j1lG3jJDrVrJwSpuyRoZglzoFKELVXjdC
+ Ip_RsdMjBZeELFYF.kPefuSJidGaWhMC3WjGHMnxcSXHXlrVPJDwjOjTSnk.xyEzmNhlJnUHB.E9
+ EQtgM7vdypdAnT1xvUHyY0JyMkeqGk3kiUe89CQphwuG62u0vU_TesJVZKI7IyY6Ce.nQWHiRbpz
+ 7_YCqZgMf4KHZPE_fcDG_HsCUaEYBe1TH5NSHHAL8iVuix_MV8y3S9mYh4QLhMBQI.h4mVTSLFGx
+ sS7Rzwa8CyWRao8Uu0sGrFy6MXiCmXVE24eKoX_NDMmZU4f6NGNFgCYpWsdxM9AD7A9tSp1iLIo3
+ JUcgnaDyLxxdK8Eu65rmhqljn7M8wcsVzGFLVttKwuy4TuhAXup3VYr7WSIDDap7ts_xIWrdGauI
+ xDT3PQXhWmNy7SiUQz4fsTuoGGXFoxM_ZNLW5xw7UGrT4WF0CXQM5FKwuGy86UyCMreTd_E33w_E
+ LhpnVKTYfkXcr260_ycTzaFjOW0aBkxlo6vsZv.wtZtxRwQq2sLHCkuFGHag._I8OTI3dHU0cTGY
+ RlwWdUlNdlD7v5Mtb.Nxp9zqYYccGuGKbFzvIQeitR9PJSTfgI5duRebIgjIIow17gtzEsxojYRv
+ chdHZ.T5zG9JjqZubl9SYg7nMvlVLyFlmw93TqmwZRIjDKkpVQ9DJ1G5Hu6HWBsi7zGyo7WWUbcN
+ zUpojXYpqpg9rPrF4SzTARIOy13ocicvBkwT3bxWGRSqX3.rtPepwqbSp4Fmz_ACLFH0B9gPl9iE
+ k
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.bf2.yahoo.com with HTTP; Sat, 8 Feb 2020 05:59:14 +0000
+Date:   Sat, 8 Feb 2020 05:59:13 +0000 (UTC)
+From:   "D.H.L HASSAIN" <mrsrajoysmrsrajoyshassain@gmail.com>
+Reply-To: rejoy_hassain_2020@mail.ru
+Message-ID: <525357914.67616.1581141553992@mail.yahoo.com>
+Subject: =?UTF-8?Q?Greetings=C2=A0to=C2=A0you.?=
 MIME-Version: 1.0
-Received: by 2002:a92:8f4b:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:47:55 -0800 (PST)
-Reply-To: auch197722@gmail.com
-From:   "Mr. Theophilus Odadudu" <siramsarmull@gmail.com>
-Date:   Fri, 7 Feb 2020 15:47:55 -0500
-Message-ID: <CAB==Gxzg+ULvYb6UQmD6szKOKH+gf469GVB2CnwzUThDh62_Vg@mail.gmail.com>
-Subject: LETTER OF INQUIRY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <525357914.67616.1581141553992.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Good Day,
+ATTENTION: DEAR BENEFICIARY CONGRATULATIONS TO YOU DEAR GOOD DAY I AM SORRY IF YOU RECEIVED THIS LETTER IN YOUR SPAM OR JUNK MAIL IT IS DUE TO A RECENT CONNECTION HERE IN MY COUNTRY.
 
-I work as a clerk in a Bank here in Nigeria, I have a very
-confidential Business Proposition for you. There is a said amount of
-money floating in the bank unclaimed, belonging to the bank Foreign
-customer who die with his family in the Ethiopian Airline crash of
-March 11, 2019.
+DEAR FRIEND.
 
-I seek your good collaboration to move the fund for our benefit. we
-have agreed that 40% be yours once you help claim.
+YOU MAY BE WONDERING WHYI CONTACT YOU BUT SOMEONE LUCKY HAS TO BE CHOSEN WHICH IS YOU. I WANT YOU TO HANDLE THIS BUSINESS TRASACTION WITH ME IF CHANCE YOU TO DO INTERNATION BUSINESS I GO YOUR CONTACT FROM A RELIABLE WEB DIRECTORY.
 
-Do get back to with 1) Your Full Name: (2) Residential Address: (3)
-Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
-funds.
+I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS DHL MASTER CARD OFFICES FUND OF $10.5 USD MILLION AFTER THE BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE DECIDED TO ISSUE YOU YOUR (ATM) VALUED AT 10.5 MILLION UNITED STATES DOLLAR.THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION DOLLAR HAS BEING TODAY CREDITED INTO (ATM) MASTER CARD AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO SEND IT TO YOU TODAY IN YOUR FAVOR.
 
-Regards
-Theophilus Odadudu
+WITH YOUR (ATM) YOU WILL HAVE ACCESS TO MAKE DAILY WITHDRAWALS OF $5000,00 UNITED STATE DOLLARS DAILIES AS ALREADY PROGRAMMED UNTIL YOU WITHDRAW YOUR TOTAL SUM IN YOUR (ATM) CARD WHICH HAS REGISTERED IN OUR SYSTEM FOR PAYMENT RECORD, AS SOON AS WE RECEIVE YOUR INFORMATIONS AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED, WE WILL SEND YOUR (ATM) CARD THROUGH DHL COURIER SERVICE, WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK TO INFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK,
+
+WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING TODAY, WE HAVE CONCLUDED TO IMMEDIATELY ISSUE YOU AS SOON AS POSSIBLE,
+
+AND YOUR VALUE SUM HAS BEEN CREDITED INTO YOUR (ATM) VISA CARD
+ACCOUNT. WHICH YOU WILL USE TO WITHDRAW YOUR FUND IN ANY PART OF THE WORLD, WE HAVE ISSUED AND CREDITED YOUR (ATM) CARD IN YOUR NAME TODAY,
+
+YOUR (ATM) WILL BE INSURE BY THE INSURANCE COMPANY AND SEND TO YOU
+THROUGH ANY AVAILABLE COURIER COMPANY OF OUR CHOICE.
+
+ONCE AGAIN CONGRATULATIONS TO YOU,
+
+DIRECTOR DHL SERVICE,
+THANKS,
+SINCERELY.
+MRS. RAJOYS HASSAIN,
