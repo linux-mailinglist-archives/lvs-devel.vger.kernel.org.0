@@ -2,73 +2,81 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AD6156326
-	for <lists+lvs-devel@lfdr.de>; Sat,  8 Feb 2020 06:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7584161708
+	for <lists+lvs-devel@lfdr.de>; Mon, 17 Feb 2020 17:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727130AbgBHF7Q (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 8 Feb 2020 00:59:16 -0500
-Received: from sonic306-1.consmr.mail.bf2.yahoo.com ([74.6.132.40]:38917 "EHLO
-        sonic306-1.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726714AbgBHF7Q (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 8 Feb 2020 00:59:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581141554; bh=pa1o5VRYWWG3WgDVzwpWeoz/bqhPAQKm9h7htHGAd9k=; h=Date:From:Reply-To:Subject:References:From:Subject; b=laJ91jsl5WPdH6/EJ2jfB5yVGQvNQ5lnOtKgz6Cqay8AzDLcJugTGLF96rATanZ7SvmVYhtSN15bH7GjEhAcbisNapafz7A00K9WAILv0DK90kmEwebTovNsNkVInDnPGpkK1dQ8ARTH/YYzVjwQgaQm9w6b09X0cETZYAzVVpmG731Fkwv6AV6GGdPUQBTPTf2idecHkXe5+t5nd6KznxrSEVqjlDGw8E03koC513KJy7mN++QXPtG0vTorK3ntvC3H6/FNKcaVoRFJK6N8LuC0he8gZNhs+/UcF/qCAhYihrlJikp3IAAkEke7OafIouHFFIKFC3irm3nWDV/qJw==
-X-YMail-OSG: 7NmAkosVM1mz0t8vwJsrOMiB51YXiLYROfQSAbBNoYRVuyZaXFlOmEguHqufTTL
- v25asHuDaaP2aBtpg1SdWggF97tD4U3sFyY5HEj.0L2FcKiU9E2zpswFASqCpgAu7JBBPa.2WS7x
- XDSyhcT0De2F5PMcnroYqdrPMg0NniLNHb14rnLBg_EQxpN.AnIvCnDEwawesnJy2edS74ubJqDP
- eNhr7i0TwlsbUMw6iTS6tvndqiBwmkbNJhWPZOsFzadHgwalvvWPcG6ca8RGmJrka3lunAcBOjry
- BOcDxZVEuCVc.PUsrFroAcs.FKmsp5XBxZVWSTAEQOeT16M2gka.jcG4zbnInwk_NwgbUQpJLlts
- FlcNy0jqdmOr7LPc6FPTGjK3HvILOb9TNCyVp0gXa8x8HTbl4tZvd58DPXWNrnBrygdggrplYuow
- ib4cns3HCeCRm1MJy8U3LBDjHqbdJModefJsAAQGmCoCMTsZmI93an5cIb00A_cdiaDtjvs566EH
- iIPpklbUNOK63GvABnt7blDSQp2bK1_.klliyb.eiK5j1lG3jJDrVrJwSpuyRoZglzoFKELVXjdC
- Ip_RsdMjBZeELFYF.kPefuSJidGaWhMC3WjGHMnxcSXHXlrVPJDwjOjTSnk.xyEzmNhlJnUHB.E9
- EQtgM7vdypdAnT1xvUHyY0JyMkeqGk3kiUe89CQphwuG62u0vU_TesJVZKI7IyY6Ce.nQWHiRbpz
- 7_YCqZgMf4KHZPE_fcDG_HsCUaEYBe1TH5NSHHAL8iVuix_MV8y3S9mYh4QLhMBQI.h4mVTSLFGx
- sS7Rzwa8CyWRao8Uu0sGrFy6MXiCmXVE24eKoX_NDMmZU4f6NGNFgCYpWsdxM9AD7A9tSp1iLIo3
- JUcgnaDyLxxdK8Eu65rmhqljn7M8wcsVzGFLVttKwuy4TuhAXup3VYr7WSIDDap7ts_xIWrdGauI
- xDT3PQXhWmNy7SiUQz4fsTuoGGXFoxM_ZNLW5xw7UGrT4WF0CXQM5FKwuGy86UyCMreTd_E33w_E
- LhpnVKTYfkXcr260_ycTzaFjOW0aBkxlo6vsZv.wtZtxRwQq2sLHCkuFGHag._I8OTI3dHU0cTGY
- RlwWdUlNdlD7v5Mtb.Nxp9zqYYccGuGKbFzvIQeitR9PJSTfgI5duRebIgjIIow17gtzEsxojYRv
- chdHZ.T5zG9JjqZubl9SYg7nMvlVLyFlmw93TqmwZRIjDKkpVQ9DJ1G5Hu6HWBsi7zGyo7WWUbcN
- zUpojXYpqpg9rPrF4SzTARIOy13ocicvBkwT3bxWGRSqX3.rtPepwqbSp4Fmz_ACLFH0B9gPl9iE
- k
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.bf2.yahoo.com with HTTP; Sat, 8 Feb 2020 05:59:14 +0000
-Date:   Sat, 8 Feb 2020 05:59:13 +0000 (UTC)
-From:   "D.H.L HASSAIN" <mrsrajoysmrsrajoyshassain@gmail.com>
-Reply-To: rejoy_hassain_2020@mail.ru
-Message-ID: <525357914.67616.1581141553992@mail.yahoo.com>
-Subject: =?UTF-8?Q?Greetings=C2=A0to=C2=A0you.?=
+        id S1728903AbgBQQLp (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 17 Feb 2020 11:11:45 -0500
+Received: from mail4-bck.iservicesmail.com ([217.130.24.84]:55308 "EHLO
+        mail4-bck.iservicesmail.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728724AbgBQQLo (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 17 Feb 2020 11:11:44 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Feb 2020 11:11:44 EST
+IronPort-SDR: fd/fLM+7vwImnHWv8kdHT72Y2dpsbZap4zlqrbn4FyjxBaOmDrWo7FTq2KZGZBMFiHxk0wljIa
+ os844PEWVa8A==
+IronPort-PHdr: =?us-ascii?q?9a23=3AJ24VhRZdArCEBgC2NKcTFov/LSx+4OfEezUN45?=
+ =?us-ascii?q?9isYplN5qZoMS7bnLW6fgltlLVR4KTs6sC17OK9f++Ejxbqb+681k8M7V0Hy?=
+ =?us-ascii?q?cfjssXmwFySOWkMmbcaMDQUiohAc5ZX0Vk9XzoeWJcGcL5ekGA6ibqtW1aFR?=
+ =?us-ascii?q?rwLxd6KfroEYDOkcu3y/qy+5rOaAlUmTaxe7x/IAi5oAnLtMQbgIRuJ6U/xx?=
+ =?us-ascii?q?DUvnZGZuNayH9nKl6Ugxvy/Nq78oR58yRXtfIh9spAXrv/cq8lU7FWDykoPn?=
+ =?us-ascii?q?4s6sHzuhbNUQWA5n0HUmULiRVIGBTK7Av7XpjqrCT3sPd21TSAMs33SbA0Xi?=
+ =?us-ascii?q?mi77tuRRT1hioLKyI1/WfKgcF2kalVog+upwZnzoDaYI+VLuRwcKDAc9wVWW?=
+ =?us-ascii?q?VPUd1cVzBDD4ygc4cDE/YNMfheooLgp1UOtxy+BQy0Ce311DBImmH53bcn2O?=
+ =?us-ascii?q?shFgHG2gMgFM8JvXvJsdX1Lr0dUea6zKnP1jjDavRW2Sv66IfUcxAhvfGNUa?=
+ =?us-ascii?q?h1ccve0EQiER7OgFaIqYH9IT+Zy+YAv3KG4+duSe6jkXArpg5rrjWhxsohjJ?=
+ =?us-ascii?q?TCiJgPxVDe7yp5xZ44Jdi/SEFmf9GpCIBQtySGN4tuRcMiXn1otD46yrIYvZ?=
+ =?us-ascii?q?67ezAHyJE9yB7eb/yHaZaH4hb/WOueOzt4mnVld6+liBa89kigzPPzWtOq31?=
+ =?us-ascii?q?ZRtiZFk9/MuW4R1xHL9MSLV/lw8l281TuBywzf8P9ILE8umafVK5Mt2rswmY?=
+ =?us-ascii?q?ASsUTHEC/2gkL2jKqOe0o55+io8f7oYrPppp+bLIJ0jwb+MrgpmsOjAOQ4Lg?=
+ =?us-ascii?q?gPU3Ke+eWzzLHj51H2QK1Wjv0qlanUqJTaJdoApqKgHgBazJgj5Ai7Dzq9zt?=
+ =?us-ascii?q?QYkmcILEhfdBKEkYfpIVfOL+78DfulhFSsijhrlLj6OejlHI6IInXdnbPJY7?=
+ =?us-ascii?q?lw8QhfxRA1wNQZ4IhbWYsMOPbiZkikjNHEAwVxDAuyzK6zENhh25kBXmSAAq?=
+ =?us-ascii?q?yZK6nZmVCN7+MrZeKLYdlGliz6Lq0d6uLjlzcGnlkSNf2lwIEebn+/NvFhP0?=
+ =?us-ascii?q?KSYGb9xNIRRzRZ9jEiRfDn3QXRGQVYYGy/Cvox?=
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2HHMwB7uUpeeiMYgtlmgkOBPgIBgUU?=
+ =?us-ascii?q?QUiASjGOGbFEBAQEGcx+DQ4ZShRaBAIMzhgcTDIFbDQEBAQEBGxoCBAEBhEC?=
+ =?us-ascii?q?CByQ8Ag0CAw0BAQYBAQEBAQUEAQECEAEBCwsLBCuFSoI7IoNwIA85SkwBDgG?=
+ =?us-ascii?q?GIgEBCimkcIkBDQ0ChR6COgQKgiMjgTYDAQGMIRp5gQeBIyGCKwgBggGCfwE?=
+ =?us-ascii?q?SAW6CSIJZBI1SEiGJRZg0gkQElmuCOQEPiBaENwOCWg+BC4MdgwmBZ4RSgX+?=
+ =?us-ascii?q?fZoQUV4Egc3EzGggwgW4agSBPGA2cYgJAgRcQAk+LKYIyAQE?=
+X-IPAS-Result: =?us-ascii?q?A2HHMwB7uUpeeiMYgtlmgkOBPgIBgUUQUiASjGOGbFEBA?=
+ =?us-ascii?q?QEGcx+DQ4ZShRaBAIMzhgcTDIFbDQEBAQEBGxoCBAEBhECCByQ8Ag0CAw0BA?=
+ =?us-ascii?q?QYBAQEBAQUEAQECEAEBCwsLBCuFSoI7IoNwIA85SkwBDgGGIgEBCimkcIkBD?=
+ =?us-ascii?q?Q0ChR6COgQKgiMjgTYDAQGMIRp5gQeBIyGCKwgBggGCfwESAW6CSIJZBI1SE?=
+ =?us-ascii?q?iGJRZg0gkQElmuCOQEPiBaENwOCWg+BC4MdgwmBZ4RSgX+fZoQUV4Egc3EzG?=
+ =?us-ascii?q?ggwgW4agSBPGA2cYgJAgRcQAk+LKYIyAQE?=
+X-IronPort-AV: E=Sophos;i="5.70,453,1574118000"; 
+   d="scan'208";a="338422212"
+Received: from mailrel04.vodafone.es ([217.130.24.35])
+  by mail02.vodafone.es with ESMTP; 17 Feb 2020 17:06:39 +0100
+Received: (qmail 20956 invoked from network); 17 Feb 2020 09:22:11 -0000
+Received: from unknown (HELO 192.168.1.163) (mariapazos@[217.217.179.17])
+          (envelope-sender <durango@motocity.mx>)
+          by mailrel04.vodafone.es (qmail-ldap-1.03) with SMTP
+          for <lvs-devel@vger.kernel.org>; 17 Feb 2020 09:22:11 -0000
+Date:   Mon, 17 Feb 2020 10:22:10 +0100 (CET)
+From:   Peter Wong <durango@motocity.mx>
+Reply-To: Peter Wong <peterwonghkhsbc@gmail.com>
+To:     lvs-devel@vger.kernel.org
+Message-ID: <27231194.588247.1581931331776.JavaMail.cash@217.130.24.55>
+Subject: Investment opportunity
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-References: <525357914.67616.1581141553992.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0
-To:     unlisted-recipients:; (no To-header on input)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-ATTENTION: DEAR BENEFICIARY CONGRATULATIONS TO YOU DEAR GOOD DAY I AM SORRY IF YOU RECEIVED THIS LETTER IN YOUR SPAM OR JUNK MAIL IT IS DUE TO A RECENT CONNECTION HERE IN MY COUNTRY.
+Greetings,
+Please check the attached email for a buisness proposal to explore.
+Looking forward to hearing from you for more details.
+Sincerely: Peter Wong
 
-DEAR FRIEND.
 
-YOU MAY BE WONDERING WHYI CONTACT YOU BUT SOMEONE LUCKY HAS TO BE CHOSEN WHICH IS YOU. I WANT YOU TO HANDLE THIS BUSINESS TRASACTION WITH ME IF CHANCE YOU TO DO INTERNATION BUSINESS I GO YOUR CONTACT FROM A RELIABLE WEB DIRECTORY.
 
-I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS DHL MASTER CARD OFFICES FUND OF $10.5 USD MILLION AFTER THE BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE DECIDED TO ISSUE YOU YOUR (ATM) VALUED AT 10.5 MILLION UNITED STATES DOLLAR.THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION DOLLAR HAS BEING TODAY CREDITED INTO (ATM) MASTER CARD AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO SEND IT TO YOU TODAY IN YOUR FAVOR.
 
-WITH YOUR (ATM) YOU WILL HAVE ACCESS TO MAKE DAILY WITHDRAWALS OF $5000,00 UNITED STATE DOLLARS DAILIES AS ALREADY PROGRAMMED UNTIL YOU WITHDRAW YOUR TOTAL SUM IN YOUR (ATM) CARD WHICH HAS REGISTERED IN OUR SYSTEM FOR PAYMENT RECORD, AS SOON AS WE RECEIVE YOUR INFORMATIONS AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED, WE WILL SEND YOUR (ATM) CARD THROUGH DHL COURIER SERVICE, WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK TO INFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK,
+----------------------------------------------------
+This email was sent by the shareware version of Postman Professional.
 
-WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING TODAY, WE HAVE CONCLUDED TO IMMEDIATELY ISSUE YOU AS SOON AS POSSIBLE,
-
-AND YOUR VALUE SUM HAS BEEN CREDITED INTO YOUR (ATM) VISA CARD
-ACCOUNT. WHICH YOU WILL USE TO WITHDRAW YOUR FUND IN ANY PART OF THE WORLD, WE HAVE ISSUED AND CREDITED YOUR (ATM) CARD IN YOUR NAME TODAY,
-
-YOUR (ATM) WILL BE INSURE BY THE INSURANCE COMPANY AND SEND TO YOU
-THROUGH ANY AVAILABLE COURIER COMPANY OF OUR CHOICE.
-
-ONCE AGAIN CONGRATULATIONS TO YOU,
-
-DIRECTOR DHL SERVICE,
-THANKS,
-SINCERELY.
-MRS. RAJOYS HASSAIN,
