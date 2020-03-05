@@ -2,66 +2,86 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 608E5178190
-	for <lists+lvs-devel@lfdr.de>; Tue,  3 Mar 2020 20:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D7617A406
+	for <lists+lvs-devel@lfdr.de>; Thu,  5 Mar 2020 12:18:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387933AbgCCSDg (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 3 Mar 2020 13:03:36 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:36851 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387883AbgCCSDg (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 3 Mar 2020 13:03:36 -0500
-Received: by mail-io1-f65.google.com with SMTP id d15so4650337iog.3
-        for <lvs-devel@vger.kernel.org>; Tue, 03 Mar 2020 10:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=krfSNSZfMVipyjZJwAeRMDrNMQPXTmnAkChR8eC7M21X2WtMy+anwYY2j8zMbs+fL6
-         8vr0SDuWWiB1uezLVOmWEwb3M6TcVKTRJYcBVuo1D1oKXV8ia6bqFpDq6HTdXkBA3GDX
-         w7DCmWX2TEiNeolwcq+9xPN3G+xlSS4Cat8x5OUmaBjCvgZRZv765+UNT9r7q44vFnM0
-         y+fm6326zcsMDOr+PrDtz3Yim6DwhpgqTmocYn41FbP+7MLjxXjedidq/l+V8m65ZZXH
-         MRjAroPva0pHF75LUrzFj+mp3/kUkOol3t7DvKOd76mdVYlEzJOVoD6fweOO0p2h4i9J
-         BKdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=EyoYnRl8jLV84SiXrfC1aDUvKJaQEVc9j3KxdNN+4hInLYMVox2MN+ti/Y+iY4sc3z
-         UbQXCYMoYX78hCq9zxWhoer5yVhsxLtp0M5Nfwem7a579YVbHB5FzV1K96CSsPTLeFmv
-         hawYTr5S+szdBr8G3+V2D+7Ezw4Cp6/ANZlunP/b8sFMNQle232PXofa9Pcdoo+VHiXl
-         IBmazfU1OzJk1o1Hg5X994AYwFkBXUXjbbjxo8YRPz+3/CZBLG2qKhOU15MSLDjHxsXH
-         FswruxtoT2tqvxhK+h8vtueWTt9rXdQvLhFHXFpbsEfe+jiOiXD2QAF+XumyqLs9aIYE
-         fLaA==
-X-Gm-Message-State: ANhLgQ1Z4rlVCBS4MhYPDOi7UeM4xDOqRkf2igPnbXKBgj2v9JIdn+UF
-        hkLnP96+LC8mkOXnfgIlFMFoNi7OpKflP21DfWM=
-X-Google-Smtp-Source: ADFU+vtwd0PGg8Xw2Dd4KT6aCi/WZXjarrbA7b4ExDiZi5beQoanj0UUkyTLv3WIpKTaWwg5GCrODMDDS7qSRvJJ+qY=
-X-Received: by 2002:a5d:8b11:: with SMTP id k17mr5082434ion.290.1583258614995;
- Tue, 03 Mar 2020 10:03:34 -0800 (PST)
+        id S1726101AbgCELQr (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 5 Mar 2020 06:16:47 -0500
+Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:48094 "EHLO
+        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725946AbgCELQr (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 5 Mar 2020 06:16:47 -0500
+X-Greylist: delayed 1194 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:46 EST
+Received: from webmail.pagasa.dost.int ([10.10.11.8])
+        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AsfdC006745-025AsfdE006745
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 5 Mar 2020 18:54:41 +0800
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 77D4229819B7;
+        Thu,  5 Mar 2020 18:38:02 +0800 (PST)
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CHiicN88rBPk; Thu,  5 Mar 2020 18:38:02 +0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5615829819B1;
+        Thu,  5 Mar 2020 18:38:01 +0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 5615829819B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
+        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583404681;
+        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=YK1laF1zCZ4x5bK5XS35JE1ciQoLir/KcnGDsqGDcQvqDv9mppz8wY1QcWgS2BWyf
+         1NTkWDdFzQWCMIxPeGB5jMeQe6LmaH+Vv1XgM2cjcliaFltcm7zq+L2mk/WQA+h9aF
+         9iWbSt1ZNz0CqEMbXHguKFK7HWO0s3wrvqjSWfjs=
+X-Virus-Scanned: amavisd-new at pagasa.dost.int
+Received: from webmail.pagasa.dost.int ([127.0.0.1])
+        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id djY_-VVsjmJn; Thu,  5 Mar 2020 18:38:01 +0800 (PST)
+Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
+        by webmail.pagasa.dost.int (Postfix) with ESMTP id 8AE6429819A8;
+        Thu,  5 Mar 2020 18:37:59 +0800 (PST)
+Date:   Thu, 5 Mar 2020 18:37:59 +0800 (PST)
+From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
+Message-ID: <148084345.3574540.1583404679539.JavaMail.zimbra@pagasa.dost.gov.ph>
+Subject: 
 MIME-Version: 1.0
-Received: by 2002:a02:9f04:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:03:34 -0800 (PST)
-Reply-To: dr.challynoah@gmail.com
-From:   DR CHALLY NOAH <mayorabrahamedge404@gmail.com>
-Date:   Tue, 3 Mar 2020 19:03:34 +0100
-Message-ID: <CALqVJWeQnrrb-MxJZmcWn8N+H0iSk1-dwNdr5W-JvrAp=ks9Cw@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
+Thread-Index: MiwLb5uCp71zH/b07Uv+5xhVjMK4qg==
+Thread-Topic: 
+X-FEAS-DKIM: Valid
+Authentication-Results: mailgw.pagasa.dost.gov.ph;
+        dkim=pass header.i=@pagasa.dost.gov.ph
+To:     unlisted-recipients:; (no To-header on input)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hello Dear,
-What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
-This said fund was issued out by the UNITED NATIONS To compensate
-you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
-at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
-fund (award)release to you or better still reply back Immediately You
-Receive This Information For An Urgent Confirmation And Release Of Your
-Fund To You Without Delays, as your email was listed among those to be
-compensated this year.Congratulations..
-Best Regards,
-Dr Chally Noah.
-Minister Of Finance On Foreign Remittance:
+
+
+Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
+ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
+ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
+rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
+nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
+ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
+=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
+Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
+en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
+o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
+inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
+tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
+eptisch sind
+Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
+f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
+ YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
+https://www.youtube.com/watch?v=3DH5vT18Ysavc
+Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
+ ) gesendet werden, damit wir das k=C3=B6nnen
+Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
+obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
+Robert Bailey
+* * * * * * * * * * * * * * * *
+Powerball Jackpot Gewinner
