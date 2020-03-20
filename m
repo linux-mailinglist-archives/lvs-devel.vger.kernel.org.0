@@ -2,210 +2,70 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A02C2189AC8
-	for <lists+lvs-devel@lfdr.de>; Wed, 18 Mar 2020 12:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F5EB18CC44
+	for <lists+lvs-devel@lfdr.de>; Fri, 20 Mar 2020 12:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727356AbgCRLhV (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 18 Mar 2020 07:37:21 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:49902 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726933AbgCRLhV (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 18 Mar 2020 07:37:21 -0400
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 02IBaWel007780;
-        Wed, 18 Mar 2020 13:36:42 +0200
-Date:   Wed, 18 Mar 2020 13:36:32 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-cc:     Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ipvs: optimize tunnel dumps for icmp errors
-In-Reply-To: <1584278741-13944-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-Message-ID: <alpine.LFD.2.21.2003181333460.4911@ja.home.ssi.bg>
-References: <1584278741-13944-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1727105AbgCTLIG (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 20 Mar 2020 07:08:06 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:39892 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727194AbgCTLIG (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 20 Mar 2020 07:08:06 -0400
+Received: by mail-oi1-f196.google.com with SMTP id d63so6025220oig.6
+        for <lvs-devel@vger.kernel.org>; Fri, 20 Mar 2020 04:08:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=kuhba0bbR9oJup1oQ7P5tNPZ9FqBHXE57QqcfHgaIHo=;
+        b=Kcjom3NypmHAHg4TIaHIQKX+6I313w7RvpeCGZ9v5e734XU61FELEPoAjKyibMlq3U
+         jWlajOGMr1t1KFpyAKJLhVSnfCSfEFH2tSyB/LJies5Hyl4BNJ81KREC7aUOMWbGKrf+
+         aIYtIuM0u3j128nsL7FNUmRNFOiuvqBOPDA3yA5IQ6E2b/XHP1I0u/BtrRFBROog7RWM
+         b0slpaMKf9Znbt/hNLZ2T9kxEBtU5n1fdxlqJ7xvrOG9U74yh1odVILLRxESBKYbtFfu
+         HTz1r+WKbquFjujJHoPKvkr4swm8R0TMqGFW+LTuMvbLm3YefKrIaj5iXarDrPWBXBhJ
+         0Q8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=kuhba0bbR9oJup1oQ7P5tNPZ9FqBHXE57QqcfHgaIHo=;
+        b=E2HUbjESbHoEt5eRYEHz821pGRB/YSgfPxuFLmOV7xss/FtGsnPySNDM0Rhyxt9OOS
+         aDANaAdex8UC9w2IS7dv6gSPLlE/DzdBNzbGPcvpMcnznhUpL/9nk5/SmDCaC4X/b+U0
+         CJr86RILWI15vmJHh7IcEwPo8MuadpR0HpLxplDL/pi6PpVF6u4AUTYp++5XwJOUcNgV
+         nc07cZ2d82f1bqUCAbGFmEdiAsfyTIN0R3E8k5e4zoz80cxpe9gcJOl5Ip79FET+A/o/
+         /6gJEE9jv9eCvnZDxJLdcgc8CbcbSWXsyQpJouFqlHarFSWdwBmWD6DdbB2hXLjMnN5n
+         5G/Q==
+X-Gm-Message-State: ANhLgQ3sMSZMkXVXxh6Ixr8zqvMBevidJeswc8sN9xugugZt95nsM4dC
+        5mmgLLhfcq9Y/wmJ0anCRkLODvQ2l7QiCDY2ilQ=
+X-Google-Smtp-Source: ADFU+vuJaizirG5OKhHQW0R3dPXXl1mJZ5EXTaqVm2ogBmTcCci9MUwD6JvDVb6RZUKgG7Eb28UBFhIy0fZi4kDlDqw=
+X-Received: by 2002:aca:3255:: with SMTP id y82mr6102866oiy.44.1584702483981;
+ Fri, 20 Mar 2020 04:08:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:a4a:c897:0:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:08:03
+ -0700 (PDT)
+From:   federa bureau of inteligence <federabureauofinteligence@gmail.com>
+Date:   Fri, 20 Mar 2020 11:08:03 +0000
+Message-ID: <CAE9o6LB50YPWezLwrs9uSwCgfuFuUSrTfGz=QiaO9Pj23qjovw@mail.gmail.com>
+Subject: HAPPY SURVIVAL OF CORONAVIRUS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Dear Sir,
 
-	Hello,
+HAPPY SURVIVAL OF CORONAVIRUS
 
-On Sun, 15 Mar 2020, Haishuang Yan wrote:
+We are reaching for a very interesting business transaction which we
+feel will of great benefit.We the FBI unit in the western subregion of
+Africa have a fund which we confiscated and lodge it in a bank
 
-> After strip GRE/UDP tunnel header for icmp errors, it's better to show
-> "GRE/UDP" instead of "IPIP" in debug message.
-> 
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+This fund is worth of $12.5 million dollars.We will need your
+assistance to recieve this fund into your account for investment in
+your country.
 
-	Looks good to me, thanks!
+We will need your urgent response for details
 
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
-	Simon, this is for -next kernels...
-
-> ---
-> v2: Fix wrong proto message
-> ---
->  net/netfilter/ipvs/ip_vs_core.c | 46 +++++++++++++++++++++++------------------
->  1 file changed, 26 insertions(+), 20 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-> index 512259f..d2ac530 100644
-> --- a/net/netfilter/ipvs/ip_vs_core.c
-> +++ b/net/netfilter/ipvs/ip_vs_core.c
-> @@ -1661,8 +1661,9 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  	struct ip_vs_protocol *pp;
->  	struct ip_vs_proto_data *pd;
->  	unsigned int offset, offset2, ihl, verdict;
-> -	bool ipip, new_cp = false;
-> +	bool tunnel, new_cp = false;
->  	union nf_inet_addr *raddr;
-> +	char *outer_proto;
->  
->  	*related = 1;
->  
-> @@ -1703,8 +1704,8 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		return NF_ACCEPT; /* The packet looks wrong, ignore */
->  	raddr = (union nf_inet_addr *)&cih->daddr;
->  
-> -	/* Special case for errors for IPIP packets */
-> -	ipip = false;
-> +	/* Special case for errors for IPIP/UDP/GRE tunnel packets */
-> +	tunnel = false;
->  	if (cih->protocol == IPPROTO_IPIP) {
->  		struct ip_vs_dest *dest;
->  
-> @@ -1721,7 +1722,8 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		cih = skb_header_pointer(skb, offset, sizeof(_ciph), &_ciph);
->  		if (cih == NULL)
->  			return NF_ACCEPT; /* The packet looks wrong, ignore */
-> -		ipip = true;
-> +		tunnel = true;
-> +		outer_proto = "IPIP";
->  	} else if ((cih->protocol == IPPROTO_UDP ||	/* Can be UDP encap */
->  		    cih->protocol == IPPROTO_GRE) &&	/* Can be GRE encap */
->  		   /* Error for our tunnel must arrive at LOCAL_IN */
-> @@ -1729,16 +1731,19 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		__u8 iproto;
->  		int ulen;
->  
-> -		/* Non-first fragment has no UDP header */
-> +		/* Non-first fragment has no UDP/GRE header */
->  		if (unlikely(cih->frag_off & htons(IP_OFFSET)))
->  			return NF_ACCEPT;
->  		offset2 = offset + cih->ihl * 4;
-> -		if (cih->protocol == IPPROTO_UDP)
-> +		if (cih->protocol == IPPROTO_UDP) {
->  			ulen = ipvs_udp_decap(ipvs, skb, offset2, AF_INET,
->  					      raddr, &iproto);
-> -		else
-> +			outer_proto = "UDP";
-> +		} else {
->  			ulen = ipvs_gre_decap(ipvs, skb, offset2, AF_INET,
->  					      raddr, &iproto);
-> +			outer_proto = "GRE";
-> +		}
->  		if (ulen > 0) {
->  			/* Skip IP and UDP/GRE tunnel headers */
->  			offset = offset2 + ulen;
-> @@ -1747,7 +1752,7 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  						 &_ciph);
->  			if (cih && cih->version == 4 && cih->ihl >= 5 &&
->  			    iproto == IPPROTO_IPIP)
-> -				ipip = true;
-> +				tunnel = true;
->  			else
->  				return NF_ACCEPT;
->  		}
-> @@ -1767,11 +1772,11 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		      "Checking incoming ICMP for");
->  
->  	offset2 = offset;
-> -	ip_vs_fill_iph_skb_icmp(AF_INET, skb, offset, !ipip, &ciph);
-> +	ip_vs_fill_iph_skb_icmp(AF_INET, skb, offset, !tunnel, &ciph);
->  	offset = ciph.len;
->  
->  	/* The embedded headers contain source and dest in reverse order.
-> -	 * For IPIP this is error for request, not for reply.
-> +	 * For IPIP/UDP/GRE tunnel this is error for request, not for reply.
->  	 */
->  	cp = INDIRECT_CALL_1(pp->conn_in_get, ip_vs_conn_in_get_proto,
->  			     ipvs, AF_INET, skb, &ciph);
-> @@ -1779,7 +1784,7 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  	if (!cp) {
->  		int v;
->  
-> -		if (ipip || !sysctl_schedule_icmp(ipvs))
-> +		if (tunnel || !sysctl_schedule_icmp(ipvs))
->  			return NF_ACCEPT;
->  
->  		if (!ip_vs_try_to_schedule(ipvs, AF_INET, skb, pd, &v, &cp, &ciph))
-> @@ -1797,7 +1802,7 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		goto out;
->  	}
->  
-> -	if (ipip) {
-> +	if (tunnel) {
->  		__be32 info = ic->un.gateway;
->  		__u8 type = ic->type;
->  		__u8 code = ic->code;
-> @@ -1809,17 +1814,18 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  			u32 mtu = ntohs(ic->un.frag.mtu);
->  			__be16 frag_off = cih->frag_off;
->  
-> -			/* Strip outer IP and ICMP, go to IPIP header */
-> +			/* Strip outer IP and ICMP, go to IPIP/UDP/GRE header */
->  			if (pskb_pull(skb, ihl + sizeof(_icmph)) == NULL)
-> -				goto ignore_ipip;
-> +				goto ignore_tunnel;
->  			offset2 -= ihl + sizeof(_icmph);
->  			skb_reset_network_header(skb);
-> -			IP_VS_DBG(12, "ICMP for IPIP %pI4->%pI4: mtu=%u\n",
-> -				&ip_hdr(skb)->saddr, &ip_hdr(skb)->daddr, mtu);
-> +			IP_VS_DBG(12, "ICMP for %s %pI4->%pI4: mtu=%u\n",
-> +				  outer_proto, &ip_hdr(skb)->saddr,
-> +				  &ip_hdr(skb)->daddr, mtu);
->  			ipv4_update_pmtu(skb, ipvs->net, mtu, 0, 0);
->  			/* Client uses PMTUD? */
->  			if (!(frag_off & htons(IP_DF)))
-> -				goto ignore_ipip;
-> +				goto ignore_tunnel;
->  			/* Prefer the resulting PMTU */
->  			if (dest) {
->  				struct ip_vs_dest_dst *dest_dst;
-> @@ -1832,11 +1838,11 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  				mtu -= sizeof(struct iphdr);
->  			info = htonl(mtu);
->  		}
-> -		/* Strip outer IP, ICMP and IPIP, go to IP header of
-> +		/* Strip outer IP, ICMP and IPIP/UDP/GRE, go to IP header of
->  		 * original request.
->  		 */
->  		if (pskb_pull(skb, offset2) == NULL)
-> -			goto ignore_ipip;
-> +			goto ignore_tunnel;
->  		skb_reset_network_header(skb);
->  		IP_VS_DBG(12, "Sending ICMP for %pI4->%pI4: t=%u, c=%u, i=%u\n",
->  			&ip_hdr(skb)->saddr, &ip_hdr(skb)->daddr,
-> @@ -1845,7 +1851,7 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		/* ICMP can be shorter but anyways, account it */
->  		ip_vs_out_stats(cp, skb);
->  
-> -ignore_ipip:
-> +ignore_tunnel:
->  		consume_skb(skb);
->  		verdict = NF_STOLEN;
->  		goto out;
-> -- 
-> 1.8.3.1
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
+Inspector Greg Adams,
+For and on behalf of Cote D'Ivoire FBI
+Tel 00225 6716 6756
