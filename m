@@ -2,119 +2,81 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC75018F0A4
-	for <lists+lvs-devel@lfdr.de>; Mon, 23 Mar 2020 09:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 055781940BE
+	for <lists+lvs-devel@lfdr.de>; Thu, 26 Mar 2020 15:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727529AbgCWIJS (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 23 Mar 2020 04:09:18 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:41287 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727526AbgCWIJR (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 23 Mar 2020 04:09:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584950956;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DatnUF98BCsDDqz4v1cS5fMH4kzRB69WiMI1dy/omLE=;
-        b=h3F6DkfqrrHEUFznbO4wK9lj/ItYgKVtAkzocdgVIBBvrtpWVrIZ8mEfbsJa80j4XrQet9
-        hadCZybYuDYMEnvJJDfu6Di+pzBH4XXkQguzGXfLbdLCufhQ2mzTTYkwL4z6D0KobCKlEL
-        4c9pUn662BwA4knIrO1XBsezbJ7rlLI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-447-EJRI2rg-NsWLNSca_2q3Rg-1; Mon, 23 Mar 2020 04:09:12 -0400
-X-MC-Unique: EJRI2rg-NsWLNSca_2q3Rg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1727981AbgCZOCj (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 26 Mar 2020 10:02:39 -0400
+Received: from correo.us.es ([193.147.175.20]:51290 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727982AbgCZOCe (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Thu, 26 Mar 2020 10:02:34 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 6248211EB88
+        for <lvs-devel@vger.kernel.org>; Thu, 26 Mar 2020 15:02:32 +0100 (CET)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 55FE6DA3AB
+        for <lvs-devel@vger.kernel.org>; Thu, 26 Mar 2020 15:02:32 +0100 (CET)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id 4AAB5DA3A1; Thu, 26 Mar 2020 15:02:32 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 3386FDA38D;
+        Thu, 26 Mar 2020 15:02:30 +0100 (CET)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Thu, 26 Mar 2020 15:02:30 +0100 (CET)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 193C11005510;
-        Mon, 23 Mar 2020 08:09:11 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E41894976;
-        Mon, 23 Mar 2020 08:09:05 +0000 (UTC)
-Date:   Mon, 23 Mar 2020 09:09:03 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Alexander Petrovsky <askjuise@gmail.com>
-Cc:     Julian Anastasov <ja@ssi.bg>,
-        "LinuxVirtualServer.org users mailing list." 
-        <lvs-users@linuxvirtualserver.org>,
-        Simon Horman <horms@verge.net.au>,
-        "lvs-devel@vger.kernel.org" <lvs-devel@vger.kernel.org>,
-        brouer@redhat.com
-Subject: Re: [lvs-users] Micro ipvsadm patch
-Message-ID: <20200323090903.0753d01a@carbon>
-In-Reply-To: <CAH57y_R=xUY-MPkFfeoOpH_f3eCLWDKuwW+wtNOKD9JJMjRkTw@mail.gmail.com>
-References: <CAH57y_TcVNdCe7ciAXX85HzWXPhWgUWvXn2f7r8yWjM2TUNecQ@mail.gmail.com>
-        <20200320133137.3cc59704@carbon>
-        <CAH57y_R=xUY-MPkFfeoOpH_f3eCLWDKuwW+wtNOKD9JJMjRkTw@mail.gmail.com>
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 0C83C42EF4E0;
+        Thu, 26 Mar 2020 15:02:30 +0100 (CET)
+Date:   Thu, 26 Mar 2020 15:02:29 +0100
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>,
+        Simon Horman <horms@verge.net.au>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ipvs: optimize tunnel dumps for icmp errors
+Message-ID: <20200326140229.emeplg75xszpd7rs@salvia>
+References: <1584278741-13944-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+ <alpine.LFD.2.21.2003181333460.4911@ja.home.ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LFD.2.21.2003181333460.4911@ja.home.ssi.bg>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Fri, 20 Mar 2020 21:16:47 +0300
-Alexander Petrovsky <askjuise@gmail.com> wrote:
+On Wed, Mar 18, 2020 at 01:36:32PM +0200, Julian Anastasov wrote:
+> 
+> 	Hello,
+> 
+> On Sun, 15 Mar 2020, Haishuang Yan wrote:
+> 
+> > After strip GRE/UDP tunnel header for icmp errors, it's better to show
+> > "GRE/UDP" instead of "IPIP" in debug message.
+> > 
+> > Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+> 
+> 	Looks good to me, thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
+> 
+> 	Simon, this is for -next kernels...
 
-> Oh, thanks.
->=20
-> Where I can find out the full procedure?
+Simon, if no objection, I'm going to include this in the next nf-next
+pull request.
 
-As this is a tool that is closely related to the kernel, I/we try to
-follow the kernel submitting patch guidelines, but losely:
-
- https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-
---Jesper
-
-
-> =D0=BF=D1=82, 20 =D0=BC=D0=B0=D1=80=D1=82=D0=B0 2020 =D0=B3. =D0=B2 15:32=
-, Jesper Dangaard Brouer <brouer@redhat.com>:
->=20
-> > On Wed, 11 Mar 2020 15:05:58 +0300
-> > Alexander Petrovsky <askjuise@gmail.com> wrote:
-> > =20
-> > > Hello!
-> > >
-> > > This micro ipvsadm patch fixes wrong (negative) FWMARK values
-> > > representation:
-> > >
-> > > # ipvsadm -L -f 2882430849
-> > > Prot LocalAddress:Port Scheduler Flags =20
-> > >   -> RemoteAddress:Port           Forward Weight ActiveConn InActConn=
- =20
-> > > FWM  -1412536447 wlc =20
-> > >   -> abc.my.host.net. Tunnel  1      0          0 =20
-> > > =20
-> >
-> > Hi Alexander,
-> >
-> > Your patch submission does not follow all the procedures, but given
-> > this is fairly trivial, and Julian didn't object, I went ahead and
-> > applied the patch with (your SoB and credit to you), here:
-> >
-> >
-> > https://git.kernel.org/pub/scm/utils/kernel/ipvsadm/ipvsadm.git/commit/=
-?id=3De61c8cdd1dcad
-> >
-> > --
-> > Best regards,
-> >   Jesper Dangaard Brouer
-> >   MSc.CS, Principal Kernel Engineer at Red Hat
-> >   LinkedIn: http://www.linkedin.com/in/brouer
-> >
-> > -- =20
-> Alexander Petrovsky
-
-
-
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+Thanks.
