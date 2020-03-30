@@ -2,81 +2,78 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 055781940BE
-	for <lists+lvs-devel@lfdr.de>; Thu, 26 Mar 2020 15:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747F21972C5
+	for <lists+lvs-devel@lfdr.de>; Mon, 30 Mar 2020 05:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727981AbgCZOCj (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 26 Mar 2020 10:02:39 -0400
-Received: from correo.us.es ([193.147.175.20]:51290 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727982AbgCZOCe (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 26 Mar 2020 10:02:34 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 6248211EB88
-        for <lvs-devel@vger.kernel.org>; Thu, 26 Mar 2020 15:02:32 +0100 (CET)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 55FE6DA3AB
-        for <lvs-devel@vger.kernel.org>; Thu, 26 Mar 2020 15:02:32 +0100 (CET)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 4AAB5DA3A1; Thu, 26 Mar 2020 15:02:32 +0100 (CET)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 3386FDA38D;
-        Thu, 26 Mar 2020 15:02:30 +0100 (CET)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Thu, 26 Mar 2020 15:02:30 +0100 (CET)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 0C83C42EF4E0;
-        Thu, 26 Mar 2020 15:02:30 +0100 (CET)
-Date:   Thu, 26 Mar 2020 15:02:29 +0100
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>,
-        Simon Horman <horms@verge.net.au>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] ipvs: optimize tunnel dumps for icmp errors
-Message-ID: <20200326140229.emeplg75xszpd7rs@salvia>
-References: <1584278741-13944-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
- <alpine.LFD.2.21.2003181333460.4911@ja.home.ssi.bg>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.21.2003181333460.4911@ja.home.ssi.bg>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729062AbgC3DVA (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 29 Mar 2020 23:21:00 -0400
+Received: from cmccmta3.chinamobile.com ([221.176.66.81]:4016 "EHLO
+        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728987AbgC3DVA (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 29 Mar 2020 23:21:00 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.5]) by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee95e81658ecc9-03bf0; Mon, 30 Mar 2020 11:20:46 +0800 (CST)
+X-RM-TRANSID: 2ee95e81658ecc9-03bf0
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost (unknown[223.105.0.241])
+        by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee35e81658d0c3-a4187;
+        Mon, 30 Mar 2020 11:20:46 +0800 (CST)
+X-RM-TRANSID: 2ee35e81658d0c3-a4187
+From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+To:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Subject: [PATCH nf-next] ipvs: fix uninitialized variable warning
+Date:   Mon, 30 Mar 2020 11:20:15 +0800
+Message-Id: <1585538415-27583-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 01:36:32PM +0200, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Sun, 15 Mar 2020, Haishuang Yan wrote:
-> 
-> > After strip GRE/UDP tunnel header for icmp errors, it's better to show
-> > "GRE/UDP" instead of "IPIP" in debug message.
-> > 
-> > Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-> 
-> 	Looks good to me, thanks!
-> 
-> Acked-by: Julian Anastasov <ja@ssi.bg>
-> 
-> 	Simon, this is for -next kernels...
+If outer_proto is not set, GCC warning as following:
 
-Simon, if no objection, I'm going to include this in the next nf-next
-pull request.
+In file included from net/netfilter/ipvs/ip_vs_core.c:52:
+net/netfilter/ipvs/ip_vs_core.c: In function 'ip_vs_in_icmp':
+include/net/ip_vs.h:233:4: warning: 'outer_proto' may be used uninitialized in this function [-Wmaybe-uninitialized]
+ 233 |    printk(KERN_DEBUG pr_fmt(msg), ##__VA_ARGS__); \
+     |    ^~~~~~
+net/netfilter/ipvs/ip_vs_core.c:1666:8: note: 'outer_proto' was declared here
+1666 |  char *outer_proto;
+     |        ^~~~~~~~~~~
 
-Thanks.
+Fixes: 73348fed35d0 ("ipvs: optimize tunnel dumps for icmp errors")
+Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+---
+ net/netfilter/ipvs/ip_vs_core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
+index d2ac530..aa6a603 100644
+--- a/net/netfilter/ipvs/ip_vs_core.c
++++ b/net/netfilter/ipvs/ip_vs_core.c
+@@ -1663,7 +1663,7 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
+ 	unsigned int offset, offset2, ihl, verdict;
+ 	bool tunnel, new_cp = false;
+ 	union nf_inet_addr *raddr;
+-	char *outer_proto;
++	char *outer_proto = "IPIP";
+ 
+ 	*related = 1;
+ 
+@@ -1723,7 +1723,6 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
+ 		if (cih == NULL)
+ 			return NF_ACCEPT; /* The packet looks wrong, ignore */
+ 		tunnel = true;
+-		outer_proto = "IPIP";
+ 	} else if ((cih->protocol == IPPROTO_UDP ||	/* Can be UDP encap */
+ 		    cih->protocol == IPPROTO_GRE) &&	/* Can be GRE encap */
+ 		   /* Error for our tunnel must arrive at LOCAL_IN */
+-- 
+1.8.3.1
+
+
+
