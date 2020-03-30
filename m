@@ -2,89 +2,67 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 892921974F3
-	for <lists+lvs-devel@lfdr.de>; Mon, 30 Mar 2020 09:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBF41979EA
+	for <lists+lvs-devel@lfdr.de>; Mon, 30 Mar 2020 12:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728766AbgC3HLk (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 30 Mar 2020 03:11:40 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:59798 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728489AbgC3HLk (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 30 Mar 2020 03:11:40 -0400
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 02U7BL0O006642;
-        Mon, 30 Mar 2020 10:11:21 +0300
-Date:   Mon, 30 Mar 2020 10:11:21 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-cc:     Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH nf-next] ipvs: fix uninitialized variable warning
-In-Reply-To: <1585538415-27583-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-Message-ID: <alpine.LFD.2.21.2003301006560.5190@ja.home.ssi.bg>
-References: <1585538415-27583-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+        id S1729305AbgC3KxW (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 30 Mar 2020 06:53:22 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:33083 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729292AbgC3KxW (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 30 Mar 2020 06:53:22 -0400
+Received: by mail-vs1-f65.google.com with SMTP id y138so10692030vsy.0
+        for <lvs-devel@vger.kernel.org>; Mon, 30 Mar 2020 03:53:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=MzysayLnvn6GqdrSzL4W/Z4nVpQsyQC87uoqelBXHW/3NVxP+IbKwm2VFM29CMkAKq
+         jMpZHUFM9mFaeSw8s7/E6G9++dsdL8dWyeZeVbbqiDXJo4R1vQjglvU5kilgUYL3+4lu
+         67wntHpDiI5T0N2exEc3GjmwYOLhvP0jPro9Z1Gd5a1KN0r4fVY+ClOnMzRgkxWulYBm
+         bTlcw6ga7FULUxXODks/eKO3aMfsLQj5BmKniG+8KNh6dDCaY3ykgz/JaUzl/1+WpeJo
+         V8E4mslGqnS54cyvVus4NDpeOq/8JUXyn8+xxrR1Mvcmrvj1ITlEmNgrb5aX5mahcpwp
+         koJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=s8pPNhOfTBqZWWUxfNIz0UIop5ypRgLkc/dNm4N6NTqR5N6CZQNAnEzHaZBKIEYUK6
+         PXM+vlKJR99a1icPUxlnY8UO7nNQN0iHIlfbi6xG4pNumgBSAwhHQma+AUTEcD3eNTOj
+         9ss37dsFS61rYgZjMi0ueleC4FdacxefBW+aO3Sl5oMeLpSOFZnXoBqOac4wenVmMK66
+         fhZDvLqsJrJG+eQia5U9f1BmMLBYTU/FGvKvK6TYEhnLWAL5xkk3duo55Ey1LUCLcfdb
+         A1QZJKSceq7nR7BR7cR357xbB8O/xwa56JfH8TTk+27Mw+Wa7aSCL3ERumcYaltI+PYg
+         DwXw==
+X-Gm-Message-State: AGi0PubSmqNKMWE7y3z5nZAFHQ5HChtPtyXixZ7HY79FgZTcgeow1qkb
+        X474c/zAkUWWVJqXCmAHCqScT8rfI/6necDhwm4=
+X-Google-Smtp-Source: APiQypKUyAULYiRQ38DUQ57EK6eldMkq514fi2xXeDIPm049QCvh0cmzUKWKT2R4Uqnncy5GNf2R7rZ8VuaGDKtNjJs=
+X-Received: by 2002:a05:6102:2401:: with SMTP id j1mr2673296vsi.13.1585565601566;
+ Mon, 30 Mar 2020 03:53:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:53:21
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:53:21 -0200
+Message-ID: <CAKwdjsrZjxjooafrmYOtGH_BEE9yTy6vzT+j4xij=0HyEqCChA@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+-- 
+My dear,
 
-	Hello,
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
 
-On Mon, 30 Mar 2020, Haishuang Yan wrote:
-
-> If outer_proto is not set, GCC warning as following:
-> 
-> In file included from net/netfilter/ipvs/ip_vs_core.c:52:
-> net/netfilter/ipvs/ip_vs_core.c: In function 'ip_vs_in_icmp':
-> include/net/ip_vs.h:233:4: warning: 'outer_proto' may be used uninitialized in this function [-Wmaybe-uninitialized]
->  233 |    printk(KERN_DEBUG pr_fmt(msg), ##__VA_ARGS__); \
->      |    ^~~~~~
-> net/netfilter/ipvs/ip_vs_core.c:1666:8: note: 'outer_proto' was declared here
-> 1666 |  char *outer_proto;
->      |        ^~~~~~~~~~~
-> 
-> Fixes: 73348fed35d0 ("ipvs: optimize tunnel dumps for icmp errors")
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
-	Hm, my compiler does not report it: gcc version 9.1.1
-
-> ---
->  net/netfilter/ipvs/ip_vs_core.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-> index d2ac530..aa6a603 100644
-> --- a/net/netfilter/ipvs/ip_vs_core.c
-> +++ b/net/netfilter/ipvs/ip_vs_core.c
-> @@ -1663,7 +1663,7 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  	unsigned int offset, offset2, ihl, verdict;
->  	bool tunnel, new_cp = false;
->  	union nf_inet_addr *raddr;
-> -	char *outer_proto;
-> +	char *outer_proto = "IPIP";
->  
->  	*related = 1;
->  
-> @@ -1723,7 +1723,6 @@ static int ipvs_gre_decap(struct netns_ipvs *ipvs, struct sk_buff *skb,
->  		if (cih == NULL)
->  			return NF_ACCEPT; /* The packet looks wrong, ignore */
->  		tunnel = true;
-> -		outer_proto = "IPIP";
->  	} else if ((cih->protocol == IPPROTO_UDP ||	/* Can be UDP encap */
->  		    cih->protocol == IPPROTO_GRE) &&	/* Can be GRE encap */
->  		   /* Error for our tunnel must arrive at LOCAL_IN */
-> -- 
-> 1.8.3.1
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
+Remain blessed,
+Mrs. Maryalice Williams.
