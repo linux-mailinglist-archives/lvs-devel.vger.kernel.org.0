@@ -2,58 +2,86 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1C91AD1FE
-	for <lists+lvs-devel@lfdr.de>; Thu, 16 Apr 2020 23:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DFA1AD272
+	for <lists+lvs-devel@lfdr.de>; Fri, 17 Apr 2020 00:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgDPVjE (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 16 Apr 2020 17:39:04 -0400
-Received: from mail.dsns.gov.ua ([194.0.148.99]:47982 "EHLO mail.dsns.gov.ua"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726407AbgDPVil (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 16 Apr 2020 17:38:41 -0400
-X-Greylist: delayed 2008 seconds by postgrey-1.27 at vger.kernel.org; Thu, 16 Apr 2020 17:38:40 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id DA4DE1D45614;
-        Thu, 16 Apr 2020 23:36:29 +0300 (EEST)
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ES_vwEPJNJRp; Thu, 16 Apr 2020 23:36:29 +0300 (EEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id A01911D45AD1;
-        Thu, 16 Apr 2020 23:36:23 +0300 (EEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.dsns.gov.ua A01911D45AD1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dsns.gov.ua;
-        s=1E60DAC0-2607-11E9-81E6-7A77C2B36653; t=1587069383;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Oslv7nw36wGCDWjteZEKz4CMfTi6nePdHFD4t7GVg1hgcN3tOC7CLZ3aFLoULYsny
-         5BI1fn2kyM3m331Fz5y6VRFbVRS7gdL13SnOBFER1fmhbfyQOveTfe6AqGyJ8qjXlT
-         sMGaYyb75EgL5JswqiequimnGmDilSW2cOjw/+CbL2wSvCPZ72x8c7psa26nxpDQ7+
-         aFPr3uKBNxu4aMY7gIvpoMfrJAtdUJLfyPlPfGgYFGsdtk0BI5+79DG8fSNg2CgQRd
-         UhC/QmDvhxB6OINqhz0PVnETMqi3Pjb7D6pnWiXRdqqs8fbOkE9+gGWmKfdN0/Tm/s
-         IjrciZzF8QDIw==
-X-Virus-Scanned: amavisd-new at dsns.gov.ua
-Received: from mail.dsns.gov.ua ([127.0.0.1])
-        by localhost (mail.dsns.gov.ua [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 12hgCTamIEHt; Thu, 16 Apr 2020 23:36:23 +0300 (EEST)
-Received: from mail.dsns.gov.ua (localhost [127.0.0.1])
-        by mail.dsns.gov.ua (Postfix) with ESMTP id 50AD61D4581F;
-        Thu, 16 Apr 2020 23:36:11 +0300 (EEST)
-Date:   Thu, 16 Apr 2020 23:36:11 +0300 (EEST)
-From:   Saleem Netanyahu <duchenko@dsns.gov.ua>
-Reply-To: Saleem Netanyahu <saleemnetu@gmail.com>
-Message-ID: <970576024.718481.1587069371277.JavaMail.zimbra@dsns.gov.ua>
-Subject: Hey, how are u, can we talk?
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [45.82.223.36, 172.69.54.54]
-X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
-Thread-Index: OyVXWHI7O2lUmalcAnMdSMQWIiouuQ==
-Thread-Topic: Hey, how are u, can we talk?
-To:     unlisted-recipients:; (no To-header on input)
+        id S1728642AbgDPWA4 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 16 Apr 2020 18:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727998AbgDPWAz (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Apr 2020 18:00:55 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3CC061A0C;
+        Thu, 16 Apr 2020 15:00:55 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id ay1so151484plb.0;
+        Thu, 16 Apr 2020 15:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:content-transfer-encoding:mime-version:subject:message-id:date
+         :cc:to;
+        bh=f7+Ji9iwyRin8bF/31Jh4PKZRcSeX5vOP4UH9FsYD94=;
+        b=E5IdDBB4L/OKqkLFUHMZFbtWTcxOc2AoCuLv/N7tmC4Kl4h3rH+BIKEnx0ioKABbVV
+         MlYIIxQL7uVuluHIw4Cx6+rNpjOcmTgOQbr+MFQpjOQrRW5+K3yYxi7ZiycD/0Y8xJQB
+         GMadALZ1J9hFZyiZ3DCNNYmGocky3rwaAt8REDl3v7rGvDOoLUds5nO/C5PVVxHCPwY5
+         sdXq31KX5j0rd7OX5vbVtzHRZwgV0Mn2y8VbPQabGNgtAFkdIw0oeqHwxn5zW8sNpFIr
+         PHfNZ5QD9hyfFn+tg4yGecZPKkJNGEorZFlZ8k4Cx3KutFowGPB5/Ehd9FHgjkKEhOQx
+         emYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:content-transfer-encoding:mime-version
+         :subject:message-id:date:cc:to;
+        bh=f7+Ji9iwyRin8bF/31Jh4PKZRcSeX5vOP4UH9FsYD94=;
+        b=MQFs8W9MEO3h9KjQW7updH5dDgslxz94hDC/RwuDh3+Oa9oOIIPRElhpP1xP5QCLMS
+         GGMnKjGQX7URKHMYerr+vgD4sYzVQyakWIGjx1Yh1HKKxAMidYeuzr6CIf3coPZmfXGI
+         sYQCIEPnEmc4Hc6rVHAX72KUnIUvnZGlOtAHh/uCol+/jLy/DpMdIudBfnU6Jd47JOep
+         Gj6JHH7cFn1TVttktk/8aXBRcEQHBG0nQ/kzXbBQ4Q1obNnshs5jSsQzG/V0Be0836xz
+         tYFAmB+4D11Rv0LLGa26lOgrvOauhRY5/SajvnoG93CvTJlsJeNlynoBGTxPr7NL1Foe
+         T9LA==
+X-Gm-Message-State: AGi0PubjE+rnYDaa66G84zICCKy/fp7ji3h1oHSm7L63FI4XeA98nhsX
+        4np4XBeAeToTmlZRp0t/OmA=
+X-Google-Smtp-Source: APiQypI6Z9JJ7fEBKA5VHeBcpql11ojdROgYG4Kv2o+ScM38w0eVljhuMqzAkhiwlfDC+sK2K24Glg==
+X-Received: by 2002:a17:90b:1993:: with SMTP id mv19mr507130pjb.88.1587074454950;
+        Thu, 16 Apr 2020 15:00:54 -0700 (PDT)
+Received: from [10.227.185.29] ([216.113.160.71])
+        by smtp.gmail.com with ESMTPSA id o9sm3500862pje.47.2020.04.16.15.00.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Apr 2020 15:00:54 -0700 (PDT)
+From:   yunhong-cgl jiang <xintian1976@gmail.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.14\))
+Subject: Long delay on estimation_timer causes packet latency
+Message-Id: <D25792C1-1B89-45DE-9F10-EC350DC04ADC@gmail.com>
+Date:   Thu, 16 Apr 2020 15:00:53 -0700
+Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        Yunhong Jiang <yunhjiang@ebay.com>
+To:     horms@verge.net.au, ja@ssi.bg
+X-Mailer: Apple Mail (2.3445.104.14)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Hi, Simon & Julian,
+	We noticed that on our kubernetes node utilizing IPVS, the =
+estimation_timer() takes very long (>200sm as shown below). Such long =
+delay on timer softirq causes long packet latency. =20
+
+          <idle>-0     [007] dNH. 25652945.670814: softirq_raise: vec=3D1 =
+[action=3DTIMER]
+.....
+          <idle>-0     [007] .Ns. 25652945.992273: softirq_exit: vec=3D1 =
+[action=3DTIMER]
+
+	The long latency is caused by the big service number (>50k) and =
+large CPU number (>80 CPUs),
+
+	We tried to move the timer function into a kernel thread so that =
+it will not block the system and seems solves our problem. Is this the =
+right direction? If yes, we will do more testing and send out the RFC =
+patch. If not, can you give us some suggestion?
+
+Thanks
+=E2=80=94yunhong=20=
