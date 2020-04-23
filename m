@@ -2,115 +2,91 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2A11AE2D3
-	for <lists+lvs-devel@lfdr.de>; Fri, 17 Apr 2020 18:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280D41B6380
+	for <lists+lvs-devel@lfdr.de>; Thu, 23 Apr 2020 20:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728489AbgDQQ4U (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 17 Apr 2020 12:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S1730402AbgDWS1S (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 23 Apr 2020 14:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728416AbgDQQ4M (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 17 Apr 2020 12:56:12 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2264C061A0C;
-        Fri, 17 Apr 2020 09:56:11 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j2so3830725wrs.9;
-        Fri, 17 Apr 2020 09:56:11 -0700 (PDT)
+        with ESMTP id S1730399AbgDWS1R (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 23 Apr 2020 14:27:17 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94512C025492
+        for <lvs-devel@vger.kernel.org>; Thu, 23 Apr 2020 11:27:15 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id x77so3393811pfc.0
+        for <lvs-devel@vger.kernel.org>; Thu, 23 Apr 2020 11:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5vRyt3gyMvMWOByiQup7/iuoQyfsqpdRhoS1efdjEY4=;
-        b=r96iYaAJUFqutvLlNPFb8i3j1V2Dc4shFIQjqagN+c4HoNWeaVzgEOSlDtF/nXoxKL
-         4rl8ksUKanZyBWaTMkATLdET25r9HIQPScCqXELA3cNyylFog/fLtdWR2J2aD+Aot1YA
-         uwzDq6E2MD1Fe/5FgD0dGmraCG6JeLOj7/OyHK2DIfWJbfzGImluPYqoqPSWmebwHv5Q
-         iKppF+24I3/OXUS/3ulHsPzPByHZ9+gmoz9J4zWOJqfyl9mNR9vlRfthl3wJm6mGw3VN
-         JMVkTgidHeBShG/JYVSsBUIJtXjX5RM3PMY0iQQDebm+PE6pl5ItFx7y8X87P4CVLeEr
-         MIBw==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
+        b=G0MearUWJO2XoX5WFWCbOSBM0KnomNOcLxBMKb36E56Tk8IIyFbWO7z4INTed1WkRU
+         qeMi1eRR7YsA+BDT6DQvUAii78YnzCjvNMVBKy4slcZy3/gJbFRS56rTYb2i1ZQ8vqn/
+         EOaplCA4N/rSu1DPvHSaWXp+qBo2gCjTbf/vDHta9DawS0nUkV5FYws7CV/zXlK/VYiG
+         COL+ehFclZxGMjmnJCFdgQT7XS8eBs73XeZW6OQ9vAUq0KfaGK/YZHActLVD5NzSJiie
+         gXxsbNT9IQMnd4wAzDKDPSrX8AkY/tvkHFQgBX+60qxPigWKusZrEf/ce5VP7zRF3LJ+
+         eYhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5vRyt3gyMvMWOByiQup7/iuoQyfsqpdRhoS1efdjEY4=;
-        b=UE0I9H/HsnLjhv1Vu0WW6Ys7SNeADfwGSA6wGXrR7IuHCyMIpMfFOO7g3rhNR+upmR
-         ssgL64O8NzndwJ3lAPg+zn0u5KhYEXGVUNNSuwwj8uBMCEIDKBmbumTatPSfrFtk+fVv
-         nnOfLIlzUn3+RwKaf6Wusd+h9W+zvhgRkKGjjKMbkO2V9EW0KhIp1FcONxnff8frapV3
-         nbIaRc9wbX/su9ygOFFG2/QfjfzTeFxCUej3+S4/8mS/W2jMOOP9nQf2xrgrFjl8c2SM
-         gsxwdrUJBhGPKgrdu0sN/3NlVma0/QwtCDyH1fjOa1oNprgHw9N/vXCD626gZM6TeTim
-         Cwzg==
-X-Gm-Message-State: AGi0PuZLfVxcCNXKuTNS0iUnatQiv+kbYeL3uTorhgfFVdVSgx3TAW1t
-        FThbmYa8jytGVcmlVPG993d36HSF6ZbkYw==
-X-Google-Smtp-Source: APiQypIwZ/jq8AtZYyR5t/lj17pbtyhqWpW7mYXgNj9fweYAkXGNJPa4XJpjF5ga1tQ25cPm02FudA==
-X-Received: by 2002:a5d:4106:: with SMTP id l6mr4809878wrp.111.1587142570430;
-        Fri, 17 Apr 2020 09:56:10 -0700 (PDT)
-Received: from [10.227.177.177] ([216.113.160.71])
-        by smtp.gmail.com with ESMTPSA id y7sm33634702wrq.54.2020.04.17.09.56.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 Apr 2020 09:56:09 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.14\))
-Subject: Re: Long delay on estimation_timer causes packet latency
-From:   yunhong-cgl jiang <xintian1976@gmail.com>
-In-Reply-To: <alpine.LFD.2.21.2004171029240.3962@ja.home.ssi.bg>
-Date:   Fri, 17 Apr 2020 09:56:06 -0700
-Cc:     horms@verge.net.au, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, Yunhong Jiang <yunhjiang@ebay.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
+        b=H37Eighqc17UQyDQ81jY/haDl+WlGh2e4JehxkrdowT/OqMX1pRHH18kfaIDih5O5q
+         6qoCEf5lyWMmmZOCSWLY51CBqAG0X0bBkbaCByYDOVcQ4oQMLEcTJ4SqwtIZKzid2mLL
+         yVzrehBunZ1lgdeU7So0QoYLuW3actz/Yc5Bc/3kpsVETcrViiNwY8nh7CMjgpkih6W/
+         C1yxhRN+HvAMr5/8WpGn5/6TCcW5iUjf0FGEljwrs0kHgnQHaTvWQbBOhGTQYEHe1Uej
+         srY2dIpdilmUEWNvkq1xET6hMQ+RZf42BGw7EFFPOBtLMJezw+fzfwPEbMT6FCSguFaL
+         dv4g==
+X-Gm-Message-State: AGi0PuYb9fLWEor2RMcPms4illAn610MLiu0aB2Yd5D/Th6t4RQLx9Ye
+        SYevXdJeMVikcGEoPI8etM9TAxjehQaAEzayDuUdW1c=
+X-Google-Smtp-Source: APiQypKOhu0Ivyzu1MQANRLgnSM6D7f6PDwmOyOGFsy7UwOOUt5tM1gVxevJ7CcMC29eb2aYcjzRxadXayX+T6slpNc=
+X-Received: by 2002:a05:6602:d:: with SMTP id b13mr5025673ioa.176.1587666433220;
+ Thu, 23 Apr 2020 11:27:13 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:27:12
+ -0700 (PDT)
+Reply-To: boa.benin107@yahoo.com
+From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
+Date:   Thu, 23 Apr 2020 20:27:12 +0200
+Message-ID: <CABHzvrnzZLe4Z0E4acOdcsDJTPa3wvp-Oz12f_M4TQ03PAGZkw@mail.gmail.com>
+Subject: Contact Eco bank-Benin to receive your payment funds transfer amount
+ of $12.800.000,00 Million USD,approved this morning by IMF.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <F48099A3-ECB3-46AF-8330-B829ED2ADA3F@gmail.com>
-References: <D25792C1-1B89-45DE-9F10-EC350DC04ADC@gmail.com>
- <alpine.LFD.2.21.2004171029240.3962@ja.home.ssi.bg>
-To:     Julian Anastasov <ja@ssi.bg>
-X-Mailer: Apple Mail (2.3445.104.14)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Thanks for reply.
-
-Yes, our patch changes the est_list to a RCU list. Will do more testing =
-and send out the patch.
-
-Thanks
-=E2=80=94Yunhong
-
-
-> On Apr 17, 2020, at 12:47 AM, Julian Anastasov <ja@ssi.bg> wrote:
->=20
->=20
-> 	Hello,
->=20
-> On Thu, 16 Apr 2020, yunhong-cgl jiang wrote:
->=20
->> Hi, Simon & Julian,
->> 	We noticed that on our kubernetes node utilizing IPVS, the =
-estimation_timer() takes very long (>200sm as shown below). Such long =
-delay on timer softirq causes long packet latency. =20
->>=20
->>          <idle>-0     [007] dNH. 25652945.670814: softirq_raise: =
-vec=3D1 [action=3DTIMER]
->> .....
->>          <idle>-0     [007] .Ns. 25652945.992273: softirq_exit: vec=3D1=
- [action=3DTIMER]
->>=20
->> 	The long latency is caused by the big service number (>50k) and =
-large CPU number (>80 CPUs),
->>=20
->> 	We tried to move the timer function into a kernel thread so that =
-it will not block the system and seems solves our problem. Is this the =
-right direction? If yes, we will do more testing and send out the RFC =
-patch. If not, can you give us some suggestion?
->=20
-> 	Using kernel thread is a good idea. For this to work, we can
-> also remove the est_lock and to use RCU for est_list.
-> The writers ip_vs_start_estimator() and ip_vs_stop_estimator() already
-> run under common mutex __ip_vs_mutex, so they not need any
-> synchronization. We need _bh lock usage in estimation_timer().
-> Let me know if you need any help with the patch.
->=20
-> Regards
->=20
-> --
-> Julian Anastasov <ja@ssi.bg>
-
+Attn Dear.
+Contact Bank of Africa-Benin to receive your payment funds transfer amount =
+of
+$12.800.000,00 Million USD,approved this morning by IMF.
+Happy to inform you, we have finally deposited your payment funds
+$12.8 million us dollars with the Paying Bank of Africa-Benin
+to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
+Contact the bank immediately you receive this email now.
+Director Bank of Africa-Benin: Dr. Festus Obiara
+Email id:  boa.benin107@yahoo.com
+Tel/mobile, (229) 62819378
+BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
+Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
+Phone:(229) 62819378.
+2020 GROUPE BANK OF AFRICA
+Be advised to re-confirm your bank details to this bank as listed.
+Your account Holder's name----------------
+Bank Name----------------------------------------------------------
+Bank address----------------------------------------------
+Account Numbers---------------------------------------
+Rounting-----------------------------------------------------------------
+Your direct Phone Numbers----------------------------------------------
+Note,I have paid the deposit and insurance fees for you
+But the only money you are to send to this bank is $150.00 us dollars
+Been for the wire transfer fees of your funds
+Contact Him now to receive your transfer deposited this morning
+I wait for your reply upon confirmation
+Mrs. Angella Michelle
+Editor, Zenith Bank- Companies Benin
+mrsa9389@gmail.com
