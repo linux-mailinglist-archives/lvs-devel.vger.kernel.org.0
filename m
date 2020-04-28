@@ -2,54 +2,68 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAB21BB97E
-	for <lists+lvs-devel@lfdr.de>; Tue, 28 Apr 2020 11:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433011BCD21
+	for <lists+lvs-devel@lfdr.de>; Tue, 28 Apr 2020 22:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgD1JIJ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 28 Apr 2020 05:08:09 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:35220 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726271AbgD1JIJ (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 28 Apr 2020 05:08:09 -0400
-Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 69C0725AD57;
-        Tue, 28 Apr 2020 19:08:06 +1000 (AEST)
-Received: by penelope.horms.nl (Postfix, from userid 7100)
-        id 5D3231A94; Tue, 28 Apr 2020 11:08:04 +0200 (CEST)
-Date:   Tue, 28 Apr 2020 11:08:04 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wensong Zhang <wensong@linux-vs.org>,
-        Julian Anastasov <ja@ssi.bg>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org
-Subject: Re: [PATCH 37/38] docs: networking: convert ipvs-sysctl.txt to ReST
-Message-ID: <20200428090804.GB14072@vergenet.net>
+        id S1726364AbgD1ULt (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 28 Apr 2020 16:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726180AbgD1ULs (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 28 Apr 2020 16:11:48 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9F9C03C1AB;
+        Tue, 28 Apr 2020 13:11:46 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 1A5C3120ED563;
+        Tue, 28 Apr 2020 13:11:45 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 13:11:43 -0700 (PDT)
+Message-Id: <20200428.131143.378850463944291442.davem@davemloft.net>
+To:     mchehab+huawei@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, netdev@vger.kernel.org, linux-hams@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org,
+        linux-decnet-user@lists.sourceforge.net,
+        ceph-devel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net, lvs-devel@vger.kernel.org
+Subject: Re: [PATCH 00/38] net: manually convert files to ReST format -
+ part 1
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <cover.1588024424.git.mchehab+huawei@kernel.org>
 References: <cover.1588024424.git.mchehab+huawei@kernel.org>
- <c47a3042ec7d3f8cb3a44f68eb4cf5c94c075a3c.1588024424.git.mchehab+huawei@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c47a3042ec7d3f8cb3a44f68eb4cf5c94c075a3c.1588024424.git.mchehab+huawei@kernel.org>
-Organisation: Horms Solutions BV
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 28 Apr 2020 13:11:45 -0700 (PDT)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 12:01:52AM +0200, Mauro Carvalho Chehab wrote:
-> - add SPDX header;
-> - add a document title;
-> - mark lists as such;
-> - mark code blocks and literals as such;
-> - adjust identation, whitespaces and blank lines;
-> - add to networking/index.rst.
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Date: Tue, 28 Apr 2020 00:01:15 +0200
+
+> There are very few documents upstream that aren't converted upstream.
 > 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> This series convert part of the networking text files into ReST.
+> It is part of a bigger set of patches, which were split on parts,
+> in order to make reviewing task easier.
+> 
+> The full series (including those ones) are at:
+> 
+> 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=net-docs
+> 
+> And the documents, converted to HTML via the building system
+> are at:
+> 
+> 	https://www.infradead.org/~mchehab/kernel_docs/networking/
 
-Acked-by: Simon Horman <horms@verge.net.au>
+These look good as far as I can tell.
 
+Jon, do you mind if I merge this via the networking tree?
+
+Thanks.
