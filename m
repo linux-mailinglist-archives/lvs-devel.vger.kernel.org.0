@@ -2,62 +2,62 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8F81F1E67
-	for <lists+lvs-devel@lfdr.de>; Mon,  8 Jun 2020 19:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495B91F2099
+	for <lists+lvs-devel@lfdr.de>; Mon,  8 Jun 2020 22:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729965AbgFHRe1 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 8 Jun 2020 13:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
+        id S1726566AbgFHUVB (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 8 Jun 2020 16:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726097AbgFHRe0 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 8 Jun 2020 13:34:26 -0400
-Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62473C08C5C2;
-        Mon,  8 Jun 2020 10:34:26 -0700 (PDT)
-Received: by mail-qv1-xf43.google.com with SMTP id g11so2266203qvs.2;
-        Mon, 08 Jun 2020 10:34:26 -0700 (PDT)
+        with ESMTP id S1726415AbgFHUVB (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 8 Jun 2020 16:21:01 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63872C08C5C2;
+        Mon,  8 Jun 2020 13:21:01 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id ec10so9009045qvb.5;
+        Mon, 08 Jun 2020 13:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BQfHe5nHe6T64nJZ48xJuQUzNOsqzYNjV6sGWHRurS4=;
-        b=puuml+9+jmfM35SwDwyG9trAffIsVPJBds++JHY9xjCronp2lDcl/8OKgSI5xJPXzv
-         25YVqtEvrByw5S5E/4ew9TsmUi2Cd9IeYMZootnX8yrXX7DsowKoBEQkSEU478yipB7S
-         yzOyi2T+Ghi0V5iNaFvWv6tGrcXbCpJwumo8/ck9EEfzdHZhqKcK/RTpjDGWxdgGbC65
-         LHDHn9gbDA3ENMMy50yl3pdLxhOTANsBgY0X61Nz5wPxMmgzv4ZcXoiFVO+yZKPzECU/
-         hWNMMpGAazjtwnT7eIjYICEJdcP0rw8qiGlErCqIEBzF9/GcIPx3QfYLUnBInwolTJ91
-         mpCQ==
+        bh=cDeaqtDdFcyCxI5XexCbjnRws95YiVmMvjSuc41+5lc=;
+        b=CK/VjEGfZHxivixLO3DqS49pGtIdbUToWYqJoijho2ccBUnrVtDsRAWTGGbcql8+qo
+         AO9nHRkSaVXEJntSXI+/jllcfkh1/wRA/jqA2F0q6BC9WsFkQqMo64rbznfPBCCUzzJz
+         IErnp42ocPPLNY2Dr8jslM8jYU50FlyyfGfAbnimhL12lVPBxHWdpfv8Ax2XnBkmfUsv
+         TquDJfn0V59ccK/hMFP675fak8Ey+qtmbsVqfB07x694ZsdE1uEA2zCwEtKKcXMy5++m
+         R3B+fG9XLBQiAaI8x7dtA8DBplCeRhNBleIdu6xkmnuzwljO8Kdkf8AxgE8UKvKLE5b/
+         JznA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BQfHe5nHe6T64nJZ48xJuQUzNOsqzYNjV6sGWHRurS4=;
-        b=FqD/vJkeXiNnSukVnKWLV0jO+GmAPLrx/sLYq29WVjJyRkS/Y7EheUeq4zFumnOVib
-         Jx7LLTCuZ33Lh1VvLxSpFXw34dn53YB2enj97f59K6ex/bMKI17B2f+NVcrQviBxm4Fc
-         uAWbN+cZjFY6EBbihYrpdpL/8drHW5EgpGpgvB3Fb89y4pkAMjysH/94vl4OvmadFRB4
-         fCjIOC3S1/hVmM1Kvngu1R0iwx5/7DxP1hMbN0ntb+I8s8gCh/G0gwsgyrtnwrZhUNKw
-         RG/5oGNZdfJlYCRysegOL3BHhWlPkd+0k6BlKuanmZeB8esKRB5uXCSGbdOsGlWOkj5s
-         5+NA==
-X-Gm-Message-State: AOAM531pSwZ3pvEGEmwnLE7WSXyn+lylKEKd18tXejgPCr3tMoxExN5v
-        dQDqOIj3z0M8/GtWZuyxYx1LawB07FM=
-X-Google-Smtp-Source: ABdhPJyjWN6a0UUnfIvQLXudDSgdikKY0iFJ5htAzJpGtXqaiO9QCf+N4obwNviOfORdXBCZNqOpjw==
-X-Received: by 2002:a0c:b791:: with SMTP id l17mr24070471qve.44.1591637665518;
-        Mon, 08 Jun 2020 10:34:25 -0700 (PDT)
+        bh=cDeaqtDdFcyCxI5XexCbjnRws95YiVmMvjSuc41+5lc=;
+        b=mHL+7zaL4Pu8qzwd2me/V5J6RNKwr8nMndUi9zYozrwSXGMY7E1hyaOd036WXibWsA
+         izRpVHHy0aeUp5mwm/NPHhGyW7oZTu6la1nnF1qGWZStNKZgqr3nDLthq2Loh9hYvcHi
+         mDNsOY6k7nC2OD0GrN9O+JZj05qf7Mf/TeQSjTiwzcequRbfDcPmUgF6Iy78zlFoma7B
+         WtEQ4/ud2c6Xwfd48uNAXQr+cLXZ6JUaAO7GjQfwMNHXSc7W0QeZQWR8LgysKxeX7x0I
+         VldqYV3Yy4fFISL9QY1BcdnXPAszzfR1uU3BvRxK0p4QEGlNE2fxTdYI+5nKcTCNsdvN
+         euyA==
+X-Gm-Message-State: AOAM53205tyWzFjcPAr0ujGpNSEX7ZjiOMzbUjn7bW8HQK5tO5V5k29v
+        JLubNKJaoZLalIoknYqF6IzC1+UVdwc=
+X-Google-Smtp-Source: ABdhPJyptYyAgSCCKCSwHoxBqaRoRD07LXg1icSWF231Y7D4tZw9SspuHzwqGQIN7LiMuqqPsBQXQA==
+X-Received: by 2002:a0c:b259:: with SMTP id k25mr444621qve.111.1591647660201;
+        Mon, 08 Jun 2020 13:21:00 -0700 (PDT)
 Received: from localhost.localdomain (toroon0411w-lp130-02-64-231-189-42.dsl.bell.ca. [64.231.189.42])
-        by smtp.googlemail.com with ESMTPSA id a27sm8182805qtc.92.2020.06.08.10.34.24
+        by smtp.googlemail.com with ESMTPSA id p13sm8638114qtk.24.2020.06.08.13.20.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 10:34:24 -0700 (PDT)
+        Mon, 08 Jun 2020 13:20:59 -0700 (PDT)
 From:   Andrew Sy Kim <kim.andrewsy@gmail.com>
 Cc:     Julian Anastasov <ja@ssi.bg>, Wensong Zhang <wensong@linux-vs.org>,
         Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
         netfilter-devel@vger.kernel.org,
         Andrew Sy Kim <kim.andrewsy@gmail.com>
 Subject: [PATCH] netfilter/ipvs: queue delayed work to expire no destination connections if expire_nodest_conn=1
-Date:   Mon,  8 Jun 2020 13:34:12 -0400
-Message-Id: <20200608173413.13870-1-kim.andrewsy@gmail.com>
+Date:   Mon,  8 Jun 2020 16:20:24 -0400
+Message-Id: <20200608202024.28369-1-kim.andrewsy@gmail.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <alpine.LFD.2.22.394.2005281954380.4045@ja.home.ssi.bg>
-References: <alpine.LFD.2.22.394.2005281954380.4045@ja.home.ssi.bg>
+In-Reply-To: <20200608173413.13870-1-kim.andrewsy@gmail.com>
+References: <20200608173413.13870-1-kim.andrewsy@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 To:     unlisted-recipients:; (no To-header on input)
@@ -153,7 +153,7 @@ index 83be2d93b407..49ca61765298 100644
  				 IP_VS_CONN_F_FWD_MASK)
  
 diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index 02f2f636798d..8396ab098953 100644
+index 02f2f636798d..f0d744e8c716 100644
 --- a/net/netfilter/ipvs/ip_vs_conn.c
 +++ b/net/netfilter/ipvs/ip_vs_conn.c
 @@ -1366,6 +1366,49 @@ static void ip_vs_conn_flush(struct netns_ipvs *ipvs)
@@ -195,7 +195,7 @@ index 02f2f636798d..8396ab098953 100644
 +		}
 +		cond_resched_rcu();
 +
-+		/* netns clean up started, aborted delayed work */
++		/* netns clean up started, abort delayed work */
 +		if (!ipvs->enable)
 +			return;
 +	}
@@ -283,15 +283,15 @@ index aa6a603a2425..2508a9caeae8 100644
  	ip_vs_set_state(cp, IP_VS_DIR_INPUT, skb, pd);
  	if (cp->packet_xmit)
 diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 8d14a1acbc37..24736efac85c 100644
+index 8d14a1acbc37..9e53f517f138 100644
 --- a/net/netfilter/ipvs/ip_vs_ctl.c
 +++ b/net/netfilter/ipvs/ip_vs_ctl.c
 @@ -210,6 +210,17 @@ static void update_defense_level(struct netns_ipvs *ipvs)
  	local_bh_enable();
  }
  
-+/*	Handler for delayed work for expiring no
-+ *	destination connections
++/* Handler for delayed work for expiring no
++ * destination connections
 + */
 +static void expire_nodest_conn_handler(struct work_struct *work)
 +{
@@ -309,8 +309,8 @@ index 8d14a1acbc37..24736efac85c 100644
  	dest->idle_start = 0;
  	spin_unlock_bh(&ipvs->dest_trash_lock);
 +
-+	/*	Queue up delayed work to expire all no estination connections.
-+	 *	No-op when CONFIG_SYSCTL is disabled.
++	/* Queue up delayed work to expire all no estination connections.
++	 * No-op when CONFIG_SYSCTL is disabled.
 +	 */
 +	if (!cleanup)
 +		ip_vs_enqueue_expire_nodest_conns(ipvs);
