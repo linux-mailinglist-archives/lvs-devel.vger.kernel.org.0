@@ -2,268 +2,59 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 982A4202B6B
-	for <lists+lvs-devel@lfdr.de>; Sun, 21 Jun 2020 17:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78892203BE4
+	for <lists+lvs-devel@lfdr.de>; Mon, 22 Jun 2020 18:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730335AbgFUPlE (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 21 Jun 2020 11:41:04 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:45368 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730295AbgFUPlE (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Sun, 21 Jun 2020 11:41:04 -0400
-Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 05LFeo6K011044;
-        Sun, 21 Jun 2020 18:40:50 +0300
-Received: (from root@localhost)
-        by ja.home.ssi.bg (8.15.2/8.15.2/Submit) id 05LFel0j011043;
-        Sun, 21 Jun 2020 18:40:47 +0300
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        netfilter-devel@vger.kernel.org
-Subject: [PATCH net-next] ipvs: register hooks only with services
-Date:   Sun, 21 Jun 2020 18:40:30 +0300
-Message-Id: <20200621154030.10998-1-ja@ssi.bg>
-X-Mailer: git-send-email 2.26.2
+        id S1729864AbgFVQCo (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 22 Jun 2020 12:02:44 -0400
+Received: from sonic310-24.consmr.mail.ne1.yahoo.com ([66.163.186.205]:40976
+        "EHLO sonic310-24.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729852AbgFVQCn (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 22 Jun 2020 12:02:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841762; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=pj4oXOE2OyHYdknQwXt6M/Ur0kBv147g1Kmcf7tcKmW6vP7QkIs/0Ep6iSdvVbItbqmxz5qvNv2Knn1CCHx1JXfWNGArujlCeYSuykFkZJxjCzXbA8w0wLvpau2QmrFe2PrXbdJtSp7sZvV+Fn+MSxxEAMjJwUYy035jS7THEfRj7uQyYShNvBfOmlxWp2S02TFvKY3T8mKwBfr51HZEWkQMAbMayIdgv5piHcdL/TZX2mXpkwvJPu8ioALMGRwKiiqoZPpjEvgEgk393Eu5ga4kGIVQY4hlCVIOpCvBFLDvIoZ1lAST79npmmV4flo+Zn04KnSvOcS2Gzu1cuLEgg==
+X-YMail-OSG: SBQnKXIVM1mTNgCK3zLXZz0mAqCLAu_qYFGTOP1_.16Lsm0yAbmVuUiRbzcAPRx
+ vFd64NNq0aBErGk8jZQmppt557BbRNs40UvRgt28TV6psc53_bk_.g63XmJg2TkYReecI3VnjPsk
+ vju7RXS_pQjXBebXy5sx0mNpmwNtjf7jE8lIrTc8fGjR0sYWzBYOY4pHHnM.7Lauc3pLU2rqmfq.
+ N7Eit2GLqPlx80aoZ9B84PI5p3X1w6hee3o5FcuQFao_7h1_YXe_MfCcrR.gA1nwVxWyYYHuZUlo
+ KB7qFK6lyMf4FYzujm8bcK.NiCMUKrpWEcnHWksbbt9Lidz3yAVXOZ1DOCm2iJZVhfBqB90PWDdD
+ h9DjnulgZkLSenlO3C4dAuGFDD70yrVPPubueGjAmM0VCHZkyGbtX4g9G9ELFZ0rfJAWVeCrntaJ
+ XaP_CoyrETUNdsTiKKKrLFuFdLIhozHA4a9YaA3ECDZQJcSRzNTD.tKwjjQ_7Yw1BwQ_7NdJPUKY
+ yaaZU_NqX5rmJ3eOWg.8QmQ0HNdNbxjHkrCRz5wTMoxSSrmcKke4bGYKz.EHuPpXSr1zn2RBZrqn
+ 0jivrLuvPfq1ve7lQAwBnuycFHVXUVpNHIaX5hcOm8QQ_uWM_9ddO_MgB1mRbgBrOT5v2LfWivzh
+ AIjUglErrBFUtol1mHqzoU4Y3yqpEd1xqtTUvJKl4emys_ReYiECF5UFCnt0.U6q.leVTajuX1ut
+ CpUrzbOXptEgtWupy64dMHIXwDCONaj2q7iNyI289LiZatE6zPKi4nsl_7Uig2CFqiqY35ypdg45
+ vL3S8mRwuJYQSBlCWVwW6FLdKvoJP1KT8kzHpkeOhqpIeXXPVO96fLi5gHRH_vcRbKCB5b.BrOyt
+ qBu_hRvFPBbweIXJHLEdIUxsusdFvM3.V0Im6IpQN1SPaG.hkbdS9Vv.0uVcQnH2OgItiTskowjj
+ GGFcGVYA8FFmbLVWVJGIyYCpshqNp7PujWUFrYuVnMHPHmrjFdKOwc85CX7SBwGI86eny_IcdNEy
+ ulKoRKDpCZOpfZdoCF_uJY6oWCtHdhthdlC1E0pmFjMadzzuvN0DhIAxEFdT_LxHuG4kDeoEmUFj
+ KND82BquRO.SJnAaTVZSmG5DktRTx5DjQmMl.agQCbe6XpJqssdIfCnjU3SrWVrQ0C8HJbqKyJFN
+ 3zq6LevTDXZ82iM1gRZIyhjWzD3WCk78Tg.K.mHveW2E5gTCIBBzx1f_4iMXufrf2M8GQ.KFDB8R
+ irEjMrrOq2MPQdOh8jzM5g0pA6w4rrjQajW2nEKfW7COn7pVCPueyyketOuFwvj.0NSx3dDesGg-
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:42 +0000
+Date:   Mon, 22 Jun 2020 16:02:39 +0000 (UTC)
+From:   Karim Zakari <kariim1960z@gmail.com>
+Reply-To: kzakari04@gmail.com
+Message-ID: <941580334.1864237.1592841759009@mail.yahoo.com>
+Subject: URGENT REPLY.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <941580334.1864237.1592841759009.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Keep the IPVS hooks registered in Netfilter only
-while there are configured virtual services. This
-saves CPU cycles while IPVS is loaded but not used.
 
-Signed-off-by: Julian Anastasov <ja@ssi.bg>
----
- include/net/ip_vs.h             |  5 +++
- net/netfilter/ipvs/ip_vs_core.c | 80 ++++++++++++++++++++++++++-------
- net/netfilter/ipvs/ip_vs_ctl.c  | 23 +++++++++-
- 3 files changed, 89 insertions(+), 19 deletions(-)
 
-diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-index fe96aa462d05..011f407b76fe 100644
---- a/include/net/ip_vs.h
-+++ b/include/net/ip_vs.h
-@@ -874,6 +874,7 @@ struct netns_ipvs {
- 	struct ip_vs_stats		tot_stats;  /* Statistics & est. */
- 
- 	int			num_services;    /* no of virtual services */
-+	int			num_services6;   /* IPv6 virtual services */
- 
- 	/* Trash for destinations */
- 	struct list_head	dest_trash;
-@@ -960,6 +961,7 @@ struct netns_ipvs {
- 	 * are not supported when synchronization is enabled.
- 	 */
- 	unsigned int		mixed_address_family_dests;
-+	unsigned int		hooks_afmask;	/* &1=AF_INET, &2=AF_INET6 */
- };
- 
- #define DEFAULT_SYNC_THRESHOLD	3
-@@ -1668,6 +1670,9 @@ static inline void ip_vs_unregister_conntrack(struct ip_vs_service *svc)
- #endif
- }
- 
-+int ip_vs_register_hooks(struct netns_ipvs *ipvs, unsigned int af);
-+void ip_vs_unregister_hooks(struct netns_ipvs *ipvs, unsigned int af);
-+
- static inline int
- ip_vs_dest_conn_overhead(struct ip_vs_dest *dest)
- {
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index 517f6a2ac15a..b4a6b7662f3f 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -2258,7 +2258,7 @@ ip_vs_forward_icmp_v6(void *priv, struct sk_buff *skb,
- #endif
- 
- 
--static const struct nf_hook_ops ip_vs_ops[] = {
-+static const struct nf_hook_ops ip_vs_ops4[] = {
- 	/* After packet filtering, change source only for VS/NAT */
- 	{
- 		.hook		= ip_vs_reply4,
-@@ -2304,7 +2304,10 @@ static const struct nf_hook_ops ip_vs_ops[] = {
- 		.hooknum	= NF_INET_FORWARD,
- 		.priority	= 100,
- 	},
-+};
-+
- #ifdef CONFIG_IP_VS_IPV6
-+static const struct nf_hook_ops ip_vs_ops6[] = {
- 	/* After packet filtering, change source only for VS/NAT */
- 	{
- 		.hook		= ip_vs_reply6,
-@@ -2350,8 +2353,64 @@ static const struct nf_hook_ops ip_vs_ops[] = {
- 		.hooknum	= NF_INET_FORWARD,
- 		.priority	= 100,
- 	},
--#endif
- };
-+#endif
-+
-+int ip_vs_register_hooks(struct netns_ipvs *ipvs, unsigned int af)
-+{
-+	const struct nf_hook_ops *ops;
-+	unsigned int count;
-+	unsigned int afmask;
-+	int ret = 0;
-+
-+	if (af == AF_INET6) {
-+#ifdef CONFIG_IP_VS_IPV6
-+		ops = ip_vs_ops6;
-+		count = ARRAY_SIZE(ip_vs_ops6);
-+		afmask = 2;
-+#else
-+		return -EINVAL;
-+#endif
-+	} else {
-+		ops = ip_vs_ops4;
-+		count = ARRAY_SIZE(ip_vs_ops4);
-+		afmask = 1;
-+	}
-+
-+	if (!(ipvs->hooks_afmask & afmask)) {
-+		ret = nf_register_net_hooks(ipvs->net, ops, count);
-+		if (ret >= 0)
-+			ipvs->hooks_afmask |= afmask;
-+	}
-+	return ret;
-+}
-+
-+void ip_vs_unregister_hooks(struct netns_ipvs *ipvs, unsigned int af)
-+{
-+	const struct nf_hook_ops *ops;
-+	unsigned int count;
-+	unsigned int afmask;
-+
-+	if (af == AF_INET6) {
-+#ifdef CONFIG_IP_VS_IPV6
-+		ops = ip_vs_ops6;
-+		count = ARRAY_SIZE(ip_vs_ops6);
-+		afmask = 2;
-+#else
-+		return;
-+#endif
-+	} else {
-+		ops = ip_vs_ops4;
-+		count = ARRAY_SIZE(ip_vs_ops4);
-+		afmask = 1;
-+	}
-+
-+	if (ipvs->hooks_afmask & afmask) {
-+		nf_unregister_net_hooks(ipvs->net, ops, count);
-+		ipvs->hooks_afmask &= ~afmask;
-+	}
-+}
-+
- /*
-  *	Initialize IP Virtual Server netns mem.
-  */
-@@ -2427,19 +2486,6 @@ static void __net_exit __ip_vs_cleanup_batch(struct list_head *net_list)
- 	}
- }
- 
--static int __net_init __ip_vs_dev_init(struct net *net)
--{
--	int ret;
--
--	ret = nf_register_net_hooks(net, ip_vs_ops, ARRAY_SIZE(ip_vs_ops));
--	if (ret < 0)
--		goto hook_fail;
--	return 0;
--
--hook_fail:
--	return ret;
--}
--
- static void __net_exit __ip_vs_dev_cleanup_batch(struct list_head *net_list)
- {
- 	struct netns_ipvs *ipvs;
-@@ -2448,7 +2494,8 @@ static void __net_exit __ip_vs_dev_cleanup_batch(struct list_head *net_list)
- 	EnterFunction(2);
- 	list_for_each_entry(net, net_list, exit_list) {
- 		ipvs = net_ipvs(net);
--		nf_unregister_net_hooks(net, ip_vs_ops, ARRAY_SIZE(ip_vs_ops));
-+		ip_vs_unregister_hooks(ipvs, AF_INET);
-+		ip_vs_unregister_hooks(ipvs, AF_INET6);
- 		ipvs->enable = 0;	/* Disable packet reception */
- 		smp_wmb();
- 		ip_vs_sync_net_cleanup(ipvs);
-@@ -2464,7 +2511,6 @@ static struct pernet_operations ipvs_core_ops = {
- };
- 
- static struct pernet_operations ipvs_core_dev_ops = {
--	.init = __ip_vs_dev_init,
- 	.exit_batch = __ip_vs_dev_cleanup_batch,
- };
- 
-diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 412656c34f20..0eed388c960b 100644
---- a/net/netfilter/ipvs/ip_vs_ctl.c
-+++ b/net/netfilter/ipvs/ip_vs_ctl.c
-@@ -1272,6 +1272,7 @@ ip_vs_add_service(struct netns_ipvs *ipvs, struct ip_vs_service_user_kern *u,
- 	struct ip_vs_scheduler *sched = NULL;
- 	struct ip_vs_pe *pe = NULL;
- 	struct ip_vs_service *svc = NULL;
-+	int ret_hooks = -1;
- 
- 	/* increase the module use count */
- 	if (!ip_vs_use_count_inc())
-@@ -1313,6 +1314,14 @@ ip_vs_add_service(struct netns_ipvs *ipvs, struct ip_vs_service_user_kern *u,
- 	}
- #endif
- 
-+	if ((u->af == AF_INET && !ipvs->num_services) ||
-+	    (u->af == AF_INET6 && !ipvs->num_services6)) {
-+		ret = ip_vs_register_hooks(ipvs, u->af);
-+		if (ret < 0)
-+			goto out_err;
-+		ret_hooks = ret;
-+	}
-+
- 	svc = kzalloc(sizeof(struct ip_vs_service), GFP_KERNEL);
- 	if (svc == NULL) {
- 		IP_VS_DBG(1, "%s(): no memory\n", __func__);
-@@ -1374,6 +1383,8 @@ ip_vs_add_service(struct netns_ipvs *ipvs, struct ip_vs_service_user_kern *u,
- 	/* Count only IPv4 services for old get/setsockopt interface */
- 	if (svc->af == AF_INET)
- 		ipvs->num_services++;
-+	else if (svc->af == AF_INET6)
-+		ipvs->num_services6++;
- 
- 	/* Hash the service into the service table */
- 	ip_vs_svc_hash(svc);
-@@ -1385,6 +1396,8 @@ ip_vs_add_service(struct netns_ipvs *ipvs, struct ip_vs_service_user_kern *u,
- 
- 
-  out_err:
-+	if (ret_hooks >= 0)
-+		ip_vs_unregister_hooks(ipvs, u->af);
- 	if (svc != NULL) {
- 		ip_vs_unbind_scheduler(svc, sched);
- 		ip_vs_service_free(svc);
-@@ -1500,9 +1513,15 @@ static void __ip_vs_del_service(struct ip_vs_service *svc, bool cleanup)
- 	struct ip_vs_pe *old_pe;
- 	struct netns_ipvs *ipvs = svc->ipvs;
- 
--	/* Count only IPv4 services for old get/setsockopt interface */
--	if (svc->af == AF_INET)
-+	if (svc->af == AF_INET) {
- 		ipvs->num_services--;
-+		if (!ipvs->num_services)
-+			ip_vs_unregister_hooks(ipvs, svc->af);
-+	} else if (svc->af == AF_INET6) {
-+		ipvs->num_services6--;
-+		if (!ipvs->num_services6)
-+			ip_vs_unregister_hooks(ipvs, svc->af);
-+	}
- 
- 	ip_vs_stop_estimator(svc->ipvs, &svc->stats);
- 
--- 
-2.26.2
+Good-Day Friend,
 
+ Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
+
+Waiting for your response for more details, As you are willing to execute this business opportunity with me.
+
+Sincerely Yours,
+Mr. Karim Zakari.
