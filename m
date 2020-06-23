@@ -2,59 +2,104 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78892203BE4
-	for <lists+lvs-devel@lfdr.de>; Mon, 22 Jun 2020 18:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F7D205028
+	for <lists+lvs-devel@lfdr.de>; Tue, 23 Jun 2020 13:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729864AbgFVQCo (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 22 Jun 2020 12:02:44 -0400
-Received: from sonic310-24.consmr.mail.ne1.yahoo.com ([66.163.186.205]:40976
-        "EHLO sonic310-24.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729852AbgFVQCn (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 22 Jun 2020 12:02:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841762; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=pj4oXOE2OyHYdknQwXt6M/Ur0kBv147g1Kmcf7tcKmW6vP7QkIs/0Ep6iSdvVbItbqmxz5qvNv2Knn1CCHx1JXfWNGArujlCeYSuykFkZJxjCzXbA8w0wLvpau2QmrFe2PrXbdJtSp7sZvV+Fn+MSxxEAMjJwUYy035jS7THEfRj7uQyYShNvBfOmlxWp2S02TFvKY3T8mKwBfr51HZEWkQMAbMayIdgv5piHcdL/TZX2mXpkwvJPu8ioALMGRwKiiqoZPpjEvgEgk393Eu5ga4kGIVQY4hlCVIOpCvBFLDvIoZ1lAST79npmmV4flo+Zn04KnSvOcS2Gzu1cuLEgg==
-X-YMail-OSG: SBQnKXIVM1mTNgCK3zLXZz0mAqCLAu_qYFGTOP1_.16Lsm0yAbmVuUiRbzcAPRx
- vFd64NNq0aBErGk8jZQmppt557BbRNs40UvRgt28TV6psc53_bk_.g63XmJg2TkYReecI3VnjPsk
- vju7RXS_pQjXBebXy5sx0mNpmwNtjf7jE8lIrTc8fGjR0sYWzBYOY4pHHnM.7Lauc3pLU2rqmfq.
- N7Eit2GLqPlx80aoZ9B84PI5p3X1w6hee3o5FcuQFao_7h1_YXe_MfCcrR.gA1nwVxWyYYHuZUlo
- KB7qFK6lyMf4FYzujm8bcK.NiCMUKrpWEcnHWksbbt9Lidz3yAVXOZ1DOCm2iJZVhfBqB90PWDdD
- h9DjnulgZkLSenlO3C4dAuGFDD70yrVPPubueGjAmM0VCHZkyGbtX4g9G9ELFZ0rfJAWVeCrntaJ
- XaP_CoyrETUNdsTiKKKrLFuFdLIhozHA4a9YaA3ECDZQJcSRzNTD.tKwjjQ_7Yw1BwQ_7NdJPUKY
- yaaZU_NqX5rmJ3eOWg.8QmQ0HNdNbxjHkrCRz5wTMoxSSrmcKke4bGYKz.EHuPpXSr1zn2RBZrqn
- 0jivrLuvPfq1ve7lQAwBnuycFHVXUVpNHIaX5hcOm8QQ_uWM_9ddO_MgB1mRbgBrOT5v2LfWivzh
- AIjUglErrBFUtol1mHqzoU4Y3yqpEd1xqtTUvJKl4emys_ReYiECF5UFCnt0.U6q.leVTajuX1ut
- CpUrzbOXptEgtWupy64dMHIXwDCONaj2q7iNyI289LiZatE6zPKi4nsl_7Uig2CFqiqY35ypdg45
- vL3S8mRwuJYQSBlCWVwW6FLdKvoJP1KT8kzHpkeOhqpIeXXPVO96fLi5gHRH_vcRbKCB5b.BrOyt
- qBu_hRvFPBbweIXJHLEdIUxsusdFvM3.V0Im6IpQN1SPaG.hkbdS9Vv.0uVcQnH2OgItiTskowjj
- GGFcGVYA8FFmbLVWVJGIyYCpshqNp7PujWUFrYuVnMHPHmrjFdKOwc85CX7SBwGI86eny_IcdNEy
- ulKoRKDpCZOpfZdoCF_uJY6oWCtHdhthdlC1E0pmFjMadzzuvN0DhIAxEFdT_LxHuG4kDeoEmUFj
- KND82BquRO.SJnAaTVZSmG5DktRTx5DjQmMl.agQCbe6XpJqssdIfCnjU3SrWVrQ0C8HJbqKyJFN
- 3zq6LevTDXZ82iM1gRZIyhjWzD3WCk78Tg.K.mHveW2E5gTCIBBzx1f_4iMXufrf2M8GQ.KFDB8R
- irEjMrrOq2MPQdOh8jzM5g0pA6w4rrjQajW2nEKfW7COn7pVCPueyyketOuFwvj.0NSx3dDesGg-
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:42 +0000
-Date:   Mon, 22 Jun 2020 16:02:39 +0000 (UTC)
-From:   Karim Zakari <kariim1960z@gmail.com>
-Reply-To: kzakari04@gmail.com
-Message-ID: <941580334.1864237.1592841759009@mail.yahoo.com>
-Subject: URGENT REPLY.
+        id S1732447AbgFWLNT (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 23 Jun 2020 07:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732233AbgFWLNR (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 23 Jun 2020 07:13:17 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D73C061795
+        for <lvs-devel@vger.kernel.org>; Tue, 23 Jun 2020 04:13:16 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id e11so18888174ilr.4
+        for <lvs-devel@vger.kernel.org>; Tue, 23 Jun 2020 04:13:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=NbreRVpA9NvMrfIFL4y9mq+GUBzAC2/eN6wLTJQX3piwR1I3339Oovt4rmQCq122cC
+         vCuR0jx/SjYW4vwlvjUx7yeXy1j4RvSx4V+d3KzQaE+G+QuJF+1XyHSL4E5iLDcZquKE
+         sjRpsdQ+AlgKbqqqagSO7tcot0N4M5rOfkjA+BLaMa/GSipmASsift7bSjVc8YBPMVF9
+         QO+7VQTjNkWDVyrwVN0Te5nhkWlqdGSnigFxXCreF2DyR9o57/vc3bWj7WHrn+r2JDo7
+         akJd05BhO+Xf6GYp8yirEa9FSP9qetmLCAsqKk3vD7VFlz5v5Hcr+buvKiusX/0uBmgt
+         ru5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=P3+xEBSQeyqmJ8Pf46tn60DMHuxnrhVxNanzmFC+JOHsZRwqDqbZmAYXh6l3JDeR5E
+         J3YzQ8MS0ny6kXh6br0kWAupj7Il+IUV1P0HqsmtvkWo5ZgO32d583ZCaVuNz7D/cB0R
+         ++R40PzMpW6yJM3sc1sPwNO2ta6xjkilUFw8h2O8apJzWs4KFZdzaksygzUjmPZuQlG4
+         w0DIMQcQoMHot1arfW2EATCO+hOwQNAz/qduSX36ZK/jKqsF924h16FqJ6H1AK4Ddvq7
+         A2cH5bLRpOepHMyVzOts7+1TuOZ0e8yK/G1KETe6iQQaKifDYdGLC3k2blskeu2s+psI
+         WEhg==
+X-Gm-Message-State: AOAM532AlPNDE1qPx7nF7/Y84wxkeazyegbjLFUP/xFK9l5rk88+gpKy
+        u8Iae4/ZM7xZjqF1sPs91douie2bJTgc0QtmgX0=
+X-Google-Smtp-Source: ABdhPJxONmA3+Ds3CN3ANhZjbHuzWCvGxcCb/J9/wG6uC3qBE/PHYSNpMBDYpDHQlpskP3XP7NRzgZcpGiJJEnuhuhE=
+X-Received: by 2002:a05:6e02:13ee:: with SMTP id w14mr20599733ilj.190.1592910796130;
+ Tue, 23 Jun 2020 04:13:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <941580334.1864237.1592841759009.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a05:6638:14d3:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:13:15
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <elnana194@gmail.com>
+Date:   Tue, 23 Jun 2020 12:13:15 +0100
+Message-ID: <CA+NUCuQYpMFdndJhZDg4+Qmo-cCvi-eyxPXDsunxETvPxkSHnA@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Greetings From Mrs. Sarah Koffi
 
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-Good-Day Friend,
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
- Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
 
-Waiting for your response for more details, As you are willing to execute this business opportunity with me.
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
 
-Sincerely Yours,
-Mr. Karim Zakari.
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
