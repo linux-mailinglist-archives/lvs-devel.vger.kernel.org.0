@@ -2,89 +2,72 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFE920C467
-	for <lists+lvs-devel@lfdr.de>; Sat, 27 Jun 2020 23:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE3F20D5FA
+	for <lists+lvs-devel@lfdr.de>; Mon, 29 Jun 2020 22:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgF0Vyg (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 27 Jun 2020 17:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S1728061AbgF2TQt (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgF0Vyf (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 27 Jun 2020 17:54:35 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BACC08C5DD
-        for <lvs-devel@vger.kernel.org>; Sat, 27 Jun 2020 14:54:34 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id d18so3942005edv.6
-        for <lvs-devel@vger.kernel.org>; Sat, 27 Jun 2020 14:54:34 -0700 (PDT)
+        with ESMTP id S1728050AbgF2TQt (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 29 Jun 2020 15:16:49 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CBBC061755
+        for <lvs-devel@vger.kernel.org>; Mon, 29 Jun 2020 12:16:48 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id v6so4702837iob.4
+        for <lvs-devel@vger.kernel.org>; Mon, 29 Jun 2020 12:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=PYwOu/B9Zh1rGzZM903Cpprywb83FCHUtNAUuiOO0o6zs6WHjlze2LXOC3hVAaGqcP
-         lg7H4pa9zGY5Ifm/Occ0RSYzXURL4hgFya6cts8HRx910s07nHPIQwuHOvC3CwSKWut7
-         W7lHESSwdkUYp3mu8F/+ONYut3Xpn3qtWv5jbLpGSjBshJ6ekhTBSCO1eoCC+HE4g/pN
-         3Oq9TtTNO3vJkKpqsqb3C/rPMy7fWmWmLKFmTu0RNDEBF2l3QJGtADAOwr4WGY+PWDtj
-         ZF9Zp08l9P41yL3JuvQth6+fpngrtjfi+iLA8IyUin9bEaOUirNwHBVJYrXrLbKq6R8z
-         N31g==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=fNHbnZ6qBYhybNUdN12ECkFfVFI70yCDInrYF2zoPF5plb6hbilOyHa2iNZtrSS87v
+         OTLaBQmS39yaOxHDCCGRKqZKzdxUahksWp8QAKM7zQ74dInKNbfuSsUPFfJuu/aHxro0
+         dkfrkhGUOgFGpv5BmB2oO/P/a0tZTm99R+0YRUECYDK0FOW7tIEKMrPFdaXjteRnjy3A
+         UEdfddzTXrEINE99BMe530xMIcn1Z2D700dW9icrNc+XJoKU1F8DUDa2/ajs73t87YP/
+         nMyUQ9tn3Br8eItfM803LJFafddU1Ad5p02kL+HH3ZCWV+35vAJy9g0S/OxmR/SqZBHF
+         1V9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
-        b=GWtAeyCIiVzAKi4XFPL+UlOZmdsa+936bNM5/Jt92QWaXxHxDW0/XVmRWKv9jveepF
-         e2nOW4qlWUZdmiYaprjvPC7iN/bB14Eb7I+OVCytfrtW6DCqBcFCTjxsDPo0cRrIYtLp
-         67PFDu3v1pyV9X46Nad38JUi8XqyoejbXACXiglJdsgPxl7dAXDg9io5itI5j4pNse7S
-         kFZ3HsdnM8VNo2eRd9e7sNfURGDJ2TV0cyrymdhFu3mOXkDuiNNw0pLslw/J8aHVEa2u
-         +6FkZgDfq5vMowtw8LZrhMbIRIT+eOCYoYVAQJl+s8fsJpM4TU0ednxYkSyfGqjBIb12
-         NpvA==
-X-Gm-Message-State: AOAM5305Y5THjstFk04RNiUQ2WYqlzfV7a+STqyPnTLNnzwXxI7Mqtu7
-        kW9QrQ7qhGCcqQiPd5XU7X+OZFe8V/EPbD6Q8oI=
-X-Google-Smtp-Source: ABdhPJy7OcR58Wulf3SrU9Hht/iHCkUTpvI0mqyV7myFOjn+5WspC4moqDhEDDIlhUbuX6rLtkz2lPM5XKvW/5XrhRs=
-X-Received: by 2002:a50:ee84:: with SMTP id f4mr9900212edr.183.1593294872387;
- Sat, 27 Jun 2020 14:54:32 -0700 (PDT)
+         :subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=K2zN9/qHN6uvkZ32c1TWKnm5BIn5sQZDqGSXoewFFCZMT8NMlXeLb4J6w/Z4bUwVro
+         82rUjDs1OGtkGQZeNTBsrFdDXZKROGVrpgQGmFuGMEjRDDWRebpkAyGb2xqVKBoB9KTf
+         dFxb3wBMRt7X/EfnZRNRMYdjTeQ580EVsUR350ht6m1z81Lz3Xp7hxEkusLM8vAUeESH
+         /cbKmtjNfwvokI7CjY8tn26h24u5C062ZIdC/qTRcpdPZJPw+Yc4CM/9iMGf1j8PSB3h
+         Es8kHDG5oxWMwICOwDo5oe5vmOXZ4/pLFI+DiDJ0P8yhNhaWZKZeOg6ZSichIM6fvL90
+         yKBw==
+X-Gm-Message-State: AOAM5301Ecdhxi+8FDwpiPFD1Ql0zGAz0ZYrHuwXaKUaG30ecMxg3+c6
+        T6FQ7N4DQY6vgRQ8rIxRNDh4kGn2LntZ+uTQspY=
+X-Google-Smtp-Source: ABdhPJynCY875qWc9KGw/Yuu8lNP5DboJQxQrbXop/NS2r7ddItX+bVG8nTiRE3Ud6Es0F26YQ20plbBBnluj74y9Dc=
+X-Received: by 2002:a6b:b252:: with SMTP id b79mr18602059iof.31.1593458208282;
+ Mon, 29 Jun 2020 12:16:48 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a50:2842:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:54:31
+Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:16:47
  -0700 (PDT)
-Reply-To: un.org@i.ua
-From:   helen <info.isaacgeorge@gmail.com>
-Date:   Sat, 27 Jun 2020 22:54:31 +0100
-Message-ID: <CAABX3N8zm7a58jU5g8fzjfpsKNf48aUsUHECRV0m9PDLWU814A@mail.gmail.com>
-Subject: 
-To:     zhang@intel.com
+Reply-To: mrs.victoria.alexander2@gmail.com
+From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
+Date:   Mon, 29 Jun 2020 12:16:47 -0700
+Message-ID: <CAP7XNCwsE5RJ0yoOo1+ZKoZ5-we_DzMj1paMJk=c52AjoPvF+w@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-MONEY-GRAM TRANSFERRED PAYMENT INFO:
-
-Below is the sender=E2=80=99s information
+Dear friend,
 
 
+I have a business container transaction what that some of( $13million dollars)
 
-1. MG. REFERENCE NO#: 36360857
+ I would like to discuss with you. If you are interested, please
+contact my email
 
-2. SENDER'S NAME: Johnson Williams
+address (mrs.victoria.alexander2@gmail.com)
 
-3. AMOUNT TO PICKUP: US$10,000
+My WhatsApp number but only message (+19293737780)
 
-
-
-Go to any Money Gram office near you and pick up the payment Track the
-
-Reference Number by visiting and click the link below
-
-(https://secure.moneygram.com/embed/track) and enter the Reference
-
-Number: 36360857 and the Last Name: Williams, you will find the payment
-
-available for pickup instantly.
-
-Yours Sincerely,
-
-Mrs. Helen Marvis
-United Nations Liaison Office
-Directorate for International Payments
+Please do not reply if you are not ready
+Thanks
