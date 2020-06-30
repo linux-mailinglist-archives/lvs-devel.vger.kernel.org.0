@@ -2,68 +2,48 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE8120F2D4
-	for <lists+lvs-devel@lfdr.de>; Tue, 30 Jun 2020 12:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF9820F50A
+	for <lists+lvs-devel@lfdr.de>; Tue, 30 Jun 2020 14:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731979AbgF3Kjp (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 30 Jun 2020 06:39:45 -0400
-Received: from smtp3.sd73.bc.ca ([142.24.50.246]:58204 "EHLO smtp3.sd73.bc.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730823AbgF3Kjp (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Tue, 30 Jun 2020 06:39:45 -0400
-X-Greylist: delayed 7007 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Jun 2020 06:39:45 EDT
-Received: from smtp.sd73.bc.ca (smtp.sd73.bc.ca [10.10.10.14])
-        by smtp3.sd73.bc.ca (Postfix) with ESMTP id 3710E65C8B;
-        Tue, 30 Jun 2020 01:13:04 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra.sd73.bc.ca [10.10.10.7])
-        by smtp.sd73.bc.ca (Postfix) with ESMTP id 05767E03E6;
-        Tue, 30 Jun 2020 01:13:05 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTPS id 439535C18F383E;
-        Tue, 30 Jun 2020 01:06:15 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 0E53E5C18F3813;
-        Tue, 30 Jun 2020 01:06:08 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca ([127.0.0.1])
-        by localhost (zimbra2.sd73.bc.ca [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id pRwzEcxuH1TG; Tue, 30 Jun 2020 01:06:07 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra3.sd73.bc.ca [10.10.10.7])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 6F1085C141203C;
-        Tue, 30 Jun 2020 01:06:06 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 01:06:06 -0700 (PDT)
-From:   charles jackson <lisa.petel@sd73.bc.ca>
-Reply-To: charles jackson <charlesjacksonjr001@gmail.com>
-Message-ID: <1704869549.67039500.1593504366259.JavaMail.zimbra@zimbra.sd73.bc.ca>
-Subject: =?UTF-8?Q?=5BPossible_Spam=5D_Covid?= =?UTF-8?Q?_19_Wohlt=C3=A4tigkeitsfon?= =?UTF-8?Q?ds?=
+        id S2387859AbgF3Mur convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Tue, 30 Jun 2020 08:50:47 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:47044 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387844AbgF3Muq (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 30 Jun 2020 08:50:46 -0400
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 11F1C36C05E1;
+        Tue, 30 Jun 2020 08:28:34 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id yEeVVElpFZXE; Tue, 30 Jun 2020 08:28:33 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id BD2BB36C05B4;
+        Tue, 30 Jun 2020 08:28:33 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Pm25v6JZpKcU; Tue, 30 Jun 2020 08:28:33 -0400 (-04)
+Received: from [10.77.68.73] (unknown [105.8.0.64])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id B0E5C36C05E1;
+        Tue, 30 Jun 2020 08:28:24 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.10.10.90]
-X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
-Thread-Topic: Covid 19 =?utf-8?Q?Wohlt=C3=A4tigkeitsfonds?=
-Thread-Index: JedD7yWvxitc8NAZxnVU2kuDy+p6Iw==
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00 Euro.
+To:     Recipients <manuel@info.com>
+From:   "manuel franco" <manuel@info.com>
+Date:   Tue, 30 Jun 2020 14:28:16 +0200
+Reply-To: manuelfrancospende1@gmail.com
+Message-Id: <20200630122824.B0E5C36C05E1@correo.bnv.gob.ve>
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Sie haben eine Spende von 2.000.000,00 Euro.
 
+Mein Name ist Manuel Franco aus den USA.
 
--- 
-Hallo
- 
- Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f&uuml;r das Corona-Virus.
- 
- Dies ist Ihr Spendencode: [CJ530342019]
- 
- www.youtube.com/watch?v=BSr8myiLPMQ
- 
- Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
- 
- charlesjacksonjr001@gmail.com
- 
- Ich hoffe, dass Sie und Ihre Familie dies durchkommen
- 
- 
- Herr Charles Jackson
+Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit
