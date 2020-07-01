@@ -2,69 +2,149 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 973FA2105FD
-	for <lists+lvs-devel@lfdr.de>; Wed,  1 Jul 2020 10:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B58210EEA
+	for <lists+lvs-devel@lfdr.de>; Wed,  1 Jul 2020 17:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728497AbgGAIRu (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 1 Jul 2020 04:17:50 -0400
-Received: from correo.us.es ([193.147.175.20]:51092 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728504AbgGAIRu (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 1 Jul 2020 04:17:50 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 8B522FC5EB
-        for <lvs-devel@vger.kernel.org>; Wed,  1 Jul 2020 10:17:49 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 7EBFBDA78B
-        for <lvs-devel@vger.kernel.org>; Wed,  1 Jul 2020 10:17:49 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 73FD9DA793; Wed,  1 Jul 2020 10:17:49 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 5AC56DA797;
-        Wed,  1 Jul 2020 10:17:47 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Wed, 01 Jul 2020 10:17:47 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 3E2324265A32;
-        Wed,  1 Jul 2020 10:17:47 +0200 (CEST)
-Date:   Wed, 1 Jul 2020 10:17:47 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Andrew Sy Kim <kim.andrewsy@gmail.com>
-Subject: Re: [PATCH net-next] ipvs: avoid expiring many connections from timer
-Message-ID: <20200701081746.GA26945@salvia>
-References: <20200620100355.4364-1-ja@ssi.bg>
+        id S1731669AbgGAPSA (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 1 Jul 2020 11:18:00 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:53136 "EHLO ja.ssi.bg"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727887AbgGAPR7 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Wed, 1 Jul 2020 11:17:59 -0400
+Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 061FHmqs004803;
+        Wed, 1 Jul 2020 18:17:48 +0300
+Received: (from root@localhost)
+        by ja.home.ssi.bg (8.15.2/8.15.2/Submit) id 061FHl8t004802;
+        Wed, 1 Jul 2020 18:17:47 +0300
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel@vger.kernel.org, YangYuxi <yx.atom1@gmail.com>
+Subject: [PATCH net-next] ipvs: allow connection reuse for unconfirmed conntrack
+Date:   Wed,  1 Jul 2020 18:17:19 +0300
+Message-Id: <20200701151719.4751-1-ja@ssi.bg>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200620100355.4364-1-ja@ssi.bg>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Sat, Jun 20, 2020 at 01:03:55PM +0300, Julian Anastasov wrote:
-> Add new functions ip_vs_conn_del() and ip_vs_conn_del_put()
-> to release many IPVS connections in process context.
-> They are suitable for connections found in table
-> when we do not want to overload the timers.
-> 
-> Currently, the change is useful for the dropentry delayed
-> work but it will be used also in following patch
-> when flushing connections to failed destinations.
+YangYuxi is reporting that connection reuse
+is causing one-second delay when SYN hits
+existing connection in TIME_WAIT state.
+Such delay was added to give time to expire
+both the IPVS connection and the corresponding
+conntrack. This was considered a rare case
+at that time but it is causing problem for
+some environments such as Kubernetes.
 
-Applied, thanks.
+As nf_conntrack_tcp_packet() can decide to
+release the conntrack in TIME_WAIT state and
+to replace it with a fresh NEW conntrack, we
+can use this to allow rescheduling just by
+tuning our check: if the conntrack is
+confirmed we can not schedule it to different
+real server and the one-second delay still
+applies but if new conntrack was created,
+we are free to select new real server without
+any delays.
+
+YangYuxi lists some of the problem reports:
+
+- One second connection delay in masquerading mode:
+https://marc.info/?t=151683118100004&r=1&w=2
+
+- IPVS low throughput #70747
+https://github.com/kubernetes/kubernetes/issues/70747
+
+- Apache Bench can fill up ipvs service proxy in seconds #544
+https://github.com/cloudnativelabs/kube-router/issues/544
+
+- Additional 1s latency in `host -> service IP -> pod`
+https://github.com/kubernetes/kubernetes/issues/90854
+
+Fixes: f719e3754ee2 ("ipvs: drop first packet to redirect conntrack")
+Co-developed-by: YangYuxi <yx.atom1@gmail.com>
+Signed-off-by: YangYuxi <yx.atom1@gmail.com>
+Signed-off-by: Julian Anastasov <ja@ssi.bg>
+---
+ include/net/ip_vs.h             | 10 ++++------
+ net/netfilter/ipvs/ip_vs_core.c | 12 +++++++-----
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+index 83be2d93b407..fe96aa462d05 100644
+--- a/include/net/ip_vs.h
++++ b/include/net/ip_vs.h
+@@ -1624,18 +1624,16 @@ static inline void ip_vs_conn_drop_conntrack(struct ip_vs_conn *cp)
+ }
+ #endif /* CONFIG_IP_VS_NFCT */
+ 
+-/* Really using conntrack? */
+-static inline bool ip_vs_conn_uses_conntrack(struct ip_vs_conn *cp,
+-					     struct sk_buff *skb)
++/* Using old conntrack that can not be redirected to another real server? */
++static inline bool ip_vs_conn_uses_old_conntrack(struct ip_vs_conn *cp,
++						 struct sk_buff *skb)
+ {
+ #ifdef CONFIG_IP_VS_NFCT
+ 	enum ip_conntrack_info ctinfo;
+ 	struct nf_conn *ct;
+ 
+-	if (!(cp->flags & IP_VS_CONN_F_NFCT))
+-		return false;
+ 	ct = nf_ct_get(skb, &ctinfo);
+-	if (ct)
++	if (ct && nf_ct_is_confirmed(ct))
+ 		return true;
+ #endif
+ 	return false;
+diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
+index aa6a603a2425..517f6a2ac15a 100644
+--- a/net/netfilter/ipvs/ip_vs_core.c
++++ b/net/netfilter/ipvs/ip_vs_core.c
+@@ -2066,14 +2066,14 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
+ 
+ 	conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
+ 	if (conn_reuse_mode && !iph.fragoffs && is_new_conn(skb, &iph) && cp) {
+-		bool uses_ct = false, resched = false;
++		bool old_ct = false, resched = false;
+ 
+ 		if (unlikely(sysctl_expire_nodest_conn(ipvs)) && cp->dest &&
+ 		    unlikely(!atomic_read(&cp->dest->weight))) {
+ 			resched = true;
+-			uses_ct = ip_vs_conn_uses_conntrack(cp, skb);
++			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
+ 		} else if (is_new_conn_expected(cp, conn_reuse_mode)) {
+-			uses_ct = ip_vs_conn_uses_conntrack(cp, skb);
++			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
+ 			if (!atomic_read(&cp->n_control)) {
+ 				resched = true;
+ 			} else {
+@@ -2081,15 +2081,17 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
+ 				 * that uses conntrack while it is still
+ 				 * referenced by controlled connection(s).
+ 				 */
+-				resched = !uses_ct;
++				resched = !old_ct;
+ 			}
+ 		}
+ 
+ 		if (resched) {
++			if (!old_ct)
++				cp->flags &= ~IP_VS_CONN_F_NFCT;
+ 			if (!atomic_read(&cp->n_control))
+ 				ip_vs_conn_expire_now(cp);
+ 			__ip_vs_conn_put(cp);
+-			if (uses_ct)
++			if (old_ct)
+ 				return NF_DROP;
+ 			cp = NULL;
+ 		}
+-- 
+2.26.2
+
