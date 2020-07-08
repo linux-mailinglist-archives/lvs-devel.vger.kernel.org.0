@@ -2,108 +2,95 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 605652141E9
-	for <lists+lvs-devel@lfdr.de>; Sat,  4 Jul 2020 01:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCEC218799
+	for <lists+lvs-devel@lfdr.de>; Wed,  8 Jul 2020 14:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgGCXSE (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 3 Jul 2020 19:18:04 -0400
-Received: from correo.us.es ([193.147.175.20]:51834 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726379AbgGCXSE (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 3 Jul 2020 19:18:04 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id DAC49ED5C1
-        for <lvs-devel@vger.kernel.org>; Sat,  4 Jul 2020 01:18:01 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id C3962DA78E
-        for <lvs-devel@vger.kernel.org>; Sat,  4 Jul 2020 01:18:01 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id B8C8BDA78A; Sat,  4 Jul 2020 01:18:01 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 25294DA789;
-        Sat,  4 Jul 2020 01:17:59 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Sat, 04 Jul 2020 01:17:59 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 038B64265A2F;
-        Sat,  4 Jul 2020 01:17:58 +0200 (CEST)
-Date:   Sat, 4 Jul 2020 01:17:58 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, YangYuxi <yx.atom1@gmail.com>
-Subject: Re: [PATCH net-next] ipvs: allow connection reuse for unconfirmed
- conntrack
-Message-ID: <20200703231758.GA4238@salvia>
-References: <20200701151719.4751-1-ja@ssi.bg>
- <20200702091829.GB6691@vergenet.net>
+        id S1729174AbgGHMdr (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 8 Jul 2020 08:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729220AbgGHMdp (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 8 Jul 2020 08:33:45 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC88C08C5DC
+        for <lvs-devel@vger.kernel.org>; Wed,  8 Jul 2020 05:33:44 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id v6so33106109iob.4
+        for <lvs-devel@vger.kernel.org>; Wed, 08 Jul 2020 05:33:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=JyneoRJLXxsOy+e3NTN1m7ZD11fBBhfcAD/zAH4+0E2re/e/mPFGcUrPpnmERdlpby
+         ImBWUuIE8nWU6eeAj9U65/fGBu9BkOvY8jllO9b4aGd4oZzj8Ul0/rARIzdbRwcvwX5S
+         V/xZhu9AVXR2tNRXBEQxd0tTyt9TNFI0dX1PF1VuHTJgeEcyjnusIPw/+xY/g+4PBpMn
+         tQDz9LlfEoplGiP/nYCBGEmsWTTAxBI5McQx8ZzKhna5A4rjUzHEi523WDfxfiIoU9Wn
+         fgiu2FKyHzEizyJRxfVINNpCjkUrBcKbIvqgv7kSuldVMbCaziru03QZUmoMvb1AAy4B
+         fIrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/vBVbAxvijag95IA6OM26aTa2bKDnUtimRlc1mZm/7M=;
+        b=OU/hQngE7xeOP6sY1AuTC0bxX188+tQKcxKglndwl2Z8H/jZPwJ4615GTpnKfAJeNP
+         eSYh9S6omdn03ZlbycQkUY67MretjOqZc6o79oKxj4rMAr8HrJBmXr3uDxL1zUZlr8Dd
+         ALfNGVxQVmYFz1Q7FmfUF2UAcfEjDDl+D+XVcliVemRxSKXXV2Ic+Rqc7WHPKx52+i4W
+         LY65OHGQqvR22Sumr6cYAfHAubTPYYuNomQGrq7JJWzuVFg895BYoGfpWK4/AF7LbUMC
+         ktyiZdVWYlx5VgUMm8FdysSa3MEVLUsZRdY71ccVNuxMQl76lT2JwYxz7coX8ICGwQjR
+         GK3Q==
+X-Gm-Message-State: AOAM530NHGcBLBjBmovbHfsYEd1haL1bkyHxUhyywuO5IqJfmoy+QgVl
+        3rOAYGMeJMeL8q53v2Lym8ssOuBTzQ4voSZ62M0=
+X-Google-Smtp-Source: ABdhPJz407bjIjeB4HOkd5tLByxSV6px3h4MSZfg95BoO/XT7WNubsznn0eimSlSJnOogsn5Nu34pWtuYgfMJdhlOAc=
+X-Received: by 2002:a6b:c9c4:: with SMTP id z187mr37326436iof.27.1594211623650;
+ Wed, 08 Jul 2020 05:33:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200702091829.GB6691@vergenet.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Received: by 2002:a05:6602:1582:0:0:0:0 with HTTP; Wed, 8 Jul 2020 05:33:42
+ -0700 (PDT)
+Reply-To: mmsafiatou057@gmail.com
+From:   "Mrs. Safitaou Zoungrana" <richardlaurentdr@gmail.com>
+Date:   Wed, 8 Jul 2020 12:33:42 +0000
+Message-ID: <CALJAiTWW1gzDcgu1g8nov0ttK3M04umyc707mnymWTP=QkvG=A@mail.gmail.com>
+Subject: My Dear Beloved One,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 11:18:29AM +0200, Simon Horman wrote:
-> On Wed, Jul 01, 2020 at 06:17:19PM +0300, Julian Anastasov wrote:
-> > YangYuxi is reporting that connection reuse
-> > is causing one-second delay when SYN hits
-> > existing connection in TIME_WAIT state.
-> > Such delay was added to give time to expire
-> > both the IPVS connection and the corresponding
-> > conntrack. This was considered a rare case
-> > at that time but it is causing problem for
-> > some environments such as Kubernetes.
-> > 
-> > As nf_conntrack_tcp_packet() can decide to
-> > release the conntrack in TIME_WAIT state and
-> > to replace it with a fresh NEW conntrack, we
-> > can use this to allow rescheduling just by
-> > tuning our check: if the conntrack is
-> > confirmed we can not schedule it to different
-> > real server and the one-second delay still
-> > applies but if new conntrack was created,
-> > we are free to select new real server without
-> > any delays.
-> > 
-> > YangYuxi lists some of the problem reports:
-> > 
-> > - One second connection delay in masquerading mode:
-> > https://marc.info/?t=151683118100004&r=1&w=2
-> > 
-> > - IPVS low throughput #70747
-> > https://github.com/kubernetes/kubernetes/issues/70747
-> > 
-> > - Apache Bench can fill up ipvs service proxy in seconds #544
-> > https://github.com/cloudnativelabs/kube-router/issues/544
-> > 
-> > - Additional 1s latency in `host -> service IP -> pod`
-> > https://github.com/kubernetes/kubernetes/issues/90854
-> > 
-> > Fixes: f719e3754ee2 ("ipvs: drop first packet to redirect conntrack")
-> > Co-developed-by: YangYuxi <yx.atom1@gmail.com>
-> > Signed-off-by: YangYuxi <yx.atom1@gmail.com>
-> > Signed-off-by: Julian Anastasov <ja@ssi.bg>
-> 
-> Thanks, this looks good to me.
-> 
-> Reviewed-by: Simon Horman <horms@verge.net.au>
-> 
-> Pablo, could you consider applying this to nf-next?
+My Dear Beloved One,
 
-Applied, thanks.
+I greet you in the name of God almighty the givers of all good things
+in life. Please kindly pardon me for any inconvenience this letter may
+cost you because I know it may come to you as a surprise as we have no
+previous correspondence.  I sent this mail praying for it to reach you
+in good health, since I myself are in a very critical health condition
+in which I sleep every night without knowing if I may be alive to see
+the next day.
+
+I am Mrs. Safiatou Zoungrana,  the wife of late Engineer Ralph
+Alphonso Zoungrana from Paris France but based here in Burkina Faso
+West Africa since eight years ago as a business woman dealing with
+gold exportation and Sales. We have been married for years before his
+sudden death although we were childless. I have been diagnosed with
+ovarian cancer and I have been battling with the sickness when my late
+lovely husband of a blessed memory was alive. May his soul rest in
+peace, Amen.
+
+My late Husband left the sum of =E2=82=AC7.900.000.00 Seven Million Nine
+Hundred Thousand Euros in a fix/suspense account in one of the prime
+bank here in Burkina Faso. Recently, my Doctor told me that I have few
+days to live due to the cancer problem. The one that disturbs me most
+is my blood pressure sickness.
+
+Having known my health condition I decided to seek for your kind
+assistance to transfer this fund into your account and you will use it
+to establish an orphanage home in my name. I will give you more
+details about the project as soon as I receive your reply in my
+private email (mmsafiatou057@gmail.com) to handle this project because
+I do not want to state all here until I see your reply, desire and
+commitment to handle this project.
+
+My Regards to your family.
+Mrs. Safiatou Zoungrana.
