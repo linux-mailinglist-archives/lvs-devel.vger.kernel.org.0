@@ -2,73 +2,90 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A56F21EFCF
-	for <lists+lvs-devel@lfdr.de>; Tue, 14 Jul 2020 13:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC31622059A
+	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jul 2020 08:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbgGNLyx (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 14 Jul 2020 07:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbgGNLyx (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 14 Jul 2020 07:54:53 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BA1C061755
-        for <lvs-devel@vger.kernel.org>; Tue, 14 Jul 2020 04:54:53 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id t18so12810188otq.5
-        for <lvs-devel@vger.kernel.org>; Tue, 14 Jul 2020 04:54:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=MRJYdBEWDkphEZG/UEdwwg3luf4wsGYhc8hRIEMMM04=;
-        b=tKmvEf1GrMYrfYDSqc1UzIkwfZSvkUMtuJmHNTFdFvTZvalL+8XJQUIk1PAuVTSSP1
-         a0WO8tSZnSQJ7Pyv5DYxES2NXPgHo+CX1PKo00pyxagd+bk/5UGKC4jFpP5zPoiuqNt3
-         9RIhLlMum1nJ9A9paxpxj9yHDJAy0ni09DJkQ2AiDMJti4I7LApl6T48xbfzxBhuzXnW
-         A758S1eQWdUk+rJ2uBs0Pts4aqHDqOthfU9yHJt9vQ5Zu8lw7etzzCHkufSG+nfs29+j
-         SFKYsfzvmNPJWaGOCNDSY2dauLS3gtt0ue5iEilnMRMrjJWxq+pcbxxXGtpVZ+hGxCGC
-         SENA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=MRJYdBEWDkphEZG/UEdwwg3luf4wsGYhc8hRIEMMM04=;
-        b=CZSTt2HNJy+WAKUAFtwT3mMtyA4xFULIXZUA/nWokzd8Z+Ss67ucfxP0LnfHKs0rJs
-         4XEUayMnmwd42bb4X7o6ryi0WTzwvqUNv91xosQ+IhFh6VOXVC2y/rVsi6bjvodpTy94
-         0AK6M3L8/L6kwF4GFRZ1isWsxa4hM7+LCaZFMwlZ/Z+xMNnrL9NXmouaNUC9o1hIfw8n
-         Wv99urnf7DoEYReLSl3BzfSLRL8kDzPaoxwZf2obOMARzMMj8hxrU3H9hP3B81D7n799
-         UVN76emhyQcAnwB+nKRxImRl0R6WL+31LAqRoh/Vtah/5oXePHkMH+NAx9ZbLU8VOJwv
-         zi2Q==
-X-Gm-Message-State: AOAM531Eoek30xWR9AxI80xAFx9bxstznzahG24pdEtJU/lDSi5yLYzA
-        K0zaFq/RAPHbP0H6+XGGa3zImxatGgkiJb6f6K0=
-X-Google-Smtp-Source: ABdhPJykiU5U7BTPYeqpxpZHAhRB0UvgrLR7JCgCjry/Np7yReQadNJN4mB0DK05lyj4XWagoXLOfu+4CFFKvWbfsJs=
-X-Received: by 2002:a9d:6a3:: with SMTP id 32mr3843149otx.16.1594727692738;
- Tue, 14 Jul 2020 04:54:52 -0700 (PDT)
+        id S1727913AbgGOG6m (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 15 Jul 2020 02:58:42 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7855 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727790AbgGOG6l (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Wed, 15 Jul 2020 02:58:41 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id BB49B181E6BED70C4B42;
+        Wed, 15 Jul 2020 14:58:35 +0800 (CST)
+Received: from huawei.com (10.179.179.12) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Wed, 15 Jul 2020
+ 14:58:26 +0800
+From:   guodeqing <geffrey.guo@huawei.com>
+To:     <wensong@linux-vs.org>
+CC:     <horms@verge.net.au>, <ja@ssi.bg>, <pablo@netfilter.org>,
+        <kadlec@netfilter.org>, <fw@strlen.de>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <lvs-devel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <geffrey.guo@huawei.com>
+Subject: [PATCH] ipvs: fix the connection sync failed in some cases
+Date:   Wed, 15 Jul 2020 14:53:47 +0800
+Message-ID: <1594796027-66136-1-git-send-email-geffrey.guo@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Received: by 2002:a8a:447:0:0:0:0:0 with HTTP; Tue, 14 Jul 2020 04:54:52 -0700 (PDT)
-Reply-To: jinghualiuyang@gmail.com
-From:   Frau JINGHUA Liu Yang <hiltrautalbrechtines@gmail.com>
-Date:   Tue, 14 Jul 2020 13:54:52 +0200
-Message-ID: <CAHgTjTHcMXF4iVfUU1BhGFxcrMmD9SGwO3rcP1tW67fP_Y==Mw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Originating-IP: [10.179.179.12]
+X-CFilter-Loop: Reflected
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
---=20
-Sch=C3=B6nen Tag,
+The sync_thread_backup only checks sk_receive_queue is empty or not,
+there is a situation which cannot sync the connection entries when
+sk_receive_queue is empty and sk_rmem_alloc is larger than sk_rcvbuf,
+the sync packets are dropped in __udp_enqueue_schedule_skb, this is
+because the packets in reader_queue is not read, so the rmem is
+not reclaimed.
 
-       Ich bin Frau JINGHUA Liu Yang f=C3=BCr die CITIBANK OF KOREA hier in
-der Republik KOREA. Ich habe einen Gesch=C3=A4ftsvorgang. Kann ich Ihnen
-vertrauen, dass Sie diesen Betrag von $9.356.669 USD =C3=BCberweisen? Wenn
-Sie bereit sind, mir zu helfen, melden Sie sich bei mir, damit ich Sie
-dar=C3=BCber informieren kann, wie wir diese Transaktion am besten
-perfektionieren k=C3=B6nnen, damit das Geld an Sie in Ihrem Land =C3=BCberw=
-iesen
-wird.
+Here I add the check of whether the reader_queue of the udp sock is
+empty or not to solve this problem.
 
-Sch=C3=B6ne Gr=C3=BC=C3=9Fe..
-Frau JINGHUA Liu Yang
+Fixes: 7c13f97ffde6 ("udp: do fwd memory scheduling on dequeue")
+Reported-by: zhouxudong <zhouxudong8@huawei.com>
+Signed-off-by: guodeqing <geffrey.guo@huawei.com>
+---
+ net/netfilter/ipvs/ip_vs_sync.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
+index 605e0f6..abe8d63 100644
+--- a/net/netfilter/ipvs/ip_vs_sync.c
++++ b/net/netfilter/ipvs/ip_vs_sync.c
+@@ -1717,6 +1717,8 @@ static int sync_thread_backup(void *data)
+ {
+ 	struct ip_vs_sync_thread_data *tinfo = data;
+ 	struct netns_ipvs *ipvs = tinfo->ipvs;
++	struct sock *sk = tinfo->sock->sk;
++	struct udp_sock *up = udp_sk(sk);
+ 	int len;
+ 
+ 	pr_info("sync thread started: state = BACKUP, mcast_ifn = %s, "
+@@ -1724,12 +1726,14 @@ static int sync_thread_backup(void *data)
+ 		ipvs->bcfg.mcast_ifn, ipvs->bcfg.syncid, tinfo->id);
+ 
+ 	while (!kthread_should_stop()) {
+-		wait_event_interruptible(*sk_sleep(tinfo->sock->sk),
+-			 !skb_queue_empty(&tinfo->sock->sk->sk_receive_queue)
+-			 || kthread_should_stop());
++		wait_event_interruptible(*sk_sleep(sk),
++					 !skb_queue_empty(&sk->sk_receive_queue) ||
++					 !skb_queue_empty(&up->reader_queue) ||
++					 kthread_should_stop());
+ 
+ 		/* do we have data now? */
+-		while (!skb_queue_empty(&(tinfo->sock->sk->sk_receive_queue))) {
++		while (!skb_queue_empty(&sk->sk_receive_queue) ||
++		       !skb_queue_empty(&up->reader_queue)) {
+ 			len = ip_vs_receive(tinfo->sock, tinfo->buf,
+ 					ipvs->bcfg.sync_maxlen);
+ 			if (len <= 0) {
+-- 
+2.7.4
+
