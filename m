@@ -2,100 +2,90 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49414222090
-	for <lists+lvs-devel@lfdr.de>; Thu, 16 Jul 2020 12:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9893D2228A7
+	for <lists+lvs-devel@lfdr.de>; Thu, 16 Jul 2020 19:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbgGPKZ7 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 16 Jul 2020 06:25:59 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:41930 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbgGPKZ7 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Jul 2020 06:25:59 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06GAH1KB151620;
-        Thu, 16 Jul 2020 10:25:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=Xo6gJCrftzSjjyI8wHnqlZSNmzgC4r1alRAMNSQjrDA=;
- b=ZKOivIHBcnsAGviho7pIIdGRqlzWRZSizzNgERRyF6ELgd5QOkQwOP0Cy7cFU3IR0HJg
- +FY6jR0MrDasitRQ2b3Wjx4qff/XOOIFiStgx/fczQxo0SOa5uISsC7IK3PQvohQX/Iw
- ixKEhZaZrGrAxekFb4ETHoqDkGCdPPMIv2o2n8MCCsFSJQG+SS2/MDyC52NM6kHkBvT/
- HKPArNKm80PbbdNk4ssffv4xgxav1f9L+NFp+0ECyR0pn7M4+vnQYL/1bzA3TQyqM+sJ
- 9oNUzLQxQcTs0Qz6VUGkwxPwRYauimONqapkZcf4OJUwLfgzi2YchdGzg+l6/6AvDKKP mg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 3275cmggks-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Jul 2020 10:25:44 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06GANhxJ101823;
-        Thu, 16 Jul 2020 10:23:44 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 327qbau878-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Jul 2020 10:23:43 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06GANUOJ002499;
-        Thu, 16 Jul 2020 10:23:30 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 16 Jul 2020 03:23:29 -0700
-Date:   Thu, 16 Jul 2020 13:23:22 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Zhouxudong (EulerOS)" <zhouxudong8@huawei.com>
-Cc:     Suraj Upadhyay <usuraj35@gmail.com>,
-        "wensong@linux-vs.org" <wensong@linux-vs.org>,
-        "horms@verge.net.au" <horms@verge.net.au>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "lvs-devel@vger.kernel.org" <lvs-devel@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "Chenxiang (EulerOS)" <rose.chen@huawei.com>,
-        "Zhaowei (EulerOS)" <zhaowei23@huawei.com>
-Subject: Re: =?utf-8?B?562U5aSN?= =?utf-8?Q?=3A?= [PATCH v2] ipvs: clean code
- for ip_vs_sync.c
-Message-ID: <20200716102321.GC2549@kadam>
-References: <1594864671-31512-1-git-send-email-zhouxudong8@huawei.com>
- <20200716024627.GC14742@blackclown>
- <69D1AB391AAC5746B9ECCF192D064D641A7949E1@DGGEMI521-MBX.china.huawei.com>
+        id S1728630AbgGPREF (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 16 Jul 2020 13:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725867AbgGPREE (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Jul 2020 13:04:04 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBE5C061755;
+        Thu, 16 Jul 2020 10:04:04 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id e12so5427351qtr.9;
+        Thu, 16 Jul 2020 10:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+cTYKrIZGIZVopU+BckUssD7pZ9lKGNH0yEl3jPyoXM=;
+        b=X0m5FsJRJcZvg+C03g6IVxn4mV5SvH+bqDqn8BmS1O44A3Q89s7vwJt6iXTn06Mk9f
+         BCCMsuyp/R1k8p+tCjgrloI0iJSwfXy+ButeOdWUsBSjjzIVlTpWydjbe+3/2JuObISJ
+         aLrKGp+aag4KtfUiHdpIb3DlMSxb8Ci/SSkNGURI+nBIfEo9rbVJdEubjYjU/HvDUycl
+         t2SNi6R4yPw66MxhjmgE0I7SE5PxteqDx0OkISzEI1BOZp/t+r0u+3ucy69Tz7EjN7dB
+         z3OLo1qxmT2+lBxVV627iEQnBmJgk4ovlaDHrRI2pktc5lDhGEOU0Gwn0s+u6JNN/90U
+         SiTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+cTYKrIZGIZVopU+BckUssD7pZ9lKGNH0yEl3jPyoXM=;
+        b=cUdtj9VoNdmoWI7Ysith6SRXieqt1OKgAJgEm3iSQebX9JKx5PixBDkvEw+uFty3n/
+         bG6DtkbTVRXX3uf5ezudx9z/dTkYYu7nElWvbYdd3OrysXyy8W39yX1agP4lfYyDZJqz
+         f6nuyrmFkhPjpTFl5jG0xGpjs2A5y/hZVkbTAkHr9+vdX4A7LfsVoyMAzmyy1i4YFDbu
+         T2rS1cd9BoIv4DGTDiecyYWPuggdlxog/+CFqdYLtNeT5KsjByMqjT00WOWNADxxllvw
+         sB9zz3iPLW+TgWiFF/pWPTL0nEGXJK0CqmwKQKJ4YTHRqdFStJAqN8nw/kaPj75+zNWz
+         j3BQ==
+X-Gm-Message-State: AOAM531Hz3/bw+A62ImHRO1uoI3akUpHzXt19uw72X539BsYaPRsYvkm
+        6IvJiDPBPks1p9VvMvjzbSo=
+X-Google-Smtp-Source: ABdhPJwCNUpfl9GDWZd7PBrvQE2OKVLkC57nkE9i7h2WBmRvq70Chlr1N+oIgtxu2B+FqNJXVGEdbw==
+X-Received: by 2002:aed:2a4d:: with SMTP id k13mr6240989qtf.376.1594919043612;
+        Thu, 16 Jul 2020 10:04:03 -0700 (PDT)
+Received: from T480s.vmware.com (toroon0411w-lp130-02-64-231-189-42.dsl.bell.ca. [64.231.189.42])
+        by smtp.googlemail.com with ESMTPSA id o50sm8856571qtc.64.2020.07.16.10.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 10:04:03 -0700 (PDT)
+From:   Andrew Sy Kim <kim.andrewsy@gmail.com>
+Cc:     Julian Anastasov <ja@ssi.bg>, Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        Andrew Sy Kim <kim.andrewsy@gmail.com>
+Subject: [PATCH net-next] ipvs: ensure RCU read unlock when connection flushing and ipvs is disabled
+Date:   Thu, 16 Jul 2020 13:03:14 -0400
+Message-Id: <20200716170314.9617-1-kim.andrewsy@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69D1AB391AAC5746B9ECCF192D064D641A7949E1@DGGEMI521-MBX.china.huawei.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007160082
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
- bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 clxscore=1011 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007160081
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-It's probably better to start somewhere like drivers/staging for clean
-up work.  Networking people are pretty busy with their own things but
-staging is happy to take clean up patches.
+When ipvs is disabled in ip_vs_expire_nodest_conn_flush,
+we should break instead of return so that rcu_read_unlock()
+is run.
 
-You need to use a proper legal name (like you would for signing
-documents for your From and Signed-off-by.
+Signed-off-by: Andrew Sy Kim <kim.andrewsy@gmail.com>
+---
+ net/netfilter/ipvs/ip_vs_conn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > @@ -1444,7 +1444,7 @@ static int bind_mcastif_addr(struct socket *sock, struct net_device *dev)
-> >  	sin.sin_addr.s_addr  = addr;
-> >  	sin.sin_port         = 0;
-> 
-> I think you missed this one.
-> should be
-> -        sin.sin_port         = 0;
-> +	 sin.sin_port = 0
-
-That was done deliberately.  Just leave that one as-is, please.
-
-regards,
-dan carpenter
+diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
+index a5e9b2d55e57..a90b8eac16ac 100644
+--- a/net/netfilter/ipvs/ip_vs_conn.c
++++ b/net/netfilter/ipvs/ip_vs_conn.c
+@@ -1422,7 +1422,7 @@ void ip_vs_expire_nodest_conn_flush(struct netns_ipvs *ipvs)
+ 
+ 		/* netns clean up started, abort delayed work */
+ 		if (!ipvs->enable)
+-			return;
++			break;
+ 	}
+ 	rcu_read_unlock();
+ }
+-- 
+2.20.1
 
