@@ -2,114 +2,100 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A83221E05
-	for <lists+lvs-devel@lfdr.de>; Thu, 16 Jul 2020 10:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49414222090
+	for <lists+lvs-devel@lfdr.de>; Thu, 16 Jul 2020 12:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbgGPIQp (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 16 Jul 2020 04:16:45 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2580 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725867AbgGPIQp (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 16 Jul 2020 04:16:45 -0400
-Received: from nkgeml708-chm.china.huawei.com (unknown [172.30.72.54])
-        by Forcepoint Email with ESMTP id DE94255744157899DEBE;
-        Thu, 16 Jul 2020 16:16:41 +0800 (CST)
-Received: from nkgeml708-chm.china.huawei.com (10.98.57.160) by
- nkgeml708-chm.china.huawei.com (10.98.57.160) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 16 Jul 2020 16:16:41 +0800
-Received: from nkgeml708-chm.china.huawei.com ([10.98.57.160]) by
- nkgeml708-chm.china.huawei.com ([10.98.57.160]) with mapi id 15.01.1913.007;
- Thu, 16 Jul 2020 16:16:41 +0800
-From:   "Guodeqing (A)" <geffrey.guo@huawei.com>
-To:     Julian Anastasov <ja@ssi.bg>
-CC:     "wensong@linux-vs.org" <wensong@linux-vs.org>,
+        id S1726190AbgGPKZ7 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 16 Jul 2020 06:25:59 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:41930 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726080AbgGPKZ7 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Jul 2020 06:25:59 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06GAH1KB151620;
+        Thu, 16 Jul 2020 10:25:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=Xo6gJCrftzSjjyI8wHnqlZSNmzgC4r1alRAMNSQjrDA=;
+ b=ZKOivIHBcnsAGviho7pIIdGRqlzWRZSizzNgERRyF6ELgd5QOkQwOP0Cy7cFU3IR0HJg
+ +FY6jR0MrDasitRQ2b3Wjx4qff/XOOIFiStgx/fczQxo0SOa5uISsC7IK3PQvohQX/Iw
+ ixKEhZaZrGrAxekFb4ETHoqDkGCdPPMIv2o2n8MCCsFSJQG+SS2/MDyC52NM6kHkBvT/
+ HKPArNKm80PbbdNk4ssffv4xgxav1f9L+NFp+0ECyR0pn7M4+vnQYL/1bzA3TQyqM+sJ
+ 9oNUzLQxQcTs0Qz6VUGkwxPwRYauimONqapkZcf4OJUwLfgzi2YchdGzg+l6/6AvDKKP mg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 3275cmggks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Jul 2020 10:25:44 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06GANhxJ101823;
+        Thu, 16 Jul 2020 10:23:44 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 327qbau878-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 16 Jul 2020 10:23:43 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06GANUOJ002499;
+        Thu, 16 Jul 2020 10:23:30 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 16 Jul 2020 03:23:29 -0700
+Date:   Thu, 16 Jul 2020 13:23:22 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Zhouxudong (EulerOS)" <zhouxudong8@huawei.com>
+Cc:     Suraj Upadhyay <usuraj35@gmail.com>,
+        "wensong@linux-vs.org" <wensong@linux-vs.org>,
         "horms@verge.net.au" <horms@verge.net.au>,
-        "pablo@netfilter.org" <pablo@netfilter.org>,
-        "kadlec@netfilter.org" <kadlec@netfilter.org>,
-        "fw@strlen.de" <fw@strlen.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "lvs-devel@vger.kernel.org" <lvs-devel@vger.kernel.org>,
-        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBpcHZzOiBmaXggdGhlIGNvbm5lY3Rpb24gc3luYyBm?=
- =?gb2312?Q?ailed_in_some_cases?=
-Thread-Topic: [PATCH] ipvs: fix the connection sync failed in some cases
-Thread-Index: AQHWWnVcQeKvQJuISkaQl2jKbtaPdKkIYbIAgAFkcQA=
-Date:   Thu, 16 Jul 2020 08:16:41 +0000
-Message-ID: <4b51941de0ab441385c356cccfee7370@huawei.com>
-References: <1594796027-66136-1-git-send-email-geffrey.guo@huawei.com>
- <alpine.LFD.2.23.451.2007152016420.6034@ja.home.ssi.bg>
-In-Reply-To: <alpine.LFD.2.23.451.2007152016420.6034@ja.home.ssi.bg>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.164.122.165]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "Chenxiang (EulerOS)" <rose.chen@huawei.com>,
+        "Zhaowei (EulerOS)" <zhaowei23@huawei.com>
+Subject: Re: =?utf-8?B?562U5aSN?= =?utf-8?Q?=3A?= [PATCH v2] ipvs: clean code
+ for ip_vs_sync.c
+Message-ID: <20200716102321.GC2549@kadam>
+References: <1594864671-31512-1-git-send-email-zhouxudong8@huawei.com>
+ <20200716024627.GC14742@blackclown>
+ <69D1AB391AAC5746B9ECCF192D064D641A7949E1@DGGEMI521-MBX.china.huawei.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69D1AB391AAC5746B9ECCF192D064D641A7949E1@DGGEMI521-MBX.china.huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007160082
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 priorityscore=1501
+ bulkscore=0 adultscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 clxscore=1011 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007160081
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-SSBkbyBhIGlwdnMgY29ubmVjdGlvbiBzeW5jIHRlc3QgaW4gYSAzLjEwIHZlcnNpb24ga2VybmVs
-IHdoaWNoIGhhcyB0aGUgN2MxM2Y5N2ZmZGU2IGNvbW1pdCB3aGljaCBzdWNjZWVkLiBJIHdpbGwg
-bW9kaWZ5IHRoZSBmaXhlcyBpbmZvcm1hdGlvbiBvZiB0aGUgcGF0Y2ggYW5kIHJlcGxhY2UgdGhl
-IHNrYl9xdWV1ZV9lbXB0eSB3aXRoIHNrYl9xdWV1ZV9lbXB0eV9sb2NrbGVzcy4NClRoYW5rcy4N
-Cg0KLS0tLS3Tyrz+1K28/i0tLS0tDQq3orz+yMs6IEp1bGlhbiBBbmFzdGFzb3YgW21haWx0bzpq
-YUBzc2kuYmddIA0Kt6LLzcqxvOQ6IFRodXJzZGF5LCBKdWx5IDE2LCAyMDIwIDE6MzYNCsrVvP7I
-yzogR3VvZGVxaW5nIChBKSA8Z2VmZnJleS5ndW9AaHVhd2VpLmNvbT4NCrOty806IHdlbnNvbmdA
-bGludXgtdnMub3JnOyBob3Jtc0B2ZXJnZS5uZXQuYXU7IHBhYmxvQG5ldGZpbHRlci5vcmc7IGth
-ZGxlY0BuZXRmaWx0ZXIub3JnOyBmd0BzdHJsZW4uZGU7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1
-YmFAa2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbHZzLWRldmVsQHZnZXIua2Vy
-bmVsLm9yZzsgbmV0ZmlsdGVyLWRldmVsQHZnZXIua2VybmVsLm9yZw0K1vfM4jogUmU6IFtQQVRD
-SF0gaXB2czogZml4IHRoZSBjb25uZWN0aW9uIHN5bmMgZmFpbGVkIGluIHNvbWUgY2FzZXMNCg0K
-DQoJSGVsbG8sDQoNCk9uIFdlZCwgMTUgSnVsIDIwMjAsIGd1b2RlcWluZyB3cm90ZToNCg0KPiBU
-aGUgc3luY190aHJlYWRfYmFja3VwIG9ubHkgY2hlY2tzIHNrX3JlY2VpdmVfcXVldWUgaXMgZW1w
-dHkgb3Igbm90LCANCj4gdGhlcmUgaXMgYSBzaXR1YXRpb24gd2hpY2ggY2Fubm90IHN5bmMgdGhl
-IGNvbm5lY3Rpb24gZW50cmllcyB3aGVuIA0KPiBza19yZWNlaXZlX3F1ZXVlIGlzIGVtcHR5IGFu
-ZCBza19ybWVtX2FsbG9jIGlzIGxhcmdlciB0aGFuIHNrX3JjdmJ1ZiwgDQo+IHRoZSBzeW5jIHBh
-Y2tldHMgYXJlIGRyb3BwZWQgaW4gX191ZHBfZW5xdWV1ZV9zY2hlZHVsZV9za2IsIHRoaXMgaXMg
-DQo+IGJlY2F1c2UgdGhlIHBhY2tldHMgaW4gcmVhZGVyX3F1ZXVlIGlzIG5vdCByZWFkLCBzbyB0
-aGUgcm1lbSBpcyBub3QgDQo+IHJlY2xhaW1lZC4NCg0KCUdvb2QgY2F0Y2guIFdlIG1pc3NlZCB0
-aGlzIGNoYW5nZSBpbiBVRFAuLi4NCg0KPiBIZXJlIEkgYWRkIHRoZSBjaGVjayBvZiB3aGV0aGVy
-IHRoZSByZWFkZXJfcXVldWUgb2YgdGhlIHVkcCBzb2NrIGlzIA0KPiBlbXB0eSBvciBub3QgdG8g
-c29sdmUgdGhpcyBwcm9ibGVtLg0KPiANCj4gRml4ZXM6IDdjMTNmOTdmZmRlNiAoInVkcDogZG8g
-ZndkIG1lbW9yeSBzY2hlZHVsaW5nIG9uIGRlcXVldWUiKQ0KDQoJV2h5IHRoaXMgY29tbWl0IGFu
-ZCBub3QgMjI3NmY1OGFjNTg5IHdoaWNoIGFkZHMgcmVhZGVyX3F1ZXVlIHRvIHVkcF9wb2xsKCkg
-PyBNYXkgYmUgYm90aD8NCg0KPiBSZXBvcnRlZC1ieTogemhvdXh1ZG9uZyA8emhvdXh1ZG9uZzhA
-aHVhd2VpLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogZ3VvZGVxaW5nIDxnZWZmcmV5Lmd1b0BodWF3
-ZWkuY29tPg0KPiAtLS0NCj4gIG5ldC9uZXRmaWx0ZXIvaXB2cy9pcF92c19zeW5jLmMgfCAxMiAr
-KysrKysrKy0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDQgZGVsZXRp
-b25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvbmV0L25ldGZpbHRlci9pcHZzL2lwX3ZzX3N5bmMu
-YyANCj4gYi9uZXQvbmV0ZmlsdGVyL2lwdnMvaXBfdnNfc3luYy5jIGluZGV4IDYwNWUwZjYuLmFi
-ZThkNjMgMTAwNjQ0DQo+IC0tLSBhL25ldC9uZXRmaWx0ZXIvaXB2cy9pcF92c19zeW5jLmMNCj4g
-KysrIGIvbmV0L25ldGZpbHRlci9pcHZzL2lwX3ZzX3N5bmMuYw0KPiBAQCAtMTcxNyw2ICsxNzE3
-LDggQEAgc3RhdGljIGludCBzeW5jX3RocmVhZF9iYWNrdXAodm9pZCAqZGF0YSkgIHsNCj4gIAlz
-dHJ1Y3QgaXBfdnNfc3luY190aHJlYWRfZGF0YSAqdGluZm8gPSBkYXRhOw0KPiAgCXN0cnVjdCBu
-ZXRuc19pcHZzICppcHZzID0gdGluZm8tPmlwdnM7DQo+ICsJc3RydWN0IHNvY2sgKnNrID0gdGlu
-Zm8tPnNvY2stPnNrOw0KPiArCXN0cnVjdCB1ZHBfc29jayAqdXAgPSB1ZHBfc2soc2spOw0KPiAg
-CWludCBsZW47DQo+ICANCj4gIAlwcl9pbmZvKCJzeW5jIHRocmVhZCBzdGFydGVkOiBzdGF0ZSA9
-IEJBQ0tVUCwgbWNhc3RfaWZuID0gJXMsICINCj4gQEAgLTE3MjQsMTIgKzE3MjYsMTQgQEAgc3Rh
-dGljIGludCBzeW5jX3RocmVhZF9iYWNrdXAodm9pZCAqZGF0YSkNCj4gIAkJaXB2cy0+YmNmZy5t
-Y2FzdF9pZm4sIGlwdnMtPmJjZmcuc3luY2lkLCB0aW5mby0+aWQpOw0KPiAgDQo+ICAJd2hpbGUg
-KCFrdGhyZWFkX3Nob3VsZF9zdG9wKCkpIHsNCj4gLQkJd2FpdF9ldmVudF9pbnRlcnJ1cHRpYmxl
-KCpza19zbGVlcCh0aW5mby0+c29jay0+c2spLA0KPiAtCQkJICFza2JfcXVldWVfZW1wdHkoJnRp
-bmZvLT5zb2NrLT5zay0+c2tfcmVjZWl2ZV9xdWV1ZSkNCj4gLQkJCSB8fCBrdGhyZWFkX3Nob3Vs
-ZF9zdG9wKCkpOw0KPiArCQl3YWl0X2V2ZW50X2ludGVycnVwdGlibGUoKnNrX3NsZWVwKHNrKSwN
-Cj4gKwkJCQkJICFza2JfcXVldWVfZW1wdHkoJnNrLT5za19yZWNlaXZlX3F1ZXVlKSB8fA0KPiAr
-CQkJCQkgIXNrYl9xdWV1ZV9lbXB0eSgmdXAtPnJlYWRlcl9xdWV1ZSkgfHwNCg0KCU1heSBiZSB3
-ZSBzaG91bGQgdXNlIHNrYl9xdWV1ZV9lbXB0eV9sb2NrbGVzcyBmb3IgNS40KyBhbmQgc2tiX3F1
-ZXVlX2VtcHR5KCkgZm9yIGJhY2twb3J0cyB0byA0LjE0IGFuZCA0LjE5Li4uDQoNCj4gKwkJCQkJ
-IGt0aHJlYWRfc2hvdWxkX3N0b3AoKSk7DQo+ICANCj4gIAkJLyogZG8gd2UgaGF2ZSBkYXRhIG5v
-dz8gKi8NCj4gLQkJd2hpbGUgKCFza2JfcXVldWVfZW1wdHkoJih0aW5mby0+c29jay0+c2stPnNr
-X3JlY2VpdmVfcXVldWUpKSkgew0KPiArCQl3aGlsZSAoIXNrYl9xdWV1ZV9lbXB0eSgmc2stPnNr
-X3JlY2VpdmVfcXVldWUpIHx8DQo+ICsJCSAgICAgICAhc2tiX3F1ZXVlX2VtcHR5KCZ1cC0+cmVh
-ZGVyX3F1ZXVlKSkgew0KDQoJSGVyZSB0b28NCg0KPiAgCQkJbGVuID0gaXBfdnNfcmVjZWl2ZSh0
-aW5mby0+c29jaywgdGluZm8tPmJ1ZiwNCj4gIAkJCQkJaXB2cy0+YmNmZy5zeW5jX21heGxlbik7
-DQo+ICAJCQlpZiAobGVuIDw9IDApIHsNCj4gLS0NCj4gMi43LjQNCg0KUmVnYXJkcw0KDQotLQ0K
-SnVsaWFuIEFuYXN0YXNvdiA8amFAc3NpLmJnPg0K
+It's probably better to start somewhere like drivers/staging for clean
+up work.  Networking people are pretty busy with their own things but
+staging is happy to take clean up patches.
+
+You need to use a proper legal name (like you would for signing
+documents for your From and Signed-off-by.
+
+> > @@ -1444,7 +1444,7 @@ static int bind_mcastif_addr(struct socket *sock, struct net_device *dev)
+> >  	sin.sin_addr.s_addr  = addr;
+> >  	sin.sin_port         = 0;
+> 
+> I think you missed this one.
+> should be
+> -        sin.sin_port         = 0;
+> +	 sin.sin_port = 0
+
+That was done deliberately.  Just leave that one as-is, please.
+
+regards,
+dan carpenter
+
