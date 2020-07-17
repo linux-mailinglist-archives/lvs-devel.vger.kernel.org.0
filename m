@@ -2,98 +2,82 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 945AB223DD5
-	for <lists+lvs-devel@lfdr.de>; Fri, 17 Jul 2020 16:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE080223F99
+	for <lists+lvs-devel@lfdr.de>; Fri, 17 Jul 2020 17:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgGQOLQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 17 Jul 2020 10:11:16 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:55406 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgGQOLQ (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 17 Jul 2020 10:11:16 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06HE2EFK055636;
-        Fri, 17 Jul 2020 14:10:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=Mv5dydH0r53hroQIradq8z6oy8JvVlHpZdHz/hKyd3A=;
- b=0ie1bOU7QvEoU/mGpDVdqzu7MmqJbqPFBT215/ITEkS5khJWLwgZ6tOWk1Yh1u2pzP3p
- UflvG7CDFEfaC+Hmrn/xOoGYNwdqGskK5ZjZGAtatexaB18yM8u3HQPDSl9sm9EyDl5d
- hrUH837hBd6Wvq3GFmNnIyzaFs/Cvoz66CQe5velV1/zir6458ZfkjTGNQCRsSKGw4tX
- 737YqQns4WemWhXaRC0bhIsvmpEBt2aEq5O9NcZT+sCZBvNrtmX6hKvaxcpcpitBbmIv
- 5WuJCL5MsBL6mHkOZ/CPsNaAmORF5gOPBGiyUV00cFHf39h1mVQcqUVyuwcVyv8o8hgs uA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 3274urqgmd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 17 Jul 2020 14:10:51 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06HE9cRq036498;
-        Fri, 17 Jul 2020 14:10:50 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 32bdaxrp9x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jul 2020 14:10:50 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06HEAcxh011239;
-        Fri, 17 Jul 2020 14:10:38 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 17 Jul 2020 07:10:37 -0700
-Date:   Fri, 17 Jul 2020 17:10:29 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Wensong Zhang <wensong@linux-vs.org>
-Cc:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrew Sy Kim <kim.andrewsy@gmail.com>,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH net-next] ipvs: missing unlock in
- ip_vs_expire_nodest_conn_flush()
-Message-ID: <20200717141029.GA21445@mwanda>
+        id S1726393AbgGQPaQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 17 Jul 2020 11:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgGQPaQ (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 17 Jul 2020 11:30:16 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA62C0619D2;
+        Fri, 17 Jul 2020 08:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=u0q4qCWNv+qhE3ZrdRgzxfegk6XFeYyskQE8fOwRrRs=; b=SggPwLXPaF9DbxaOh0Zz/ED/P0
+        6gGiwOd2aUZmcH8TeJ6sct16sXyqz48zefFf2DfupKuLBLJojH900LWWGxhSxVAy2sARrGwWcy8wH
+        jDLrEdl0NXk2QgfW8TbtMaXRWrsYrwusbL1lGvgvaG0uMaYBAlRYr0VgwsFZoQpsQriF2SsFn5JtS
+        Qf6FjTErWY8Xx4qdJXtxVBYT6WYwWUVkymSpHpVEN0866rVKg/kuR+D1v/X/J/VAiV6sdAKkvaRN0
+        QPRYBbqsfp/7Ce1tybB0g4fTb5YX7hc4Tc9+Y0BSPB2k+DRRLzwDq2mk+ltrZ/j+2GOnZqW6Gsmi6
+        wNHWnKEg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jwSJQ-0002zB-DK; Fri, 17 Jul 2020 15:30:12 +0000
+Subject: Re: mmotm 2020-07-16-22-52 uploaded (net: IPVS)
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>,
+        Julian Anastasov <ja@ssi.bg>, lvs-devel@vger.kernel.org
+References: <20200717055300.ObseZH9Vs%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <88196a8a-2778-0324-8005-d63bfee86c4e@infradead.org>
+Date:   Fri, 17 Jul 2020 08:30:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9684 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 malwarescore=0
- spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007170104
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9684 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
- suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007170103
+In-Reply-To: <20200717055300.ObseZH9Vs%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-We can't return without calling rcu_read_unlock().
+On 7/16/20 10:53 PM, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2020-07-16-22-52 has been uploaded to
+> 
+>    http://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
 
-Fixes: 04231e52d355 ("ipvs: queue delayed work to expire no destination connections if expire_nodest_conn=1")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- net/netfilter/ipvs/ip_vs_conn.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+(also in linux-next)
 
-diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index a5e9b2d55e57..a90b8eac16ac 100644
---- a/net/netfilter/ipvs/ip_vs_conn.c
-+++ b/net/netfilter/ipvs/ip_vs_conn.c
-@@ -1422,7 +1422,7 @@ void ip_vs_expire_nodest_conn_flush(struct netns_ipvs *ipvs)
- 
- 		/* netns clean up started, abort delayed work */
- 		if (!ipvs->enable)
--			return;
-+			break;
- 	}
- 	rcu_read_unlock();
- }
+Many of these errors:
+
+In file included from ../net/netfilter/ipvs/ip_vs_conn.c:37:0:
+../include/net/ip_vs.h: In function ‘ip_vs_enqueue_expire_nodest_conns’:
+../include/net/ip_vs.h:1536:61: error: parameter name omitted
+ static inline void ip_vs_enqueue_expire_nodest_conns(struct netns_ipvs) {}
+                                                             ^~~~~~~~~~
+
+
 -- 
-2.27.0
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
