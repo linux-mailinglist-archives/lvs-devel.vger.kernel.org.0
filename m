@@ -2,70 +2,98 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A34132229D9
-	for <lists+lvs-devel@lfdr.de>; Thu, 16 Jul 2020 19:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945AB223DD5
+	for <lists+lvs-devel@lfdr.de>; Fri, 17 Jul 2020 16:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728672AbgGPR1J (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 16 Jul 2020 13:27:09 -0400
-Received: from ja.ssi.bg ([178.16.129.10]:57964 "EHLO ja.ssi.bg"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726986AbgGPR1I (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Thu, 16 Jul 2020 13:27:08 -0400
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 06GHQrsa007472;
-        Thu, 16 Jul 2020 20:26:55 +0300
-Date:   Thu, 16 Jul 2020 20:26:53 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Andrew Sy Kim <kim.andrewsy@gmail.com>
-cc:     Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH net-next] ipvs: ensure RCU read unlock when connection
- flushing and ipvs is disabled
-In-Reply-To: <20200716170314.9617-1-kim.andrewsy@gmail.com>
-Message-ID: <alpine.LFD.2.23.451.2007162025220.5182@ja.home.ssi.bg>
-References: <20200716170314.9617-1-kim.andrewsy@gmail.com>
+        id S1726210AbgGQOLQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 17 Jul 2020 10:11:16 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:55406 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgGQOLQ (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 17 Jul 2020 10:11:16 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06HE2EFK055636;
+        Fri, 17 Jul 2020 14:10:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=Mv5dydH0r53hroQIradq8z6oy8JvVlHpZdHz/hKyd3A=;
+ b=0ie1bOU7QvEoU/mGpDVdqzu7MmqJbqPFBT215/ITEkS5khJWLwgZ6tOWk1Yh1u2pzP3p
+ UflvG7CDFEfaC+Hmrn/xOoGYNwdqGskK5ZjZGAtatexaB18yM8u3HQPDSl9sm9EyDl5d
+ hrUH837hBd6Wvq3GFmNnIyzaFs/Cvoz66CQe5velV1/zir6458ZfkjTGNQCRsSKGw4tX
+ 737YqQns4WemWhXaRC0bhIsvmpEBt2aEq5O9NcZT+sCZBvNrtmX6hKvaxcpcpitBbmIv
+ 5WuJCL5MsBL6mHkOZ/CPsNaAmORF5gOPBGiyUV00cFHf39h1mVQcqUVyuwcVyv8o8hgs uA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 3274urqgmd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Jul 2020 14:10:51 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06HE9cRq036498;
+        Fri, 17 Jul 2020 14:10:50 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 32bdaxrp9x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jul 2020 14:10:50 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06HEAcxh011239;
+        Fri, 17 Jul 2020 14:10:38 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 17 Jul 2020 07:10:37 -0700
+Date:   Fri, 17 Jul 2020 17:10:29 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Wensong Zhang <wensong@linux-vs.org>
+Cc:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrew Sy Kim <kim.andrewsy@gmail.com>,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH net-next] ipvs: missing unlock in
+ ip_vs_expire_nodest_conn_flush()
+Message-ID: <20200717141029.GA21445@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9684 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007170104
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9684 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007170103
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+We can't return without calling rcu_read_unlock().
 
-	Hello,
+Fixes: 04231e52d355 ("ipvs: queue delayed work to expire no destination connections if expire_nodest_conn=1")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ net/netfilter/ipvs/ip_vs_conn.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 16 Jul 2020, Andrew Sy Kim wrote:
+diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
+index a5e9b2d55e57..a90b8eac16ac 100644
+--- a/net/netfilter/ipvs/ip_vs_conn.c
++++ b/net/netfilter/ipvs/ip_vs_conn.c
+@@ -1422,7 +1422,7 @@ void ip_vs_expire_nodest_conn_flush(struct netns_ipvs *ipvs)
+ 
+ 		/* netns clean up started, abort delayed work */
+ 		if (!ipvs->enable)
+-			return;
++			break;
+ 	}
+ 	rcu_read_unlock();
+ }
+-- 
+2.27.0
 
-> When ipvs is disabled in ip_vs_expire_nodest_conn_flush,
-> we should break instead of return so that rcu_read_unlock()
-> is run.
-> 
-> Signed-off-by: Andrew Sy Kim <kim.andrewsy@gmail.com>
-
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
-> ---
->  net/netfilter/ipvs/ip_vs_conn.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-> index a5e9b2d55e57..a90b8eac16ac 100644
-> --- a/net/netfilter/ipvs/ip_vs_conn.c
-> +++ b/net/netfilter/ipvs/ip_vs_conn.c
-> @@ -1422,7 +1422,7 @@ void ip_vs_expire_nodest_conn_flush(struct netns_ipvs *ipvs)
->  
->  		/* netns clean up started, abort delayed work */
->  		if (!ipvs->enable)
-> -			return;
-> +			break;
->  	}
->  	rcu_read_unlock();
->  }
-> -- 
-> 2.20.1
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
