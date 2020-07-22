@@ -2,132 +2,74 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1351E229369
-	for <lists+lvs-devel@lfdr.de>; Wed, 22 Jul 2020 10:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9045B22985C
+	for <lists+lvs-devel@lfdr.de>; Wed, 22 Jul 2020 14:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727826AbgGVI0z (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 22 Jul 2020 04:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S1731695AbgGVMlQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 22 Jul 2020 08:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727034AbgGVI0s (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 22 Jul 2020 04:26:48 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D3EC0619E3
-        for <lvs-devel@vger.kernel.org>; Wed, 22 Jul 2020 01:26:46 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id bm28so1019779edb.2
-        for <lvs-devel@vger.kernel.org>; Wed, 22 Jul 2020 01:26:46 -0700 (PDT)
+        with ESMTP id S1726161AbgGVMlP (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 22 Jul 2020 08:41:15 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319CAC0619DC
+        for <lvs-devel@vger.kernel.org>; Wed, 22 Jul 2020 05:41:15 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id l1so2337374ioh.5
+        for <lvs-devel@vger.kernel.org>; Wed, 22 Jul 2020 05:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ijnpSqTzlWs7OuuIHaz94zTqsgZ4TkbrlxGL7rF8SvM=;
-        b=xFRbFe5eYCppxJ62qFkLFv33fQa9ER4RHEl34g5WwIC4xdcR+4tivo7mnn1S+rNlbS
-         cMN8QwQ1eW0avv9rFxBRIQMUktSGW06zNgKrNWQvq5F25hq8QLzdYCQ1hmqL4iSIvq09
-         Szc8YdqC97qHUqKRHbhQr8/oguhWktZDZtVMGTavTEfzVAENBpjq7LQbsQSFC/Qb56AS
-         G/7MNxNktsXQmENPoH9ousqNoZVBW0eyiSYtxkhGP/mapdbBWtSCpZCTmHbB+1rtyqO0
-         wY2Oxf7ffMMplrOPj5lpx8Ya/rpegVFUOFLBmwqnjZVN6pLS4eW+iRKkCxAtMw4/FDqK
-         d09g==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=MRJYdBEWDkphEZG/UEdwwg3luf4wsGYhc8hRIEMMM04=;
+        b=S+71BlSngXQ5LNt44+n/DUWb03Hg+RWDDq7dR5Ub7Pzs/XDeuKup5z2qu/SSHkPKIj
+         b1uuXFdCdw3nM4vJFi/QIp6pestq6n5OQ86j0sPx+2gW7zuTu3XHsxSlkpOsdZNIpOFW
+         3mKioPICRHEnx7009X5ObCMleBmyOkNr2ccLs6LVIQsCvChZ4A0cPSxIYWAd8hTzB71O
+         xX7revvljJzhXBPoIhC9jW7O1RnMvTjhYNAZP0BIkgaGuPVd7XOcChOGAGpruLb7OFms
+         1y34DrleeCI+SWcFRc/AySpAj6mCVS7ca/tYmUVxa6u0W6acH8o/E3KCGSY22m+RREMn
+         r+/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ijnpSqTzlWs7OuuIHaz94zTqsgZ4TkbrlxGL7rF8SvM=;
-        b=kENr+M27SVAPQsWu7MvX5ozk6TtKCahMT6/5OD61Rq1T8ukNrpaalCQAzoidCrQjFw
-         l1LiNyijTaSUxhCdZJggsHeS+7mCHEhy1AC2tySWD8Tb0dYfw1uL6PYx1TUBDKF+6w9H
-         R0yA+Mm9aIRN+Oy5foDzMLO2UG4oeSBS2j/ZFR52eCxV5UD8y08UCK3BoqFPbK+Lsi+7
-         SP8KnkSWbgITdmktZUvRN/kMfO7IcatL8vZ1m0xEmI48fQFqn5cTGrvJ/iG5vnK/FLfI
-         MwYcZ1VvYlHKxKviCBnT5BzEmnfj8Q7RkNDy2TF9sERn6UaS9F9iUr4td1n3+YakLQLV
-         6Yew==
-X-Gm-Message-State: AOAM531PxZkah5YEWK13v07ZkuDkHBXrmQMOayl3KjdWRiEMXiGy4b8p
-        1CS6MwMt9ONiGhs49/0+aaWaag==
-X-Google-Smtp-Source: ABdhPJxnWSvai+9iaNos8sJtXdeBHraQbZUkyduEvMUxv8nKJJQfjOWUUSDiYYhu744BzkT/PRbBSQ==
-X-Received: by 2002:aa7:d341:: with SMTP id m1mr28525320edr.50.1595406404862;
-        Wed, 22 Jul 2020 01:26:44 -0700 (PDT)
-Received: from tsr-lap-08.nix.tessares.net ([79.132.248.22])
-        by smtp.gmail.com with ESMTPSA id x16sm19025267edr.52.2020.07.22.01.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2020 01:26:44 -0700 (PDT)
-Subject: Re: [MPTCP] [PATCH 24/24] net: pass a sockptr_t into ->setsockopt
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
-        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
-        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-References: <20200720124737.118617-1-hch@lst.de>
- <20200720124737.118617-25-hch@lst.de>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Message-ID: <b3665200-2476-9d35-8dea-d5da141c6b70@tessares.net>
-Date:   Wed, 22 Jul 2020 10:26:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=MRJYdBEWDkphEZG/UEdwwg3luf4wsGYhc8hRIEMMM04=;
+        b=TedI9fFRh2wd1dDfCPBbXy1ZJQsnEjKAEq8YNciH/0Wu2pOuNAmFEtHPN5W8kLe9Gd
+         XqNFRYYC0h0s/uDT8XJAa7ogZpis0FP8PnS+shFO5ir8fxku9YvvB+r77YOJ9klIIiFY
+         CVAHXoxAR1xkUBXYYuG7MhAFoRSBRQ7B/28iaOESXBUIJWW+gnJgMnxbRyHI2hkZ+4ZM
+         nAzGg2h2R0T8DSSF1xw8SA4Mq7n5NuWecTzMoeg/fuM6K8RttwFHJy0WnfYaBeq39zKv
+         74vNUnzkpbtiJLZG6PW70bWaJOfgkdIVDBuIdWUmolGXwF2h5+98bEiSS1322LHVM7yB
+         SRwA==
+X-Gm-Message-State: AOAM530vHXpLHxfaZc5M+Xsf42AE1tfhQGFRhhl+ft2/rPXy3QIDEuLI
+        5O7BkFI+lVBwpnOsEQ587NVAc9KKYawSk1Kb7GQ=
+X-Google-Smtp-Source: ABdhPJwmd9FaYrPTNKSMS94c322CTfUMF+qzrw4WHzSUt4JvTfANICAHmrk7/9IkzYksUEVZPipgxD5RXoPgxjEun+o=
+X-Received: by 2002:a05:6638:1341:: with SMTP id u1mr22396644jad.9.1595421674634;
+ Wed, 22 Jul 2020 05:41:14 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200720124737.118617-25-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ac0:8c34:0:0:0:0:0 with HTTP; Wed, 22 Jul 2020 05:41:14
+ -0700 (PDT)
+Reply-To: jinghualiuyang@gmail.com
+From:   Frau JINGHUA Liu Yang <pp094933@gmail.com>
+Date:   Wed, 22 Jul 2020 14:41:14 +0200
+Message-ID: <CAFu0bsxwNVreU=PmzjGbEOZA00PRTMqzyJaEir+1T44mHtMdDA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hi Christoph,
+--=20
+Sch=C3=B6nen Tag,
 
-On 20/07/2020 14:47, Christoph Hellwig wrote:
-> Rework the remaining setsockopt code to pass a sockptr_t instead of a
-> plain user pointer.  This removes the last remaining set_fs(KERNEL_DS)
-> outside of architecture specific code.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
+       Ich bin Frau JINGHUA Liu Yang f=C3=BCr die CITIBANK OF KOREA hier in
+der Republik KOREA. Ich habe einen Gesch=C3=A4ftsvorgang. Kann ich Ihnen
+vertrauen, dass Sie diesen Betrag von $9.356.669 USD =C3=BCberweisen? Wenn
+Sie bereit sind, mir zu helfen, melden Sie sich bei mir, damit ich Sie
+dar=C3=BCber informieren kann, wie wir diese Transaktion am besten
+perfektionieren k=C3=B6nnen, damit das Geld an Sie in Ihrem Land =C3=BCberw=
+iesen
+wird.
 
-...
-> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> index 27b6f250b87dfd..30a8e697b9db9c 100644
-> --- a/net/mptcp/protocol.c
-> +++ b/net/mptcp/protocol.c
-> @@ -1627,7 +1627,7 @@ static void mptcp_destroy(struct sock *sk)
->   }
->   
->   static int mptcp_setsockopt_sol_socket(struct mptcp_sock *msk, int optname,
-> -				       char __user *optval, unsigned int optlen)
-> +				       sockptr_t optval, unsigned int optlen)
->   {
->   	struct sock *sk = (struct sock *)msk;
->   	struct socket *ssock;
-> @@ -1643,8 +1643,8 @@ static int mptcp_setsockopt_sol_socket(struct mptcp_sock *msk, int optname,
->   			return -EINVAL;
->   		}
->   
-> -		ret = sock_setsockopt(ssock, SOL_SOCKET, optname,
-> -				      USER_SOCKPTR(optval), optlen);
-> +		ret = sock_setsockopt(ssock, SOL_SOCKET, optname, optval,
-> +				      optlen);
-
-A very small detail related to the modifications in MPTCP code, only if 
-you have to send a v2 and if you don't mind: may you move "optlen" to 
-the previous line like it was before your patch 7/24. Same below at the 
-end of the function.
-
-That would reduce the global diff in MPTCP files to function signatures 
-only.
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Sch=C3=B6ne Gr=C3=BC=C3=9Fe..
+Frau JINGHUA Liu Yang
