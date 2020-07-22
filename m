@@ -2,74 +2,100 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9045B22985C
-	for <lists+lvs-devel@lfdr.de>; Wed, 22 Jul 2020 14:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF00229E02
+	for <lists+lvs-devel@lfdr.de>; Wed, 22 Jul 2020 19:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731695AbgGVMlQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 22 Jul 2020 08:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S1731719AbgGVRJ4 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 22 Jul 2020 13:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgGVMlP (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 22 Jul 2020 08:41:15 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319CAC0619DC
-        for <lvs-devel@vger.kernel.org>; Wed, 22 Jul 2020 05:41:15 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id l1so2337374ioh.5
-        for <lvs-devel@vger.kernel.org>; Wed, 22 Jul 2020 05:41:15 -0700 (PDT)
+        with ESMTP id S1726462AbgGVRJz (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 22 Jul 2020 13:09:55 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCACC0619DC;
+        Wed, 22 Jul 2020 10:09:54 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id h19so3257561ljg.13;
+        Wed, 22 Jul 2020 10:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=MRJYdBEWDkphEZG/UEdwwg3luf4wsGYhc8hRIEMMM04=;
-        b=S+71BlSngXQ5LNt44+n/DUWb03Hg+RWDDq7dR5Ub7Pzs/XDeuKup5z2qu/SSHkPKIj
-         b1uuXFdCdw3nM4vJFi/QIp6pestq6n5OQ86j0sPx+2gW7zuTu3XHsxSlkpOsdZNIpOFW
-         3mKioPICRHEnx7009X5ObCMleBmyOkNr2ccLs6LVIQsCvChZ4A0cPSxIYWAd8hTzB71O
-         xX7revvljJzhXBPoIhC9jW7O1RnMvTjhYNAZP0BIkgaGuPVd7XOcChOGAGpruLb7OFms
-         1y34DrleeCI+SWcFRc/AySpAj6mCVS7ca/tYmUVxa6u0W6acH8o/E3KCGSY22m+RREMn
-         r+/g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nqelWpCqH7nOe0oSyngzrBNpGRC3PyDyz91JHpls3Xk=;
+        b=QbFOpYWq197fvdaI4E7hogiJ5z6DhlnMwFbSAyObyOYxQk/ojAWvAxU5xeCwIzRoyp
+         bGpv6okHRbaDCk3F5IJgGXS3Wesi1t0HKLxD0rWbntKFa+o4FEuZ/aNqddB2gT9rJhFi
+         ekTLt46VwAAqYYSOS+Ti6gpiM2sULyDbPlDxrV2EC1wYfvYmkCiCMfUA2sia4+eUOZSm
+         DpKqJKTrsnJtuquGnG9/42hXesw1S5DhQmqbpijEy6OLbaHF8RyBbV+paN+wC914K+DB
+         Om2JyFGEZL8bVoXG7xFZFOn3b/hxnJAALpQKOVax/+9YzLSzmIzDLinAT6/sMjMDDXxC
+         pBiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=MRJYdBEWDkphEZG/UEdwwg3luf4wsGYhc8hRIEMMM04=;
-        b=TedI9fFRh2wd1dDfCPBbXy1ZJQsnEjKAEq8YNciH/0Wu2pOuNAmFEtHPN5W8kLe9Gd
-         XqNFRYYC0h0s/uDT8XJAa7ogZpis0FP8PnS+shFO5ir8fxku9YvvB+r77YOJ9klIIiFY
-         CVAHXoxAR1xkUBXYYuG7MhAFoRSBRQ7B/28iaOESXBUIJWW+gnJgMnxbRyHI2hkZ+4ZM
-         nAzGg2h2R0T8DSSF1xw8SA4Mq7n5NuWecTzMoeg/fuM6K8RttwFHJy0WnfYaBeq39zKv
-         74vNUnzkpbtiJLZG6PW70bWaJOfgkdIVDBuIdWUmolGXwF2h5+98bEiSS1322LHVM7yB
-         SRwA==
-X-Gm-Message-State: AOAM530vHXpLHxfaZc5M+Xsf42AE1tfhQGFRhhl+ft2/rPXy3QIDEuLI
-        5O7BkFI+lVBwpnOsEQ587NVAc9KKYawSk1Kb7GQ=
-X-Google-Smtp-Source: ABdhPJwmd9FaYrPTNKSMS94c322CTfUMF+qzrw4WHzSUt4JvTfANICAHmrk7/9IkzYksUEVZPipgxD5RXoPgxjEun+o=
-X-Received: by 2002:a05:6638:1341:: with SMTP id u1mr22396644jad.9.1595421674634;
- Wed, 22 Jul 2020 05:41:14 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nqelWpCqH7nOe0oSyngzrBNpGRC3PyDyz91JHpls3Xk=;
+        b=k3wIByikShOaLkMc1Od1tLGwmab7hG9iKbyDULD2uOU+twM7jxZwJn7IWxMKu4MHdb
+         2Um8GRz1pnUx6Or1zrBKsXK1VsWCVoqGK+g00uoLdXwN0ZIjQs2SY1NcE1kAF8LDVTbU
+         yec/VCQcloskNDtE/ZzYq3LleNJ4xRU3nJ3wI0s/geljdUP2TUb94FrsAN6b/v2V85qz
+         Jc8CdA/0064dg3bpth9PgXEMbwg5daPhBpS5N9zJpR/T9aF3Yn/Utf8++olez5sBFyLk
+         PhS8JcXdC8vjOKTUaUQOoc6YRUqpWtVVYj0gjyhYOFPmkN984ejeamHM/Bn02+cBPon8
+         gMPw==
+X-Gm-Message-State: AOAM531Eo1Acr/3nE2b3iA/QDxbQGbfSLq/pJjtA4rrQ+YuHqM+38kBs
+        PxMKDcJqZcbVcOCj/Ts6eT4QBe1XJMs+YgpX9dqBNA==
+X-Google-Smtp-Source: ABdhPJzXtI3YBeORsJYQmEu28fVJCUtGV7rd5sI5b8tsC3G9617tl0t2hP5zU+hEdegWolMtC+F/64n4emjrett5jt8=
+X-Received: by 2002:a2e:90da:: with SMTP id o26mr95292ljg.91.1595437793253;
+ Wed, 22 Jul 2020 10:09:53 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ac0:8c34:0:0:0:0:0 with HTTP; Wed, 22 Jul 2020 05:41:14
- -0700 (PDT)
-Reply-To: jinghualiuyang@gmail.com
-From:   Frau JINGHUA Liu Yang <pp094933@gmail.com>
-Date:   Wed, 22 Jul 2020 14:41:14 +0200
-Message-ID: <CAFu0bsxwNVreU=PmzjGbEOZA00PRTMqzyJaEir+1T44mHtMdDA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20200720124737.118617-1-hch@lst.de> <20200720204756.iengwcguikj2yrxt@ast-mbp.dhcp.thefacebook.com>
+ <20200722075657.GB26554@lst.de>
+In-Reply-To: <20200722075657.GB26554@lst.de>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 22 Jul 2020 10:09:41 -0700
+Message-ID: <CAADnVQKy0+rsRftEzp4PvxQtj7uOwybz0Nd4_h0FR37p2Q=X4w@mail.gmail.com>
+Subject: Re: get rid of the address_space override in setsockopt
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        "moderated list:ETHERNET BRIDGE" <bridge@lists.linux-foundation.org>,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>, mptcp@lists.01.org,
+        lvs-devel@vger.kernel.org, rds-devel@oss.oracle.com,
+        linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
---=20
-Sch=C3=B6nen Tag,
+On Wed, Jul 22, 2020 at 12:56 AM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Mon, Jul 20, 2020 at 01:47:56PM -0700, Alexei Starovoitov wrote:
+> > > a kernel pointer.  This is something that works for most common sockopts
+> > > (and is something that the ePBF support relies on), but unfortunately
+> > > in various corner cases we either don't use the passed in length, or in
+> > > one case actually copy data back from setsockopt, so we unfortunately
+> > > can't just always do the copy in the highlevel code, which would have
+> > > been much nicer.
+> >
+> > could you rebase on bpf-next tree and we can route it this way then?
+> > we'll also test the whole thing before applying.
+>
+> The bpf-next tree is missing all my previous setsockopt cleanups, so
+> there series won't apply.
 
-       Ich bin Frau JINGHUA Liu Yang f=C3=BCr die CITIBANK OF KOREA hier in
-der Republik KOREA. Ich habe einen Gesch=C3=A4ftsvorgang. Kann ich Ihnen
-vertrauen, dass Sie diesen Betrag von $9.356.669 USD =C3=BCberweisen? Wenn
-Sie bereit sind, mir zu helfen, melden Sie sich bei mir, damit ich Sie
-dar=C3=BCber informieren kann, wie wir diese Transaktion am besten
-perfektionieren k=C3=B6nnen, damit das Geld an Sie in Ihrem Land =C3=BCberw=
-iesen
-wird.
-
-Sch=C3=B6ne Gr=C3=BC=C3=9Fe..
-Frau JINGHUA Liu Yang
+Right. I've realized that after sending that email two days ago.
+Now bpf-next->net-next PR is pending and as soon as it's merged
+bpf-next will have all the recent bits.
