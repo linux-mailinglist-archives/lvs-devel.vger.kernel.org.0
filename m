@@ -2,167 +2,121 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C079324170D
-	for <lists+lvs-devel@lfdr.de>; Tue, 11 Aug 2020 09:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CD5241790
+	for <lists+lvs-devel@lfdr.de>; Tue, 11 Aug 2020 09:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728105AbgHKHTT (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 11 Aug 2020 03:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S1727993AbgHKHtT (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 11 Aug 2020 03:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbgHKHTS (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 11 Aug 2020 03:19:18 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E82DC06174A;
-        Tue, 11 Aug 2020 00:19:18 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id o22so8740714qtt.13;
-        Tue, 11 Aug 2020 00:19:18 -0700 (PDT)
+        with ESMTP id S1728133AbgHKHtS (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 11 Aug 2020 03:49:18 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4539C061787;
+        Tue, 11 Aug 2020 00:49:16 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id j10so5523284qvo.13;
+        Tue, 11 Aug 2020 00:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QUV+RKelrGDMMeJLFdVFPbO5APkLi9wyQFp+5QMDpqo=;
-        b=G8B0k6+gHQyZJGZkIl+xEMk6z/IlDGgzjGX5y4LxNPYyppL8U7UKPd3gn+3fIKXHCo
-         l9kweqnqTiecZV2ppBXXk7umYr3ephBhbV8F21O/89WgTHoAW0RxLr7uNmAFB/jp7JAS
-         QkKwvX2oUHmDCy2WrQQG3Q7sOLr62fSGghzehtSVFW5dSIffIgKzCwEkKerIv2qsnz2j
-         6HXMeKJr7toegZllvqQbAmUtlY3qUIGrTZG3Sg/2nNGBCdCC+ot2LSIpg6JI8qB4/rcf
-         heYYSfK9onwXOq7o4LBJlO95mn//YsfsVAlK5QbjYbgU6M3+ZGw+qvxYy25G/3shbRUP
-         PgzA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OOMSJE9xSBil9mXDx2Lia4KUqWqXBp/e2t+xm7m3Qh8=;
+        b=F1f7ZE4KDjPF6dImWkq/5Gb5Ibw/zsrD+Y+bAFrUMb2y8iUJult1fm9hB0McdzouIP
+         JdDgEL1T2JKzUfHwWYdBwmkOObOmECVPSE43vBjnO8kfMo4FuMKCwhbmdiKeIPv5iz7L
+         IE25z3GCJwOCUWTeQCgIZMZ8PIMkHN+IFDgY8wMNCbsC3ngJJuI7/lB+STIlvY2ysxqF
+         ldKh+gEuY1fZUGum5vnuiVAGZ4fX/Dcx3RTT3RcYeK3t/7XuKa7ZhV+D86LSpYOVn+GG
+         d4Gr2ojxTkHSGSiIKscJVFKq+vyJBGOqJiFz5iMLUNPcjV+SCQjFLjVaYbqOvQ2CLPI0
+         j6gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QUV+RKelrGDMMeJLFdVFPbO5APkLi9wyQFp+5QMDpqo=;
-        b=p4TYkCfngNQqdBFFanB24evcfpGZq0BIQalVoXOcnLwwu1LafEtC9j9idH7CVh2JZw
-         vWerA09TTV/CzCDlbFaztm5IcSvuCo+7bNlLWqTuCpoQrzdJhuh7O3UWir+pd3na5kOy
-         LGc+nHCGMlfuwm/1WG2LDkj0u3vP3xxla9DCY7PAlF+3rKfLm7wRYLtoS8k8NAKtm4h6
-         HGsBMvRGr1xxwUOTrDDWobCkyP7rRBV6Tw1CAhUDsdwWFZOkjPVGUeGuM8ONqd9mNT4L
-         IMA2ZRfcHLbpu+vScYU9AwZ04qInkvi0CS/5hNhpYHMASFN5Uwgnh8I6hX+ZCt2j5NTA
-         LSUg==
-X-Gm-Message-State: AOAM531NMb9WGLRwtt/toG5yUiGOkkC8oXzK9rnRucdgGyrQZI9JOJz0
-        mMn/is+SNH/yqF6D3pcJ3Q==
-X-Google-Smtp-Source: ABdhPJxBd5Yw2qCQsEu0ftMM++sr6OpE6pVjh3+jCMAnheGuaNBmkGoWNWMr2U2MFEYgUmx3GtaNhw==
-X-Received: by 2002:ac8:454b:: with SMTP id z11mr32295102qtn.350.1597130357716;
-        Tue, 11 Aug 2020 00:19:17 -0700 (PDT)
-Received: from PWN (146-115-88-66.s3894.c3-0.sbo-ubr1.sbo.ma.cable.rcncustomer.com. [146.115.88.66])
-        by smtp.gmail.com with ESMTPSA id x67sm16866688qke.136.2020.08.11.00.19.16
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OOMSJE9xSBil9mXDx2Lia4KUqWqXBp/e2t+xm7m3Qh8=;
+        b=flffocutCjA8Eh/YhJjeeEisxilaDpD54uIB0rnaNZKZhgAI+2mUwerOTKh5An2PZN
+         uAksgfqeCjsrnaXkxZ5Uj/vw1sztRuuqDNjsBObnL8DsbokzJ2YmEvQrMt5YCxewtSDh
+         W8lQ2VGHlKygEnEeqvHNC8wXbdDWzYTl4RthsM0OGW2vUF/a8PudBG/iSKb7UCHmahdu
+         5og7JaWHHQtwHWlxaFoUgp2Dwx45TgTSYTAXB/nrkxkEZ5yz05LsELPIeDwr8uGC7qZK
+         L7Axf3AOH++f2uKTWnNDstFyZeEJi+9U0DQwMKSVIaB1fHxEc2p4Cj85UgEG/NX6giwV
+         ri3Q==
+X-Gm-Message-State: AOAM532QgwnoCPJwf/LOypc3EMRh6W0/B23UvvQHcQ9fNADavzMj2ouz
+        aa7W7TY0Aa0buECBd7gC0Q==
+X-Google-Smtp-Source: ABdhPJyKvjIhgKI2nli71gIsO+GWvcApvoJ6Cm7TU2kBmCv9kYz8IAaCuRaLy8t1HOMGLqJIMFiQtA==
+X-Received: by 2002:ad4:44e5:: with SMTP id p5mr32058968qvt.197.1597132155990;
+        Tue, 11 Aug 2020 00:49:15 -0700 (PDT)
+Received: from localhost.localdomain (146-115-88-66.s3894.c3-0.sbo-ubr1.sbo.ma.cable.rcncustomer.com. [146.115.88.66])
+        by smtp.gmail.com with ESMTPSA id j16sm16693897qke.87.2020.08.11.00.49.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2020 00:19:17 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 03:19:14 -0400
+        Tue, 11 Aug 2020 00:49:15 -0700 (PDT)
 From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Cong Wang <xiyou.wangcong@gmail.com>,
-        Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>,
+To:     Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        lvs-devel@vger.kernel.org,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        coreteam@netfilter.org,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [Linux-kernel-mentees] [PATCH net] ipvs: Fix uninit-value in
- do_ip_vs_set_ctl()
-Message-ID: <20200811071914.GA832118@PWN>
+        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [Linux-kernel-mentees] [PATCH net-next v2] ipvs: Fix uninit-value in do_ip_vs_set_ctl()
+Date:   Tue, 11 Aug 2020 03:46:40 -0400
+Message-Id: <20200811074640.841693-1-yepeilin.cs@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200810220703.796718-1-yepeilin.cs@gmail.com>
 References: <20200810220703.796718-1-yepeilin.cs@gmail.com>
- <CAM_iQpWsQubVJ-AYaLHujHwz68+nsHBcbgbf8XPMEPD=Vu+zaA@mail.gmail.com>
- <20200811050929.GA821443@PWN>
- <alpine.LFD.2.23.451.2008110936570.3707@ja.home.ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.23.451.2008110936570.3707@ja.home.ssi.bg>
+Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 09:58:46AM +0300, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Tue, 11 Aug 2020, Peilin Ye wrote:
-> 
-> > On Mon, Aug 10, 2020 at 08:57:19PM -0700, Cong Wang wrote:
-> > > On Mon, Aug 10, 2020 at 3:10 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
-> > > >
-> > > > do_ip_vs_set_ctl() is referencing uninitialized stack value when `len` is
-> > > > zero. Fix it.
-> > > 
-> > > Which exact 'cmd' is it here?
-> > > 
-> > > I _guess_ it is one of those uninitialized in set_arglen[], which is 0.
-> > 
-> > Yes, it was `IP_VS_SO_SET_NONE`, implicitly initialized to zero.
-> > 
-> > > But if that is the case, should it be initialized to
-> > > sizeof(struct ip_vs_service_user) instead because ip_vs_copy_usvc_compat()
-> > > is called anyway. Or, maybe we should just ban len==0 case.
-> > 
-> > I see. I think the latter would be easier, but we cannot ban all of
-> > them, since the function does something with `IP_VS_SO_SET_FLUSH`, which
-> > is a `len == 0` case.
-> > 
-> > Maybe we do something like this?
-> 
-> 	Yes, only IP_VS_SO_SET_FLUSH uses len 0. We can go with
-> this change but you do not need to target net tree, as the
-> problem is not fatal net-next works too. What happens is
-> that we may lookup services with random search keys which
-> is harmless.
+do_ip_vs_set_ctl() is referencing uninitialized stack value when `len` is
+zero. Fix it.
 
-I see, I'll target net-next instead.
+Reported-by: syzbot+23b5f9e7caf61d9a3898@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=46ebfb92a8a812621a001ef04d90dfa459520fe2
+Suggested-by: Julian Anastasov <ja@ssi.bg>
+Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
+---
+Changes in v2:
+    - Target net-next tree. (Suggested by Julian Anastasov <ja@ssi.bg>)
+    - Reject all `len == 0` requests except `IP_VS_SO_SET_FLUSH`, instead
+      of initializing `arg`. (Suggested by Cong Wang
+      <xiyou.wangcong@gmail.com>, Julian Anastasov <ja@ssi.bg>)
 
-> 	Another option is to add new block after this one:
-> 
->         } else if (cmd == IP_VS_SO_SET_TIMEOUT) {
->                 /* Set timeout values for (tcp tcpfin udp) */
->                 ret = ip_vs_set_timeout(ipvs, (struct ip_vs_timeout_user *)arg);
->                 goto out_unlock;
->         }
-> 
-> 	such as:
-> 
-> 	} else if (!len) {
-> 		/* No more commands with len=0 below */
-> 		ret = -EINVAL;
-> 		goto out_unlock;
-> 	}
-> 
-> 	It give more chance for future commands to use len=0
-> but the drawback is that the check happens under mutex. So, I'm
-> fine with both versions, it is up to you to decide :)
+ net/netfilter/ipvs/ip_vs_ctl.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Ah, this seems much cleaner. I'll send v2 soon, thank you!
+diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+index 412656c34f20..beeafa42aad7 100644
+--- a/net/netfilter/ipvs/ip_vs_ctl.c
++++ b/net/netfilter/ipvs/ip_vs_ctl.c
+@@ -2471,6 +2471,10 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
+ 		/* Set timeout values for (tcp tcpfin udp) */
+ 		ret = ip_vs_set_timeout(ipvs, (struct ip_vs_timeout_user *)arg);
+ 		goto out_unlock;
++	} else if (!len) {
++		/* No more commands with len == 0 below */
++		ret = -EINVAL;
++		goto out_unlock;
+ 	}
+ 
+ 	usvc_compat = (struct ip_vs_service_user *)arg;
+@@ -2547,9 +2551,6 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
+ 		break;
+ 	case IP_VS_SO_SET_DELDEST:
+ 		ret = ip_vs_del_dest(svc, &udest);
+-		break;
+-	default:
+-		ret = -EINVAL;
+ 	}
+ 
+   out_unlock:
+-- 
+2.25.1
 
-Peilin Ye
-
-> > @@ -2432,6 +2432,8 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
-> > 
-> >  	if (cmd < IP_VS_BASE_CTL || cmd > IP_VS_SO_SET_MAX)
-> >  		return -EINVAL;
-> > +	if (len == 0 && cmd != IP_VS_SO_SET_FLUSH)
-> > +		return -EINVAL;
-> >  	if (len != set_arglen[CMDID(cmd)]) {
-> >  		IP_VS_DBG(1, "set_ctl: len %u != %u\n",
-> >  			  len, set_arglen[CMDID(cmd)]);
-> > @@ -2547,9 +2549,6 @@ do_ip_vs_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
-> >  		break;
-> >  	case IP_VS_SO_SET_DELDEST:
-> >  		ret = ip_vs_del_dest(svc, &udest);
-> > -		break;
-> > -	default:
-> > -		ret = -EINVAL;
-> >  	}
-> > 
-> >    out_unlock:
-> 
-> Regards
-> 
-> --
-> Julian Anastasov <ja@ssi.bg>
