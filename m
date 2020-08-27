@@ -2,96 +2,69 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C91F245842
-	for <lists+lvs-devel@lfdr.de>; Sun, 16 Aug 2020 16:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F40254F6F
+	for <lists+lvs-devel@lfdr.de>; Thu, 27 Aug 2020 21:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728656AbgHPO6v (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 16 Aug 2020 10:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727950AbgHPO6t (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 16 Aug 2020 10:58:49 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEE4C061786
-        for <lvs-devel@vger.kernel.org>; Sun, 16 Aug 2020 07:58:49 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id p191so8025354ybg.0
-        for <lvs-devel@vger.kernel.org>; Sun, 16 Aug 2020 07:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=cdm2CGHbZXkS/7dfc4ugHPNq77IY8k0vLd4svDhfvcAtSbqXbhSgjdNNxTG2tlmum6
-         mUQMeTw+uobiXGDRxAJ9QR3f3UpJTmk4c9ow7gc0uh3fU5Jgh3mJ0Q5YgR4qWwF0iux+
-         t8yaexytx/2ve5DZSxNfKi7B9M2VDPVP1qxtJY09VrIo58s5w5JvzXKj67lRntgvbKFl
-         SSzLQzKu51ryQxyXyrT02Jr3myzhlaVn5plQvykwlRByvJBWrglJI9DsI837ahE4kGed
-         GePqMhfPfFEb+cH+90+isvoLBOHORxYm/WTPHREjhVS5bhgvQUS34TdbRJctznhf6QLD
-         Kwvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Duxa+mmNF3T3C2WDKsmzowR2OzvdY892XFjTPp0RWRI=;
-        b=P8tocx6NzVVWCcV6TDQBAKqpqsR4hM4iRGGR9lGE18tUgzT9fPPFJkRfUowEUIrPCF
-         M9DHog6esje7HTkWl87p7r58IWytKfloI/D09l+jqwzdXNOCYlPuXcBaUtQhnKqr4H0i
-         /fU3uimBS0fHa6YWFiR/x5ll8z7D2JtWLcyWhLjMe8gjCm8a6STA9M3xKfgNZ9H+2UsK
-         vJfX43rs8iUPoU/FvuxPpUF1wTHn7kh+gqaU0jNj5RAyi0wujvNf1IMvNE4MV6Si7lH+
-         ALXtEUD0Jj5HQUW8jkxwUnS9Dv59KziDay+Edi9S6RzYNRsXwox9/G+blWmwtoxmWeRH
-         Oa9Q==
-X-Gm-Message-State: AOAM531PVHdiQXsJs6s0K9kj78+k9sc5nXqCXmsr7+Cs8UmUdAbgt5Ky
-        W3TXnsN8abbRJlqyTWTJJlSE7enY3aVbd9bCNVM=
-X-Google-Smtp-Source: ABdhPJx99TGJptJqQ0iBchwNXwzPoluBvUWl7P1zQ4cJ6iGOd/qbwX8Mj7L5v6r5dhtBGRIDUhFCY2wQjD+xtdbHtik=
-X-Received: by 2002:a25:dc4b:: with SMTP id y72mr14977185ybe.197.1597589927470;
- Sun, 16 Aug 2020 07:58:47 -0700 (PDT)
+        id S1726344AbgH0TyK (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 27 Aug 2020 15:54:10 -0400
+Received: from forward105j.mail.yandex.net ([5.45.198.248]:35548 "EHLO
+        forward105j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726236AbgH0TyK (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 27 Aug 2020 15:54:10 -0400
+X-Greylist: delayed 341 seconds by postgrey-1.27 at vger.kernel.org; Thu, 27 Aug 2020 15:54:08 EDT
+Received: from mxback17j.mail.yandex.net (mxback17j.mail.yandex.net [IPv6:2a02:6b8:0:1619::93])
+        by forward105j.mail.yandex.net (Yandex) with ESMTP id 5611BB20D8C;
+        Thu, 27 Aug 2020 22:48:17 +0300 (MSK)
+Received: from iva7-f62245f79210.qloud-c.yandex.net (iva7-f62245f79210.qloud-c.yandex.net [2a02:6b8:c0c:2e83:0:640:f622:45f7])
+        by mxback17j.mail.yandex.net (mxback/Yandex) with ESMTP id cCPYONAQh0-mGbekdjK;
+        Thu, 27 Aug 2020 22:48:17 +0300
+Received: by iva7-f62245f79210.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id JKX2XogRXs-mEnG4U43;
+        Thu, 27 Aug 2020 22:48:15 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Lach <iam@lach.pw>
+Cc:     iam@lach.pw, Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>,
+        Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Remove ipvs v6 dependency on iptables
+Date:   Fri, 28 Aug 2020 00:48:02 +0500
+Message-Id: <20200827194802.1164-1-iam@lach.pw>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Received: by 2002:a26:1284:0:0:0:0:0 with HTTP; Sun, 16 Aug 2020 07:58:46
- -0700 (PDT)
-Reply-To: sctnld11170@tlen.pl
-From:   "Mr. Scott Donald" <mariam.cook20145@gmail.com>
-Date:   Sun, 16 Aug 2020 07:58:46 -0700
-Message-ID: <CAEyMmcmu1_-Ea=g38KN3msBSOqapxCxLdehO6uQchWq++FG-fg@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
---=20
-Dear Friend,
+This dependency was added in 63dca2c0b0e7a92cb39d1b1ecefa32ffda201975, because this commit had dependency on
+ipv6_find_hdr, which was located in iptables-specific code
 
-I'm Mr. Scott Donald a Successful businessMan dealing with
-Exportation, I got your mail contact through search to let you know my
-intension and my Ugly Situation Am a dying Man here in Los Angeles
-California Hospital Bed in (USA), I Lost my Wife and my only Daughter
-for Covid-19 and I also have a problem in my Health and I can die
-anytime I Know,
+But it is no longer required, because f8f626754ebeca613cf1af2e6f890cfde0e74d5b moved them to a more common location
+---
+ net/netfilter/ipvs/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-I have a project that I am about to hand over to you. and I already
-instructed the Bankia S.A. Madrid, Spain(BSA) to transfer my fund sum
-of =C2=A33,7M GBP. Equivalent to =E2=82=AC4,077,033.91 EUR, to you as to en=
-able you
-to give 50% of this fund to Charitable Home in your State and take 50%
-don't think otherwise and why would anybody send someone you barely
-know to help you deliver a message, help me do this for the happiness
-of my soul and for God to mercy me and my Family and give Us a good
-place.
+diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+index 2c1593089..eb0e329f9 100644
+--- a/net/netfilter/ipvs/Kconfig
++++ b/net/netfilter/ipvs/Kconfig
+@@ -29,7 +29,6 @@ if IP_VS
+ config	IP_VS_IPV6
+ 	bool "IPv6 support for IPVS"
+ 	depends on IPV6 = y || IP_VS = IPV6
+-	select IP6_NF_IPTABLES
+ 	select NF_DEFRAG_IPV6
+ 	help
+ 	  Add IPv6 support to IPVS.
+-- 
+2.28.0
 
-please, do as I said there was someone from your State that I deeply
-love so very very much and I miss her so badly I have no means to
-reach any Charitable Home there. that is why I go for a personal
-search of the Country and State and I got your mail contact through
-search to let you know my Bitterness and please, help me is getting
-Dark I ask my Doctor to help me keep you notice failure for me to
-reach you in person Your urgent Response, here is my Doctor Whats-app
-Number for urgent notice +13019692737
-
-Hope To Hear From You. I'm sending this email to you for the second
-time yet no response from you.
-
-My Regards.
-
-Mr. Scott Donald
-CEO
