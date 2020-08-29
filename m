@@ -2,76 +2,100 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D078255F9E
-	for <lists+lvs-devel@lfdr.de>; Fri, 28 Aug 2020 19:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19949256622
+	for <lists+lvs-devel@lfdr.de>; Sat, 29 Aug 2020 10:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727923AbgH1RWA (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 28 Aug 2020 13:22:00 -0400
-Received: from correo.us.es ([193.147.175.20]:54702 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727902AbgH1RV7 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 28 Aug 2020 13:21:59 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 403E41C4377
-        for <lvs-devel@vger.kernel.org>; Fri, 28 Aug 2020 19:21:58 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 31DC5DA840
-        for <lvs-devel@vger.kernel.org>; Fri, 28 Aug 2020 19:21:58 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 1E9FADA704; Fri, 28 Aug 2020 19:21:58 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WELCOMELIST,USER_IN_WHITELIST autolearn=disabled
-        version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id E174EDA730;
-        Fri, 28 Aug 2020 19:21:55 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Fri, 28 Aug 2020 19:21:55 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id A052142EF4E1;
-        Fri, 28 Aug 2020 19:21:55 +0200 (CEST)
-Date:   Fri, 28 Aug 2020 19:21:55 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     Wensong Zhang <wensong@linux-vs.org>,
+        id S1726748AbgH2I61 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 29 Aug 2020 04:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726280AbgH2I6Z (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 29 Aug 2020 04:58:25 -0400
+X-Greylist: delayed 472 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Aug 2020 01:58:24 PDT
+Received: from forward101p.mail.yandex.net (forward101p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6EFC061236;
+        Sat, 29 Aug 2020 01:58:24 -0700 (PDT)
+Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
+        by forward101p.mail.yandex.net (Yandex) with ESMTP id A9F2C2643EB6;
+        Sat, 29 Aug 2020 11:50:23 +0300 (MSK)
+Received: from mxback5q.mail.yandex.net (mxback5q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:b716:ad89])
+        by forward101q.mail.yandex.net (Yandex) with ESMTP id A3CB6CF40002;
+        Sat, 29 Aug 2020 11:50:23 +0300 (MSK)
+Received: from vla5-e763f15c6769.qloud-c.yandex.net (vla5-e763f15c6769.qloud-c.yandex.net [2a02:6b8:c18:340b:0:640:e763:f15c])
+        by mxback5q.mail.yandex.net (mxback/Yandex) with ESMTP id xwsiBp6pc0-oMv0uHXm;
+        Sat, 29 Aug 2020 11:50:23 +0300
+Received: by vla5-e763f15c6769.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id QISoGxxgDy-oIHmt0XR;
+        Sat, 29 Aug 2020 11:50:21 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   Yaroslav Bolyukin <iam@lach.pw>
+To:     ja@ssi.bg, Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Cc:     iam@lach.pw, Wensong Zhang <wensong@linux-vs.org>,
         Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
         "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [Linux-kernel-mentees] [PATCH net-next v2] ipvs: Fix
- uninit-value in do_ip_vs_set_ctl()
-Message-ID: <20200828172155.GA6651@salvia>
-References: <20200810220703.796718-1-yepeilin.cs@gmail.com>
- <20200811074640.841693-1-yepeilin.cs@gmail.com>
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: [PATCH] Remove ipvs v6 dependency on iptables
+Date:   Sat, 29 Aug 2020 13:50:05 +0500
+Message-Id: <20200829085005.24931-1-iam@lach.pw>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <e4765a73-e6a1-f5ba-dd8b-7c1ee1e5883d@6wind.com>
+References: <e4765a73-e6a1-f5ba-dd8b-7c1ee1e5883d@6wind.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200811074640.841693-1-yepeilin.cs@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Transfer-Encoding: 8bit
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 03:46:40AM -0400, Peilin Ye wrote:
-> do_ip_vs_set_ctl() is referencing uninitialized stack value when `len` is
-> zero. Fix it.
+This dependency was added as part of commit ecefa32ffda201975
+("ipvs: Fix faulty IPv6 extension header handling in IPVS"), because it
+had dependency on ipv6_find_hdr, which was located in iptables-specific
+code
 
-Applied to nf-next, thanks.
+But it is no longer required after commit e6f890cfde0e74d5b
+("ipv6:Move ipv6_find_hdr() out of Netfilter code.")
+
+Also remove ip6tables include from ip_vs
+
+Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+---
+ include/net/ip_vs.h        | 3 ---
+ net/netfilter/ipvs/Kconfig | 1 -
+ 2 files changed, 4 deletions(-)
+
+diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+index 9a59a3378..d609e957a 100644
+--- a/include/net/ip_vs.h
++++ b/include/net/ip_vs.h
+@@ -25,9 +25,6 @@
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>			/* for struct ipv6hdr */
+ #include <net/ipv6.h>
+-#if IS_ENABLED(CONFIG_IP_VS_IPV6)
+-#include <linux/netfilter_ipv6/ip6_tables.h>
+-#endif
+ #if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ #include <net/netfilter/nf_conntrack.h>
+ #endif
+diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+index 2c1593089..eb0e329f9 100644
+--- a/net/netfilter/ipvs/Kconfig
++++ b/net/netfilter/ipvs/Kconfig
+@@ -29,7 +29,6 @@ if IP_VS
+ config	IP_VS_IPV6
+ 	bool "IPv6 support for IPVS"
+ 	depends on IPV6 = y || IP_VS = IPV6
+-	select IP6_NF_IPTABLES
+ 	select NF_DEFRAG_IPV6
+ 	help
+ 	  Add IPv6 support to IPVS.
+-- 
+2.28.0
+
