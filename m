@@ -2,45 +2,44 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81D52566ED
-	for <lists+lvs-devel@lfdr.de>; Sat, 29 Aug 2020 12:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BAE256802
+	for <lists+lvs-devel@lfdr.de>; Sat, 29 Aug 2020 16:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728077AbgH2KyL (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 29 Aug 2020 06:54:11 -0400
-Received: from forward105p.mail.yandex.net ([77.88.28.108]:43743 "EHLO
-        forward105p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728070AbgH2Kx7 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 29 Aug 2020 06:53:59 -0400
-X-Greylist: delayed 7360 seconds by postgrey-1.27 at vger.kernel.org; Sat, 29 Aug 2020 06:53:31 EDT
-Received: from forward101q.mail.yandex.net (forward101q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb98])
-        by forward105p.mail.yandex.net (Yandex) with ESMTP id C036A4D41A1A;
-        Sat, 29 Aug 2020 13:52:44 +0300 (MSK)
-Received: from mxback7q.mail.yandex.net (mxback7q.mail.yandex.net [IPv6:2a02:6b8:c0e:41:0:640:cbbf:d618])
-        by forward101q.mail.yandex.net (Yandex) with ESMTP id BAC61CF40002;
-        Sat, 29 Aug 2020 13:52:44 +0300 (MSK)
-Received: from vla1-00787b9b359d.qloud-c.yandex.net (vla1-00787b9b359d.qloud-c.yandex.net [2a02:6b8:c0d:2915:0:640:78:7b9b])
-        by mxback7q.mail.yandex.net (mxback/Yandex) with ESMTP id gCYnzgL8Ka-qh8iouRw;
-        Sat, 29 Aug 2020 13:52:44 +0300
-Received: by vla1-00787b9b359d.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 8pPW436arS-qelORpTN;
-        Sat, 29 Aug 2020 13:52:42 +0300
+        id S1728039AbgH2OAY (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 29 Aug 2020 10:00:24 -0400
+Received: from forward102j.mail.yandex.net ([5.45.198.243]:46277 "EHLO
+        forward102j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728012AbgH2OAW (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 29 Aug 2020 10:00:22 -0400
+Received: from forward103q.mail.yandex.net (forward103q.mail.yandex.net [IPv6:2a02:6b8:c0e:50:0:640:b21c:d009])
+        by forward102j.mail.yandex.net (Yandex) with ESMTP id 60EBDF2083F;
+        Sat, 29 Aug 2020 17:00:14 +0300 (MSK)
+Received: from mxback5q.mail.yandex.net (mxback5q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:b716:ad89])
+        by forward103q.mail.yandex.net (Yandex) with ESMTP id 5A3E761E0009;
+        Sat, 29 Aug 2020 17:00:14 +0300 (MSK)
+Received: from vla3-b0c95643f530.qloud-c.yandex.net (vla3-b0c95643f530.qloud-c.yandex.net [2a02:6b8:c15:341d:0:640:b0c9:5643])
+        by mxback5q.mail.yandex.net (mxback/Yandex) with ESMTP id jpkCmE9VZ8-0Dv0NDrH;
+        Sat, 29 Aug 2020 17:00:14 +0300
+Received: by vla3-b0c95643f530.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id fTzMuIFaS8-09mq9T7d;
+        Sat, 29 Aug 2020 17:00:12 +0300
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (Client certificate not present)
 From:   Yaroslav Bolyukin <iam@lach.pw>
 To:     ja@ssi.bg
-Cc:     iam@lach.pw, Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>,
-        "David S. Miller" <davem@davemloft.net>,
+Cc:     iam@lach.pw, "David S. Miller" <davem@davemloft.net>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>,
         Jakub Kicinski <kuba@kernel.org>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
         lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: [PATCHv4 net-next] Remove ipvs v6 dependency on iptables
-Date:   Sat, 29 Aug 2020 15:51:37 +0500
-Message-Id: <20200829105136.3533-1-iam@lach.pw>
+Subject: [PATCHv5 net-next] ipvs: remove dependency on ip6_tables
+Date:   Sat, 29 Aug 2020 18:59:53 +0500
+Message-Id: <20200829135953.20228-1-iam@lach.pw>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <alpine.LFD.2.23.451.2008291233110.3043@ja.home.ssi.bg>
 References: <alpine.LFD.2.23.451.2008291233110.3043@ja.home.ssi.bg>
@@ -58,6 +57,8 @@ Fixes: f8f626754ebe ("ipv6: Move ipv6_find_hdr() out of Netfilter code.")
 Fixes: 63dca2c0b0e7 ("ipvs: Fix faulty IPv6 extension header handling in IPVS").
 Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
 ---
+ Missed canonical patch format section, subsystem is now spevified
+
  include/net/ip_vs.h        | 3 ---
  net/netfilter/ipvs/Kconfig | 1 -
  2 files changed, 4 deletions(-)
