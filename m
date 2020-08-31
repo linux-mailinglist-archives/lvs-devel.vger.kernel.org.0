@@ -2,107 +2,86 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C25FB257F5C
-	for <lists+lvs-devel@lfdr.de>; Mon, 31 Aug 2020 19:12:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB28258361
+	for <lists+lvs-devel@lfdr.de>; Mon, 31 Aug 2020 23:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728756AbgHaRMV (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 31 Aug 2020 13:12:21 -0400
-Received: from mg.ssi.bg ([178.16.128.9]:41756 "EHLO mg.ssi.bg"
+        id S1730224AbgHaVS2 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 31 Aug 2020 17:18:28 -0400
+Received: from correo.us.es ([193.147.175.20]:50192 "EHLO mail.us.es"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727044AbgHaRMU (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 31 Aug 2020 13:12:20 -0400
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 1B84C247A0;
-        Mon, 31 Aug 2020 20:12:17 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
-        by mg.ssi.bg (Proxmox) with ESMTP id 7A1112479F;
-        Mon, 31 Aug 2020 20:12:16 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id DD17E3C24C7;
-        Mon, 31 Aug 2020 20:12:09 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 07VHC5NF006196;
-        Mon, 31 Aug 2020 20:12:06 +0300
-Date:   Mon, 31 Aug 2020 20:12:05 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Yaroslav Bolyukin <iam@lach.pw>
-cc:     "David S. Miller" <davem@davemloft.net>,
+        id S1728514AbgHaVS1 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 31 Aug 2020 17:18:27 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 0C8021C4428
+        for <lvs-devel@vger.kernel.org>; Mon, 31 Aug 2020 23:18:24 +0200 (CEST)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id F3D58DA704
+        for <lvs-devel@vger.kernel.org>; Mon, 31 Aug 2020 23:18:23 +0200 (CEST)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id DBDB9DA78A; Mon, 31 Aug 2020 23:18:23 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WELCOMELIST,USER_IN_WHITELIST
+        autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 8465BDA78B;
+        Mon, 31 Aug 2020 23:18:21 +0200 (CEST)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Mon, 31 Aug 2020 23:18:21 +0200 (CEST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 44245426CCB9;
+        Mon, 31 Aug 2020 23:18:21 +0200 (CEST)
+Date:   Mon, 31 Aug 2020 23:18:20 +0200
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Yaroslav Bolyukin <iam@lach.pw>,
+        "David S. Miller" <davem@davemloft.net>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Wensong Zhang <wensong@linux-vs.org>,
         Simon Horman <horms@verge.net.au>,
         Jakub Kicinski <kuba@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
         lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org
 Subject: Re: [PATCHv5 net-next] ipvs: remove dependency on ip6_tables
-In-Reply-To: <20200829135953.20228-1-iam@lach.pw>
-Message-ID: <alpine.LFD.2.23.451.2008312005270.4425@ja.home.ssi.bg>
-References: <alpine.LFD.2.23.451.2008291233110.3043@ja.home.ssi.bg> <20200829135953.20228-1-iam@lach.pw>
+Message-ID: <20200831211820.GB24186@salvia>
+References: <alpine.LFD.2.23.451.2008291233110.3043@ja.home.ssi.bg>
+ <20200829135953.20228-1-iam@lach.pw>
+ <alpine.LFD.2.23.451.2008312005270.4425@ja.home.ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.LFD.2.23.451.2008312005270.4425@ja.home.ssi.bg>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-
-	Hello,
-
-On Sat, 29 Aug 2020, Yaroslav Bolyukin wrote:
-
-> This dependency was added because ipv6_find_hdr was in iptables specific
-> code but is no longer required
+On Mon, Aug 31, 2020 at 08:12:05PM +0300, Julian Anastasov wrote:
 > 
-> Fixes: f8f626754ebe ("ipv6: Move ipv6_find_hdr() out of Netfilter code.")
-> Fixes: 63dca2c0b0e7 ("ipvs: Fix faulty IPv6 extension header handling in IPVS").
-> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
-
-	Looks good to me, thanks! May be maintainers will
-remove the extra dot after the Fixes line.
-
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
-> ---
->  Missed canonical patch format section, subsystem is now spevified
+> 	Hello,
 > 
->  include/net/ip_vs.h        | 3 ---
->  net/netfilter/ipvs/Kconfig | 1 -
->  2 files changed, 4 deletions(-)
+> On Sat, 29 Aug 2020, Yaroslav Bolyukin wrote:
 > 
-> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-> index 9a59a3378..d609e957a 100644
-> --- a/include/net/ip_vs.h
-> +++ b/include/net/ip_vs.h
-> @@ -25,9 +25,6 @@
->  #include <linux/ip.h>
->  #include <linux/ipv6.h>			/* for struct ipv6hdr */
->  #include <net/ipv6.h>
-> -#if IS_ENABLED(CONFIG_IP_VS_IPV6)
-> -#include <linux/netfilter_ipv6/ip6_tables.h>
-> -#endif
->  #if IS_ENABLED(CONFIG_NF_CONNTRACK)
->  #include <net/netfilter/nf_conntrack.h>
->  #endif
-> diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
-> index 2c1593089..eb0e329f9 100644
-> --- a/net/netfilter/ipvs/Kconfig
-> +++ b/net/netfilter/ipvs/Kconfig
-> @@ -29,7 +29,6 @@ if IP_VS
->  config	IP_VS_IPV6
->  	bool "IPv6 support for IPVS"
->  	depends on IPV6 = y || IP_VS = IPV6
-> -	select IP6_NF_IPTABLES
->  	select NF_DEFRAG_IPV6
->  	help
->  	  Add IPv6 support to IPVS.
-> --
-> 2.28.0
+> > This dependency was added because ipv6_find_hdr was in iptables specific
+> > code but is no longer required
+> > 
+> > Fixes: f8f626754ebe ("ipv6: Move ipv6_find_hdr() out of Netfilter code.")
+> > Fixes: 63dca2c0b0e7 ("ipvs: Fix faulty IPv6 extension header handling in IPVS").
+> > Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
+> 
+> 	Looks good to me, thanks! May be maintainers will
+> remove the extra dot after the Fixes line.
 
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+Applied, thanks. I have also removed the extra dot.
