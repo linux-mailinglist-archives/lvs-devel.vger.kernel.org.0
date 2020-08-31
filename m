@@ -2,94 +2,107 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7051257A85
-	for <lists+lvs-devel@lfdr.de>; Mon, 31 Aug 2020 15:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C25FB257F5C
+	for <lists+lvs-devel@lfdr.de>; Mon, 31 Aug 2020 19:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbgHaNdb (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 31 Aug 2020 09:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726384AbgHaN1R (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 31 Aug 2020 09:27:17 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E9C0619EB
-        for <lvs-devel@vger.kernel.org>; Mon, 31 Aug 2020 06:26:29 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id e11so6668774ljn.6
-        for <lvs-devel@vger.kernel.org>; Mon, 31 Aug 2020 06:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
-        b=GvS5ONqONS+SkRITeLOYK+nEKqeftr2e4zlw8iOljUdVaT4ei8mXK/eMe5gdebbxul
-         qejaiESAwrQo/TwRSbsV2RgWo1cR2hwlUx3zHZP6xDZHfKXln6WrMjydy1j5UDKStApO
-         83k6OMYB/O4HA/D4ksOUSzU9ZpUpEqmaButNQtqR6C29H3+mAHSKCbPlI067sUdB20EE
-         ixBTW9S1A2kyuIbzfdQN/JSL5cc/RZ+/MNHv7Yis6pX8HuuJNUwic97zwHx5MU4x4PUn
-         9VwFvJUStfi4hRDyGGDy0ijlpU3bNrs4tLAIT0WFfsT49jK8zJO72eI6R18XAB60K+Uk
-         aflg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=o69Nac3LLMj5CDhyPqLcnP7WGq46U4gQb9HzFdG/MvE=;
-        b=FaC4HBa2h97pq9pcyZRZlu8SDZIJyk4F9Zh0PPHMJxHMijAIX4dnyFTEzsI+EdlJGg
-         dKkhwPVxtdDtS/SHM7Jl1Y3JZ6WxMc3CzwROqhNs3AGgnD5b2HMVKrQpPzCP2dmm/i/D
-         p5kbDs5e70XgdWG+SGDGCZ+QsE6o3tMe5LCPQaTfKH8hw6+YKZase3LtDLLpptTipGOs
-         VdCCFi3p24Y4teHFlv/AmOrttAEH50ObQLs3DwONPSQaj5mZZQf7IN/bEWIHDyCRYAoI
-         cuB8VDtbWuhdQr1cTHmBKnsOjSUzKnFDd5UstkF7EBcHtqa42GbCYb+xy4GFuy0wO4z+
-         /OEQ==
-X-Gm-Message-State: AOAM532ReiC7ruQY4DR8dm5qMrofijoFq5Xk8Llqy3T1XiUVEDAcSLzr
-        OSPCHWNI4aTPnKMpkurXnujYMkb3foNTmE365uA=
-X-Google-Smtp-Source: ABdhPJx5h73UdWdmqN0ZXklbmHxhGiANR3jS4fz3EetfufGWkyufJh3oSK0WTBZL+72KPBBqNF1EE+YcTj5isQyt2i4=
-X-Received: by 2002:a2e:5316:: with SMTP id h22mr714236ljb.167.1598880387154;
- Mon, 31 Aug 2020 06:26:27 -0700 (PDT)
+        id S1728756AbgHaRMV (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 31 Aug 2020 13:12:21 -0400
+Received: from mg.ssi.bg ([178.16.128.9]:41756 "EHLO mg.ssi.bg"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727044AbgHaRMU (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 31 Aug 2020 13:12:20 -0400
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 1B84C247A0;
+        Mon, 31 Aug 2020 20:12:17 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
+        by mg.ssi.bg (Proxmox) with ESMTP id 7A1112479F;
+        Mon, 31 Aug 2020 20:12:16 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id DD17E3C24C7;
+        Mon, 31 Aug 2020 20:12:09 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 07VHC5NF006196;
+        Mon, 31 Aug 2020 20:12:06 +0300
+Date:   Mon, 31 Aug 2020 20:12:05 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Yaroslav Bolyukin <iam@lach.pw>
+cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCHv5 net-next] ipvs: remove dependency on ip6_tables
+In-Reply-To: <20200829135953.20228-1-iam@lach.pw>
+Message-ID: <alpine.LFD.2.23.451.2008312005270.4425@ja.home.ssi.bg>
+References: <alpine.LFD.2.23.451.2008291233110.3043@ja.home.ssi.bg> <20200829135953.20228-1-iam@lach.pw>
 MIME-Version: 1.0
-Reply-To: marie_avis12@yahoo.com
-Received: by 2002:a2e:9817:0:0:0:0:0 with HTTP; Mon, 31 Aug 2020 06:26:26
- -0700 (PDT)
-From:   Miss Maris Avis <marie.avis11@gmail.com>
-Date:   Mon, 31 Aug 2020 13:26:26 +0000
-X-Google-Sender-Auth: aulnVZG-1gSOcZsrnz7-vOB6QCo
-Message-ID: <CADTVshPC=1cJsw0xvUiUZDDBg3VVdBcHJ+pk-zuvR4tycntngg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-My Dear,
 
-My name is Miss Marie Avis the only daughter of Mr. Gabriel Avis, my
-Father was dealing in Cocoa and Timber in this country before his
-death,  It is my pleasure to contact you for a business venture which
-I intend to establish in your country. Though I have not met with you
-before but I believe one has to risk confiding before you can succeed
-sometimes in life.
+	Hello,
 
-I can confide in you for my brighter future since you are a human
-being like me. There is this huge amount of Ten Million five hundred
-thousand United States dollars. ($10.500.000.00) which my late Father
-kept for me in a suspense account with one of the bank here in Abidjan
-Cote d'Ivoire before he was assassinated by unknown persons, Now I
-have decided to invest these money in your country or anywhere safe
-enough for me.
+On Sat, 29 Aug 2020, Yaroslav Bolyukin wrote:
 
-I want you to help me claim this fund from the bank and have it
-transfer into your personal account in your country for investment
-purposes in your country in these areas:
+> This dependency was added because ipv6_find_hdr was in iptables specific
+> code but is no longer required
+> 
+> Fixes: f8f626754ebe ("ipv6: Move ipv6_find_hdr() out of Netfilter code.")
+> Fixes: 63dca2c0b0e7 ("ipvs: Fix faulty IPv6 extension header handling in IPVS").
+> Signed-off-by: Yaroslav Bolyukin <iam@lach.pw>
 
-1). Telecommunication
-2). The transport Industry
-3). Five Star Hotel
-4). Tourism
-5). Real Estate
+	Looks good to me, thanks! May be maintainers will
+remove the extra dot after the Fixes line.
 
-If you can be of assistance to me I will be pleased to offer you 20%
-of the total fund.
+Acked-by: Julian Anastasov <ja@ssi.bg>
 
-I await your soonest response.
+> ---
+>  Missed canonical patch format section, subsystem is now spevified
+> 
+>  include/net/ip_vs.h        | 3 ---
+>  net/netfilter/ipvs/Kconfig | 1 -
+>  2 files changed, 4 deletions(-)
+> 
+> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+> index 9a59a3378..d609e957a 100644
+> --- a/include/net/ip_vs.h
+> +++ b/include/net/ip_vs.h
+> @@ -25,9 +25,6 @@
+>  #include <linux/ip.h>
+>  #include <linux/ipv6.h>			/* for struct ipv6hdr */
+>  #include <net/ipv6.h>
+> -#if IS_ENABLED(CONFIG_IP_VS_IPV6)
+> -#include <linux/netfilter_ipv6/ip6_tables.h>
+> -#endif
+>  #if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>  #include <net/netfilter/nf_conntrack.h>
+>  #endif
+> diff --git a/net/netfilter/ipvs/Kconfig b/net/netfilter/ipvs/Kconfig
+> index 2c1593089..eb0e329f9 100644
+> --- a/net/netfilter/ipvs/Kconfig
+> +++ b/net/netfilter/ipvs/Kconfig
+> @@ -29,7 +29,6 @@ if IP_VS
+>  config	IP_VS_IPV6
+>  	bool "IPv6 support for IPVS"
+>  	depends on IPV6 = y || IP_VS = IPV6
+> -	select IP6_NF_IPTABLES
+>  	select NF_DEFRAG_IPV6
+>  	help
+>  	  Add IPv6 support to IPVS.
+> --
+> 2.28.0
 
-Respectfully yours,
-Miss Marie Evis
-Tel: +225597438528
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
