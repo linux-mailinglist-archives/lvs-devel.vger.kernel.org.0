@@ -2,95 +2,79 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E4F260631
-	for <lists+lvs-devel@lfdr.de>; Mon,  7 Sep 2020 23:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C28A265A0C
+	for <lists+lvs-devel@lfdr.de>; Fri, 11 Sep 2020 09:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbgIGVTa (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 7 Sep 2020 17:19:30 -0400
-Received: from mail-il1-f207.google.com ([209.85.166.207]:53953 "EHLO
-        mail-il1-f207.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728101AbgIGVTQ (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 7 Sep 2020 17:19:16 -0400
-Received: by mail-il1-f207.google.com with SMTP id c8so6213997ila.20
-        for <lvs-devel@vger.kernel.org>; Mon, 07 Sep 2020 14:19:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=KDsIY9T/YTTlKMwesQyoJ6ofuhbIdzhOayQF73PmSbw=;
-        b=tJpcxwQ5GHliMP+EaS4Ro9mmbFvzLeJA6V5TkM4QD+nN46KfpD0Pv0U1IrI42/nsms
-         iDtkkqlUjryQEchk4o6lBHRxR04MivRxaBsW4/cX/EbOpXUz5XAY1S6H7jDVtZd3BzT4
-         ZvWxAcTX4izzE/NqxmMYzv9Y+LHXlIcvKHpXXkCBUqA146Mk2UCRLO5Kxc0/G64n5IDf
-         BaGJ+dHB06kGPBuaB0VQucJTKOep6b7eWN3QTAfDjGKlj1FiFgoctB4dl+4s+BtwtdcR
-         /VRZaQ9/01hSY3HPlrzG1S+hwQL+qWvLJ/9oMAPxEugK4iffnwDYhEUswcT+dA4kA+fO
-         f3HQ==
-X-Gm-Message-State: AOAM530KiA7lfdJx/N8zagyWYeVoX3R+iw41xPNgzicuAGEiSwmvGOo7
-        VL+3MOVj/EHR9Vn0AevHUUQ3Ljag1fADsV0se6aCUY3/7GMj
-X-Google-Smtp-Source: ABdhPJw22dwmVAPZ9SruiFpMv44NnluSWWCi0x/WHYJ6GOkdMfP+JrrrAJQjP7aqkLwToAMWPQMWs9Sz4aA+PKlNIPULyb1thvlz
+        id S1725535AbgIKHIN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Fri, 11 Sep 2020 03:08:13 -0400
+Received: from mail.flex.co.jp ([211.8.82.123]:57151 "EHLO www.flex.co.jp"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725468AbgIKHIM (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Fri, 11 Sep 2020 03:08:12 -0400
+Received: from live.com.mx ([103.89.89.225])
+        (authenticated bits=0)
+        by www.flex.co.jp (MTA) with ESMTP id 0898t27C018775
+        for <lvs-devel@vger.kernel.org>; Wed, 9 Sep 2020 17:55:11 +0900
+Reply-To: powerinthewords@yahoo.co.jp
+From:   piyin.crhe@live.com.mx
+To:     lvs-devel@vger.kernel.org
+Subject: =?utf-8?Q?=5BSpam=5D?=
+ We are still waiting for your email...
+Date:   09 Sep 2020 01:55:09 -0700
+Message-ID: <20200909015509.20FB3A8A7EAB5D3C@live.com.mx>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:60c:: with SMTP id t12mr2508124ils.200.1599513556041;
- Mon, 07 Sep 2020 14:19:16 -0700 (PDT)
-Date:   Mon, 07 Sep 2020 14:19:16 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005244f405aebfc5ba@google.com>
-Subject: INFO: trying to register non-static key in update_defense_level
-From:   syzbot <syzbot+80eac45c3b92882289f6@syzkaller.appspotmail.com>
-To:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
-        horms@verge.net.au, ja@ssi.bg, kadlec@netfilter.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        syzkaller-bugs@googlegroups.com, wensong@linux-vs.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hello,
+Dear Beneficiary,
 
-syzbot found the following issue on:
+We wish to inform you that a power of attorney was forwarded to 
+our office  by two gentlemen regarding your unclaimed fund of $56 
+Million Dollar. One of them is an American citizen named Mr. 
+Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
+citizen.We have be waiting for you to contact us since last year.
 
-HEAD commit:    9322c47b Merge tag 'xfs-5.9-fixes-2' of git://git.kernel.o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1670fe59900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bd46548257448703
-dashboard link: https://syzkaller.appspot.com/bug?extid=80eac45c3b92882289f6
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+The document claims these gentlemen to be your authorized 
+representatives, and the power of attorney states that you are 
+already deceased.  It further states that your death was due to 
+lung cancer, with your date of death being January 27th, 2020.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+They have now submitted a new account to replace the receiving 
+account that was in the original claim of funds. These funds have 
+remained unclaimed for quite some time and the need for 
+resolution is pressing. Below is the new account they have 
+submitted.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+80eac45c3b92882289f6@syzkaller.appspotmail.com
+Account Name's :  Robert Porter /Wilhelm Berg
+Account: 5007-29 438 66
+IBAN-nr: SE4150000000050072943866
+Bic-kod: ESSESESS
+Skandinaviska Enskilda Banken. (SEB :)
+SWEDEN .
 
-INFO: trying to register non-static key.
-the code is fine but needs lockdep annotation.
-turning off the locking correctness validator.
-CPU: 0 PID: 607 Comm: kworker/0:12 Not tainted 5.9.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_long defense_work_handler
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x198/0x1fd lib/dump_stack.c:118
- assign_lock_key kernel/locking/lockdep.c:894 [inline]
- register_lock_class+0x157d/0x1630 kernel/locking/lockdep.c:1206
- __lock_acquire+0xf9/0x5570 kernel/locking/lockdep.c:4305
- lock_acquire+0x1f3/0xae0 kernel/locking/lockdep.c:5006
- __raw_spin_lock include/linux/spinlock_api_smp.h:142 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:151
- spin_lock include/linux/spinlock.h:354 [inline]
- update_defense_level+0xdc/0x10f0 net/netfilter/ipvs/ip_vs_ctl.c:113
- defense_work_handler+0x25/0xe0 net/netfilter/ipvs/ip_vs_ctl.c:235
- process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+In the event that you are in fact still alive, we ask that you 
+confirm your existence by responding to this email. You are to 
+view this as a matter requiring immediate attention and response. 
+We have 48 hr monitoring of all activities within Federal Reserve 
+Bank.On this regard,you will be directed to any of our office 
+center that you will go in person to sign the final papers,
+because we have our payment center in Europe,Asia,America and 
+Canada.You will go to any of the office that you will be directed 
+to with the copy of the documents of your fund.
 
+We have contacted the bank in the Sweden asking them to wait for 
+further directives from Federal Reserve Bank, prior to 
+authorizing any withdrawals in any form.  Our request is based 
+entirely on our attempt to verify that you are in fact deceased, 
+before money is wrongly disbursed.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Your in Service,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Robert Steven Kaplan
+2200 N Pearl St, Dallas, TX 75201, United States
