@@ -2,79 +2,48 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C28A265A0C
-	for <lists+lvs-devel@lfdr.de>; Fri, 11 Sep 2020 09:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67E992689DE
+	for <lists+lvs-devel@lfdr.de>; Mon, 14 Sep 2020 13:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725535AbgIKHIN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Fri, 11 Sep 2020 03:08:13 -0400
-Received: from mail.flex.co.jp ([211.8.82.123]:57151 "EHLO www.flex.co.jp"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725468AbgIKHIM (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 11 Sep 2020 03:08:12 -0400
-Received: from live.com.mx ([103.89.89.225])
-        (authenticated bits=0)
-        by www.flex.co.jp (MTA) with ESMTP id 0898t27C018775
-        for <lvs-devel@vger.kernel.org>; Wed, 9 Sep 2020 17:55:11 +0900
-Reply-To: powerinthewords@yahoo.co.jp
-From:   piyin.crhe@live.com.mx
-To:     lvs-devel@vger.kernel.org
-Subject: =?utf-8?Q?=5BSpam=5D?=
- We are still waiting for your email...
-Date:   09 Sep 2020 01:55:09 -0700
-Message-ID: <20200909015509.20FB3A8A7EAB5D3C@live.com.mx>
+        id S1725984AbgINLVa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Mon, 14 Sep 2020 07:21:30 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:51028 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725948AbgINLV1 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 14 Sep 2020 07:21:27 -0400
+X-Greylist: delayed 17716 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Sep 2020 07:21:27 EDT
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id ADF5833C2603;
+        Sun, 13 Sep 2020 21:34:42 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id kyvYE5w7qA5c; Sun, 13 Sep 2020 21:34:42 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 23EC734A3BB5;
+        Sun, 13 Sep 2020 20:52:26 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qMOB9mqWhh7f; Sun, 13 Sep 2020 20:52:26 -0400 (-04)
+Received: from [192.168.8.101] (8ta-229-1-181.telkomadsl.co.za [197.229.1.181])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 9CF8D338274A;
+        Sun, 13 Sep 2020 19:15:29 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
 Content-Transfer-Encoding: 8BIT
-X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
+Content-Description: Mail message body
+Subject: Spende von 2.000.000,00 Euro.
+To:     Recipients <manuelfranco@info.com>
+From:   "manuel franco" <manuelfranco@info.com>
+Date:   Mon, 14 Sep 2020 01:15:17 +0200
+Reply-To: manuelfrancospende11@gmail.com
+Message-Id: <20200913231530.9CF8D338274A@correo.bnv.gob.ve>
 Sender: lvs-devel-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Dear Beneficiary,
+ Sie haben eine Spende von 2.000.000,00 Euro.
 
-We wish to inform you that a power of attorney was forwarded to 
-our office  by two gentlemen regarding your unclaimed fund of $56 
-Million Dollar. One of them is an American citizen named Mr. 
-Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
-citizen.We have be waiting for you to contact us since last year.
-
-The document claims these gentlemen to be your authorized 
-representatives, and the power of attorney states that you are 
-already deceased.  It further states that your death was due to 
-lung cancer, with your date of death being January 27th, 2020.
-
-They have now submitted a new account to replace the receiving 
-account that was in the original claim of funds. These funds have 
-remained unclaimed for quite some time and the need for 
-resolution is pressing. Below is the new account they have 
-submitted.
-
-Account Name's :  Robert Porter /Wilhelm Berg
-Account: 5007-29 438 66
-IBAN-nr: SE4150000000050072943866
-Bic-kod: ESSESESS
-Skandinaviska Enskilda Banken. (SEB :)
-SWEDEN .
-
-In the event that you are in fact still alive, we ask that you 
-confirm your existence by responding to this email. You are to 
-view this as a matter requiring immediate attention and response. 
-We have 48 hr monitoring of all activities within Federal Reserve 
-Bank.On this regard,you will be directed to any of our office 
-center that you will go in person to sign the final papers,
-because we have our payment center in Europe,Asia,America and 
-Canada.You will go to any of the office that you will be directed 
-to with the copy of the documents of your fund.
-
-We have contacted the bank in the Sweden asking them to wait for 
-further directives from Federal Reserve Bank, prior to 
-authorizing any withdrawals in any form.  Our request is based 
-entirely on our attempt to verify that you are in fact deceased, 
-before money is wrongly disbursed.
-
-Your in Service,
-
-Robert Steven Kaplan
-2200 N Pearl St, Dallas, TX 75201, United States
+Mein Name ist Manuel Franco aus den USA.
+Ich habe die America-Lotterie im Wert von 768 Millionen US-Dollar gewonnen und spende einen Teil davon an nur 5 glückliche Menschen und einige Waisenhäuser als Wohlwollen für die Menschheit.
