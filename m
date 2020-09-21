@@ -2,95 +2,75 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E833A27368C
-	for <lists+lvs-devel@lfdr.de>; Tue, 22 Sep 2020 01:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 699122736BF
+	for <lists+lvs-devel@lfdr.de>; Tue, 22 Sep 2020 01:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728794AbgIUXRJ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 21 Sep 2020 19:17:09 -0400
-Received: from mail.rusoil.net ([188.128.114.25]:34772 "EHLO mail.rusoil.net"
+        id S1728851AbgIUXnz (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 21 Sep 2020 19:43:55 -0400
+Received: from correo.us.es ([193.147.175.20]:57386 "EHLO mail.us.es"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728728AbgIUXRJ (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 21 Sep 2020 19:17:09 -0400
-X-Greylist: delayed 569 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:17:08 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id F08FD40B4E;
-        Tue, 22 Sep 2020 04:10:03 +0500 (YEKT)
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Fn4rRWYX3ZjX; Tue, 22 Sep 2020 04:10:03 +0500 (YEKT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 9B83240D89;
-        Tue, 22 Sep 2020 04:10:02 +0500 (YEKT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 9B83240D89
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
-        s=maildkim; t=1600729802;
-        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=x2I7e9EgciYjaAoJg3rfZVxzA9pE0Cgb7FlSoGsco2ahMOaX3roddCgNt5ZBQdCGE
-         JxcRxeCnBVJVhnaINXmU9wpOLF8eKTc72aaSsKUibEQkoD6nnTxsRNebo0rp+hY6qv
-         UdVldvWwEY3+cSPuZGsnpC+bIH+6uHqBlF6Ko4D0=
-X-Virus-Scanned: amavisd-new at mail.rusoil.net
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Vb0234N7HHGT; Tue, 22 Sep 2020 04:10:02 +0500 (YEKT)
-Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
-        by mail.rusoil.net (Postfix) with ESMTP id 9975040B4E;
-        Tue, 22 Sep 2020 04:10:00 +0500 (YEKT)
-Date:   Tue, 22 Sep 2020 04:09:59 +0500 (YEKT)
-From:   Blue Oak Mortgage and Loans <em@rusoil.net>
-Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
-Message-ID: <2042565757.907170.1600729799964.JavaMail.zimbra@rusoil.net>
-Subject: Wir finanzieren Projekte und Unternehmen
+        id S1728518AbgIUXnz (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 21 Sep 2020 19:43:55 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 2CAA5117743
+        for <lvs-devel@vger.kernel.org>; Tue, 22 Sep 2020 01:36:01 +0200 (CEST)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 1E63BDA73F
+        for <lvs-devel@vger.kernel.org>; Tue, 22 Sep 2020 01:36:01 +0200 (CEST)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id 01E1FDA78D; Tue, 22 Sep 2020 01:36:00 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,USER_IN_WELCOMELIST,USER_IN_WHITELIST autolearn=disabled
+        version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 7A7D8DA73D;
+        Tue, 22 Sep 2020 01:35:58 +0200 (CEST)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Tue, 22 Sep 2020 01:35:58 +0200 (CEST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 43BF642EF4E1;
+        Tue, 22 Sep 2020 01:35:58 +0200 (CEST)
+Date:   Tue, 22 Sep 2020 01:35:58 +0200
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     YueHaibing <yuehaibing@huawei.com>, wensong@linux-vs.org,
+        ja@ssi.bg, kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] ipvs: Remove unused macros
+Message-ID: <20200921233557.GA6523@salvia>
+References: <20200918131656.46260-1-yuehaibing@huawei.com>
+ <20200921072436.GA8437@vergenet.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.210.183.69]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
-Thread-Index: ENTWPf2UA0Hg2K9IMaFbchrM95pBmA==
-Thread-Topic: Wir finanzieren Projekte und Unternehmen
-To:     unlisted-recipients:; (no To-header on input)
+Content-Disposition: inline
+In-Reply-To: <20200921072436.GA8437@vergenet.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+On Mon, Sep 21, 2020 at 09:24:40AM +0200, Simon Horman wrote:
+> On Fri, Sep 18, 2020 at 09:16:56PM +0800, YueHaibing wrote:
+> > They are not used since commit e4ff67513096 ("ipvs: add
+> > sync_maxlen parameter for the sync daemon")
+> > 
+> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> 
+> Thanks, this look good to me.
+> 
+> Acked-by: Simon Horman <horms@verge.net.au>
+> 
+> Pablo, please consider this for nf-next.
 
-
-Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
-ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
-
-
-Eine kurze Einf=C3=BChrung.
-
-Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
-eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
- Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
-n 2% pro Jahr.
-
-
-Darlehensverfahren
-
-1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
-dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
-
-2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
-nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
- vorlegen.
-
-3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
-antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
-erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
- den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
-he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
-ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
-
-4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
-nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
-m NC-Darlehensvertragsformular aufgef=C3=BChrt.
-
-Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
-App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
-re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
-n.
-
-WhatsApp: + 90-552-365-3483
-E-Mail: info@bluelmtg.net
+Applied, thanks.
