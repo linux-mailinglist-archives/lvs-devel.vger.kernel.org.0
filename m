@@ -2,88 +2,71 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8374C2750F0
-	for <lists+lvs-devel@lfdr.de>; Wed, 23 Sep 2020 08:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA48275714
+	for <lists+lvs-devel@lfdr.de>; Wed, 23 Sep 2020 13:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbgIWGHD (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 23 Sep 2020 02:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbgIWGGi (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 23 Sep 2020 02:06:38 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD50FC061755;
-        Tue, 22 Sep 2020 23:06:37 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id k25so16202285ljk.0;
-        Tue, 22 Sep 2020 23:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=zhNLPdt3MABy9YGkQQhQ6/eOKIUXSwNa1xulGA5X34I=;
-        b=lT7Ov8RiWALgWo1tGW58nncRiqRjEqVnH4H0E5Yobwk9FNfUMCkYZfDjZvfB5orEP1
-         +YpacYIhhKTJNnlLPzzbUo0RfIaFLJhb/tDOA/EOCjfS7FGPsOEvvXv6k75sub9w73ng
-         wXZETZ/7tVv61t4+eu088LGRF+qzVs+5exUq0Jxflj7BSbmE4BRCG86nliVX+LQ5fj37
-         gCqfJIkkELSCCxlMtMl0W+Nu/LOjCHxxPoCDFFg+Eyifj8TyBN/C8r88oDWhxsf3Bg4q
-         1hyaMUiWzqUKKCLf4I/EOiD38fvIR+mv6i81Th4zYDo4VoRru7GhoxG5NSmQTVE2WAVa
-         wPBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=zhNLPdt3MABy9YGkQQhQ6/eOKIUXSwNa1xulGA5X34I=;
-        b=OjR+O8cWbZMdD4pnYNQA/XL5Ju3R1qrPD501tVgXjSExR4n6OS1DvSmOiHIZB8ioLR
-         CWkq1nYm7oEOIYISewcnu2kRZc3ROHw9o1P+JXQAV3mvQN32Q9Pzn9MDq0HeSs3/g07Z
-         BpvU1p3p99CBMfABGpMOpvcS1B7qU2uKFjm1aucvNC2JD52b5l6TuGcvSHc+UoYNfCbC
-         Hzb5ZyrrK7voieBEkY6d/WK9y2ZgfMMK1V6EZXWa3eo6IOfcTlCX8xiqXE9P4KS9Saza
-         LdFAHeaHM1Uzjqd17ccwjeNa1vCzoSdGw74btzajoe3brdJM1Ch0GV9ImuXoB3Y5FePr
-         jEyg==
-X-Gm-Message-State: AOAM532f0rsuBuIMFFo7A1SgyKj6S34v5bf5qXEXOkMPGQGQi9CH0XSU
-        KPYdAEiHFr9aPjSDfCgmQBZhUbqfH8OJ7e6wPJmdV0t3qDSk1g==
-X-Google-Smtp-Source: ABdhPJxfzcC+TydkSiRcCojlYcHR2hO+JoT7gp8X19M834MP43Q1uN1L4utP9tCc1HEcdobJ3iR8M8cdOvp5959jYWw=
-X-Received: by 2002:a2e:b006:: with SMTP id y6mr2376853ljk.462.1600841196247;
- Tue, 22 Sep 2020 23:06:36 -0700 (PDT)
+        id S1726445AbgIWLXn (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 23 Sep 2020 07:23:43 -0400
+Received: from hermes.cta.br ([161.24.235.5]:53390 "EHLO hermes.cta.br"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726332AbgIWLXn (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Wed, 23 Sep 2020 07:23:43 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by hermes.cta.br (Postfix) with ESMTP id 8ED011707896;
+        Wed, 23 Sep 2020 08:05:49 -0300 (-03)
+Received: from hermes.cta.br ([127.0.0.1])
+        by localhost (hermes.cta.br [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id z9SAfrowxxpm; Wed, 23 Sep 2020 08:05:48 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by hermes.cta.br (Postfix) with ESMTP id 8D3DF1705327;
+        Wed, 23 Sep 2020 02:44:15 -0300 (-03)
+DKIM-Filter: OpenDKIM Filter v2.10.3 hermes.cta.br 8D3DF1705327
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cta.br;
+        s=50824260-A46F-11E8-B5E3-16F5207DEC71; t=1600839857;
+        bh=PEgy+RpcsckcVXxslQn6d+tc//P81+6V7lvSU9dRFp0=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=OqE6u+PzB/lJzQ02/vNi6WxEwbrK/kOz3eCMv3NS+XUDx0b3HvpXodHIzPd7nhmCr
+         TscAPn5VNV8yT6BI5qGm3r596Kd4LkJR94fv2ytQ1Yp3N7rPpL0T1RZClvfkFnEB6I
+         V0XF/TpOhEIyuogBEPdj/Z+Qm1KZe+ChGPRiadeTbjz6XZCGiVqCxGmHCDohjXnzXj
+         ksOKxIcr0jjQOSz9z84Obe0JBpR4D/CeD0PU0IOQiCtU9BWvnLPwdvhXDRCiY+FtLd
+         BZl61bjmCTZXUCVnHUBHD0tfElWwOVeG8G83zrWjsp2TVPfWPVavQNwqnzQQLH+HWP
+         bLHDh8CSLjY3A==
+X-Virus-Scanned: amavisd-new at cta.br
+Received: from hermes.cta.br ([127.0.0.1])
+        by localhost (hermes.cta.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id b7JAHWJE7bgx; Wed, 23 Sep 2020 02:44:15 -0300 (-03)
+Received: from [10.120.212.214] (unknown [105.12.3.179])
+        by hermes.cta.br (Postfix) with ESMTPSA id B3AA11629B0F;
+        Wed, 23 Sep 2020 01:44:17 -0300 (-03)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-From:   yue longguang <yuelongguang@gmail.com>
-Date:   Wed, 23 Sep 2020 14:06:25 +0800
-Message-ID: <CAPaK2r921GtJVhwGKnZyCcQ1qkcWA=8TBWwNkW03R_=7TKzo6g@mail.gmail.com>
-Subject: [PATCH] ipvs: adjust the debug order of src and dst
-To:     wensong@linux-vs.org, horms@verge.net.au, ja@ssi.bg,
-        pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <scco@cta.br>
+From:   ''Tayeb souami'' <scco@cta.br>
+Date:   Wed, 23 Sep 2020 06:46:36 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20200923044417.B3AA11629B0F@hermes.cta.br>
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-From: ylg <bigclouds@163.com>
+Hallo mein lieber Freund
+                                  Mein Name ist Tayeb Souami aus New Jersey=
+ in Amerika und ich habe den America Lottery Jackpot von 315 Millionen Euro=
+ gewonnen. Ich habe mich entschlossen, die Summe von 2.000.000 Euro an f=FC=
+nf gl=FCckliche Personen zu spenden, und Sie wurden als einer der Beg=FCnst=
+igten ausgew=E4hlt. Bitte klicken Sie auf diesen Link, um mehr =FCber meine=
+n Gewinn zu erfahren.
 
-adjust the debug order of src and dst when tcp state changes
 
-Signed-off-by: ylg <bigclouds@163.com>
----
- net/netfilter/ipvs/ip_vs_proto_tcp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
 
-diff --git a/net/netfilter/ipvs/ip_vs_proto_tcp.c
-b/net/netfilter/ipvs/ip_vs_proto_tcp.c
-index dc2e7da2742a..6567eb45a234 100644
---- a/net/netfilter/ipvs/ip_vs_proto_tcp.c
-+++ b/net/netfilter/ipvs/ip_vs_proto_tcp.c
-@@ -548,10 +548,10 @@ set_tcp_state(struct ip_vs_proto_data *pd,
-struct ip_vs_conn *cp,
-       th->fin ? 'F' : '.',
-       th->ack ? 'A' : '.',
-       th->rst ? 'R' : '.',
--      IP_VS_DBG_ADDR(cp->daf, &cp->daddr),
--      ntohs(cp->dport),
-       IP_VS_DBG_ADDR(cp->af, &cp->caddr),
-       ntohs(cp->cport),
-+      IP_VS_DBG_ADDR(cp->daf, &cp->daddr),
-+      ntohs(cp->dport),
-       tcp_state_name(cp->state),
-       tcp_state_name(new_state),
-       refcount_read(&cp->refcnt));
--- 
-2.20.1 (Apple Git-117)
+Bitte kontaktieren Sie mich =FCber diese E-Mail: Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=FCcklich zu machen.
+
+Gr=FC=DFe
+Herr Tayeb Souami
