@@ -2,47 +2,86 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3FE27581F
-	for <lists+lvs-devel@lfdr.de>; Wed, 23 Sep 2020 14:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4FF275EEB
+	for <lists+lvs-devel@lfdr.de>; Wed, 23 Sep 2020 19:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgIWMnC (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 23 Sep 2020 08:43:02 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:51174 "EHLO vps0.lunn.ch"
+        id S1726332AbgIWRms (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 23 Sep 2020 13:42:48 -0400
+Received: from mg.ssi.bg ([178.16.128.9]:53130 "EHLO mg.ssi.bg"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726513AbgIWMnC (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 23 Sep 2020 08:43:02 -0400
-X-Greylist: delayed 2130 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 08:43:02 EDT
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
-        (envelope-from <andrew@lunn.ch>)
-        id 1kL3YC-00FsR9-OA; Wed, 23 Sep 2020 14:07:08 +0200
-Date:   Wed, 23 Sep 2020 14:07:08 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        id S1726234AbgIWRms (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Wed, 23 Sep 2020 13:42:48 -0400
+X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 13:42:47 EDT
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id C93E12C3C8;
+        Wed, 23 Sep 2020 20:33:04 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
+        by mg.ssi.bg (Proxmox) with ESMTP id 3E5092C3C3;
+        Wed, 23 Sep 2020 20:33:04 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id AC3963C0332;
+        Wed, 23 Sep 2020 20:33:01 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 08NHWwhQ005307;
+        Wed, 23 Sep 2020 20:32:58 +0300
+Date:   Wed, 23 Sep 2020 20:32:58 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
 To:     yue longguang <yuelongguang@gmail.com>
-Cc:     wensong@linux-vs.org, horms@verge.net.au, ja@ssi.bg,
-        pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        LKML <linux-kernel@vger.kernel.org>
+cc:     Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org
 Subject: Re: [PATCH] ipvs: adjust the debug order of src and dst
-Message-ID: <20200923120708.GD3770354@lunn.ch>
+In-Reply-To: <CAPaK2r921GtJVhwGKnZyCcQ1qkcWA=8TBWwNkW03R_=7TKzo6g@mail.gmail.com>
+Message-ID: <alpine.LFD.2.23.451.2009232012470.4453@ja.home.ssi.bg>
 References: <CAPaK2r921GtJVhwGKnZyCcQ1qkcWA=8TBWwNkW03R_=7TKzo6g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPaK2r921GtJVhwGKnZyCcQ1qkcWA=8TBWwNkW03R_=7TKzo6g@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 02:06:25PM +0800, yue longguang wrote:
+
+	Hello,
+
+On Wed, 23 Sep 2020, yue longguang wrote:
+
 > From: ylg <bigclouds@163.com>
 > 
 > adjust the debug order of src and dst when tcp state changes
+> 
+> Signed-off-by: ylg <bigclouds@163.com>
+> ---
+>  net/netfilter/ipvs/ip_vs_proto_tcp.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> b/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> index dc2e7da2742a..6567eb45a234 100644
+> --- a/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> +++ b/net/netfilter/ipvs/ip_vs_proto_tcp.c
+> @@ -548,10 +548,10 @@ set_tcp_state(struct ip_vs_proto_data *pd,
+> struct ip_vs_conn *cp,
+>        th->fin ? 'F' : '.',
+>        th->ack ? 'A' : '.',
+>        th->rst ? 'R' : '.',
+> -      IP_VS_DBG_ADDR(cp->daf, &cp->daddr),
+> -      ntohs(cp->dport),
+>        IP_VS_DBG_ADDR(cp->af, &cp->caddr),
+>        ntohs(cp->cport),
+> +      IP_VS_DBG_ADDR(cp->daf, &cp->daddr),
+> +      ntohs(cp->dport),
+>        tcp_state_name(cp->state),
+>        tcp_state_name(new_state),
+>        refcount_read(&cp->refcnt));
+> -- 
 
-Hi Yue
+	The first patch applies but this one does not: wrapped lines,
+different tabs. You can also consider using the
+"c:%s:%d v:%s:%d d:%s:%d" format as in ip_vs_bind_dest(). As result,
+we will avoid the confusion about "->" meaning.
 
-You need to explain why you are doing something, not what you are
-doing, in the commit message.
+Regards
 
-	Andrew
+--
+Julian Anastasov <ja@ssi.bg>
+
