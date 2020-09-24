@@ -2,80 +2,88 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2130E2775F8
-	for <lists+lvs-devel@lfdr.de>; Thu, 24 Sep 2020 17:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F239277B16
+	for <lists+lvs-devel@lfdr.de>; Thu, 24 Sep 2020 23:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728601AbgIXPz4 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 24 Sep 2020 11:55:56 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:34704 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728343AbgIXPzz (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 24 Sep 2020 11:55:55 -0400
-Received: from madeliefje.horms.nl (unknown [83.161.246.101])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 4984E25AD79;
-        Fri, 25 Sep 2020 01:55:52 +1000 (AEST)
-Received: by madeliefje.horms.nl (Postfix, from userid 7100)
-        id 982D2152D; Thu, 24 Sep 2020 17:55:50 +0200 (CEST)
-Date:   Thu, 24 Sep 2020 17:55:50 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     "longguang.yue" <bigclouds@163.com>
-Cc:     Wensong Zhang <wensong@linux-vs.org>, Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ipvs: adjust the debug order of src and dst
-Message-ID: <20200924155550.GC13127@vergenet.net>
-References: <20200923055000.82748-1-bigclouds@163.com>
+        id S1726316AbgIXVeI (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 24 Sep 2020 17:34:08 -0400
+Received: from [125.140.134.231] ([125.140.134.231]:56053 "EHLO
+        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725208AbgIXVeI (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 24 Sep 2020 17:34:08 -0400
+Received: from User ([185.191.231.247]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
+         Fri, 25 Sep 2020 06:32:26 +0900
+Reply-To: <samthong5555@yahoo.com>
+From:   "SAM THONG" <samthong5555@gmail.com>
+Subject: Business Acquisition 1
+Date:   Thu, 24 Sep 2020 14:32:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200923055000.82748-1-bigclouds@163.com>
-Organisation: Horms Solutions BV
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <WIN-DAONO245HJFaiA300e70eea@WIN-DAONO245HJF>
+X-OriginalArrivalTime: 24 Sep 2020 21:32:27.0355 (UTC) FILETIME=[332392B0:01D692BA]
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 01:49:59PM +0800, longguang.yue wrote:
-> From: ylg <bigclouds@163.com>
-> 
-> adjust the debug order of src and dst when tcp state changes
-> 
-> Signed-off-by: ylg <bigclouds@163.com>
 
-Hi,
 
-This sounds reasonable to me but please provide your real name
-in the Signed-off-by name, which should be consistent with the From field
-at the top of the commit message (or, if absent of the email).
+Dear sir
 
-Thanks!
+Our underwriter company is seeking the attention of genuine and reliable persons, companies
 
-> ---
->  net/netfilter/ipvs/ip_vs_proto_tcp.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_proto_tcp.c b/net/netfilter/ipvs/ip_vs_proto_tcp.c
-> index dc2e7da2742a..6567eb45a234 100644
-> --- a/net/netfilter/ipvs/ip_vs_proto_tcp.c
-> +++ b/net/netfilter/ipvs/ip_vs_proto_tcp.c
-> @@ -548,10 +548,10 @@ set_tcp_state(struct ip_vs_proto_data *pd, struct ip_vs_conn *cp,
->  			      th->fin ? 'F' : '.',
->  			      th->ack ? 'A' : '.',
->  			      th->rst ? 'R' : '.',
-> -			      IP_VS_DBG_ADDR(cp->daf, &cp->daddr),
-> -			      ntohs(cp->dport),
->  			      IP_VS_DBG_ADDR(cp->af, &cp->caddr),
->  			      ntohs(cp->cport),
-> +			      IP_VS_DBG_ADDR(cp->daf, &cp->daddr),
-> +			      ntohs(cp->dport),
->  			      tcp_state_name(cp->state),
->  			      tcp_state_name(new_state),
->  			      refcount_read(&cp->refcnt));
-> -- 
-> 2.20.1 (Apple Git-117)
-> 
+who are indeed in need of funds as investment capital or business expansion in form of a
+
+direct loan to partner with us and benefit in our new Loan and Project funding programs.
+
+
+
+We offer flexible loans and funding for various projects at very affordable low interest
+
+rate of 3% annually for a period of 1-15 years on Non collateral loan/funding . We offer
+
+loan/funding from a minimum of Euro ? / USD$ 1 Million to Euro ? / USD$ 1 Billion. Max,
+
+depending on the nature of business/project.
+
+We are currently funding for:-
+
+
+
+* Starting up a Franchise
+
+* Business Acquisition
+
+* Business Expansion
+
+* Commercial Real Estate purchase
+
+* Consultancy and Contract Execution, Marine , ETC.
+
+
+
+Kindly get in touch for further details and procedure. samthong5555@yahoo.com 
+
+
+
+Respectfully,
+
+
+SAM THONG
+
+
+
+
+
+
+
+	
+
+
+
