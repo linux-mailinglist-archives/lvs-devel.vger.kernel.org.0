@@ -2,159 +2,170 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 936AA27F135
-	for <lists+lvs-devel@lfdr.de>; Wed, 30 Sep 2020 20:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2008C281C50
+	for <lists+lvs-devel@lfdr.de>; Fri,  2 Oct 2020 21:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725892AbgI3STx (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 30 Sep 2020 14:19:53 -0400
-Received: from mg.ssi.bg ([178.16.128.9]:57786 "EHLO mg.ssi.bg"
+        id S1725355AbgJBTws (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 2 Oct 2020 15:52:48 -0400
+Received: from m12-13.163.com ([220.181.12.13]:38330 "EHLO m12-13.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725814AbgI3STx (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 30 Sep 2020 14:19:53 -0400
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id C8319CCA4;
-        Wed, 30 Sep 2020 21:19:50 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
-        by mg.ssi.bg (Proxmox) with ESMTP id 0A176CC9F;
-        Wed, 30 Sep 2020 21:19:50 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 7AB1E3C09D2;
-        Wed, 30 Sep 2020 21:19:46 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 08UIJhq5007185;
-        Wed, 30 Sep 2020 21:19:45 +0300
-Date:   Wed, 30 Sep 2020 21:19:43 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     "longguang.yue" <bigclouds@163.com>
-cc:     kuba@kernel.org, yuelongguang@gmail.com,
-        Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "open list:IPVS" <lvs-devel@vger.kernel.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>
-Subject: Re: [PATCH v3] ipvs: Add traffic statistic up even it is VS/DR or
- VS/TUN mode
-In-Reply-To: <20200930012611.54859-1-bigclouds@163.com>
-Message-ID: <alpine.LFD.2.23.451.2009302019180.5709@ja.home.ssi.bg>
-References: <20200929074110.33d7d740@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <20200930012611.54859-1-bigclouds@163.com>
+        id S1725283AbgJBTws (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Fri, 2 Oct 2020 15:52:48 -0400
+X-Greylist: delayed 6344 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Oct 2020 15:52:46 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nd9oP
+        Av+PVdHTui16lO4giEVC1V0YqToMfMakyliwMQ=; b=ijqMYkJgCWfmFay1I1Kz1
+        HEXxHn8T8isObsQYDAMfmwm0Zgp1rTpoWpgR74Y7h2v2HJedbphh7Jt59DdmbBzQ
+        evXGg2oLdQlTbRSBjvpf2poaqh06xRH2lKjkn++g4y+fhlqIebDfsfcIW66dh47/
+        Y2lhaIY2tdMm4Kx2nc5yBI=
+Received: from localhost.localdomain (unknown [114.247.184.147])
+        by smtp9 (Coremail) with SMTP id DcCowACnCGi_YHdf7MZNJQ--.43537S2;
+        Sat, 03 Oct 2020 01:17:51 +0800 (CST)
+From:   "longguang.yue" <bigclouds@163.com>
+Cc:     ja@ssi.bg, kuba@kernel.org, wensong@linux-vs.org,
+        horms@verge.net.au, pablo@netfilter.org, kadlec@netfilter.org,
+        fw@strlen.de, davem@davemloft.net, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel@vger.kernel.org, yuelongguang@gmail.com,
+        "longguang.yue" <bigclouds@163.com>
+Subject: [PATCH v4] ipvs: Add traffic statistic up even it is VS/DR or VS/TUN mode
+Date:   Sat,  3 Oct 2020 01:17:32 +0800
+Message-Id: <20201002171732.74552-1-bigclouds@163.com>
+X-Mailer: git-send-email 2.20.1 (Apple Git-117)
+In-Reply-To: <alpine.LFD.2.23.451.2009302019180.5709@ja.home.ssi.bg>
+References: <alpine.LFD.2.23.451.2009302019180.5709@ja.home.ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowACnCGi_YHdf7MZNJQ--.43537S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4DCw1kZF48ZFW3Ar4rAFb_yoW5Kw1Dp3
+        WUKa93XrW8GFy3t3WxJr97ur1fCr1kJ3Zrur4Yk34Sy3Z8JF15XFsY9FyYyFW5CrsYqa43
+        tw4Fqw45Cw1DJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UmhFsUUUUU=
+X-Originating-IP: [114.247.184.147]
+X-CM-SenderInfo: peljuzprxg2qqrwthudrp/1tbiVB+xQ1UMOY-1YAAAsD
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+It's ipvs's duty to do traffic statistic if packets get hit,
+no matter what mode it is.
 
-	Hello,
+Changes in v1: support DR/TUN mode statistic
+Changes in v2: ip_vs_conn_out_get handles DR/TUN mode's conn
+Changes in v3: fix checkpatch
+Changes in v4: restructure and optimise this feature
 
-On Wed, 30 Sep 2020, longguang.yue wrote:
+Signed-off-by: longguang.yue <bigclouds@163.com>
+---
+ net/netfilter/ipvs/ip_vs_conn.c | 18 +++++++++++++++---
+ net/netfilter/ipvs/ip_vs_core.c | 24 +++++++++++++++++-------
+ 2 files changed, 32 insertions(+), 10 deletions(-)
 
-> It's ipvs's duty to do traffic statistic if packets get hit,
-> no matter what mode it is.
-> 
-> Signed-off-by: longguang.yue <bigclouds@163.com>
-> ---
->  net/netfilter/ipvs/ip_vs_conn.c | 14 ++++++++++++--
->  net/netfilter/ipvs/ip_vs_core.c |  5 ++++-
->  2 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-> index a90b8eac16ac..c4d164ce8ca7 100644
-> --- a/net/netfilter/ipvs/ip_vs_conn.c
-> +++ b/net/netfilter/ipvs/ip_vs_conn.c
-> @@ -401,6 +401,8 @@ struct ip_vs_conn *ip_vs_ct_in_get(const struct ip_vs_conn_param *p)
->  struct ip_vs_conn *ip_vs_conn_out_get(const struct ip_vs_conn_param *p)
->  {
->  	unsigned int hash;
-> +	__be16 cport;
-> +	const union nf_inet_addr *caddr;
->  	struct ip_vs_conn *cp, *ret=NULL;
+diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
+index a90b8eac16ac..af08ca2d9174 100644
+--- a/net/netfilter/ipvs/ip_vs_conn.c
++++ b/net/netfilter/ipvs/ip_vs_conn.c
+@@ -401,6 +401,8 @@ struct ip_vs_conn *ip_vs_ct_in_get(const struct ip_vs_conn_param *p)
+ struct ip_vs_conn *ip_vs_conn_out_get(const struct ip_vs_conn_param *p)
+ {
+ 	unsigned int hash;
++	__be16 sport;
++	const union nf_inet_addr *saddr;
+ 	struct ip_vs_conn *cp, *ret=NULL;
+ 
+ 	/*
+@@ -411,10 +413,20 @@ struct ip_vs_conn *ip_vs_conn_out_get(const struct ip_vs_conn_param *p)
+ 	rcu_read_lock();
+ 
+ 	hlist_for_each_entry_rcu(cp, &ip_vs_conn_tab[hash], c_list) {
+-		if (p->vport == cp->cport && p->cport == cp->dport &&
+-		    cp->af == p->af &&
++		if (p->vport != cp->cport)
++			continue;
++
++		if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ) {
++			sport = cp->vport;
++			saddr = &cp->vaddr;
++		} else {
++			sport = cp->dport;
++			saddr = &cp->daddr;
++		}
++
++		if (p->cport == sport && cp->af == p->af &&
+ 		    ip_vs_addr_equal(p->af, p->vaddr, &cp->caddr) &&
+-		    ip_vs_addr_equal(p->af, p->caddr, &cp->daddr) &&
++		    ip_vs_addr_equal(p->af, p->caddr, saddr) &&
+ 		    p->protocol == cp->protocol &&
+ 		    cp->ipvs == p->ipvs) {
+ 			if (!__ip_vs_conn_get(cp))
+diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
+index e3668a6e54e4..315289aecad7 100644
+--- a/net/netfilter/ipvs/ip_vs_core.c
++++ b/net/netfilter/ipvs/ip_vs_core.c
+@@ -911,6 +911,10 @@ static int handle_response_icmp(int af, struct sk_buff *skb,
+ 		ip_vs_update_conntrack(skb, cp, 0);
+ 
+ ignore_cp:
++	ip_vs_out_stats(cp, skb);
++	skb->ipvs_property = 1;
++	if (!(cp->flags & IP_VS_CONN_F_NFCT))
++		ip_vs_notrack(skb);
+ 	verdict = NF_ACCEPT;
+ 
+ out:
+@@ -1276,6 +1280,9 @@ handle_response(int af, struct sk_buff *skb, struct ip_vs_proto_data *pd,
+ {
+ 	struct ip_vs_protocol *pp = pd->pp;
+ 
++	if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ)
++		goto ignore_cp;
++
+ 	IP_VS_DBG_PKT(11, af, pp, skb, iph->off, "Outgoing packet");
+ 
+ 	if (skb_ensure_writable(skb, iph->len))
+@@ -1328,6 +1335,16 @@ handle_response(int af, struct sk_buff *skb, struct ip_vs_proto_data *pd,
+ 	LeaveFunction(11);
+ 	return NF_ACCEPT;
+ 
++ignore_cp:
++	ip_vs_out_stats(cp, skb);
++	skb->ipvs_property = 1;
++	if (!(cp->flags & IP_VS_CONN_F_NFCT))
++		ip_vs_notrack(skb);
++	__ip_vs_conn_put(cp);
++
++	LeaveFunction(11);
++	return NF_ACCEPT;
++
+ drop:
+ 	ip_vs_conn_put(cp);
+ 	kfree_skb(skb);
+@@ -1413,8 +1430,6 @@ ip_vs_out(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, in
+ 			     ipvs, af, skb, &iph);
+ 
+ 	if (likely(cp)) {
+-		if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ)
+-			goto ignore_cp;
+ 		return handle_response(af, skb, pd, cp, &iph, hooknum);
+ 	}
+ 
+@@ -1475,14 +1490,9 @@ ip_vs_out(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, in
+ 		}
+ 	}
+ 
+-out:
+ 	IP_VS_DBG_PKT(12, af, pp, skb, iph.off,
+ 		      "ip_vs_out: packet continues traversal as normal");
+ 	return NF_ACCEPT;
+-
+-ignore_cp:
+-	__ip_vs_conn_put(cp);
+-	goto out;
+ }
+ 
+ /*
+-- 
+2.20.1 (Apple Git-117)
 
-	May be we can do it in few rounds, here is a list
-of some initial notes...
-
-	caddr/cport are misleading, can be saddr/sport (source)
-or laddr/lport (local).
-
->  	/*
-> @@ -411,10 +413,18 @@ struct ip_vs_conn *ip_vs_conn_out_get(const struct ip_vs_conn_param *p)
->  	rcu_read_lock();
->  
->  	hlist_for_each_entry_rcu(cp, &ip_vs_conn_tab[hash], c_list) {
-
-	Lets first check here for cp->cport before touching more
-cache lines while traversing the list, it eliminates the cost of
-next checks:
-
-		if (p->vport != cp->cport)
-			continue;
-
-		then
-
-		if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ) {
-		...
-
-> -		if (p->vport == cp->cport && p->cport == cp->dport &&
-> +		cport = cp->dport;
-> +		caddr = &cp->daddr;
-> +
-> +		if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ) {
-> +			cport = cp->vport;
-> +			caddr = &cp->vaddr;
-> +		}
-
-	Considering the issues solved by commit 3c5ab3f395d6,
-such check more correctly matches the replies from DR/TUN
-real server to local clients but also to remote clients
-if director is used as router.
-
-> +
-> +		if (p->vport == cp->cport && p->cport == cport &&
-
-		if (p->cport == sport &&
-			...
-
->  		    cp->af == p->af &&
->  		    ip_vs_addr_equal(p->af, p->vaddr, &cp->caddr) &&
-> -		    ip_vs_addr_equal(p->af, p->caddr, &cp->daddr) &&
-> +		    ip_vs_addr_equal(p->af, p->caddr, caddr) &&
->  		    p->protocol == cp->protocol &&
->  		    cp->ipvs == p->ipvs) {
->  			if (!__ip_vs_conn_get(cp))
-> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-> index e3668a6e54e4..7ba88dab297a 100644
-> --- a/net/netfilter/ipvs/ip_vs_core.c
-> +++ b/net/netfilter/ipvs/ip_vs_core.c
-> @@ -1413,8 +1413,11 @@ ip_vs_out(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, in
->  			     ipvs, af, skb, &iph);
->  
->  	if (likely(cp)) {
-> -		if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ)
-> +		if (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ) {
-> +			ip_vs_out_stats(cp, skb);
-> +			skb->ipvs_property = 1;
-
-	We will also need:
-
-			if (!(cp->flags & IP_VS_CONN_F_NFCT))
-				ip_vs_notrack(skb);
-
-	Similar code is needed in handle_response_icmp(),
-so that we account ICMP packets, where a jump to new label
-before ip_vs_out_stats() can work.
-
-	But such jump is preferred even for handle_response()
-because the (IP_VS_FWD_METHOD(cp) != IP_VS_CONN_F_MASQ) check
-should be moved from ip_vs_out() into handle_response().
-For this to work the ip_vs_set_state() call in handle_response()
-should be moved before the new label and ip_vs_out_stats() call.
-
->  			goto ignore_cp;
-> +		}
->  		return handle_response(af, skb, pd, cp, &iph, hooknum);
->  	}
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
 
