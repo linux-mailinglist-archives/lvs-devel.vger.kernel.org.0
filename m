@@ -2,74 +2,67 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7597E284084
-	for <lists+lvs-devel@lfdr.de>; Mon,  5 Oct 2020 22:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880D7285D7B
+	for <lists+lvs-devel@lfdr.de>; Wed,  7 Oct 2020 12:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729545AbgJEURc (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 5 Oct 2020 16:17:32 -0400
-Received: from mg.ssi.bg ([178.16.128.9]:39118 "EHLO mg.ssi.bg"
+        id S1728263AbgJGKwQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Wed, 7 Oct 2020 06:52:16 -0400
+Received: from mx.metalurgs.lv ([81.198.125.103]:61402 "EHLO mx.metalurgs.lv"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729424AbgJEURc (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 5 Oct 2020 16:17:32 -0400
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id DA8752B1DF;
-        Mon,  5 Oct 2020 23:17:30 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
-        by mg.ssi.bg (Proxmox) with ESMTP id ED2C42B1D9;
-        Mon,  5 Oct 2020 23:17:29 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 782323C09B7;
-        Mon,  5 Oct 2020 23:17:29 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 095KHQ5F014009;
-        Mon, 5 Oct 2020 23:17:27 +0300
-Date:   Mon, 5 Oct 2020 23:17:26 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     "longguang.yue" <bigclouds@163.com>
-cc:     lvs-devel@vger.kernel.org, yuelongguang@gmail.com
-Subject: Re: [PATCH v7] ipvs: inspect reply packets from DR/TUN real
- servers
-In-Reply-To: <20201005064943.88541-1-bigclouds@163.com>
-Message-ID: <alpine.LFD.2.23.451.2010052316090.13695@ja.home.ssi.bg>
-References: <alpine.LFD.2.23.451.2010041409460.5398@ja.home.ssi.bg> <20201005064943.88541-1-bigclouds@163.com>
+        id S1728259AbgJGKwP (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:52:15 -0400
+Received: from mx.metalurgs.lv (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id C5F9462AA9
+        for <lvs-devel@vger.kernel.org>; Wed,  7 Oct 2020 13:51:13 +0300 (EEST)
+Received: from kas30pipe.localhost (localhost [127.0.0.1])
+        by mx.metalurgs.lv (Postfix) with ESMTP id 9D98F63576
+        for <lvs-devel@vger.kernel.org>; Wed,  7 Oct 2020 13:51:13 +0300 (EEST)
+Received: by mx.metalurgs.lv (Postfix, from userid 1005)
+        id 27A9262930; Wed,  7 Oct 2020 13:51:10 +0300 (EEST)
+Received: from [100.64.1.74] (unknown [190.15.125.55])
+        (Authenticated sender: admin)
+        by mx.metalurgs.lv (Postfix) with ESMTPA id 5C78E5F187;
+        Wed,  7 Oct 2020 13:51:04 +0300 (EEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Description: Mail message body
+To:     Recipients <financialcapability6@gmail.com>
+From:   "Mr. Hashim Bin" <financialcapability6@gmail.com>
+Date:   Wed, 07 Oct 2020 07:50:53 -0300
+Reply-To: hmurrah39@gmail.com
+X-SpamTest-Envelope-From: financialcapability6@gmail.com
+X-SpamTest-Group-ID: 00000000
+X-SpamTest-Info: Profiles 71303 [Jan 01 2015]
+X-SpamTest-Info: {TO: forged address, i.e. recipient, investors, public, etc.}
+X-SpamTest-Info: {DATE: unreal year}
+X-SpamTest-Method: none
+X-SpamTest-Rate: 55
+X-SpamTest-Status: Not detected
+X-SpamTest-Status-Extended: not_detected
+X-SpamTest-Version: SMTP-Filter Version 3.0.0 [0284], KAS30/Release
+Message-ID: <20201007105111.27A9262930@mx.metalurgs.lv>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+Subject: Low Rate Loan./mmm,
+X-Anti-Virus: Kaspersky Anti-Virus for Linux Mail Server 5.6.39/RELEASE,
+         bases: 20140401 #7726142, check: 20201007 notchecked
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Hello Dear,
 
-	Hello,
 
-On Mon, 5 Oct 2020, longguang.yue wrote:
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
-> Just like for MASQ, inspect the reply packets coming from DR/TUN
-> real servers and alter the connection's state and timeout
-> according to the protocol.
-> 
-> It's ipvs's duty to do traffic statistic if packets get hit,
-> no matter what mode it is.
-> 
-> Signed-off-by: longguang.yue <bigclouds@163.com>
-> 
-> ---
-> v1: support DR/TUN mode statistic
-> v2: ip_vs_conn_out_get handles DR/TUN mode's conn
-> v3: fix checkpatch
-> v4, v5: restructure and optimise this feature
-> v6: rewrite subject and patch description
-> v7: adjust changelogs and order of some local vars
 
-	Thanks! Fixed the patch format and posted it as v8.
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
 
-> Signed-off-by: longguang.yue <bigclouds@163.com>
-> ---
->  net/netfilter/ipvs/ip_vs_conn.c | 18 +++++++++++++++---
->  net/netfilter/ipvs/ip_vs_core.c | 17 ++++++-----------
->  2 files changed, 21 insertions(+), 14 deletions(-)
 
-Regards
+Please get back to me if you are interested for more
 
---
-Julian Anastasov <ja@ssi.bg>
+details.
 
+
+Yours faithfully,
+
+Hashim Murrah
