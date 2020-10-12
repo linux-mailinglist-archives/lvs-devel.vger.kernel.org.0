@@ -2,90 +2,62 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED01289EB8
-	for <lists+lvs-devel@lfdr.de>; Sat, 10 Oct 2020 08:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9C728AB24
+	for <lists+lvs-devel@lfdr.de>; Mon, 12 Oct 2020 02:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727258AbgJJGmY (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 10 Oct 2020 02:42:24 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:60528 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727092AbgJJGmL (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 10 Oct 2020 02:42:11 -0400
-Received: from madeliefje.horms.nl (tulip.horms.nl [83.161.246.101])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 3A9C725B7E4;
-        Sat, 10 Oct 2020 17:42:08 +1100 (AEDT)
-Received: by madeliefje.horms.nl (Postfix, from userid 7100)
-        id 4633E1399; Sat, 10 Oct 2020 08:42:06 +0200 (CEST)
-Date:   Sat, 10 Oct 2020 08:42:06 +0200
-From:   Simon Horman <horms@verge.net.au>
+        id S1729580AbgJLABC (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 11 Oct 2020 20:01:02 -0400
+Received: from correo.us.es ([193.147.175.20]:33476 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729572AbgJLABC (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Sun, 11 Oct 2020 20:01:02 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 27914E7810
+        for <lvs-devel@vger.kernel.org>; Mon, 12 Oct 2020 02:01:01 +0200 (CEST)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 17DFDDA704
+        for <lvs-devel@vger.kernel.org>; Mon, 12 Oct 2020 02:01:01 +0200 (CEST)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id F3676DA72F; Mon, 12 Oct 2020 02:01:00 +0200 (CEST)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,USER_IN_WELCOMELIST,USER_IN_WHITELIST autolearn=disabled
+        version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 1DF37DA72F;
+        Mon, 12 Oct 2020 02:00:59 +0200 (CEST)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Mon, 12 Oct 2020 02:00:59 +0200 (CEST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id EBF0641FF201;
+        Mon, 12 Oct 2020 02:00:58 +0200 (CEST)
+Date:   Mon, 12 Oct 2020 02:00:58 +0200
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
 To:     Julian Anastasov <ja@ssi.bg>
-Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
         netfilter-devel@vger.kernel.org, Evgeny B <abt-admin@mail.ru>,
         Eric Dumazet <eric.dumazet@gmail.com>
 Subject: Re: [PATCH net] ipvs: clear skb->tstamp in forwarding path
-Message-ID: <20201010064206.GC22339@vergenet.net>
+Message-ID: <20201012000058.GA9184@salvia>
 References: <20201009182425.9050-1-ja@ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20201009182425.9050-1-ja@ssi.bg>
-Organisation: Horms Solutions BV
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
 On Fri, Oct 09, 2020 at 09:24:25PM +0300, Julian Anastasov wrote:
 > fq qdisc requires tstamp to be cleared in forwarding path
-> 
-> Reported-by: Evgeny B <abt-admin@mail.ru>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=209427
-> Suggested-by: Eric Dumazet <eric.dumazet@gmail.com>
-> Fixes: 8203e2d844d3 ("net: clear skb->tstamp in forwarding paths")
-> Fixes: fb420d5d91c1 ("tcp/fq: move back to CLOCK_MONOTONIC")
-> Fixes: 80b14dee2bea ("net: Add a new socket option for a future transmit time.")
-> Signed-off-by: Julian Anastasov <ja@ssi.bg>
 
-Reviewed-by: Simon Horman <horms@verge.net.au>
-
-Pablo, could you consider this for nf ?
-
-> ---
->  net/netfilter/ipvs/ip_vs_xmit.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/net/netfilter/ipvs/ip_vs_xmit.c b/net/netfilter/ipvs/ip_vs_xmit.c
-> index b00866d777fe..d2e5a8f644b8 100644
-> --- a/net/netfilter/ipvs/ip_vs_xmit.c
-> +++ b/net/netfilter/ipvs/ip_vs_xmit.c
-> @@ -609,6 +609,8 @@ static inline int ip_vs_tunnel_xmit_prepare(struct sk_buff *skb,
->  	if (ret == NF_ACCEPT) {
->  		nf_reset_ct(skb);
->  		skb_forward_csum(skb);
-> +		if (skb->dev)
-> +			skb->tstamp = 0;
->  	}
->  	return ret;
->  }
-> @@ -649,6 +651,8 @@ static inline int ip_vs_nat_send_or_cont(int pf, struct sk_buff *skb,
->  
->  	if (!local) {
->  		skb_forward_csum(skb);
-> +		if (skb->dev)
-> +			skb->tstamp = 0;
->  		NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
->  			NULL, skb_dst(skb)->dev, dst_output);
->  	} else
-> @@ -669,6 +673,8 @@ static inline int ip_vs_send_or_cont(int pf, struct sk_buff *skb,
->  	if (!local) {
->  		ip_vs_drop_early_demux_sk(skb);
->  		skb_forward_csum(skb);
-> +		if (skb->dev)
-> +			skb->tstamp = 0;
->  		NF_HOOK(pf, NF_INET_LOCAL_OUT, cp->ipvs->net, NULL, skb,
->  			NULL, skb_dst(skb)->dev, dst_output);
->  	} else
-> -- 
-> 2.26.2
-> 
-> 
+Applied, thanks.
