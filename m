@@ -2,70 +2,52 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE9228AB26
-	for <lists+lvs-devel@lfdr.de>; Mon, 12 Oct 2020 02:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C011728F0B6
+	for <lists+lvs-devel@lfdr.de>; Thu, 15 Oct 2020 13:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729572AbgJLAC1 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 11 Oct 2020 20:02:27 -0400
-Received: from correo.us.es ([193.147.175.20]:33686 "EHLO mail.us.es"
+        id S1731257AbgJOLK0 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 15 Oct 2020 07:10:26 -0400
+Received: from edge.kilargo.pl ([77.252.52.110]:49217 "EHLO edge.kilargo.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgJLAC1 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Sun, 11 Oct 2020 20:02:27 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 53AD8E780F
-        for <lvs-devel@vger.kernel.org>; Mon, 12 Oct 2020 02:02:26 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 4452CDA730
-        for <lvs-devel@vger.kernel.org>; Mon, 12 Oct 2020 02:02:26 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 379E0DA704; Mon, 12 Oct 2020 02:02:26 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,USER_IN_WELCOMELIST,USER_IN_WHITELIST autolearn=disabled
-        version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 58C15DA730;
-        Mon, 12 Oct 2020 02:02:24 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Mon, 12 Oct 2020 02:02:24 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 3CBAC41FF201;
-        Mon, 12 Oct 2020 02:02:24 +0200 (CEST)
-Date:   Mon, 12 Oct 2020 02:02:23 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "longguang.yue" <bigclouds@163.com>, yuelongguang@gmail.com
-Subject: Re: [PATCH v8 net-next] ipvs: inspect reply packets from DR/TUN real
- servers
-Message-ID: <20201012000223.GA14420@salvia>
-References: <20201005201347.13644-1-ja@ssi.bg>
+        id S1728844AbgJOLKD (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Thu, 15 Oct 2020 07:10:03 -0400
+X-Greylist: delayed 323 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 07:10:02 EDT
+Received: from mail.kilargo.pl (77.252.52.107) by edge.kilargo.pl
+ (77.252.52.109) with Microsoft SMTP Server (TLS) id 8.3.485.1; Thu, 15 Oct
+ 2020 13:04:38 +0200
+Received: from User (185.248.12.71) by MAIL.kilargo.pl (172.22.0.36) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Oct 2020 13:04:32 +0200
+Reply-To: <kim.leang2011@yahoo.com>
+From:   Kim Leang <mechanik@kilargo.pl>
+Subject: Greeting! !!
+Date:   Thu, 15 Oct 2020 14:04:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201005201347.13644-1-ja@ssi.bg>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <5a5cd7c4af2440ff9bf757a1f2a4f6e9@mail.kilargo.pl>
+To:     Undisclosed recipients:;
+X-Originating-IP: [185.248.12.71]
+X-ClientProxiedBy: mail.kilargo.pl (172.22.0.36) To MAIL.kilargo.pl
+ (172.22.0.36)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A295AAB9B6B64766B
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 11:13:47PM +0300, Julian Anastasov wrote:
-> From: longguang.yue <bigclouds@163.com>
-> 
-> Just like for MASQ, inspect the reply packets coming from DR/TUN
-> real servers and alter the connection's state and timeout
-> according to the protocol.
-> 
-> It's ipvs's duty to do traffic statistic if packets get hit,
-> no matter what mode it is.
+Greeting!
 
-Applied, thanks.
+I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
+
+I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+
+The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
+
+Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
+
+Thanks and have a nice day,
+Mr. Kim Leang.
