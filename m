@@ -2,85 +2,86 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 153AC293F7A
-	for <lists+lvs-devel@lfdr.de>; Tue, 20 Oct 2020 17:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEE22941CD
+	for <lists+lvs-devel@lfdr.de>; Tue, 20 Oct 2020 20:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408681AbgJTPWv (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 20 Oct 2020 11:22:51 -0400
-Received: from correo.us.es ([193.147.175.20]:52292 "EHLO mail.us.es"
+        id S2408891AbgJTSBE (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 20 Oct 2020 14:01:04 -0400
+Received: from mg.ssi.bg ([178.16.128.9]:44678 "EHLO mg.ssi.bg"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408652AbgJTPWu (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Tue, 20 Oct 2020 11:22:50 -0400
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 1E41C1761A2
-        for <lvs-devel@vger.kernel.org>; Tue, 20 Oct 2020 17:22:49 +0200 (CEST)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 12400DA902
-        for <lvs-devel@vger.kernel.org>; Tue, 20 Oct 2020 17:22:49 +0200 (CEST)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id EC151FF135; Tue, 20 Oct 2020 17:22:48 +0200 (CEST)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WELCOMELIST,USER_IN_WHITELIST
-        autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 9491CFB388;
-        Tue, 20 Oct 2020 17:22:46 +0200 (CEST)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Tue, 20 Oct 2020 17:22:46 +0200 (CEST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 655FA4301DE0;
-        Tue, 20 Oct 2020 17:22:46 +0200 (CEST)
-Date:   Tue, 20 Oct 2020 17:22:46 +0200
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     "longguang.yue" <bigclouds@163.com>, yuelongguang@gmail.com,
-        Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:IPVS" <netdev@vger.kernel.org>,
-        "open list:IPVS" <lvs-devel@vger.kernel.org>,
-        "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
-        "open list:NETFILTER" <coreteam@netfilter.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5] ipvs: adjust the debug info in function set_tcp_state
-Message-ID: <20201020152246.GA19962@salvia>
-References: <alpine.LFD.2.23.451.2009271625160.35554@ja.home.ssi.bg>
- <20200928024938.97121-1-bigclouds@163.com>
- <alpine.LFD.2.23.451.2009300803110.6056@ja.home.ssi.bg>
+        id S2408890AbgJTSBD (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 20 Oct 2020 14:01:03 -0400
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id D448F2A4D0;
+        Tue, 20 Oct 2020 21:01:00 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
+        by mg.ssi.bg (Proxmox) with ESMTP id 15F392A444;
+        Tue, 20 Oct 2020 21:01:00 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id E0FD23C09C1;
+        Tue, 20 Oct 2020 21:00:59 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 09KI0xrP006704;
+        Tue, 20 Oct 2020 21:00:59 +0300
+Date:   Tue, 20 Oct 2020 21:00:59 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Damien Claisse <d.claisse@criteo.com>
+cc:     "lvs-devel@vger.kernel.org" <lvs-devel@vger.kernel.org>,
+        "netfilter-devel@vger.kernel.org" <netfilter-devel@vger.kernel.org>,
+        Mahesh Bandewar <maheshb@google.com>
+Subject: Re: Network namespace, ipvlan and IPVS source NAT
+In-Reply-To: <1A2C4E81-2244-4104-B543-08713F000C0C@criteo.com>
+Message-ID: <79a56db-5657-6dda-5de0-d7565ef950c6@ssi.bg>
+References: <1A2C4E81-2244-4104-B543-08713F000C0C@criteo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LFD.2.23.451.2009300803110.6056@ja.home.ssi.bg>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 08:08:02AM +0300, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Mon, 28 Sep 2020, longguang.yue wrote:
-> 
-> > Outputting client,virtual,dst addresses info when tcp state changes,
-> > which makes the connection debug more clear
-> > 
-> > Signed-off-by: longguang.yue <bigclouds@163.com>
-> 
-> 	OK, v5 can be used instead of fixing v4.
-> 
-> Acked-by: Julian Anastasov <ja@ssi.bg>
 
-Applied, thanks.
+	Hello,
+
+On Tue, 20 Oct 2020, Damien Claisse wrote:
+
+> I'm trying to understand a limitation in ipvlan/netfilter that prevents doing routed IPVS with source NAT inside a namespace.
+> 
+> Setup is the following: there is an "lvs" namespace, with an ipvlan interface (in l3 mode) moved to this namespace, linked to physical interface. Goal is to isolate load balanced traffic in a separate namespace.
+> This setup is working flawlessly with l3 routed IPIP encapsulation, but I also have a use case for applications that don't support encapsulation, hence the need to do l3 routed load balancing with source NAT.
+> Issue is that if I put iptables NAT rule in namespace using ipvs module, nothing happens, packet is forwarded but source IP is not translated. It seems like netfilter is blind to ipvlan l3 traffic. I also tried using "l3s" mode that should to go through netfilter, but in that case, packets for virtual IPs are rejected with a TCP reset. Virtual IPs in namespace seem not visible to this mode.
+> 
+> I'm wondering what would be the best way to make it happen:
+> - patch ipvlan to lookup for VIPs in namespaces
+> - patch netfilter ipvs NAT module to translate in root namespace
+> - any other better idea is welcome
+> 
+> Please find below commands to reproduce the issue. In this example physical load balancer interface is enp4s0, virtual IP is 192.168.42.1 (to be exported by a routing protocol, or route manually added to a client in same subnet as load balancer for testing), load balancer IP is 192.168.10.10, and real server IP is 192.168.20.20
+> 
+> - In root namespace:
+> ip netns add lvs
+> ip link add ipvlan0 link enp4s0 type ipvlan mode l3s
+> ip link set ipvlan0 up
+> ip link set ipvlan0 netns lvs
+> 
+> - In lvs namespace (ip netns exec lvs bash):
+> ip addr add 192.168.42.1/32 dev ipvlan0
+> ip route add default via 192.168.10.10 dev ipvlan0 onlink
+> ipvsadm -A -t 192.168.42.1:80 -s rr
+> ipvsadm -a -t 192.168.42.1:80 -r 192.168.20.20:80 -m
+> iptables -t nat -A POSTROUTING -m ipvs --vaddr 192.168.42.1/24 --vport 80 -j SNAT --to-source 192.168.10.10
+
+	Make sure /proc/sys/net/ipv4/vs/conntrack is set to 1
+to allow IPVS to keep the netfilter conntracks for its
+packets. This is supported with the CONFIG_IP_VS_NFCT=y
+kernel option.
+
+> What I'd expect: a packet outgoing from enp4s0 with source IP 192.168.10.10 and destination IP 192.168.20.20
+> What I see from a test client:
+> - in l3 mode: a packet outgoing from enp4s0 with source client IP address and destination 192.168.20.20 (hence missing source NAT). I also don't see any conntrack event when doing conntrack -E
+> - in l3s mode: connection reset sent to client. While reading l3s implementation, I wonder where route lookup is done in ipvlan_l3_rcv, it seems that namespaces' virtual IP addresses are not visible during this lookup, hence the TCP RST.
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
