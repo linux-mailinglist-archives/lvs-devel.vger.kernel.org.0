@@ -2,101 +2,95 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1259C299714
-	for <lists+lvs-devel@lfdr.de>; Mon, 26 Oct 2020 20:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C666A29974D
+	for <lists+lvs-devel@lfdr.de>; Mon, 26 Oct 2020 20:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1737072AbgJZTfM (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 26 Oct 2020 15:35:12 -0400
-Received: from mg.ssi.bg ([178.16.128.9]:46254 "EHLO mg.ssi.bg"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2444361AbgJZTfM (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 26 Oct 2020 15:35:12 -0400
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 6369C163CF;
-        Mon, 26 Oct 2020 21:35:08 +0200 (EET)
-Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
-        by mg.ssi.bg (Proxmox) with ESMTP id 82D4716454;
-        Mon, 26 Oct 2020 21:35:06 +0200 (EET)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 626103C0325;
-        Mon, 26 Oct 2020 21:35:06 +0200 (EET)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 09QJZ4rh008355;
-        Mon, 26 Oct 2020 21:35:06 +0200
-Date:   Mon, 26 Oct 2020 21:35:04 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     =?UTF-8?Q?Cezar_S=C3=A1_Espinola?= <cezarsa@gmail.com>
-cc:     lvs-devel@vger.kernel.org
-Subject: Re: Possibility of adding a new netlink command to dump everything
-In-Reply-To: <CA++F93g_WfKbVHLMUFYgQbR63o2-s8Ky_W9Z85qsFM77OaweEQ@mail.gmail.com>
-Message-ID: <68d574-d213-50-7617-f1d917625362@ssi.bg>
-References: <CA++F93g_WfKbVHLMUFYgQbR63o2-s8Ky_W9Z85qsFM77OaweEQ@mail.gmail.com>
+        id S1726021AbgJZTsA (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 26 Oct 2020 15:48:00 -0400
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:43600 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725861AbgJZTr7 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 26 Oct 2020 15:47:59 -0400
+Received: by mail-oi1-f177.google.com with SMTP id x203so6326854oia.10
+        for <lvs-devel@vger.kernel.org>; Mon, 26 Oct 2020 12:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aUpIXWcge6Idt1Hrp2edKf6Gjxz9A/R87xsxAYGR+Ak=;
+        b=P6VU55N5NHv1m2n3oDJ7t92/Gd0ZtnmXN4G11B+ta/a5ZDrV6WXW1SFIU5CTaIVBGL
+         Uw9leeIdpOczYJsm7RMFdgWQKxwXhFrsc5RyxDTqm6FB2ZL5WESckT3LBBqlOLd8Mb4S
+         EaNC1uBAhEYrWsg0Uv9C9ai2WZlof0MBIGbBF9Zot+YBaA84NenWFrFhCRZ9AV+8rXO2
+         NZuLCCPzMo9gZYUasHJldc5RvpuwS5bV9N3a8zrAt4uH4RzdaxhtjshONcUCCUn3r55O
+         LosWjIFhU21vocXyfRebEhMyxN4zeCurDFK3p6tU9GfSLEMPwpAYezmMsfQfglnkVel1
+         zDFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aUpIXWcge6Idt1Hrp2edKf6Gjxz9A/R87xsxAYGR+Ak=;
+        b=f4hNHIPZ3W4O3Me4ZUobG0sjpo85NYCy/MzxR+fGeYJSP0H1ahrwIw7H6pjPLWmhQP
+         ukt8nQdmwTU6oYlL3GFKneo5+d7yznV3VHV7rhj5wqZoRABi2JUnASVOrw2X9Wd1D+CC
+         I1+jVc5g52Tk3GJchUVI6rLedMqMczqJcWAec0dDz+PleIDHrnFubIgnYuJ9foaeLch0
+         f7F9Uq61x7T/8Om2VWFTUpXpb3bCr65Bj5rnUvqRO6mEU/YC8wKtLEBY1Mhe8/8XqCMI
+         Bjm4S0x9Sagdw8rg92iiOj+ZFb30K35QAvhgF5nmpGOENeNzLEelvmqxdb0vA/8yevbX
+         TVng==
+X-Gm-Message-State: AOAM531Ik4EifjbsbmPn7yUnzHwUHgQmwUFTCX+82zvG+kxn6NzZJ8gD
+        H/6XqRxTX7X1zbBMNLNEB7E66FZ3kfTPFqUegS2U2iPP9O0=
+X-Google-Smtp-Source: ABdhPJzqO6Wqa5DSTBx+uZGlOf/09w/ti6WDdrPVCne0ZMBQMIQ4uanD2vQiPpyt5YhUWAjrb5RrnwX28dmB7PXy4go=
+X-Received: by 2002:aca:ac8f:: with SMTP id v137mr11489399oie.134.1603741677706;
+ Mon, 26 Oct 2020 12:47:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463811672-1073527054-1603740906=:4529"
+References: <CA++F93g_WfKbVHLMUFYgQbR63o2-s8Ky_W9Z85qsFM77OaweEQ@mail.gmail.com>
+ <68d574-d213-50-7617-f1d917625362@ssi.bg>
+In-Reply-To: <68d574-d213-50-7617-f1d917625362@ssi.bg>
+From:   =?UTF-8?Q?Cezar_S=C3=A1_Espinola?= <cezarsa@gmail.com>
+Date:   Mon, 26 Oct 2020 16:47:46 -0300
+Message-ID: <CA++F93huu-Q_J2X89ndYwCGWwETmOPsDDdgVdVeDHUMU5qRg6g@mail.gmail.com>
+Subject: Re: Possibility of adding a new netlink command to dump everything
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     lvs-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+> > 1. First of all is such a patch adding a new command something desirabl=
+e and
+> > could it possibly be merged or should I just drop it?
+>
+>         It depends on its complexity, are you changing
+> the ipvsadm -S code or just the kernel part?
 
----1463811672-1073527054-1603740906=:4529
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Thank you for the fast reply! Just the kernel part for now and some
+crude standalone benchmarking code, although I intend to also change
+the ipvsadm -S code to use this new cmd if available.
 
+> > 2. I can see that besides the generic netlink interface there's also an=
+other
+> > interface based on getsockopt options, should the patch also add a new =
+socket
+> > option or is it okay for this new functionality to be exclusive to gene=
+ric
+> > netlink?
+>
+>         No, sockopt is old interface and it is not changed,
+> it lacks IPv6 support, etc.
 
-	Hello,
+Great.
 
-On Mon, 26 Oct 2020, Cezar Sá Espinola wrote:
+> > 3. Should this go forward, any advice on my next steps? Should I simply=
+ send the
+> > patch here?
+>
+>         You can post it with [PATCH RFC] tag, so that we
+> can see how do you mix services and destinations in same
+> packet. You can also add speed comparison after the --- line
+> for more information.
 
-> Hi all. This is my first message here and also my first attempt at kernel
-> development so I'm a bit nervous and afraid I'm doing something wrong.
-> 
-> The last few days I've been toying with a patch to IPVS to allow me to use
-> netlink to dump all services and all its destinations in a single call.
-> 
-> The motivation for this came after profiling a kubernetes node machine with a
-> few thousand IPVS services each with an average of two destinations. The
-> component responsible for ensuring that the IPVS rules are correct always needs
-> a fresh dump of all services with all destinations and currently this is
-> accomplished by issuing a IPVS_CMD_GET_SERVICE generic netlink dump command
-> followed by multiple IPVS_CMD_GET_DEST dump commands.
-
-	This is how ipvsadm -S runs now, list_all() gets all
-services and for each gets its destinations.
-
-> The patch in question adds a new netlink command IPVS_CMD_GET_SERVICE_DEST
-> which dumps all services where each service is followed by a dump of its
-> destinations. It's working now on my machine and some preliminary experiments
-> show me that there's a significant performance improvement in switching to a
-> single call to dump everything. However, I have some questions that I'd like to
-> talk about before trying to submit it.
-> 
-> 1. First of all is such a patch adding a new command something desirable and
-> could it possibly be merged or should I just drop it?
-
-	It depends on its complexity, are you changing
-the ipvsadm -S code or just the kernel part?
-
-> 2. I can see that besides the generic netlink interface there's also another
-> interface based on getsockopt options, should the patch also add a new socket
-> option or is it okay for this new functionality to be exclusive to generic
-> netlink?
-
-	No, sockopt is old interface and it is not changed,
-it lacks IPv6 support, etc.
-
-> 3. Should this go forward, any advice on my next steps? Should I simply send the
-> patch here?
-
-	You can post it with [PATCH RFC] tag, so that we
-can see how do you mix services and destinations in same
-packet. You can also add speed comparison after the --- line
-for more information.
+I'll do that and we can discuss further then. Thanks a lot for your time!
 
 Regards
-
 --
-Julian Anastasov <ja@ssi.bg>
----1463811672-1073527054-1603740906=:4529--
-
+Cezar S=C3=A1 Espinola
