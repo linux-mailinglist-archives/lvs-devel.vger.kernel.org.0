@@ -2,60 +2,82 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8AC29498D
-	for <lists+lvs-devel@lfdr.de>; Wed, 21 Oct 2020 10:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24732990F6
+	for <lists+lvs-devel@lfdr.de>; Mon, 26 Oct 2020 16:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407169AbgJUI4J (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 21 Oct 2020 04:56:09 -0400
-Received: from mail.reduno.com.bo ([200.105.172.211]:33936 "EHLO
-        mail.reduno.com.bo" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731692AbgJUI4J (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 21 Oct 2020 04:56:09 -0400
-X-Greylist: delayed 5818 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Oct 2020 04:56:08 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.reduno.com.bo (Postfix) with ESMTP id 19C32806CCA13;
-        Wed, 21 Oct 2020 02:33:40 -0400 (-04)
-Received: from mail.reduno.com.bo ([127.0.0.1])
-        by localhost (mail.reduno.com.bo [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GKow7H3AfcHQ; Wed, 21 Oct 2020 02:33:39 -0400 (-04)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.reduno.com.bo (Postfix) with ESMTP id 83188806E3207;
-        Wed, 21 Oct 2020 02:31:58 -0400 (-04)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.reduno.com.bo 83188806E3207
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=reduno.com.bo;
-        s=8AAF89FC-0BDE-11EA-9539-98B377D8CA06; t=1603261918;
-        bh=KYkYjRCbHaNR0grZfYhEhpIGaV+4QVPUCF5GUGWer1Q=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=NeKmROCRZoJnuCBEkFhJxbcjs4EssGEzLL12N5VrS8co4A5Q/6wuk4+GSSLEqv7ty
-         5jFFLeILWOlx2xKomuFAyN5n+ZEsSrFxL/YxIyK1Zy6o1f2YMvppUwixfxNpiQUMY/
-         pj9OPnbEBxSYW1VzqXhs4eRS0H1wDy1irO59KuOU9BoZ41ps+x+IPhNVqhUXisUIOF
-         kIjDI68amfChAteq6S+QB+XNTdeH/F4dpD8XPY8nF1EZX4TSYqk1+Byxj1A7RRyurl
-         4HGiWLtWTGeAEQK7lg/XkAZqlkZSYE2A9iuV3R6NSFUdoatQys2WLY9NZyQry8T8ea
-         WWTxeTBKaWINg==
-X-Virus-Scanned: amavisd-new at reduno.com.bo
-Received: from mail.reduno.com.bo ([127.0.0.1])
-        by localhost (mail.reduno.com.bo [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wIaHL1cZsEdg; Wed, 21 Oct 2020 02:31:58 -0400 (-04)
-Received: from [192.168.100.12] (unknown [36.37.140.125])
-        by mail.reduno.com.bo (Postfix) with ESMTPSA id CBB3F806A8C4F;
-        Wed, 21 Oct 2020 02:30:16 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1783825AbgJZP1u (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 26 Oct 2020 11:27:50 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:41466 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1783556AbgJZP1t (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 26 Oct 2020 11:27:49 -0400
+Received: by mail-ot1-f45.google.com with SMTP id n15so8314984otl.8
+        for <lvs-devel@vger.kernel.org>; Mon, 26 Oct 2020 08:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=eubxZeME9MVo04i3g72Z1OM8ee4gR4GC+PAdwG/Au5k=;
+        b=QYZuoscyQaujv+iztaxwUNJDww7d+xKaIUPvG8YIUGJuHFlUKlav9SYWWo9H0iDRca
+         hw5dhEYPpoViHKJ5n2A4tnghdBn/5IqC9V+hopc2b3CY8W26mGFIRAAUu/a/MqL1717K
+         YNtaQoIIE29O4x8ofoC0876OkpMGyDzpyoGYpQ8X+k4uJlMPBVs60kjNDTvgVs2YlEo+
+         hZl3F4Rc9YAJoJXiC1JSL2+W3ABuVAYYu4T4TS7e8F2G4Agwq+3vlfOTMrlcG+wz5es0
+         udP3lkXwTWPmiZE+jHysjq5qJ4D6a2kapWwkIk+4twgk+ICtWlSHGP/+hfgOujHQ1kio
+         kL5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=eubxZeME9MVo04i3g72Z1OM8ee4gR4GC+PAdwG/Au5k=;
+        b=gx+oRQaIRNG+ei7OGSFyuHsc+rB56A6PaKqMoD5d3MtL9qI91PEzHdMa+PxDcx2T0i
+         IsfdQqKmF77+gzIcHFmj8UuiQkL2nzWKb12VoczBmuNeriEr4mvATaS2wmbAufqit/Au
+         7xiXPcIpaalrRG2zMf2XZuEZtd+kvh6pGPcuFW7QpDcoem8FL01k/grAvZ8IYRWXTLF0
+         ioa2uWVqY0hXq8MD1sMkkcSEuteVUMHl0Ie3vP5rEG1mU457soK6WVQ9oCSF3SUNi0mo
+         mPHuv2KlT6dRA1NNxR/wkWiZb3cYIvxtCByIA5qPOvuvVGRTFQxozOTzPIZWr/TdhGu5
+         LEWA==
+X-Gm-Message-State: AOAM531ERef0cvqZ+2tPbKSZawnZAuRMqWvdXOVUQY0J6vLVhmdcWlJf
+        lgFz/R+M0JeilEtpZ3XGhzeZ3iCVDSSZ5O4w00FEB29UmFpCvQ==
+X-Google-Smtp-Source: ABdhPJzgaqr2urgHYDVXMVdHI2fxkDtxcj0YctlOvQNvTz6KM9uv7GbjrpS97XD/DWgutUC9D4YaxLiaE3tSZS9xuQs=
+X-Received: by 2002:a9d:3d06:: with SMTP id a6mr11264456otc.368.1603726068558;
+ Mon, 26 Oct 2020 08:27:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Good Day
-To:     Recipients <prueba@reduno.com.bo>
-From:   Sov Chan <prueba@reduno.com.bo>
-Date:   Wed, 21 Oct 2020 12:58:15 +0700
-Reply-To: sovchan@aol.com
-Message-Id: <20201021063016.CBB3F806A8C4F@mail.reduno.com.bo>
+From:   =?UTF-8?Q?Cezar_S=C3=A1_Espinola?= <cezarsa@gmail.com>
+Date:   Mon, 26 Oct 2020 12:27:37 -0300
+Message-ID: <CA++F93g_WfKbVHLMUFYgQbR63o2-s8Ky_W9Z85qsFM77OaweEQ@mail.gmail.com>
+Subject: Possibility of adding a new netlink command to dump everything
+To:     lvs-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hello,
+Hi all. This is my first message here and also my first attempt at kernel
+development so I'm a bit nervous and afraid I'm doing something wrong.
 
-I have a business proposal to share with you. Contact me for more details.
+The last few days I've been toying with a patch to IPVS to allow me to use
+netlink to dump all services and all its destinations in a single call.
 
-Kind regards,
-Sov
+The motivation for this came after profiling a kubernetes node machine with a
+few thousand IPVS services each with an average of two destinations. The
+component responsible for ensuring that the IPVS rules are correct always needs
+a fresh dump of all services with all destinations and currently this is
+accomplished by issuing a IPVS_CMD_GET_SERVICE generic netlink dump command
+followed by multiple IPVS_CMD_GET_DEST dump commands.
+
+The patch in question adds a new netlink command IPVS_CMD_GET_SERVICE_DEST
+which dumps all services where each service is followed by a dump of its
+destinations. It's working now on my machine and some preliminary experiments
+show me that there's a significant performance improvement in switching to a
+single call to dump everything. However, I have some questions that I'd like to
+talk about before trying to submit it.
+
+1. First of all is such a patch adding a new command something desirable and
+could it possibly be merged or should I just drop it?
+
+2. I can see that besides the generic netlink interface there's also another
+interface based on getsockopt options, should the patch also add a new socket
+option or is it okay for this new functionality to be exclusive to generic
+netlink?
+
+3. Should this go forward, any advice on my next steps? Should I simply send the
+patch here?
+
+Thank you for your time!
