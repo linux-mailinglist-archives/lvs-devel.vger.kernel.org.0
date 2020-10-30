@@ -2,74 +2,82 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D24E2997E1
-	for <lists+lvs-devel@lfdr.de>; Mon, 26 Oct 2020 21:23:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141CF2A08BD
+	for <lists+lvs-devel@lfdr.de>; Fri, 30 Oct 2020 16:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731367AbgJZUXw (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 26 Oct 2020 16:23:52 -0400
-Received: from mg.ssi.bg ([178.16.128.9]:47654 "EHLO mg.ssi.bg"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726025AbgJZUXw (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 26 Oct 2020 16:23:52 -0400
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 3E88F16A90;
-        Mon, 26 Oct 2020 22:23:50 +0200 (EET)
-Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
-        by mg.ssi.bg (Proxmox) with ESMTP id F29F816A85;
-        Mon, 26 Oct 2020 22:23:48 +0200 (EET)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 5C2C23C09C0;
-        Mon, 26 Oct 2020 22:23:47 +0200 (EET)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id 09QKNgoN008874;
-        Mon, 26 Oct 2020 22:23:45 +0200
-Date:   Mon, 26 Oct 2020 22:23:42 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     "longguang.yue" <bigclouds@163.com>
-cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        yuelongguang@gmail.com
-Subject: Re: a question about fullnat mode for ipvs
-In-Reply-To: <1989ac03.3737.175445ba5f9.Coremail.bigclouds@163.com>
-Message-ID: <615db10-72af-2a86-dde2-61af8e6bd80@ssi.bg>
-References: <20201005201347.13644-1-ja@ssi.bg> <20201012000223.GA14420@salvia> <1989ac03.3737.175445ba5f9.Coremail.bigclouds@163.com>
+        id S1726999AbgJ3PAd (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 30 Oct 2020 11:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726806AbgJ3PAd (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 30 Oct 2020 11:00:33 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491CEC0610CF
+        for <lvs-devel@vger.kernel.org>; Fri, 30 Oct 2020 08:00:20 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id oq3so7163187ejb.7
+        for <lvs-devel@vger.kernel.org>; Fri, 30 Oct 2020 08:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=HE6E+XrbeESF3o8rTDQz2QLKkiXlFNzvm1ZUlxBk9BaZfK5MRTsz1JeT4mAxENRpdT
+         m1Mx11KzbmmD5tdebUWbv2xgPe4gw5lVQ+TKYKbE3ioKLF3BvxZ0vc1FCZ91Eceo6Cii
+         5JBqzBsMKF7AGg+iRdtizbNrB+c82/PvzzSKbjOB/LiGcRYRHf45ePmj4quaEUqUDvFF
+         Dvb0vKjucUBtTa9I+V3IHFQBGbGDvna+onBUPPsHPTb5expM1iwtYAZjjT1lGo1ofMT0
+         MgX4WQjgyfO+q5BJQVoAF07NmXdR6AGWf53mQ6NLO+dsUvq/nHeVsbPN0fQlPB2oPBR+
+         XhTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=h4FdsQy67tMjwQ6zj9WPen15v1YrZRwt/hqEGP3km027GI/Ldu/K24ikitttM6LQ0o
+         FwE4O8wy/nyN97ZNFdaLYHH6s2iiMlQkC9oAbrx+h+a/wDCUP8OATBdKbbwujOmiX8fV
+         6/85rpDGN/tPJ/qhFA3Dl0xAj/sKrGSsaiu8wzhmWEkfzkBnqT+eudluUieCQMUA8yp4
+         HZwLSfKSP7/FGsuN7mLHkoD8rsNXSt3CqK5KeUSgDYGWNFLwOSZzEcHDikRxgmiHFaWO
+         66XS9F3HniapHmqD5b44FhlmCyCD6gvWQugyfS6H8+ZQNTksxsN++HInO5nndHInU2+X
+         Bs5g==
+X-Gm-Message-State: AOAM531elGZXM1uZ4UzG0+ez6BMr3JHEJUgpa7usNf4ceP+0vKBY0Mlz
+        titAM709VVjyfuANcGDjRYdtE7+c9DoVWVFnBA==
+X-Google-Smtp-Source: ABdhPJx/gvGJ7xrAck4BcuQCcxCDYbJtv50bICsD2KCNTIdwitCE/qveBysML1MhEN0sJHgpgUGfc44eBVlETJVQnc0=
+X-Received: by 2002:a17:906:d1c3:: with SMTP id bs3mr2746628ejb.246.1604070014976;
+ Fri, 30 Oct 2020 08:00:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463811672-345138178-1603743827=:4529"
+Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 08:00:14
+ -0700 (PDT)
+Reply-To: li.anable85@gmail.com
+From:   Liliane Abel <k.griest04@gmail.com>
+Date:   Fri, 30 Oct 2020 16:00:14 +0100
+Message-ID: <CABAZL7kPuop=tyKJr9pi39k7sYM4pO5O-F+O3=QPdzox21LHpQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Dearest
 
----1463811672-345138178-1603743827=:4529
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Greeting my dear, I am Liliane Abel by name, The only daughter of late
+Mr.Benson Abel. My father is one of the top Politician in our country
+and my mother is a farmers and cocoa merchant when they were both
+alive. After the death of my mother, long ago, my father was
+controlling their business until he was poisoned by his business
+associates which he suffered and died.
 
-
-	Hello,
-
-On Tue, 20 Oct 2020, longguang.yue wrote:
-
-> Hi,all:
->     fullnat mode refers to  incoming packet's src:port and dst:port pairs are both changed at the same
-> time, vice  versa for outgoing packets.
->     fullnat has existed for many years since 2009, why which is not in kernel.
-
-	Not sure. What I see now is that it adds some complexity
-to the code. Open questions are about integration with netfilter
-conntracks (when conntrack=1), in the sync protocol, etc.
-
->     introduction for fullnat    http://kb.linuxvirtualserver.org/wiki/IPVS_FULLNAT_and_SYNPROXY
-> 
-> could we port or re-implement it in upstream?
-
-	May be I don't fully understand the goals but
-is it worth it?
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
----1463811672-345138178-1603743827=:4529--
-
+Before the death of my father, He told me about (two million five
+hundred thousand united states dollars) which he deposited in the bank
+in Lome-Togo, It was the money he intended to transfer overseas for
+investment before he was poisoned. He also instructed me that I should
+seek for foreign partners in any country of my choice who will assist
+me transfer this money in overseas account where the money will be
+wisely invested.
+I am seeking for your kind assistance in the following ways:  (1) to
+provide a safe bank account into where the money will be transferred
+for investment. (2) To serve as a guardian of this fund since I am a
+girl of 19 years old. (3) To make arrangement for me to come over to
+your country to further my education. This is my reason for writing to
+you. Please if you are willing to assist me I will offer you 25% of
+the total money. Reply if  you are interested
+Best regards.
+Liliane Abel.
