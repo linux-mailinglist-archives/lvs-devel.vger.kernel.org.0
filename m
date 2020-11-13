@@ -2,107 +2,56 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3DD2B3E3A
-	for <lists+lvs-devel@lfdr.de>; Mon, 16 Nov 2020 09:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C5E2B5DB3
+	for <lists+lvs-devel@lfdr.de>; Tue, 17 Nov 2020 12:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728131AbgKPICG (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 16 Nov 2020 03:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727973AbgKPICF (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 16 Nov 2020 03:02:05 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C38C0613CF;
-        Mon, 16 Nov 2020 00:02:05 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id q5so13389919pfk.6;
-        Mon, 16 Nov 2020 00:02:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=9Y1yLZPbBL2X5WIYzh0MGolabV4K2PbjAEx9PhCuf+Q=;
-        b=kpM8zXJ/HI3JAXzLtyf43BKIVH0eKHa0+/czdTViRIu70kSn8YwBwt5Rin3vQ1B/V5
-         7rXATO838psjNSblinn929eJATjAnVZjiR9bnBk7hZCcLju6mVRew6AJMrt7wFc1Fl7S
-         Z4caCceE4pIaUUNt8DXbXosT+gL+8NBJSi+6VSoqKw3MwAzoY9hX8xE/41NgWxBDT2cz
-         VytAjDZDgdc1kgxYrOIabmqd6Nab8eg0PTEn3nDiLhbeERmkgdQNx0QEg16oqQ+mrgae
-         1m0uVRk2yg2jAyfXUj0VOdFRGT45FT3oSt4te7MN+DRJpItPZs1OXwD4UwfwkMWN3IGD
-         R89A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9Y1yLZPbBL2X5WIYzh0MGolabV4K2PbjAEx9PhCuf+Q=;
-        b=LkYT4hJrH67LJBYpx57gTh5Tt94fcfTBzvBTge8zHr+x11mlFRSbbdyRT5jby3DWv4
-         y/Y2S8GxxuBj/9Iwa5Hlk3h9KLcnuVwJIsvQvoZ7tjmXrnsHFNjTP1FifFVTV89uolth
-         kjnsE90LxoiEggHM/EQUfqoqvhWGrfdWSpKIkj23kLRgnUJ5uaVw0z57J+k5L5Mq0luF
-         N2S0QBHMapTQa+7eGBnMmULSIPuie6QAfMVRX5x5DA07tXA/6zYQQg2UNKh6XkNLybod
-         ooS/kIbRxHY7aW5JI4pUKYV8mXe7+da/wyVjj/KOYM3H5NQAQb7ld8fFMbraFD9VRd/9
-         zEwg==
-X-Gm-Message-State: AOAM530tApaQ5VBKHuO0vPl9IUIo+Zh3BfBlJ3Zt9n1xkEIn9L2M0AJm
-        jGzEWRAZF1Hd8zZcjbtsl5k=
-X-Google-Smtp-Source: ABdhPJzhWi0/OjAlz2/BIbIgxQj1UreWhYu3egSm7uojQxyPCrwoHDeQL3pL61qwOodl2i14XkH5LA==
-X-Received: by 2002:a62:8857:0:b029:18b:cf28:9bbe with SMTP id l84-20020a6288570000b029018bcf289bbemr12903100pfd.45.1605513725298;
-        Mon, 16 Nov 2020 00:02:05 -0800 (PST)
-Received: from localhost.localdomain ([8.210.202.142])
-        by smtp.gmail.com with ESMTPSA id w10sm15031227pgj.91.2020.11.16.00.01.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Nov 2020 00:02:04 -0800 (PST)
-From:   Yejune Deng <yejune.deng@gmail.com>
-To:     wensong@linux-vs.org, horms@verge.net.au, ja@ssi.bg,
-        pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yejune.deng@gmail.com
-Subject: [PATCH] ipvs: replace atomic_add_return()
-Date:   Mon, 16 Nov 2020 16:01:47 +0800
-Message-Id: <1605513707-7579-1-git-send-email-yejune.deng@gmail.com>
-X-Mailer: git-send-email 1.9.1
+        id S1727267AbgKQLAm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Tue, 17 Nov 2020 06:00:42 -0500
+Received: from tigeramira.ro ([88.158.78.30]:31871 "EHLO mail.tigeramira.ro"
+        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1727406AbgKQLAm (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 17 Nov 2020 06:00:42 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 5648AC96BD8
+        for <lvs-devel@vger.kernel.org>; Mon, 16 Nov 2020 14:59:59 +0200 (EET)
+Received: from mail.tigeramira.ro ([127.0.0.1])
+        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id LUk-Xrj0ssBL for <lvs-devel@vger.kernel.org>;
+        Mon, 16 Nov 2020 14:59:56 +0200 (EET)
+Received: from mail.tigeramira.ro (localhost [127.0.0.1])
+        by mail.tigeramira.ro (Postfix) with ESMTP id 5D91CAF2622
+        for <lvs-devel@vger.kernel.org>; Sat, 14 Nov 2020 14:13:22 +0200 (EET)
+Received: from [156.96.44.214] (unknown [192.168.12.254])
+        by mail.tigeramira.ro (Postfix) with ESMTP id B8BE8998EAA
+        for <lvs-devel@vger.kernel.org>; Fri, 13 Nov 2020 19:08:26 +0200 (EET)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Corporate and Personal Loan::,
+To:     lvs-devel@vger.kernel.org
+From:   "Investment  Corporate" <financialcapability6@gmail.com>
+Date:   Fri, 13 Nov 2020 08:08:39 -0800
+Reply-To: hmurrah39@gmail.com
+Message-Id: <20201113170827.B8BE8998EAA@mail.tigeramira.ro>
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-atomic_inc_return() looks better
+Hello lvs-devel@vger.kernel.org
 
-Signed-off-by: Yejune Deng <yejune.deng@gmail.com>
----
- net/netfilter/ipvs/ip_vs_core.c | 2 +-
- net/netfilter/ipvs/ip_vs_sync.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index c0b8215..54e086c 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -2137,7 +2137,7 @@ static int ip_vs_in_icmp_v6(struct netns_ipvs *ipvs, struct sk_buff *skb,
- 	if (cp->flags & IP_VS_CONN_F_ONE_PACKET)
- 		pkts = sysctl_sync_threshold(ipvs);
- 	else
--		pkts = atomic_add_return(1, &cp->in_pkts);
-+		pkts = atomic_inc_return(&cp->in_pkts);
- 
- 	if (ipvs->sync_state & IP_VS_STATE_MASTER)
- 		ip_vs_sync_conn(ipvs, cp, pkts);
-diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
-index 16b4806..9d43277 100644
---- a/net/netfilter/ipvs/ip_vs_sync.c
-+++ b/net/netfilter/ipvs/ip_vs_sync.c
-@@ -615,7 +615,7 @@ static void ip_vs_sync_conn_v0(struct netns_ipvs *ipvs, struct ip_vs_conn *cp,
- 	cp = cp->control;
- 	if (cp) {
- 		if (cp->flags & IP_VS_CONN_F_TEMPLATE)
--			pkts = atomic_add_return(1, &cp->in_pkts);
-+			pkts = atomic_inc_return(&cp->in_pkts);
- 		else
- 			pkts = sysctl_sync_threshold(ipvs);
- 		ip_vs_sync_conn(ipvs, cp, pkts);
-@@ -776,7 +776,7 @@ void ip_vs_sync_conn(struct netns_ipvs *ipvs, struct ip_vs_conn *cp, int pkts)
- 	if (!cp)
- 		return;
- 	if (cp->flags & IP_VS_CONN_F_TEMPLATE)
--		pkts = atomic_add_return(1, &cp->in_pkts);
-+		pkts = atomic_inc_return(&cp->in_pkts);
- 	else
- 		pkts = sysctl_sync_threshold(ipvs);
- 	goto sloop;
--- 
-1.9.1
+We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
 
+
+We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+
+
+Please get back to me if you are interested for more
+
+details.
+
+
+Yours faithfully,
+
+Hashim Murrah
