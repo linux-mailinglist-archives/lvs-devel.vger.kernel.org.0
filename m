@@ -2,68 +2,114 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D237F2BC9BA
-	for <lists+lvs-devel@lfdr.de>; Sun, 22 Nov 2020 22:50:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DD02C0E1F
+	for <lists+lvs-devel@lfdr.de>; Mon, 23 Nov 2020 15:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbgKVVt0 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 22 Nov 2020 16:49:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbgKVVt0 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 22 Nov 2020 16:49:26 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABBCC0613CF
-        for <lvs-devel@vger.kernel.org>; Sun, 22 Nov 2020 13:49:26 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id t9so15127622edq.8
-        for <lvs-devel@vger.kernel.org>; Sun, 22 Nov 2020 13:49:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:sender:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
-        b=Ir7Kfb2CRuyi38NdyXO/AfqY/yLA50txIVvf6Ffe+9WdLAReLDWbGGOlH9TN+bkfz9
-         Pk87iFyQ6YAlohcmHCfNdoAiKMAkOO8iAezNkPNhTG+i8ijzgLNr49bQU440S5ODjpju
-         meEcj+lQu7m0TByz3xNhcUQB7vwgmiuT+j/qhSoWEz8ijADz4YYucNoggoajrf51ha/e
-         RvNBAwWOtiFd/zOT2BkDEcIbei5TDmuINYdOwiCSVKVoOzws/YQFCyWnuK9a2RFEAdMU
-         AmNydMGGIERo8zHvVoTNRe7tYbIfU0mDzrGhiB4sIkUqsl1EPDtBXSOOkz7geyRxhgm1
-         InNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:sender:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=holMzMixu6L4mPkY4KLX0AXrH3B7KLU6Q1+gVZ1hbDo=;
-        b=Rt77XPTrI/bZ1oKtD5mbifzAZ1Ct9gOkjzrv3FysilazA3wlDn6YN7NTnWW9aAvyNr
-         sXrT0l3V9OosSLgl7wyuvWu6Kdjlc5bAINCEwnWrrOZuFXoCOX2ExnRuQiL6uLE6UyMF
-         HGITG9vHPWxuo3G0+nfC70g3ZWHWDXU5MX3jh7Q2ixnC0kgCIVmY4yu2hUaFKACWXLLA
-         Kt1/k/B5QqD49isgWPNbtIQbIgL8kx8o/+hMoKEwvzUQrZTTtSjMm86i5REXQjzpXqmh
-         BhqDoEjxDQjhg4UCrdgW9QNcsiiL7upIvRsH1n7panSyjoVaaKdpUk/f5Y+bGn4lFFyl
-         GtXw==
-X-Gm-Message-State: AOAM531eQSTAIl6UYUrDDOrsFdJeIL0ehHL0+5vBijEWFaYEPdZ4xF5n
-        skRWYB/XPRZKpFUFhu2hamY=
-X-Google-Smtp-Source: ABdhPJz9PBPJNlvdIEMhlNKSWgX4SfVJtj6X0CALHPW/HAeZ9jueR6ZcdREz9j1mKtkmtRe1V8APgg==
-X-Received: by 2002:a05:6402:2031:: with SMTP id ay17mr25875380edb.358.1606081764856;
-        Sun, 22 Nov 2020 13:49:24 -0800 (PST)
-Received: from [192.168.43.48] ([197.210.35.67])
-        by smtp.gmail.com with ESMTPSA id e17sm4016232edc.45.2020.11.22.13.49.19
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sun, 22 Nov 2020 13:49:24 -0800 (PST)
-Message-ID: <5fbadce4.1c69fb81.8dfc7.11bb@mx.google.com>
-Sender: Baniko Diallo <banidiallo23@gmail.com>
-From:   Adelina Zeuki <adelinazeuki@gmail.com>
-X-Google-Original-From: "Adelina Zeuki" <  adelinazeuki@gmail.comm >
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1732042AbgKWOte (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 23 Nov 2020 09:49:34 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:8388 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731823AbgKWOte (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 23 Nov 2020 09:49:34 -0500
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Cfqm91XYmz711Q;
+        Mon, 23 Nov 2020 22:48:57 +0800 (CST)
+Received: from [10.174.179.81] (10.174.179.81) by
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 23 Nov 2020 22:49:11 +0800
+Subject: Re: [PATCH net v2] ipvs: fix possible memory leak in
+ ip_vs_control_net_init
+To:     Julian Anastasov <ja@ssi.bg>
+CC:     Simon Horman <horms@verge.net.au>, <pablo@netfilter.org>,
+        <christian@brauner.io>, <lvs-devel@vger.kernel.org>,
+        <netfilter-devel@vger.kernel.org>
+References: <20201120082610.60917-1-wanghai38@huawei.com>
+ <21af4c92-8ca6-cce9-64bc-c4e88b6d1e8a@ssi.bg>
+From:   "wanghai (M)" <wanghai38@huawei.com>
+Message-ID: <66825441-bb06-3d18-0424-df355d596c5f@huawei.com>
+Date:   Mon, 23 Nov 2020 22:49:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Hello !!
-To:     Recipients <adelinazeuki@gmail.comm>
-Date:   Sun, 22 Nov 2020 21:49:13 +0000
-Reply-To: adelinazeuki@gmail.com
+In-Reply-To: <21af4c92-8ca6-cce9-64bc-c4e88b6d1e8a@ssi.bg>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.81]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hi dear,
 
-Can i talk with you ?
+ÔÚ 2020/11/22 19:20, Julian Anastasov Ð´µÀ:
+> 	Hello,
+>
+> On Fri, 20 Nov 2020, Wang Hai wrote:
+>
+>> kmemleak report a memory leak as follows:
+>>
+>> BUG: memory leak
+>> unreferenced object 0xffff8880759ea000 (size 256):
+>> comm "syz-executor.3", pid 6484, jiffies 4297476946 (age 48.546s)
+[...]
+>>
+>> Fixes: b17fc9963f83 ("IPVS: netns, ip_vs_stats and its procfs")
+>> Fixes: 61b1ab4583e2 ("IPVS: netns, add basic init per netns.")
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Wang Hai <wanghai38@huawei.com>
+>> ---
+[...]
+>>   
+>> -	proc_create_net("ip_vs", 0, ipvs->net->proc_net, &ip_vs_info_seq_ops,
+>> -			sizeof(struct ip_vs_iter));
+>> -	proc_create_net_single("ip_vs_stats", 0, ipvs->net->proc_net,
+>> -			ip_vs_stats_show, NULL);
+>> -	proc_create_net_single("ip_vs_stats_percpu", 0, ipvs->net->proc_net,
+>> -			ip_vs_stats_percpu_show, NULL);
+>> +#ifdef CONFIG_PROC_FS
+>> +	if (!proc_create_net("ip_vs", 0, ipvs->net->proc_net, &ip_vs_info_seq_ops,
+>> +			sizeof(struct ip_vs_iter)))
+>> +		goto err_vs;
+>> +	if (!proc_create_net_single("ip_vs_stats", 0, ipvs->net->proc_net,
+>> +			ip_vs_stats_show, NULL))
+>> +		goto err_stats;
+>> +	if (!proc_create_net_single("ip_vs_stats_percpu", 0, ipvs->net->proc_net,
+>> +			ip_vs_stats_percpu_show, NULL))
+>> +		goto err_percpu;
+> 	Make sure the parameters are properly aligned to function open
+> parenthesis without exceeding 80 columns:
+>
+> linux# scripts/checkpatch.pl --strict /tmp/file.patch
+Thanks, I'll perfect it.
+> 	It was true only for first call due to some
+> renames for the others two in commit 3617d9496cd9 :(
+It does indeed rename in commit 3617d9496cd9.
+But I don't understand what's wrong with my patch here.
+>> +#endif
+>>   
+>>   	if (ip_vs_control_net_init_sysctl(ipvs))
+>>   		goto err;
+>> @@ -4180,6 +4185,14 @@ int __net_init ip_vs_control_net_init(struct netns_ipvs *ipvs)
+>>   	return 0;
+>>   
+>>   err:
+>> +#ifdef CONFIG_PROC_FS
+>> +	remove_proc_entry("ip_vs_stats_percpu", ipvs->net->proc_net);
+> 	It should look better with an empty line before
+> the 3 new labels.
+Thanks, I'll perfect it.
+>> +err_percpu:
+[...]
+>>   	remove_proc_entry("ip_vs_stats", ipvs->net->proc_net);
+>>   	remove_proc_entry("ip_vs", ipvs->net->proc_net);
+>> +#endif
+>>   	free_percpu(ipvs->tot_stats.cpustats);
+>>   }
+>>   
+> Regards
+>
+> --
+> Julian Anastasov <ja@ssi.bg>
+>
+> .
+>
