@@ -2,108 +2,157 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 553712C6398
-	for <lists+lvs-devel@lfdr.de>; Fri, 27 Nov 2020 12:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145642CCFB4
+	for <lists+lvs-devel@lfdr.de>; Thu,  3 Dec 2020 07:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgK0LJq (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 27 Nov 2020 06:09:46 -0500
-Received: from correo.us.es ([193.147.175.20]:54808 "EHLO mail.us.es"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725989AbgK0LJq (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 27 Nov 2020 06:09:46 -0500
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 164F019191F
-        for <lvs-devel@vger.kernel.org>; Fri, 27 Nov 2020 12:09:44 +0100 (CET)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 04D0BDA86C
-        for <lvs-devel@vger.kernel.org>; Fri, 27 Nov 2020 12:09:44 +0100 (CET)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id EDAFEDA84D; Fri, 27 Nov 2020 12:09:43 +0100 (CET)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WELCOMELIST,USER_IN_WHITELIST
-        autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 7D100DA84F;
-        Fri, 27 Nov 2020 12:09:41 +0100 (CET)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Fri, 27 Nov 2020 12:09:41 +0100 (CET)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (unknown [90.77.255.23])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id 4D97142EF42C;
-        Fri, 27 Nov 2020 12:09:41 +0100 (CET)
-Date:   Fri, 27 Nov 2020 12:09:41 +0100
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Wang Hai <wanghai38@huawei.com>, horms@verge.net.au,
-        kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
-        kuba@kernel.org, christian@brauner.io,
-        hans.schillstrom@ericsson.com, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v3] ipvs: fix possible memory leak in
- ip_vs_control_net_init
-Message-ID: <20201127110941.GA11008@salvia>
-References: <20201124080749.69160-1-wanghai38@huawei.com>
- <3164a9e0-962a-c54-129e-9ad780c454c8@ssi.bg>
+        id S1729846AbgLCGnJ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 3 Dec 2020 01:43:09 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:52866 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727677AbgLCGnI (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 3 Dec 2020 01:43:08 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=dust.li@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UHOJr3o_1606977744;
+Received: from DustLi-Macbook.local(mailfrom:dust.li@linux.alibaba.com fp:SMTPD_---0UHOJr3o_1606977744)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 03 Dec 2020 14:42:25 +0800
+Subject: Re: Long delay on estimation_timer causes packet latency
+To:     yunhong-cgl jiang <xintian1976@gmail.com>,
+        Julian Anastasov <ja@ssi.bg>
+Cc:     horms@verge.net.au, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, Yunhong Jiang <yunhjiang@ebay.com>
+References: <D25792C1-1B89-45DE-9F10-EC350DC04ADC@gmail.com>
+ <alpine.LFD.2.21.2004171029240.3962@ja.home.ssi.bg>
+ <F48099A3-ECB3-46AF-8330-B829ED2ADA3F@gmail.com>
+From:   "dust.li" <dust.li@linux.alibaba.com>
+Message-ID: <d89672f8-a028-8690-0e6a-517631134ef6@linux.alibaba.com>
+Date:   Thu, 3 Dec 2020 14:42:24 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <3164a9e0-962a-c54-129e-9ad780c454c8@ssi.bg>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Virus-Scanned: ClamAV using ClamSMTP
+In-Reply-To: <F48099A3-ECB3-46AF-8330-B829ED2ADA3F@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 08:09:19PM +0200, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Tue, 24 Nov 2020, Wang Hai wrote:
-> 
-> > kmemleak report a memory leak as follows:
-> > 
-> > BUG: memory leak
-> > unreferenced object 0xffff8880759ea000 (size 256):
-> > backtrace:
-> > [<00000000c0bf2deb>] kmem_cache_zalloc include/linux/slab.h:656 [inline]
-> > [<00000000c0bf2deb>] __proc_create+0x23d/0x7d0 fs/proc/generic.c:421
-> > [<000000009d718d02>] proc_create_reg+0x8e/0x140 fs/proc/generic.c:535
-> > [<0000000097bbfc4f>] proc_create_net_data+0x8c/0x1b0 fs/proc/proc_net.c:126
-> > [<00000000652480fc>] ip_vs_control_net_init+0x308/0x13a0 net/netfilter/ipvs/ip_vs_ctl.c:4169
-> > [<000000004c927ebe>] __ip_vs_init+0x211/0x400 net/netfilter/ipvs/ip_vs_core.c:2429
-> > [<00000000aa6b72d9>] ops_init+0xa8/0x3c0 net/core/net_namespace.c:151
-> > [<00000000153fd114>] setup_net+0x2de/0x7e0 net/core/net_namespace.c:341
-> > [<00000000be4e4f07>] copy_net_ns+0x27d/0x530 net/core/net_namespace.c:482
-> > [<00000000f1c23ec9>] create_new_namespaces+0x382/0xa30 kernel/nsproxy.c:110
-> > [<00000000098a5757>] copy_namespaces+0x2e6/0x3b0 kernel/nsproxy.c:179
-> > [<0000000026ce39e9>] copy_process+0x220a/0x5f00 kernel/fork.c:2072
-> > [<00000000b71f4efe>] _do_fork+0xc7/0xda0 kernel/fork.c:2428
-> > [<000000002974ee96>] __do_sys_clone3+0x18a/0x280 kernel/fork.c:2703
-> > [<0000000062ac0a4d>] do_syscall_64+0x33/0x40 arch/x86/entry/common.c:46
-> > [<0000000093f1ce2c>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > 
-> > In the error path of ip_vs_control_net_init(), remove_proc_entry() needs
-> > to be called to remove the added proc entry, otherwise a memory leak
-> > will occur.
-> > 
-> > Also, add some '#ifdef CONFIG_PROC_FS' because proc_create_net* return NULL
-> > when PROC is not used.
-> > 
-> > Fixes: b17fc9963f83 ("IPVS: netns, ip_vs_stats and its procfs")
-> > Fixes: 61b1ab4583e2 ("IPVS: netns, add basic init per netns.")
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Wang Hai <wanghai38@huawei.com>
-> 
-> 	Looks good to me, thanks!
-> 
-> Acked-by: Julian Anastasov <ja@ssi.bg>
+Hi Yunhong & Julian, any updates ?
 
-Applied, thanks.
+
+We've encountered the same problem. With lots of ipvs
+
+services plus many CPUs, it's easy to reproduce this issue.
+
+I have a simple script to reproduce:
+
+First add many ipvs services:
+
+for((i=0;i<50000;i++)); do
+         ipvsadm -A -t 10.10.10.10:$((2000+$i))
+done
+
+
+Then, check the latency of estimation_timer() using bpftrace:
+
+#!/usr/bin/bpftrace
+
+kprobe:estimation_timer {
+         @enter = nsecs;
+}
+
+kretprobe:estimation_timer {
+         $exit = nsecs;
+         printf("latency: %ld us\n", (nsecs - @enter)/1000);
+}
+
+I observed about 268ms delay on my 104 CPUs test server.
+
+Attaching 2 probes...
+latency: 268807 us
+latency: 268519 us
+latency: 269263 us
+
+
+And I tried moving estimation_timer() into a delayed
+
+workqueue, this do make things better. But since the
+
+estimation won't give up CPU, it can run for pretty
+
+long without scheduling on a server which don't have
+
+preempt enabled, so tasks on that CPU can't get executed
+
+during that period.
+
+
+Since the estimation repeated every 2s, we can't call
+
+cond_resched() to give up CPU in the middle of iterating the
+
+est_list, or the estimation will be quite inaccurate.
+
+Besides the est_list needs to be protected.
+
+
+I haven't found any ideal solution yet, currently, we just
+
+moved the estimation into kworker and add sysctl to allow
+
+us to disable the estimation, since we don't need the
+
+estimation anyway.
+
+
+Our patches is pretty simple now, if you think it's useful,
+
+I can paste them
+
+
+Do you guys have any suggestions or solutions ?
+
+
+Thanks a lot !
+
+Dust
+
+
+
+On 4/18/20 12:56 AM, yunhong-cgl jiang wrote:
+> Thanks for reply.
+>
+> Yes, our patch changes the est_list to a RCU list. Will do more testing and send out the patch.
+>
+> Thanks
+> —Yunhong
+>
+>
+>> On Apr 17, 2020, at 12:47 AM, Julian Anastasov <ja@ssi.bg> wrote:
+>>
+>>
+>> 	Hello,
+>>
+>> On Thu, 16 Apr 2020, yunhong-cgl jiang wrote:
+>>
+>>> Hi, Simon & Julian,
+>>> 	We noticed that on our kubernetes node utilizing IPVS, the estimation_timer() takes very long (>200sm as shown below). Such long delay on timer softirq causes long packet latency.
+>>>
+>>>           <idle>-0     [007] dNH. 25652945.670814: softirq_raise: vec=1 [action=TIMER]
+>>> .....
+>>>           <idle>-0     [007] .Ns. 25652945.992273: softirq_exit: vec=1 [action=TIMER]
+>>>
+>>> 	The long latency is caused by the big service number (>50k) and large CPU number (>80 CPUs),
+>>>
+>>> 	We tried to move the timer function into a kernel thread so that it will not block the system and seems solves our problem. Is this the right direction? If yes, we will do more testing and send out the RFC patch. If not, can you give us some suggestion?
+>> 	Using kernel thread is a good idea. For this to work, we can
+>> also remove the est_lock and to use RCU for est_list.
+>> The writers ip_vs_start_estimator() and ip_vs_stop_estimator() already
+>> run under common mutex __ip_vs_mutex, so they not need any
+>> synchronization. We need _bh lock usage in estimation_timer().
+>> Let me know if you need any help with the patch.
+>>
+>> Regards
+>>
+>> --
+>> Julian Anastasov <ja@ssi.bg>
