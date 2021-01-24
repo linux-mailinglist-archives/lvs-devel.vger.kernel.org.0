@@ -2,57 +2,60 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5F1300F29
-	for <lists+lvs-devel@lfdr.de>; Fri, 22 Jan 2021 22:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8A4301B44
+	for <lists+lvs-devel@lfdr.de>; Sun, 24 Jan 2021 11:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727354AbhAVVs1 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 22 Jan 2021 16:48:27 -0500
-Received: from mail.padangpariamankab.go.id ([103.94.3.123]:34100 "EHLO
-        mail.padangpariamankab.go.id" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729851AbhAVVrr (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 22 Jan 2021 16:47:47 -0500
-X-Greylist: delayed 2704 seconds by postgrey-1.27 at vger.kernel.org; Fri, 22 Jan 2021 16:47:45 EST
-Received: from localhost (localhost [127.0.0.1])
-        by mail.padangpariamankab.go.id (Postfix) with ESMTP id 42B296E6C97;
-        Sat, 23 Jan 2021 03:48:32 +0700 (WIB)
-Received: from mail.padangpariamankab.go.id ([127.0.0.1])
-        by localhost (mail.padangpariamankab.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Q5K0eRIjg5mw; Sat, 23 Jan 2021 03:48:31 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.padangpariamankab.go.id (Postfix) with ESMTP id E99E36E6CA0;
-        Sat, 23 Jan 2021 03:48:30 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.padangpariamankab.go.id E99E36E6CA0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=padangpariamankab.go.id; s=D2C6CDEC-3607-11EA-BC8A-EEDE4AB8B776;
-        t=1611348511; bh=4AhSoXRU63EAbbOwseUY/pxjidGey07DskAQ7pZ9AvE=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=t9NhlogsVeXxpObOSrdg21vldF5q01Z6i7i4LjMPt6IGNBfRaz4Xki68i84uSEvE/
-         THee4gFJ8ixXxp5+x8rVCHW+Krmdb+CtwgjLjVuyslLm3AlFXwtDmvWWLsWwBisTJo
-         ZEvPt39H/Z2n3F7/0mt8hldL2+wXeD1jE/jX3PCA=
-X-Virus-Scanned: amavisd-new at padangpariamankab.go.id
-Received: from mail.padangpariamankab.go.id ([127.0.0.1])
-        by localhost (mail.padangpariamankab.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id y1C6ZiorOj4i; Sat, 23 Jan 2021 03:48:30 +0700 (WIB)
-Received: from mail.padangpariamankab.go.id (mail.padangpariamankab.go.id [103.94.3.123])
-        by mail.padangpariamankab.go.id (Postfix) with ESMTP id D9EEF6E6BEA;
-        Sat, 23 Jan 2021 03:48:27 +0700 (WIB)
-Date:   Sat, 23 Jan 2021 03:48:27 +0700 (WIB)
-From:   GREENLIGHT <rsud@padangpariamankab.go.id>
-Reply-To: "Greenlight Financial Services " <greenlightservices@usa.com>
-Message-ID: <265927033.19556.1611348507774.JavaMail.zimbra@padangpariamankab.go.id>
-Subject: Update
+        id S1726657AbhAXKqL (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 24 Jan 2021 05:46:11 -0500
+Received: from kirsty.vergenet.net ([202.4.237.240]:32870 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726662AbhAXKqJ (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 24 Jan 2021 05:46:09 -0500
+Received: from madeliefje.horms.nl (tulip.horms.nl [83.161.246.101])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 7BADF25B7B1;
+        Sun, 24 Jan 2021 21:45:26 +1100 (AEDT)
+Received: by madeliefje.horms.nl (Postfix, from userid 7100)
+        id 88A0F44C4; Sun, 24 Jan 2021 11:45:24 +0100 (CET)
+Date:   Sun, 24 Jan 2021 11:45:24 +0100
+From:   Simon Horman <horms@verge.net.au>
+To:     Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     dpayne <darby.payne@gmail.com>, netfilter-devel@vger.kernel.org,
+        lvs-devel@vger.kernel.org
+Subject: Re: [PATCH v6] ipvs: add weighted random twos choice algorithm
+Message-ID: <20210124104524.GG576@vergenet.net>
+References: <c97fced3-b6b7-ba40-274c-7a5749bbe48a@ssi.bg>
+ <20210106190242.1044489-1-darby.payne@gmail.com>
+ <c13462ca-37ce-1112-f73c-40d3e612482@ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [103.94.3.123]
-X-Mailer: Zimbra 8.8.15_GA_3895 (zclient/8.8.15_GA_3895)
-Thread-Index: UV0i4grF4kE9OAUymzizskFj18kNjg==
-Thread-Topic: Update
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c13462ca-37ce-1112-f73c-40d3e612482@ssi.bg>
+Organisation: Horms Solutions BV
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+On Wed, Jan 06, 2021 at 09:25:47PM +0200, Julian Anastasov wrote:
+> 
+> 	Hello,
+> 
+> On Wed, 6 Jan 2021, dpayne wrote:
+> 
+> > Adds the random twos choice load-balancing algorithm. The algorithm will
+> > pick two random servers based on weights. Then select the server with
+> > the least amount of connections normalized by weight. The algorithm
+> > avoids the "herd behavior" problem. The algorithm comes from a paper
+> > by Michael Mitzenmacher available here
+> > http://www.eecs.harvard.edu/~michaelm/NEWWORK/postscripts/twosurvey.pdf
+> > 
+> > Signed-off-by: dpayne <darby.payne@gmail.com>
+> 
+> 	Looks good to me for -next, thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
 
+Sorry for the delay,
 
-We offer Reliable/Low Interest Rate Financial Services to Companies & Individuals including; Start-Up Business, Loans & Mortgage ETC. Apply Now
+Acked-by: Simon Horman <horms@verge.net.au>
