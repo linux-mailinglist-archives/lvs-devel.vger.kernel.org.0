@@ -2,60 +2,85 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8A4301B44
-	for <lists+lvs-devel@lfdr.de>; Sun, 24 Jan 2021 11:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA713030D0
+	for <lists+lvs-devel@lfdr.de>; Tue, 26 Jan 2021 01:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbhAXKqL (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 24 Jan 2021 05:46:11 -0500
-Received: from kirsty.vergenet.net ([202.4.237.240]:32870 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726662AbhAXKqJ (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 24 Jan 2021 05:46:09 -0500
-Received: from madeliefje.horms.nl (tulip.horms.nl [83.161.246.101])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 7BADF25B7B1;
-        Sun, 24 Jan 2021 21:45:26 +1100 (AEDT)
-Received: by madeliefje.horms.nl (Postfix, from userid 7100)
-        id 88A0F44C4; Sun, 24 Jan 2021 11:45:24 +0100 (CET)
-Date:   Sun, 24 Jan 2021 11:45:24 +0100
-From:   Simon Horman <horms@verge.net.au>
-To:     Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     dpayne <darby.payne@gmail.com>, netfilter-devel@vger.kernel.org,
-        lvs-devel@vger.kernel.org
+        id S1732455AbhAZAGQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 25 Jan 2021 19:06:16 -0500
+Received: from correo.us.es ([193.147.175.20]:33964 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732386AbhAZAFj (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 25 Jan 2021 19:05:39 -0500
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id 47BE6DA720
+        for <lvs-devel@vger.kernel.org>; Tue, 26 Jan 2021 01:03:58 +0100 (CET)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 37702DA78A
+        for <lvs-devel@vger.kernel.org>; Tue, 26 Jan 2021 01:03:58 +0100 (CET)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id 2C883DA72F; Tue, 26 Jan 2021 01:03:58 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WELCOMELIST,USER_IN_WHITELIST
+        autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id 72EE6DA704;
+        Tue, 26 Jan 2021 01:03:55 +0100 (CET)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Tue, 26 Jan 2021 01:03:55 +0100 (CET)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id 54FBE426CC84;
+        Tue, 26 Jan 2021 01:03:55 +0100 (CET)
+Date:   Tue, 26 Jan 2021 01:04:52 +0100
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     Julian Anastasov <ja@ssi.bg>, dpayne <darby.payne@gmail.com>,
+        netfilter-devel@vger.kernel.org, lvs-devel@vger.kernel.org
 Subject: Re: [PATCH v6] ipvs: add weighted random twos choice algorithm
-Message-ID: <20210124104524.GG576@vergenet.net>
+Message-ID: <20210126000452.GA29052@salvia>
 References: <c97fced3-b6b7-ba40-274c-7a5749bbe48a@ssi.bg>
  <20210106190242.1044489-1-darby.payne@gmail.com>
  <c13462ca-37ce-1112-f73c-40d3e612482@ssi.bg>
+ <20210124104524.GG576@vergenet.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c13462ca-37ce-1112-f73c-40d3e612482@ssi.bg>
-Organisation: Horms Solutions BV
+In-Reply-To: <20210124104524.GG576@vergenet.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Jan 06, 2021 at 09:25:47PM +0200, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Wed, 6 Jan 2021, dpayne wrote:
-> 
-> > Adds the random twos choice load-balancing algorithm. The algorithm will
-> > pick two random servers based on weights. Then select the server with
-> > the least amount of connections normalized by weight. The algorithm
-> > avoids the "herd behavior" problem. The algorithm comes from a paper
-> > by Michael Mitzenmacher available here
-> > http://www.eecs.harvard.edu/~michaelm/NEWWORK/postscripts/twosurvey.pdf
+On Sun, Jan 24, 2021 at 11:45:24AM +0100, Simon Horman wrote:
+> On Wed, Jan 06, 2021 at 09:25:47PM +0200, Julian Anastasov wrote:
 > > 
-> > Signed-off-by: dpayne <darby.payne@gmail.com>
+> > 	Hello,
+> > 
+> > On Wed, 6 Jan 2021, dpayne wrote:
+> > 
+> > > Adds the random twos choice load-balancing algorithm. The algorithm will
+> > > pick two random servers based on weights. Then select the server with
+> > > the least amount of connections normalized by weight. The algorithm
+> > > avoids the "herd behavior" problem. The algorithm comes from a paper
+> > > by Michael Mitzenmacher available here
+> > > http://www.eecs.harvard.edu/~michaelm/NEWWORK/postscripts/twosurvey.pdf
+> > > 
+> > > Signed-off-by: dpayne <darby.payne@gmail.com>
+> > 
+> > 	Looks good to me for -next, thanks!
+> > 
+> > Acked-by: Julian Anastasov <ja@ssi.bg>
 > 
-> 	Looks good to me for -next, thanks!
+> Sorry for the delay,
 > 
-> Acked-by: Julian Anastasov <ja@ssi.bg>
+> Acked-by: Simon Horman <horms@verge.net.au>
 
-Sorry for the delay,
-
-Acked-by: Simon Horman <horms@verge.net.au>
+Applied, thanks.
