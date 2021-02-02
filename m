@@ -2,112 +2,82 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C68830C203
-	for <lists+lvs-devel@lfdr.de>; Tue,  2 Feb 2021 15:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAAC30C243
+	for <lists+lvs-devel@lfdr.de>; Tue,  2 Feb 2021 15:49:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbhBBOhb (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 2 Feb 2021 09:37:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231499AbhBBORr (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Tue, 2 Feb 2021 09:17:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0966264FCD;
-        Tue,  2 Feb 2021 13:55:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612274159;
-        bh=uqEQxgxP/Gh6jkafzcZMwsNruCxCCpY2QrRHAchjz/o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AJZKCAkxo4iNw6GvoaohZFZ6alAc19sFBqoWDRu0qkz7f0ZiSqji/3BwP2DQizckW
-         fRCRjI2NTiTh4HFtW09AF6rjvmTdGcbbCFqEdIZ0kAJYrmdiCtMrPEuD4IN5B0NoHN
-         WQ7J+ebZG6SJdlu1w8kHoaIB0H2kINRmq+k14SML6PRIIMoJCf/mwHEc8g6Sn6uuPB
-         9ztrCNZy9RseBE9g48WJ1yyI4PSypSHvbw6W7/XfdLfgT+1RiaEuTyEzr1DmCXFzvR
-         +67DFBd9dAd0Yd7JEfyZgxSstDlupg0aeJVm+Fad5uyt/lyxFU43SDI3UNHASfsRej
-         9xDdTDpTFlGOA==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>,
+        id S234558AbhBBOpf (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 2 Feb 2021 09:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234542AbhBBOgd (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 2 Feb 2021 09:36:33 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057E1C06178B
+        for <lvs-devel@vger.kernel.org>; Tue,  2 Feb 2021 06:34:50 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id q5so19199779ilc.10
+        for <lvs-devel@vger.kernel.org>; Tue, 02 Feb 2021 06:34:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bxl73venaa9cWERoVp0VscHZS3/IH5lSgUJLT8Av3Oc=;
+        b=d5yDUwK8kbyroVDcNrW9Bed9kahFje2ZIU0BDehuW5DzhPmTw6AKATlvIgrv3J4sup
+         aIo/FiNf8JoT4Hc5Hak+mLJocFm+sU/u992MZHifR/Vk1Vy162sQeLOaHALCaNiJbGRo
+         OML/GI0PIO+UdFLcZ8smRhAhPEB81uhDI1ArrGScpj4MY6sy6aHAFWoy7FYSsBM4zZ8y
+         BasAXhEgwWcGYwtGMAoiGGjfmc51b8AlNJGIgeBrkF+i00WuUU55rrkEzAbaCoaooN1y
+         L9wDlcTrJVC2mJ9uCebXrUMygqRdWMyoY4OOn+vTf+7KKYGSCcbjpUs1+bjIJQtN65xg
+         Nfyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bxl73venaa9cWERoVp0VscHZS3/IH5lSgUJLT8Av3Oc=;
+        b=i8LxRyMDujxEXeQAl1sWmE6CKfmEhwKhNN3fEFM9i0Ij83FwC1TfMLU700MRdyvMA+
+         +dwN2mpT/y+mARUrxRqcWoWQZwRWyfPCntE+Wi+RWbCWdSENGb0OBaf/lutPQp3wjxSx
+         HNggT8mMt9S2o8KZ2NW6Ux+gioCINyqL0CFBmrqRjLK+PSHeSNl9rSVfkp2clI4/K3NG
+         uy7POTZKV8rkDCvXwaYHU/N2FvwM+/kdd4UrTwdPqkpitv9q1xc3nEv5d2Fj+jv/of6n
+         0KBS+Gxan47WPqKpj9iZTzncxLAmSWYFc6gS3LTYIGceWXTTHdlJahCTBX9O5hdtZfcy
+         9xrw==
+X-Gm-Message-State: AOAM530O8YOGiLgfKaWE+F7SSMK/GXhD0GeHjxAc1n7uA5u3hnFHiuiE
+        rfUOpCeVdqbuBWWvLmnWT7G0yXQ619vtxFnKdJR8Vw==
+X-Google-Smtp-Source: ABdhPJwdCq6fIqid1NDIwXhIUsFuZbRVI0mELuQ6Hg5XtSZnefbtVLLxDzRUbY6f1swYl+qnJ9omvJfA21H0KTmRU6M=
+X-Received: by 2002:a05:6e02:1251:: with SMTP id j17mr3978433ilq.216.1612276489189;
+ Tue, 02 Feb 2021 06:34:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20210202135544.3262383-1-leon@kernel.org>
+In-Reply-To: <20210202135544.3262383-1-leon@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 2 Feb 2021 15:34:37 +0100
+Message-ID: <CANn89iL4jGbr_6rr11nsHxmdh7uz=kqXuMhRb0nakWO3rBZwsQ@mail.gmail.com>
+Subject: Re: [PATCH net 0/4] Fix W=1 compilation warnings in net/* folder
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
-        Eric Dumazet <edumazet@google.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
         Florian Westphal <fw@strlen.de>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        lvs-devel@vger.kernel.org, Matteo Croce <mcroce@redhat.com>,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Julian Anastasov <ja@ssi.bg>,
+        LKML <linux-kernel@vger.kernel.org>, lvs-devel@vger.kernel.org,
+        Matteo Croce <mcroce@redhat.com>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
         Simon Horman <horms@verge.net.au>
-Subject: [PATCH net 4/4] netfilter: move handlers to net/ip_vs.h
-Date:   Tue,  2 Feb 2021 15:55:44 +0200
-Message-Id: <20210202135544.3262383-5-leon@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210202135544.3262383-1-leon@kernel.org>
-References: <20210202135544.3262383-1-leon@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+On Tue, Feb 2, 2021 at 2:55 PM Leon Romanovsky <leon@kernel.org> wrote:
+>
+> From: Leon Romanovsky <leonro@nvidia.com>
+>
+> Hi,
+>
+> This short series fixes W=1 compilation warnings which I experienced
+> when tried to compile net/* folder.
+>
 
-Fix the following compilation warnings:
-net/netfilter/ipvs/ip_vs_proto_tcp.c:147:1: warning: no previous prototype for 'tcp_snat_handler' [-Wmissing-prototypes]
-  147 | tcp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-      | ^~~~~~~~~~~~~~~~
-net/netfilter/ipvs/ip_vs_proto_udp.c:136:1: warning: no previous prototype for 'udp_snat_handler' [-Wmissing-prototypes]
-  136 | udp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-      | ^~~~~~~~~~~~~~~~
-
-Fixes: 6ecd754883da ("ipvs: use indirect call wrappers")
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- include/net/ip_vs.h             | 11 +++++++++++
- net/netfilter/ipvs/ip_vs_core.c | 12 ------------
- 2 files changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-index d609e957a3ec..7cb5a1aace40 100644
---- a/include/net/ip_vs.h
-+++ b/include/net/ip_vs.h
-@@ -1712,4 +1712,15 @@ ip_vs_dest_conn_overhead(struct ip_vs_dest *dest)
- 		atomic_read(&dest->inactconns);
- }
-
-+#ifdef CONFIG_IP_VS_PROTO_TCP
-+INDIRECT_CALLABLE_DECLARE(int
-+	tcp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-+			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
-+#endif
-+
-+#ifdef CONFIG_IP_VS_PROTO_UDP
-+INDIRECT_CALLABLE_DECLARE(int
-+	udp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-+			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
-+#endif
- #endif	/* _NET_IP_VS_H */
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index 54e086c65721..0c132ff9b446 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -68,18 +68,6 @@ EXPORT_SYMBOL(ip_vs_get_debug_level);
- #endif
- EXPORT_SYMBOL(ip_vs_new_conn_out);
-
--#ifdef CONFIG_IP_VS_PROTO_TCP
--INDIRECT_CALLABLE_DECLARE(int
--	tcp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
--			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
--#endif
--
--#ifdef CONFIG_IP_VS_PROTO_UDP
--INDIRECT_CALLABLE_DECLARE(int
--	udp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
--			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
--#endif
--
- #if defined(CONFIG_IP_VS_PROTO_TCP) && defined(CONFIG_IP_VS_PROTO_UDP)
- #define SNAT_CALL(f, ...) \
- 	INDIRECT_CALL_2(f, tcp_snat_handler, udp_snat_handler, __VA_ARGS__)
---
-2.29.2
-
+Ok, but we never had a strong requirement about W=1, so adding Fixes:
+tag is adding
+unnecessary burden to stable teams all around the world.
