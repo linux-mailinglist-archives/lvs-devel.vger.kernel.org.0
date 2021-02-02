@@ -2,64 +2,75 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EA430DA79
-	for <lists+lvs-devel@lfdr.de>; Wed,  3 Feb 2021 14:03:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A1D30C1F3
+	for <lists+lvs-devel@lfdr.de>; Tue,  2 Feb 2021 15:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbhBCNB4 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 3 Feb 2021 08:01:56 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:56622 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S229691AbhBCNBs (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 3 Feb 2021 08:01:48 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=VBKhclcJlvYiMcoD1Xp1AvPlw2KAMvHjrrveRbgU61K9ec5EaoY9btpenHsD0RDlPN0jX6OszDG/WiTwgovB0szaL3r6+BmXDSWbanfZGrwtz29mLiS/dGTmDgHqlTiNvn2lsCB2gX9P3xHAAdhHzRZJWVce22m0Q8XZB5JVJgXZ2vFjtxdrj//kOelA33YEc5NUAdiwDbiL7MDkpENYNnOeqo5rgXytlBVASgndKlbEiDiyz2HSlWybBn
-        dXJCQWtQ9gHAytf/eaB9i0ayKhNG8wu4nTS6k9fU55FfJ2rOCl57X+C5TxMXIiclllXXQ9BdfDjJaJkNi1gUE+lb7FzA==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Sat, 30 Jan 2021 04:03:39 +0000
-Message-ID: <E1A691FA-150F-48F7-876F-C11717DDC02B@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Sat, 30 Jan 2021 04:03:38 -0000
+        id S234653AbhBBOiP (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 2 Feb 2021 09:38:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51350 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229983AbhBBORp (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 2 Feb 2021 09:17:45 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9454164FC5;
+        Tue,  2 Feb 2021 13:55:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612274149;
+        bh=keCkanpK2quFyUoP2sx6/rYjvo75AHXrNu1jIcal3Nk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BkqNr1X+v2SqOy6cjJ9bc7qgUWfmFxrAWzOXsO57Ko5nkViZYaz9DRIVvzt/6rg+X
+         V1/IoxLg98kVAy38RnB5qDcYnkrQkzPYDJDvN/C+fwQPrff6CDBcqiKKe2KA4zgpls
+         cAwuFtQ4JzUQxaInNBSnz6xAL/vw6PYbT9rqpyuQ4+Dnk3du/F+8mBNzD7ajHeizaO
+         WcLY2pWHY5XUTkrCo9OTZGVufSybf6xW5PIW9l5DTzTuWu5yqRgU34A22XnbGx5nda
+         +53ZsdeGnrR18zrE08B6OjVLT+loJBOMo/Tft9e9vLYcgfkld/iOwyZn8b29r9Ec9F
+         pqgPtCPIQNVvw==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
+        lvs-devel@vger.kernel.org, Matteo Croce <mcroce@redhat.com>,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Simon Horman <horms@verge.net.au>
+Subject: [PATCH net 0/4] Fix W=1 compilation warnings in net/* folder
+Date:   Tue,  2 Feb 2021 15:55:40 +0200
+Message-Id: <20210202135544.3262383-1-leon@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hello,
+From: Leon Romanovsky <leonro@nvidia.com>
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+Hi,
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+This short series fixes W=1 compilation warnings which I experienced
+when tried to compile net/* folder.
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
+Thanks
 
-Regards,
-Ms. Reem.
+Leon Romanovsky (4):
+  ipv6: silence compilation warning for non-IPV6 builds
+  ipv6: move udp declarations to net/udp.h
+  net/core: move ipv6 gro function declarations to net/ipv6
+  netfilter: move handlers to net/ip_vs.h
+
+ include/net/ip_vs.h             | 11 +++++++++++
+ include/net/ipv6.h              |  3 +++
+ include/net/udp.h               |  3 +++
+ net/core/dev.c                  |  4 +---
+ net/ipv6/icmp.c                 |  6 ++++++
+ net/ipv6/ip6_input.c            |  3 +--
+ net/netfilter/ipvs/ip_vs_core.c | 12 ------------
+ 7 files changed, 25 insertions(+), 17 deletions(-)
+
+--
+2.29.2
 
