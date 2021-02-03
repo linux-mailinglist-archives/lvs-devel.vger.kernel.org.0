@@ -2,68 +2,85 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7380930DB4B
-	for <lists+lvs-devel@lfdr.de>; Wed,  3 Feb 2021 14:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1678430D73B
+	for <lists+lvs-devel@lfdr.de>; Wed,  3 Feb 2021 11:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbhBCN2J (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 3 Feb 2021 08:28:09 -0500
-Received: from 198-20-226-115.unifiedlayer.com ([198.20.226.115]:51174 "EHLO
-        198-20-226-115.unifiedlayer.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231886AbhBCN2C (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 3 Feb 2021 08:28:02 -0500
-X-Greylist: delayed 21682 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Feb 2021 08:27:03 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=carnivalassure.com.bd; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=miRpAdBSO5eDo01VDX+EK9bqGCmqMjXHS3kO16T6iWw=; b=oR9DBi73zWrpNptVGG8joD1q3D
-        a2vFVnixMQAUcmehD6fgJOQ9JP9N27NiM2NuC8HmaSTuyc4tIbd8kMLlSjPNy8b19j5i4Yecn4k41
-        d2L53GGQ3KAYNm9cTjTcF00G/e0wgveF66KZo4CFoHY+VyQWZpnDvHs7YXjdM1k0LGC10SnlZJnOf
-        hyfuxn41TeLbFp37bqri+jK8o3wb0VHiGKRxBfijUx18MCanoqvAna1IaS7ccBxFfbvZdTXygBXlc
-        j3LFBSU0eQazmqTdBY+jvtCMEdlAV/WbBykAUBZA45AnMWlIO1A8LzPVfVBXCEwNqNeODasQNIR6+
-        B0GfR5SA==;
-Received: from [127.0.0.1] (port=46664 helo=dot.dotlines.com.sg)
-        by dot.dotlines.com.sg with esmtpa (Exim 4.93)
-        (envelope-from <noreply@carnivalassure.com.bd>)
-        id 1l7CVp-0005bM-9S; Wed, 03 Feb 2021 01:23:41 -0600
+        id S233768AbhBCKRH (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 3 Feb 2021 05:17:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37764 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232865AbhBCKRA (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Wed, 3 Feb 2021 05:17:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 340B664E3E;
+        Wed,  3 Feb 2021 10:16:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1612347379;
+        bh=JiQd1AVXeEdpEBGNqD2D+wZ+wH51zt/0P+o9Tb1P56c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gnN5UB9yoV5OXihVhGd5KxypFuR0QjRFq4L6Slxp+HQAnhEBHuScRHbXKEinyPa1H
+         Voi4CAxi9qqVZTcBVb+tN+mHpZJXgrJLyzWtJgUF+j/ltj8KjjSacT2htWiKqsKkWz
+         l1QCCdGQ0Hy55WjiHMNMpVEi/Yxd+zqgvG/uaQJexTtHSBiQIGfcx3yt+w07WaH2Dw
+         hxW0zgqpuY5O1YfP+VKwDXsmQTyKYrcd9h8HSC8Geu2DWRa+f3AHemPoFsj3OX1NJs
+         WyjsrbL8AkyLqsNexUxI49UXEfMw2bCD6TLVNXOzTo7Yh93lzaE11GFMDK5ZVVUHmf
+         4mu+O0XFY2gmw==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
+        Florian Westphal <fw@strlen.de>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
+        lvs-devel@vger.kernel.org, Matteo Croce <mcroce@redhat.com>,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Simon Horman <horms@verge.net.au>
+Subject: [PATCH net-next v1 0/4] Fix W=1 compilation warnings in net/* folder
+Date:   Wed,  3 Feb 2021 12:16:08 +0200
+Message-Id: <20210203101612.4004322-1-leon@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Date:   Wed, 03 Feb 2021 01:23:40 -0600
-From:   Francois Pinault <noreply@carnivalassure.com.bd>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Organization: Donation
-Reply-To: francoispinault1936@outlook.com
-Mail-Reply-To: francoispinault1936@outlook.com
-Message-ID: <02cc13f2661d3cb7582fa6695be089c9@carnivalassure.com.bd>
-X-Sender: noreply@carnivalassure.com.bd
-User-Agent: Roundcube Webmail/1.3.15
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - dot.dotlines.com.sg
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - carnivalassure.com.bd
-X-Get-Message-Sender-Via: dot.dotlines.com.sg: authenticated_id: noreply@carnivalassure.com.bd
-X-Authenticated-Sender: dot.dotlines.com.sg: noreply@carnivalassure.com.bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+From: Leon Romanovsky <leonro@nvidia.com>
 
+Changelog:
+v1:
+ * Removed Fixes lines.
+ * Changed target from net to be net-next.
+ * Patch 1: Moved function declaration to be outside config instead
+   games with if/endif.
+ * Patch 3: Moved declarations to new header file.
+v0: https://lore.kernel.org/lkml/20210202135544.3262383-1-leon@kernel.org
+------------------------------------------------------------------
+Hi,
 
--- 
-Hallo, ich bin Herr Francois Pinault, ich habe Ihnen gespendet. Sie 
-können mein Profil auf Wikipedia, Google oder Forbes überprüfen.
+This short series fixes W=1 compilation warnings which I experienced
+when tried to compile net/* folder.
 
-Für Ihren Spendenanspruch und weitere Informationen kontaktieren Sie 
-mich umgehend unter francoispinault1936@outlook.com
+Thanks
 
-Mit freundlichen Grüßen,
-Herr Francois Pinault
+Leon Romanovsky (4):
+  ipv6: silence compilation warning for non-IPV6 builds
+  ipv6: move udp declarations to net/udp.h
+  net/core: move gro function declarations to separate header
+  netfilter: move handlers to net/ip_vs.h
+
+ include/linux/icmpv6.h          |  2 +-
+ include/net/gro.h               | 12 ++++++++++++
+ include/net/ip_vs.h             | 11 +++++++++++
+ include/net/udp.h               |  3 +++
+ net/core/dev.c                  |  7 +------
+ net/ipv6/ip6_input.c            |  3 +--
+ net/netfilter/ipvs/ip_vs_core.c | 12 ------------
+ 7 files changed, 29 insertions(+), 21 deletions(-)
+ create mode 100644 include/net/gro.h
+
+--
+2.29.2
+
