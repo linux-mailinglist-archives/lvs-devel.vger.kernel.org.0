@@ -2,110 +2,65 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D94830DBDF
-	for <lists+lvs-devel@lfdr.de>; Wed,  3 Feb 2021 14:53:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08EE310457
+	for <lists+lvs-devel@lfdr.de>; Fri,  5 Feb 2021 06:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbhBCNwk (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 3 Feb 2021 08:52:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50652 "EHLO mail.kernel.org"
+        id S229715AbhBEFIl (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Fri, 5 Feb 2021 00:08:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232460AbhBCNwL (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Wed, 3 Feb 2021 08:52:11 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 717B364E43;
-        Wed,  3 Feb 2021 13:51:29 +0000 (UTC)
+        id S229587AbhBEFIk (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Fri, 5 Feb 2021 00:08:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8889164E24;
+        Fri,  5 Feb 2021 05:07:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612360290;
-        bh=/KEuRgVOiA/VvIPSzucVMF3o8/yUTvTxNRQRpZ1mn68=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PEuanVo3hPfhP87VtCstAWPnr9Xr+WcjLVCvvy0359C1LrJjWDpG7lLX+6wQfJmNd
-         OM52P5pBsWmAhw9axoiz0MBwZn15/btJXij7vUVk+HGwkoLI02PgDo4PMwcA0nuQz8
-         CmRC0A4CKGEvik5Nl46HDqzyPd7G3A9ryh617dHwoAS+a+cmZsHq3eNA+CJnMwA3NP
-         u4qbH771msTfRhVE2vs76mzaJ46u+xOVSieiI/rdfKtFDmjKa+I/v9PoSnM55y4pvq
-         PwyNsyCO2pghLPQ/QOG+uoOGQe+h/WVNt/77i67iPmT7wi2k0drOJDL5mb+brIn3vW
-         miZNym37wH4Xw==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        s=k20201202; t=1612501679;
+        bh=ulBEqcu3uB/xXFXJGBCw5AtPU0BmN4KWSiBM/1b2+F4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e++b4k9sV6hSevPgZIJ/JhKzd5knmr9mIJmFhKbl//RPLsK7MBJGluO9Z54NTWIJg
+         3PkPBROBlhX8eFVj1fAxlhMqjV6V9wyNuGDhcqtT9hF4qkV+AWPH1s3re6AK7QDJwq
+         mp4Cej7dWdn1Xf8pHyti76LS5XdRyBmmneQJZ2BC6E9OkWhyxzqvyrtRS+l3+5O2XS
+         MGhpShgamjgGhSOtf5Yr3/4L0b6l3qTG0t+izkzSnbQWd4grjQATGEIkDHrYldNlBL
+         J6VRcocMTF5T+3qy3X3tbmHCHJieyZqrS+2/CmUfZy0acxECVUAer7DNk4Leg1BROU
+         Oco+/q6wBJ8Fw==
+Date:   Thu, 4 Feb 2021 21:07:57 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
+        Eric Dumazet <edumazet@google.com>,
+        Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
         Florian Westphal <fw@strlen.de>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Julian Anastasov <ja@ssi.bg>, lvs-devel@vger.kernel.org,
-        Matteo Croce <mcroce@redhat.com>, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, Simon Horman <horms@verge.net.au>
-Subject: [PATCH net-next v2 4/4] netfilter: move handlers to net/ip_vs.h
-Date:   Wed,  3 Feb 2021 15:51:12 +0200
-Message-Id: <20210203135112.4083711-5-leon@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
+        lvs-devel@vger.kernel.org, Matteo Croce <mcroce@redhat.com>,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Simon Horman <horms@verge.net.au>
+Subject: Re: [PATCH net-next v2 0/4] Fix W=1 compilation warnings in net/*
+ folder
+Message-ID: <20210204210757.5f3f4f5a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 In-Reply-To: <20210203135112.4083711-1-leon@kernel.org>
 References: <20210203135112.4083711-1-leon@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+On Wed,  3 Feb 2021 15:51:08 +0200 Leon Romanovsky wrote:
+> From: Leon Romanovsky <leonro@nvidia.com>
+> 
+> Changelog:
+> v2:
+>  * Patch 3: Added missing include file.
+> v1: https://lore.kernel.org/lkml/20210203101612.4004322-1-leon@kernel.org
+>  * Removed Fixes lines.
+>  * Changed target from net to be net-next.
+>  * Patch 1: Moved function declaration to be outside config instead
+>    games with if/endif.
+>  * Patch 3: Moved declarations to new header file.
+> v0: https://lore.kernel.org/lkml/20210202135544.3262383-1-leon@kernel.org
 
-Fix the following compilation warnings:
-net/netfilter/ipvs/ip_vs_proto_tcp.c:147:1: warning: no previous prototype for 'tcp_snat_handler' [-Wmissing-prototypes]
-  147 | tcp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-      | ^~~~~~~~~~~~~~~~
-net/netfilter/ipvs/ip_vs_proto_udp.c:136:1: warning: no previous prototype for 'udp_snat_handler' [-Wmissing-prototypes]
-  136 | udp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-      | ^~~~~~~~~~~~~~~~
-
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- include/net/ip_vs.h             | 11 +++++++++++
- net/netfilter/ipvs/ip_vs_core.c | 12 ------------
- 2 files changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-index d609e957a3ec..7cb5a1aace40 100644
---- a/include/net/ip_vs.h
-+++ b/include/net/ip_vs.h
-@@ -1712,4 +1712,15 @@ ip_vs_dest_conn_overhead(struct ip_vs_dest *dest)
- 		atomic_read(&dest->inactconns);
- }
-
-+#ifdef CONFIG_IP_VS_PROTO_TCP
-+INDIRECT_CALLABLE_DECLARE(int
-+	tcp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-+			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
-+#endif
-+
-+#ifdef CONFIG_IP_VS_PROTO_UDP
-+INDIRECT_CALLABLE_DECLARE(int
-+	udp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
-+			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
-+#endif
- #endif	/* _NET_IP_VS_H */
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index 54e086c65721..0c132ff9b446 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -68,18 +68,6 @@ EXPORT_SYMBOL(ip_vs_get_debug_level);
- #endif
- EXPORT_SYMBOL(ip_vs_new_conn_out);
-
--#ifdef CONFIG_IP_VS_PROTO_TCP
--INDIRECT_CALLABLE_DECLARE(int
--	tcp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
--			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
--#endif
--
--#ifdef CONFIG_IP_VS_PROTO_UDP
--INDIRECT_CALLABLE_DECLARE(int
--	udp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
--			 struct ip_vs_conn *cp, struct ip_vs_iphdr *iph));
--#endif
--
- #if defined(CONFIG_IP_VS_PROTO_TCP) && defined(CONFIG_IP_VS_PROTO_UDP)
- #define SNAT_CALL(f, ...) \
- 	INDIRECT_CALL_2(f, tcp_snat_handler, udp_snat_handler, __VA_ARGS__)
---
-2.29.2
-
+Applied, thanks!
