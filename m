@@ -2,65 +2,68 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F08EE310457
-	for <lists+lvs-devel@lfdr.de>; Fri,  5 Feb 2021 06:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D67311DC8
+	for <lists+lvs-devel@lfdr.de>; Sat,  6 Feb 2021 15:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbhBEFIl (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 5 Feb 2021 00:08:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47816 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229587AbhBEFIk (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 5 Feb 2021 00:08:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8889164E24;
-        Fri,  5 Feb 2021 05:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612501679;
-        bh=ulBEqcu3uB/xXFXJGBCw5AtPU0BmN4KWSiBM/1b2+F4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e++b4k9sV6hSevPgZIJ/JhKzd5knmr9mIJmFhKbl//RPLsK7MBJGluO9Z54NTWIJg
-         3PkPBROBlhX8eFVj1fAxlhMqjV6V9wyNuGDhcqtT9hF4qkV+AWPH1s3re6AK7QDJwq
-         mp4Cej7dWdn1Xf8pHyti76LS5XdRyBmmneQJZ2BC6E9OkWhyxzqvyrtRS+l3+5O2XS
-         MGhpShgamjgGhSOtf5Yr3/4L0b6l3qTG0t+izkzSnbQWd4grjQATGEIkDHrYldNlBL
-         J6VRcocMTF5T+3qy3X3tbmHCHJieyZqrS+2/CmUfZy0acxECVUAer7DNk4Leg1BROU
-         Oco+/q6wBJ8Fw==
-Date:   Thu, 4 Feb 2021 21:07:57 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Leon Romanovsky <leonro@nvidia.com>, coreteam@netfilter.org,
-        Florian Westphal <fw@strlen.de>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        lvs-devel@vger.kernel.org, Matteo Croce <mcroce@redhat.com>,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Simon Horman <horms@verge.net.au>
-Subject: Re: [PATCH net-next v2 0/4] Fix W=1 compilation warnings in net/*
- folder
-Message-ID: <20210204210757.5f3f4f5a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210203135112.4083711-1-leon@kernel.org>
-References: <20210203135112.4083711-1-leon@kernel.org>
+        id S230180AbhBFOjA (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 6 Feb 2021 09:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230184AbhBFOi7 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 6 Feb 2021 09:38:59 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F34C061786
+        for <lvs-devel@vger.kernel.org>; Sat,  6 Feb 2021 06:38:19 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id i20so9862828otl.7
+        for <lvs-devel@vger.kernel.org>; Sat, 06 Feb 2021 06:38:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=XYtszzE/LpsbnaOMbL3i9ek36+51/HV8infauGGc6JaIR1GnQCdJ7/Ds54KZgDytKR
+         GrbOFZZrlAKdoP1HWZ31I/tybvcK+AP/bDsHKiqpDpAlXEpcDpCa0mYuflpZTxUVQ4qI
+         H+dd8GoCBPz1SVY95lMzAzSvN6vUMgt3AW7qfgZLpC9eal6ImbEeoagHUm3JbcCgRt6g
+         iJvYlnLvTYFZ6FV+ydcHXcBPX5NUmPYUeOqAYFNZvf+Dd9zbXQt5Z9rpAkKLwysww/m6
+         7bUFq/PIuL1O464cmeOvkQiSYFtdQ8879hE/wINpEd8ORGfl3409wl1BIuqsmQ+kP2gC
+         6cKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=RLaEe4PWqqte+vEBZxrYgOVByNLf7CvA6OhBKQoCDN06cWfMWDT3ef7uQI4BehDqya
+         NCBDsfE3yb7ZdKD9jtHZN459GPvn0E0oXVJrfSI7L2jd0NPzM53vHceWzj8jA0T+SoW+
+         UU25g7lws6OAT9cRcYAAeVSM55p8qHUQhosaNPfSjn8+MsJSUu6erZaAae9wbthQd8F8
+         0sOQohORNJGygljGFjnRuQ3cCKJP6RnDxhLFHtkzA08avlnwCj4UCIkyxsiMplhU2vzV
+         hvgBmhCjKp4Hh6KVuDScD6k9Lct4sp3Y9qmNognp5izKRDAorGT6m0m9zJE2Nd9I6u8D
+         ZwcA==
+X-Gm-Message-State: AOAM531yjaQrsyVRabJsc/xS6T5YbMygu1jcYy6eXebt+38lIwyMrF33
+        HedRG2y38Evb/mCdGj10l5mjiY1djqfYhNavxIQ=
+X-Google-Smtp-Source: ABdhPJwUKNaKhQgD18aXLaGI1VUUqx+mmipeHKQay5fg9bMqMiX3U52bBqmDaXfmT0RLeuR5O3e/lB3MO8VVlccjwJk=
+X-Received: by 2002:a9d:6056:: with SMTP id v22mr7041213otj.266.1612622298539;
+ Sat, 06 Feb 2021 06:38:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a9d:3e4c:0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:38:18 -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada@gmail.com>
+Date:   Sat, 6 Feb 2021 15:38:18 +0100
+Message-ID: <CAO_fDi8mto=dAz+hr5DM6gTY1yjhGRPbwgY-QXyVfXCJW3AKqg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed,  3 Feb 2021 15:51:08 +0200 Leon Romanovsky wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
-> 
-> Changelog:
-> v2:
->  * Patch 3: Added missing include file.
-> v1: https://lore.kernel.org/lkml/20210203101612.4004322-1-leon@kernel.org
->  * Removed Fixes lines.
->  * Changed target from net to be net-next.
->  * Patch 1: Moved function declaration to be outside config instead
->    games with if/endif.
->  * Patch 3: Moved declarations to new header file.
-> v0: https://lore.kernel.org/lkml/20210202135544.3262383-1-leon@kernel.org
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
-Applied, thanks!
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
