@@ -2,78 +2,67 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C243160B8
-	for <lists+lvs-devel@lfdr.de>; Wed, 10 Feb 2021 09:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4444631CA56
+	for <lists+lvs-devel@lfdr.de>; Tue, 16 Feb 2021 13:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbhBJINi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Wed, 10 Feb 2021 03:13:38 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:55916 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233766AbhBJIN1 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 10 Feb 2021 03:13:27 -0500
-X-ASG-Debug-ID: 1612944670-112c0d6a799cb90001-fID3nb
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id jJ81a9DkExpcgPkc; Wed, 10 Feb 2021 03:11:10 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:45:33 -0500
+        id S230368AbhBPMDx (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 16 Feb 2021 07:03:53 -0500
+Received: from [103.116.200.12] ([103.116.200.12]:13830 "EHLO
+        mail.trans7.co.id" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S230379AbhBPMBx (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 16 Feb 2021 07:01:53 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.trans7.co.id (Postfix) with ESMTP id D50221063130;
+        Mon, 15 Feb 2021 13:43:07 -0500 (EST)
+Received: from mail.trans7.co.id ([127.0.0.1])
+        by localhost (mail.trans7.co.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id W72kJ0OpVTqH; Mon, 15 Feb 2021 13:43:07 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.trans7.co.id (Postfix) with ESMTP id 3915C106312F;
+        Mon, 15 Feb 2021 13:43:07 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.trans7.co.id 3915C106312F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=trans7.co.id;
+        s=dkim; t=1613414587;
+        bh=NDFq9aMlRU2V4J0FJaQ6Momdz2TQMlMovgopXHTaA6w=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=ZqwqmivXDH9DAwzStQaeoVv47B4gu6m1Lpd66Q4jPKhCi47qK94b+oGRZ7B5kAEHO
+         TDw4taYzh5+BCCS25GSq39klbPkq3lGETXVRJ8G8NyA6NyyR71WOhQFsTfaKsM2YD8
+         NCc5Xabv42IXCFopNpAxSra26/Q+4Bh9Yn8gfdy0=
+X-Virus-Scanned: amavisd-new at mail.trans7.co.id
+Received: from mail.trans7.co.id ([127.0.0.1])
+        by localhost (mail.trans7.co.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id HlIX0TLJfpty; Mon, 15 Feb 2021 13:43:07 -0500 (EST)
+Received: from [192.168.227.2] (unknown [41.147.0.146])
+        by mail.trans7.co.id (Postfix) with ESMTPSA id 0812B1063115;
+        Mon, 15 Feb 2021 13:42:54 -0500 (EST)
 Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:44:47 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <04dad0e2-2f3b-46a3-bb30-cab23ca007d4@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612944670
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87880
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+Subject: Czesc
+To:     Recipients <jovi.iskandar@trans7.co.id>
+From:   "Cristy Davis" <jovi.iskandar@trans7.co.id>
+Date:   Mon, 15 Feb 2021 10:42:40 -0800
+Reply-To: cristydavis2002@gmail.com
+Message-Id: <20210215184255.0812B1063115@mail.trans7.co.id>
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+Hallo,
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+Mein Name ist Cristy Davis, 40 Jahre alt, der Gewinner am 12. Februar 2020 =
+in H=F6he von 70 Millionen US-Dollar. Mein Jackpot war ein Geschenk Gottes =
+an mich, daher spendet meine ganze Familie / Stiftung 600.000 US-Dollar an =
+Sie und Ihre Familie. Wegen der durch COVID-19 verursachten Not.
+Kontaktieren Sie mich unter: cristydavis2002@gmail.com f=FCr weitere Inform=
+ationen und nehmen Sie dieses Zeichen als Geschenk Gottes an Ihre Familie a=
+n.
 
-Please contact us for more details;
+Keine Zahlung f=FCr die Inanspruchnahme meines Geschenks.
 
 
-Kind regards,
+Lesen Sie mehr: https://www.youtube.com/watch?v=3Dqod1Sgxyi6U
 
-Paul McCann
-
--- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+Mit freundlichen Gr=FC=DFen,
+Cristy Davis
