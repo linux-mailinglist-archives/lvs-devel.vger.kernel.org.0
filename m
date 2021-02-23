@@ -2,67 +2,60 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4444631CA56
-	for <lists+lvs-devel@lfdr.de>; Tue, 16 Feb 2021 13:04:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25547322A5F
+	for <lists+lvs-devel@lfdr.de>; Tue, 23 Feb 2021 13:16:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbhBPMDx (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 16 Feb 2021 07:03:53 -0500
-Received: from [103.116.200.12] ([103.116.200.12]:13830 "EHLO
-        mail.trans7.co.id" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbhBPMBx (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 16 Feb 2021 07:01:53 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.trans7.co.id (Postfix) with ESMTP id D50221063130;
-        Mon, 15 Feb 2021 13:43:07 -0500 (EST)
-Received: from mail.trans7.co.id ([127.0.0.1])
-        by localhost (mail.trans7.co.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id W72kJ0OpVTqH; Mon, 15 Feb 2021 13:43:07 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.trans7.co.id (Postfix) with ESMTP id 3915C106312F;
-        Mon, 15 Feb 2021 13:43:07 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.trans7.co.id 3915C106312F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=trans7.co.id;
-        s=dkim; t=1613414587;
-        bh=NDFq9aMlRU2V4J0FJaQ6Momdz2TQMlMovgopXHTaA6w=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=ZqwqmivXDH9DAwzStQaeoVv47B4gu6m1Lpd66Q4jPKhCi47qK94b+oGRZ7B5kAEHO
-         TDw4taYzh5+BCCS25GSq39klbPkq3lGETXVRJ8G8NyA6NyyR71WOhQFsTfaKsM2YD8
-         NCc5Xabv42IXCFopNpAxSra26/Q+4Bh9Yn8gfdy0=
-X-Virus-Scanned: amavisd-new at mail.trans7.co.id
-Received: from mail.trans7.co.id ([127.0.0.1])
-        by localhost (mail.trans7.co.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id HlIX0TLJfpty; Mon, 15 Feb 2021 13:43:07 -0500 (EST)
-Received: from [192.168.227.2] (unknown [41.147.0.146])
-        by mail.trans7.co.id (Postfix) with ESMTPSA id 0812B1063115;
-        Mon, 15 Feb 2021 13:42:54 -0500 (EST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S232537AbhBWMQM (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 23 Feb 2021 07:16:12 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:36781 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232466AbhBWMQK (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Tue, 23 Feb 2021 07:16:10 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 23 Feb 2021 04:15:26 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Tue, 23 Feb 2021
+ 04:15:11 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Tue, 23 Feb 2021 12:15:24 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Czesc
-To:     Recipients <jovi.iskandar@trans7.co.id>
-From:   "Cristy Davis" <jovi.iskandar@trans7.co.id>
-Date:   Mon, 15 Feb 2021 10:42:40 -0800
-Reply-To: cristydavis2002@gmail.com
-Message-Id: <20210215184255.0812B1063115@mail.trans7.co.id>
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <1b4f2d00c95b4623a892dbef0777cb05@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hallo,
+Hello,
 
-Mein Name ist Cristy Davis, 40 Jahre alt, der Gewinner am 12. Februar 2020 =
-in H=F6he von 70 Millionen US-Dollar. Mein Jackpot war ein Geschenk Gottes =
-an mich, daher spendet meine ganze Familie / Stiftung 600.000 US-Dollar an =
-Sie und Ihre Familie. Wegen der durch COVID-19 verursachten Not.
-Kontaktieren Sie mich unter: cristydavis2002@gmail.com f=FCr weitere Inform=
-ationen und nehmen Sie dieses Zeichen als Geschenk Gottes an Ihre Familie a=
-n.
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-Keine Zahlung f=FCr die Inanspruchnahme meines Geschenks.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-Lesen Sie mehr: https://www.youtube.com/watch?v=3Dqod1Sgxyi6U
-
-Mit freundlichen Gr=FC=DFen,
-Cristy Davis
+Regards,
+Ms. Reem.
