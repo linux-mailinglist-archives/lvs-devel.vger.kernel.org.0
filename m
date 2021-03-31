@@ -2,55 +2,46 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6488734E165
-	for <lists+lvs-devel@lfdr.de>; Tue, 30 Mar 2021 08:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351D834FA2C
+	for <lists+lvs-devel@lfdr.de>; Wed, 31 Mar 2021 09:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbhC3Gmy (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 30 Mar 2021 02:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbhC3Gmp (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 30 Mar 2021 02:42:45 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27704C061762;
-        Mon, 29 Mar 2021 23:42:45 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@breakpoint.cc>)
-        id 1lR85J-0002FN-F0; Tue, 30 Mar 2021 08:42:41 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     <netfilter-devel@vger.kernel.org>
-Cc:     lvs-devel@vger.kernel.org, ja@ssi.bg, horms@verge.net.au,
-        Florian Westphal <fw@strlen.de>
-Subject: [PATCH nf-next] netfilter: ipvs: do not printk on netns creation
-Date:   Tue, 30 Mar 2021 08:42:32 +0200
-Message-Id: <20210330064232.11960-1-fw@strlen.de>
-X-Mailer: git-send-email 2.26.3
+        id S234142AbhCaHav convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Wed, 31 Mar 2021 03:30:51 -0400
+Received: from bizcloud-power.sawafuji.co.jp ([128.199.220.203]:46712 "EHLO
+        mta0.sawafuji.co.jp" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234153AbhCaHaj (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 31 Mar 2021 03:30:39 -0400
+X-Greylist: delayed 665 seconds by postgrey-1.27 at vger.kernel.org; Wed, 31 Mar 2021 03:30:39 EDT
+From:   Albert Bourla <info@universalautomation.com.pk>
+To:     lvs-devel@vger.kernel.org
+Subject: Bidding invitation
+Date:   31 Mar 2021 09:13:59 +0200
+Message-ID: <20210331091359.946695A72EC0AF50@universalautomation.com.pk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-This causes dmesg spew during normal operation, so remove this.
+Good Day Sir/Ms,
 
-Signed-off-by: Florian Westphal <fw@strlen.de>
----
- net/netfilter/ipvs/ip_vs_ftp.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/net/netfilter/ipvs/ip_vs_ftp.c b/net/netfilter/ipvs/ip_vs_ftp.c
-index cf925906f59b..ef1f45e43b63 100644
---- a/net/netfilter/ipvs/ip_vs_ftp.c
-+++ b/net/netfilter/ipvs/ip_vs_ftp.c
-@@ -591,8 +591,6 @@ static int __net_init __ip_vs_ftp_init(struct net *net)
- 		ret = register_ip_vs_app_inc(ipvs, app, app->protocol, ports[i]);
- 		if (ret)
- 			goto err_unreg;
--		pr_info("%s: loaded support on port[%d] = %u\n",
--			app->name, i, ports[i]);
- 	}
- 	return 0;
+We are please to invite you or your company to quote the 
+following item listed below:
  
--- 
-2.26.3
+Product/Model No: A702TH FYNE PRESSURE REGULATOR
+Model Number: A702TH
+Qty. 30 units
 
+
+Compulsory,Kindly send your quotation to: 
+quotation@pfizerbvsupply.com 
+for immediate approval.
+
+Kind Regards,
+Albert Bourla
+PFIZER B.V Supply Chain Manager
+Tel: +31(0)208080 880
+ADDRESS: Rivium Westlaan 142, 2909 LD
+Capelle aan den IJssel, Netherlands
