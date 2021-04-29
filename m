@@ -2,63 +2,68 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E35364D49
-	for <lists+lvs-devel@lfdr.de>; Mon, 19 Apr 2021 23:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1517536E279
+	for <lists+lvs-devel@lfdr.de>; Thu, 29 Apr 2021 02:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbhDSVt5 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 19 Apr 2021 17:49:57 -0400
-Received: from mbox.abcom.al ([217.73.143.249]:54598 "EHLO mbox.abcom.al"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231738AbhDSVt5 (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Mon, 19 Apr 2021 17:49:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id 7ABFC125382EA;
-        Mon, 19 Apr 2021 22:54:06 +0200 (CEST)
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id vxqqA9RYZi9W; Mon, 19 Apr 2021 22:54:06 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by mbox.abcom.al (Postfix) with ESMTP id B913C1248CC6F;
-        Mon, 19 Apr 2021 22:54:03 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mbox.abcom.al B913C1248CC6F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abcom.al;
-        s=0F3BA0EE-D5D4-11E8-9596-F9115129F2F4; t=1618865643;
-        bh=BZv72htijiAiJQlxop8ucT2O5E8VQfLYZFZIV1NskB4=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=diaK47Tgl4NoWJyQS/d/AVj+6JoQqzWaRcyqSS63hZHBfmoEIOYQEqvSfDcSYqQ6X
-         ZB441D7qYvRDFSTrlwJ2HMWFiucrxNnROd7vhBR/81bQYv6QuzO0ILOE80AKXHLa7g
-         esNK7Xu/8Nh6mQoAkrLxkY7lNZd8PBj0/pBpbdma4835TzsuFixDiViK1Q/E7kW7NL
-         UwCIUWrJG2niSLZaM7tG3pJyzZm+xcYiGPtzmhLYqqNOKfLtc6MKkHFnT3ONFCFKfM
-         +UIS2avc8SgPN7TFh1rxz9FuH6Fypn+TbaDdGWl2X3EzTvzZ3vTiCanacuqseSoigZ
-         WPwnKSiasLIBw==
-X-Virus-Scanned: amavisd-new at mbox.abcom.al
-Received: from mbox.abcom.al ([127.0.0.1])
-        by localhost (mbox.abcom.al [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 6CK2X1nYg6bI; Mon, 19 Apr 2021 22:54:03 +0200 (CEST)
-Received: from [192.168.43.60] (unknown [105.4.5.77])
-        by mbox.abcom.al (Postfix) with ESMTPSA id 0C8AE118405B6;
-        Mon, 19 Apr 2021 22:53:52 +0200 (CEST)
-Content-Type: text/plain; charset="utf-8"
+        id S229474AbhD2AQ0 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 28 Apr 2021 20:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbhD2AQX (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 28 Apr 2021 20:16:23 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFC3C06138D
+        for <lvs-devel@vger.kernel.org>; Wed, 28 Apr 2021 17:15:37 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id v191so3100738pfc.8
+        for <lvs-devel@vger.kernel.org>; Wed, 28 Apr 2021 17:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=TvDH0Ufqq951p1SmGaor3zZZi0JBju1aRHwGT5Ex+6c=;
+        b=FD0ohVbyzoZbOTJc7gpaukzvlMEZ4ko4pUSOF5OpN4CCsRiQxfRfDoat6cMJOIR/U0
+         CBneh41M2UB+u6eb2r/B8Wmt+BXMQZdVsShro+DKWZ7xXPE58p2N+98bU5l1IIMXCSEO
+         dLNd2qYHTj4BrSF3PS394TCvK49HjLBDwaOeYZFcS0WqvcftxM3gcLl66Hhz5aFpXkaX
+         6JyYv07KgaZDJteTTiDaQO1VkYJ7e6XvG2tWQc/jVumvpb674H1Wqzo33ukRxpfz4TTl
+         WyLupPFRH/43cBdim1/MHAo1eO1XpoLK+2XiCiyvij4I3y95q8HEetFeH9FKst0PLi+l
+         evig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=TvDH0Ufqq951p1SmGaor3zZZi0JBju1aRHwGT5Ex+6c=;
+        b=DYBlxsg2CJpmTGKjRdQ+jzlSlUO+4x4SQeK+Dl3CXgAbE54D5jujOxOIqetYWwNz4G
+         pJ8NM4AE3mtC3mQdAz9m0kImDkHYpV7hUhspJ/C5ubJgtmM92h1I9UQAiBRUIxrMtL7D
+         Tl7yehK2vdfSbMxGim8WdKadkZ2YWuki7bC12PtbfLM+BJ/AQq6EPyosCaKyG/Jlwlet
+         NLsBELJlacx7eVE2F+ZGEvU1PTLfkYc5PBYpm/qHkdvf3qi9JecuAXg9yXqB/8j6uc4X
+         0VVLYAd8w2uiP5nvH3X9swU58CZS9R/bNo81NQ08nJSFfMCLplLvxU5fIT6LLM/NPwuo
+         YiLg==
+X-Gm-Message-State: AOAM530Hh0cUNTE+e0grOoqjSdzxkwfh8WNV3Hd4DmmvWE6bH1TUcPpO
+        wFxWVtc81cdArBNAPjoxjNbanrdhHD4V8TvYa64KMZhMKbLMd5n5lfs=
+X-Google-Smtp-Source: ABdhPJyMtnO3kbu665lwjylW4ZTFMe3ffNP0jcmIe2zyga16Pps2qxNRYrKaHtUnlCJy6fHWgBNTYdsqdMBNX3CWtTI=
+X-Received: by 2002:aa7:9696:0:b029:259:efef:e1e0 with SMTP id
+ f22-20020aa796960000b0290259efefe1e0mr31684776pfk.0.1619655336983; Wed, 28
+ Apr 2021 17:15:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Hallo=2C_Sie_haben_eine_Spende_von_=E2=82=AC_2=2E000=2E000=2C00?=
-To:     Recipients <abashi@abcom.al>
-From:   <abashi@abcom.al>
-Date:   Mon, 19 Apr 2021 22:53:05 +0200
-Reply-To: tayebsouamidonationorg@gmail.com
-Message-Id: <20210419205353.0C8AE118405B6@mbox.abcom.al>
+Received: by 2002:a05:7300:6426:b029:19:764e:b00a with HTTP; Wed, 28 Apr 2021
+ 17:15:36 -0700 (PDT)
+Reply-To: bwalysam@gmail.com
+From:   Mr Kingsley Obiora <maryclove123@gmail.com>
+Date:   Thu, 29 Apr 2021 01:15:36 +0100
+Message-ID: <CAFBdPmec3ib5nPNU6-wrLJoYVDfwMFgzXJ-UC3CN87fsSyk4wg@mail.gmail.com>
+Subject: Hello From Dr Kingsley Obiora
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-I'm Tayeb Souami, 55-year-old an elderly citizen of New Jersey, USA. I won =
-a $315.3 million jackpot, On behalf of my family and act of good will, we a=
-re donating to you and your family the sum of (=E2=82=AC 2,000,000.00 EUR) =
-I try to reach the public charity orphanages. Contribute to poverty reducti=
-on and ensure adequate health care for individuals. I also want you to inve=
-st part of this donation in public infrastructure to provide jobs for unemp=
-loyed citizens in your country.You can Watch me on youtube Claimed  https:/=
-/www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks I choose you because I believe in yo=
-u. I need your full cooperation regarding this donation. Please contact me =
-back here at my private email: tayebsouamidonationorg@gmail.com
+Dear Sir,
+
+After our meeting held today based on your funds, the management want
+to bring to your notice that we are making a special arrangement to
+bring your said fund by cash through diplomatic Immunity to your
+country home. Further details of this arrangement will be given to you
+once you acknowledged this idea.
+
+Waiting for your soonest response.
+Kingsley Obiora
