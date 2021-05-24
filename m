@@ -2,65 +2,51 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B252838E8C5
-	for <lists+lvs-devel@lfdr.de>; Mon, 24 May 2021 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C62C38F40E
+	for <lists+lvs-devel@lfdr.de>; Mon, 24 May 2021 22:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbhEXOez (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 24 May 2021 10:34:55 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:33376 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbhEXOex (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 24 May 2021 10:34:53 -0400
-Received: by mail-io1-f72.google.com with SMTP id d14-20020a056602328eb029043afd25c9efso25988574ioz.0
-        for <lvs-devel@vger.kernel.org>; Mon, 24 May 2021 07:33:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=mzMzgGXGzf6LXhHO5i6yc8Y+EDUJAYcIfexi+vE47CU=;
-        b=mC11PN+DfuZwoIziNYiwzDdZE7+v+0tdlN93AFolZxXcxNpeI+jgDe8B2ulDEz4j+n
-         Zp47N67LOfcQ4PXinyO6USYpxM/fZNcOEpQF+Q0ZZJyqBczBzuMyWd/VH5DT5AZyNWNK
-         8cvFginl04JdaEfllc7C9elxVYxby/TKuFPsa5wpUdSrnqgLRik1xX+VY95aevob6mFP
-         ct9dXrbGHrT2XW9xK4sRmWGbAT987tgM8N500VKGn1riJDlgvTsWK+JbnqhHM0PNayCh
-         FJTVKm1h8BSSteIm+wFbQLWJR7nddGC2c8PlN43iwX0oIWvKuffJpiThVYWcMs5m0dAK
-         mjlA==
-X-Gm-Message-State: AOAM531PyrxcwCEcx4NEV3H9hFAqhl99DW8VmEy1unz8VafWUKlI915i
-        WSKfEqcvwLVZtjydM02P+IVHxzPJGL3i3/RO7hIBFw69fV5V
-X-Google-Smtp-Source: ABdhPJwcLmlxYie5V2pawuvy04hy/JhXmHluK7avvoMDLz8HPqTWiVk6pB4ev4axH1fIOY+cFZD0NJBTXl7Xe+dCdaOexF+vy7zQ
+        id S232516AbhEXUFl (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 24 May 2021 16:05:41 -0400
+Received: from mg.ssi.bg ([178.16.128.9]:35582 "EHLO mg.ssi.bg"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232107AbhEXUFl (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 24 May 2021 16:05:41 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.27 at vger.kernel.org; Mon, 24 May 2021 16:05:40 EDT
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id D15CE2EEF8;
+        Mon, 24 May 2021 22:55:27 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [178.16.128.7])
+        by mg.ssi.bg (Proxmox) with ESMTP id BD6FB2EEF7;
+        Mon, 24 May 2021 22:55:26 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 952233C0332;
+        Mon, 24 May 2021 22:55:25 +0300 (EEST)
+Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 14OJtPOm125619;
+        Mon, 24 May 2021 22:55:25 +0300
+Received: (from root@localhost)
+        by ja.home.ssi.bg (8.16.1/8.16.1/Submit) id 14OJtNKT125612;
+        Mon, 24 May 2021 22:55:23 +0300
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel@vger.kernel.org
+Subject: [PATCH net] ipvs: ignore IP_VS_SVC_F_HASHED flag when adding service
+Date:   Mon, 24 May 2021 22:54:57 +0300
+Message-Id: <20210524195457.125514-1-ja@ssi.bg>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b47:: with SMTP id f7mr18755134ilu.261.1621866805007;
- Mon, 24 May 2021 07:33:25 -0700 (PDT)
-Date:   Mon, 24 May 2021 07:33:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c91e6f05c3144acc@google.com>
-Subject: [syzbot] memory leak in ip_vs_add_service
-From:   syzbot <syzbot+e562383183e4b1766930@syzkaller.appspotmail.com>
-To:     coreteam@netfilter.org, davem@davemloft.net, fw@strlen.de,
-        horms@verge.net.au, ja@ssi.bg, kadlec@netfilter.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, pablo@netfilter.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hello,
+syzbot reported memory leak [1] when adding service with
+HASHED flag. We should ignore this flag both from sockopt
+and netlink provided data, otherwise the service is not
+hashed and not visible while releasing resources.
 
-syzbot found the following issue on:
-
-HEAD commit:    c3d0e3fd Merge tag 'fs.idmapped.mount_setattr.v5.13-rc3' o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=148d0bd7d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ae7b129a135ab06b
-dashboard link: https://syzkaller.appspot.com/bug?extid=e562383183e4b1766930
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15585a4bd00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13900753d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e562383183e4b1766930@syzkaller.appspotmail.com
-
+[1]
 BUG: memory leak
 unreferenced object 0xffff888115227800 (size 512):
   comm "syz-executor263", pid 8658, jiffies 4294951882 (age 12.560s)
@@ -82,14 +68,27 @@ unreferenced object 0xffff888115227800 (size 512):
     [<ffffffff84350efa>] do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
     [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-
-
+Reported-and-tested-by: syzbot+e562383183e4b1766930@syzkaller.appspotmail.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Julian Anastasov <ja@ssi.bg>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ net/netfilter/ipvs/ip_vs_ctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+index d45dbcba8b49..c25097092a06 100644
+--- a/net/netfilter/ipvs/ip_vs_ctl.c
++++ b/net/netfilter/ipvs/ip_vs_ctl.c
+@@ -1367,7 +1367,7 @@ ip_vs_add_service(struct netns_ipvs *ipvs, struct ip_vs_service_user_kern *u,
+ 	ip_vs_addr_copy(svc->af, &svc->addr, &u->addr);
+ 	svc->port = u->port;
+ 	svc->fwmark = u->fwmark;
+-	svc->flags = u->flags;
++	svc->flags = u->flags & ~IP_VS_SVC_F_HASHED;
+ 	svc->timeout = u->timeout * HZ;
+ 	svc->netmask = u->netmask;
+ 	svc->ipvs = ipvs;
+-- 
+2.31.1
+
+
