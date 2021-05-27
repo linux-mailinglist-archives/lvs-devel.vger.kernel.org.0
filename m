@@ -2,34 +2,31 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8CB38FF1E
-	for <lists+lvs-devel@lfdr.de>; Tue, 25 May 2021 12:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41FB392C59
+	for <lists+lvs-devel@lfdr.de>; Thu, 27 May 2021 13:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbhEYKcK (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 25 May 2021 06:32:10 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:54950 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbhEYKbe (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 25 May 2021 06:31:34 -0400
-Received: from madeliefje.horms.nl (tulip.horms.nl [83.161.246.101])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id D3E8025AD66;
-        Tue, 25 May 2021 20:30:03 +1000 (AEST)
-Received: by madeliefje.horms.nl (Postfix, from userid 7100)
-        id F28493850; Tue, 25 May 2021 12:30:01 +0200 (CEST)
-Date:   Tue, 25 May 2021 12:30:01 +0200
-From:   Simon Horman <horms@verge.net.au>
+        id S233869AbhE0LJM (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 27 May 2021 07:09:12 -0400
+Received: from mail.netfilter.org ([217.70.188.207]:60654 "EHLO
+        mail.netfilter.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232381AbhE0LJL (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 27 May 2021 07:09:11 -0400
+Received: from netfilter.org (unknown [90.77.255.23])
+        by mail.netfilter.org (Postfix) with ESMTPSA id 3162364416;
+        Thu, 27 May 2021 13:06:36 +0200 (CEST)
+Date:   Thu, 27 May 2021 13:07:35 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
 To:     Julian Anastasov <ja@ssi.bg>
-Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
         netfilter-devel@vger.kernel.org
 Subject: Re: [PATCH net] ipvs: ignore IP_VS_SVC_F_HASHED flag when adding
  service
-Message-ID: <20210525103001.GA3365@vergenet.net>
+Message-ID: <20210527110735.GA6710@salvia>
 References: <20210524195457.125514-1-ja@ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <20210524195457.125514-1-ja@ssi.bg>
-Organisation: Horms Solutions BV
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
@@ -62,10 +59,5 @@ On Mon, May 24, 2021 at 10:54:57PM +0300, Julian Anastasov wrote:
 >     [<ffffffff836920f2>] __x64_sys_setsockopt+0x22/0x30 net/socket.c:2125
 >     [<ffffffff84350efa>] do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
 >     [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> Reported-and-tested-by: syzbot+e562383183e4b1766930@syzkaller.appspotmail.com
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Julian Anastasov <ja@ssi.bg>
 
-Reviewed-by: Simon Horman <horms@verge.net.au>
-
+Applied, thanks.
