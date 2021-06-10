@@ -2,127 +2,83 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FDA39A951
-	for <lists+lvs-devel@lfdr.de>; Thu,  3 Jun 2021 19:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF423A291D
+	for <lists+lvs-devel@lfdr.de>; Thu, 10 Jun 2021 12:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbhFCRir (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 3 Jun 2021 13:38:47 -0400
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:51849 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbhFCRir (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 3 Jun 2021 13:38:47 -0400
-Received: by mail-wm1-f47.google.com with SMTP id r13so3908848wmq.1;
-        Thu, 03 Jun 2021 10:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9ZEWHSSOb74rLWBdPbbD8Bw6Cd9qJ07nhLoANozAowA=;
-        b=s1rHc9mCAalfAD9jNYasuCBfe7xeQ6PErUmHUjpRlAfZctPlDyJzoyZDFz0S644oTL
-         tuIcnViK0JYmqG7TOGcuVnIJfHLnVBhGEcYJEwyipCvInodMovVIiqZD9clCGUA3A7JG
-         UH8rHj9LeQa8Xia46PTscM8jQTd+tHoNgoXaq0JyCKCiTBzD4uUYU3bt8LiyZotOB5Tf
-         OPqA1rYk6mrXkIR/VU1MIO5EaEXW/QEBfxaCiw00pHPAccx0FNvw/Ix9lf3T//EmHchm
-         wckQ4m0buQR+jKtPUXW2psRKoSODGxOFdKrewizUUtNQAF2pOKO04u2voygJ3Qp9wrBw
-         xPrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9ZEWHSSOb74rLWBdPbbD8Bw6Cd9qJ07nhLoANozAowA=;
-        b=t1pyXNZL9MOYj5XqD4dahA/ZCVhs8sLnEf2lCocXZGKzjAzI4neelHdehvKoc9ZyVc
-         +QCokHwbZZ76NJnsJ4wNf0ylQuOzTtkJsOtj+KVtap0P0loGc0hl0MKVP+70MBw//jD7
-         uROKhhPFevc+vaWyeKqQ3bWT7hETFi9tYAQhon/8ntx5viLgTp5YUmOCbgoy1bLqDvYZ
-         dVyK32e2smHSaNcjKd9CBCc7PVajkea/6L8p0Gac8IVfZni0Vqdsxg4tqXgnpy8bvVO9
-         9a28EiOEhMZJGDugpoLGEPTtmcgkxUxoU7o+aiKfMiwsY/3jV7Whn4bJJvn/vtS+6GYF
-         aLbQ==
-X-Gm-Message-State: AOAM531kSCyTJG3yfmFcAdPk+FrggZNACDSsGxVoQI+pktuzxniDbNSp
-        AmZYe6Ue+b9qRzon92zK4NGLq01nSSOfDUuwHWg=
-X-Google-Smtp-Source: ABdhPJzjtaHxvcA/Ycqn31cacCGPcInD2eYWcgqY43Km/VJSWBFnIj1HKH5+2lD0Fjr5vJ1aN4xcP//XCewEozbqTOg=
-X-Received: by 2002:a05:600c:c9:: with SMTP id u9mr205699wmm.156.1622741746374;
- Thu, 03 Jun 2021 10:35:46 -0700 (PDT)
+        id S229941AbhFJKSB (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 10 Jun 2021 06:18:01 -0400
+Received: from mail.chalver.com.ec ([186.3.12.10]:34935 "EHLO
+        mail.chalver.com.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229770AbhFJKR7 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 10 Jun 2021 06:17:59 -0400
+Received: from mail.chalver.com.ec (localhost.localdomain [127.0.0.1])
+        by mail.chalver.com.ec (Postfix) with ESMTPS id 43E001F2434D;
+        Thu, 10 Jun 2021 02:27:11 -0500 (ECT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.chalver.com.ec (Postfix) with ESMTP id 84CCD1F24364;
+        Thu, 10 Jun 2021 01:49:56 -0500 (ECT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.chalver.com.ec 84CCD1F24364
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chalver.com.ec;
+        s=E2A417BC-DDA7-11E6-85F6-38495636B764; t=1623307796;
+        bh=PxMh0SAMbBGlctefOH2OhvTlJNlHw25bONEEE7Ldp0I=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=HuNsyz2m5m8N+LBe2iw5xSrJ7acf2IZZKZfImS8yYC0LsbmHee4ix09COXl/6HWBE
+         4ThhJnbqByW7N6e79bvnDCoD2YkiE141E6ciEyOmi44eDD/V4Yu62ucBK4pNwdObNm
+         C8ixjw9JNXB1QyDLIWdgkid4dRpk7lUqTBtoxkD50ma/xQLMpe3XhKkhuNNd+y+LG9
+         VDX6C8fKteJkCuKbAbYnvsASCux84DOF18i5Y/P9dnTtUNJ+7Rgt5PEKC3P+eXa5fD
+         5nyp8cxbjdQrv/UpWLyDqtXOCNShZHm7aCwXnKEPvaH7b6DZg85RbT+CsfggIJ4wSN
+         +Ytc+nhyaM/mQ==
+X-Virus-Scanned: amavisd-new at chalver.com.ec
+Received: from mail.chalver.com.ec ([127.0.0.1])
+        by localhost (mail.chalver.com.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qcfK0CgLlf8E; Thu, 10 Jun 2021 01:49:55 -0500 (ECT)
+Received: from cris-PC.wifi (unknown [105.9.120.116])
+        by mail.chalver.com.ec (Postfix) with ESMTPSA id 7E0E21F2357E;
+        Thu, 10 Jun 2021 01:49:38 -0500 (ECT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <000000000000c91e6f05c3144acc@google.com> <CADvbK_duDeZidW1mgSyNo+f1Hj4L0V6=L-Upfgp+5DEu5P-8Ag@mail.gmail.com>
- <b216d7a4-c3dd-3714-3897-3124769c88f2@ssi.bg>
-In-Reply-To: <b216d7a4-c3dd-3714-3897-3124769c88f2@ssi.bg>
-From:   Xin Long <lucien.xin@gmail.com>
-Date:   Thu, 3 Jun 2021 13:35:35 -0400
-Message-ID: <CADvbK_cUe=T5-zBcgUm4uA7rjqsomoB+DZYs9tQSWbqP3Q77Pw@mail.gmail.com>
-Subject: Re: [syzbot] memory leak in ip_vs_add_service
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     syzbot <syzbot+e562383183e4b1766930@syzkaller.appspotmail.com>,
-        coreteam@netfilter.org, Simon Horman <horms@verge.net.au>,
-        LKML <linux-kernel@vger.kernel.org>, lvs-devel@vger.kernel.org,
-        network dev <netdev@vger.kernel.org>,
-        netfilter-devel@vger.kernel.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients <mpaucar@chalver.com.ec>
+From:   ''Tayeb souami'' <mpaucar@chalver.com.ec>
+Date:   Thu, 10 Jun 2021 08:56:01 +0200
+Reply-To: Tayebsouam.spende@gmail.com
+Message-Id: <20210610064938.7E0E21F2357E@mail.chalver.com.ec>
+X-Laboratorios-Chalver-MailScanner-Information: Please contact the ISP for more information
+X-Laboratorios-Chalver-MailScanner-ID: 7E0E21F2357E.A5375
+X-Laboratorios-Chalver-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Jun 3, 2021 at 1:32 PM Julian Anastasov <ja@ssi.bg> wrote:
->
->
->         Hello,
->
-> On Wed, 2 Jun 2021, Xin Long wrote:
->
-> > On Mon, May 24, 2021 at 10:33 AM syzbot
-> > <syzbot+e562383183e4b1766930@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    c3d0e3fd Merge tag 'fs.idmapped.mount_setattr.v5.13-rc3' o..
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=148d0bd7d00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=ae7b129a135ab06b
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=e562383183e4b1766930
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15585a4bd00000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13900753d00000
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+e562383183e4b1766930@syzkaller.appspotmail.com
-> > >
-> > > BUG: memory leak
-> > > unreferenced object 0xffff888115227800 (size 512):
-> > >   comm "syz-executor263", pid 8658, jiffies 4294951882 (age 12.560s)
-> > >   hex dump (first 32 bytes):
-> > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> > >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-> > >   backtrace:
-> > >     [<ffffffff83977188>] kmalloc include/linux/slab.h:556 [inline]
-> > >     [<ffffffff83977188>] kzalloc include/linux/slab.h:686 [inline]
-> > >     [<ffffffff83977188>] ip_vs_add_service+0x598/0x7c0 net/netfilter/ipvs/ip_vs_ctl.c:1343
-> > >     [<ffffffff8397d770>] do_ip_vs_set_ctl+0x810/0xa40 net/netfilter/ipvs/ip_vs_ctl.c:2570
-> > >     [<ffffffff838449a8>] nf_setsockopt+0x68/0xa0 net/netfilter/nf_sockopt.c:101
-> > >     [<ffffffff839ae4e9>] ip_setsockopt+0x259/0x1ff0 net/ipv4/ip_sockglue.c:1435
-> > >     [<ffffffff839fa03c>] raw_setsockopt+0x18c/0x1b0 net/ipv4/raw.c:857
-> > >     [<ffffffff83691f20>] __sys_setsockopt+0x1b0/0x360 net/socket.c:2117
-> > >     [<ffffffff836920f2>] __do_sys_setsockopt net/socket.c:2128 [inline]
-> > >     [<ffffffff836920f2>] __se_sys_setsockopt net/socket.c:2125 [inline]
-> > >     [<ffffffff836920f2>] __x64_sys_setsockopt+0x22/0x30 net/socket.c:2125
-> > >     [<ffffffff84350efa>] do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
-> > >     [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-> > do_ip_vs_set_ctl() allows users to add svc with the flags field set.
-> > when IP_VS_SVC_F_HASHED is used, and in ip_vs_svc_hash()
-> > called ip_vs_add_service() will trigger the err msg:
-> >
-> > IPVS: ip_vs_svc_hash(): request for already hashed, called from
-> > do_ip_vs_set_ctl+0x810/0xa40
-> >
-> > and the svc allocated will leak.
-> >
-> > so fix it by mask the flags with ~IP_VS_SVC_F_HASHED in
-> > ip_vs_copy_usvc_compat(), while at it also remove the unnecessary
-> > flag IP_VS_SVC_F_HASHED set in ip_vs_edit_service().
->
->         The net tree already contains fix for this problem.
->
-> Regards
->
-> --
-> Julian Anastasov <ja@ssi.bg>
->
-good, thanks for the info, :-)
+
+Lieber Freund,
+
+Ich bin Herr Tayeb Souami, New Jersey, Vereinigte Staaten von Amerika, der =
+Mega-Gewinner von $ 315million In Mega Millions Jackpot, spende ich an 5 zu=
+f=C3=A4llige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Ma=
+il nach einem Spinball ausgew=C3=A4hlt.Ich habe den gr=C3=B6=C3=9Ften Teil =
+meines Verm=C3=B6gens auf eine Reihe von Wohlt=C3=A4tigkeitsorganisationen =
+und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die =
+Summe von =E2=82=AC 2.000.000,00 an Sie als eine der ausgew=C3=A4hlten 5 zu=
+ spenden, um meine Gewinne zu =C3=BCberpr=C3=BCfen, sehen Sie bitte meine Y=
+ou Tube Seite unten.
+
+UHR MICH HIER: https://www.youtube.com/watch?v=3DZ6ui8ZDQ6Ks
+
+
+
+Das ist dein Spendencode: [TS530342018]
+
+
+
+Antworten Sie mit dem SPENDE-CODE an diese
+
+E-Mail:Tayebsouam.spende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie gl=C3=BCcklich zu machen.
+
+Gr=C3=BC=C3=9Fe
+Herr Tayeb Souami
