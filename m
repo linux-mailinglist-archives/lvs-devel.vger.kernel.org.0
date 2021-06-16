@@ -2,56 +2,56 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF423A291D
-	for <lists+lvs-devel@lfdr.de>; Thu, 10 Jun 2021 12:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D903A9B8E
+	for <lists+lvs-devel@lfdr.de>; Wed, 16 Jun 2021 15:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbhFJKSB (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 10 Jun 2021 06:18:01 -0400
-Received: from mail.chalver.com.ec ([186.3.12.10]:34935 "EHLO
-        mail.chalver.com.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbhFJKR7 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 10 Jun 2021 06:17:59 -0400
-Received: from mail.chalver.com.ec (localhost.localdomain [127.0.0.1])
-        by mail.chalver.com.ec (Postfix) with ESMTPS id 43E001F2434D;
-        Thu, 10 Jun 2021 02:27:11 -0500 (ECT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.chalver.com.ec (Postfix) with ESMTP id 84CCD1F24364;
-        Thu, 10 Jun 2021 01:49:56 -0500 (ECT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.chalver.com.ec 84CCD1F24364
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chalver.com.ec;
-        s=E2A417BC-DDA7-11E6-85F6-38495636B764; t=1623307796;
-        bh=PxMh0SAMbBGlctefOH2OhvTlJNlHw25bONEEE7Ldp0I=;
+        id S233238AbhFPNJN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 16 Jun 2021 09:09:13 -0400
+Received: from mail.oss.com.pe ([161.132.100.45]:53470 "EHLO
+        mail.consorciolp.com.pe" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233207AbhFPNJL (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 16 Jun 2021 09:09:11 -0400
+X-Greylist: delayed 18484 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Jun 2021 09:09:11 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.consorciolp.com.pe (Postfix) with ESMTP id CC1EA310F4E92;
+        Wed, 16 Jun 2021 01:55:01 -0500 (-05)
+Received: from mail.consorciolp.com.pe ([127.0.0.1])
+        by localhost (mail.consorciolp.com.pe [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id orsQ5ay-iFTp; Wed, 16 Jun 2021 01:55:01 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.consorciolp.com.pe (Postfix) with ESMTP id 91B5F32915B86;
+        Wed, 16 Jun 2021 01:52:27 -0500 (-05)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.consorciolp.com.pe 91B5F32915B86
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oss.com.pe;
+        s=675A380C-4679-11E8-96E4-C0788CA36BC0; t=1623826347;
+        bh=7Y6RtNhSVAIVHdJEU2gHHWYvaP8LRgEAhMNj0EoKaAA=;
         h=MIME-Version:To:From:Date:Message-Id;
-        b=HuNsyz2m5m8N+LBe2iw5xSrJ7acf2IZZKZfImS8yYC0LsbmHee4ix09COXl/6HWBE
-         4ThhJnbqByW7N6e79bvnDCoD2YkiE141E6ciEyOmi44eDD/V4Yu62ucBK4pNwdObNm
-         C8ixjw9JNXB1QyDLIWdgkid4dRpk7lUqTBtoxkD50ma/xQLMpe3XhKkhuNNd+y+LG9
-         VDX6C8fKteJkCuKbAbYnvsASCux84DOF18i5Y/P9dnTtUNJ+7Rgt5PEKC3P+eXa5fD
-         5nyp8cxbjdQrv/UpWLyDqtXOCNShZHm7aCwXnKEPvaH7b6DZg85RbT+CsfggIJ4wSN
-         +Ytc+nhyaM/mQ==
-X-Virus-Scanned: amavisd-new at chalver.com.ec
-Received: from mail.chalver.com.ec ([127.0.0.1])
-        by localhost (mail.chalver.com.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id qcfK0CgLlf8E; Thu, 10 Jun 2021 01:49:55 -0500 (ECT)
-Received: from cris-PC.wifi (unknown [105.9.120.116])
-        by mail.chalver.com.ec (Postfix) with ESMTPSA id 7E0E21F2357E;
-        Thu, 10 Jun 2021 01:49:38 -0500 (ECT)
+        b=gW9PYFN6OxeQ6CRWD05avnFZQkKbbgRcPZ2yIjwMOlZINjkhlDWmOux9M6tHJ6YUA
+         ca1xhpIW7Stz0XeL4heW67+GcooWNGXRroxShio0aYGirxIPytlEs62nhHFZx9Y1e7
+         iyfkAuxTmlj46AFH/5iMgy3j+IQZ48nwOOPnB1+F5IE9n/HQz+FDh5CHo/2HwXfxHS
+         j7lFZmMbYoT5Jb6ZNyY+ngwjkXqdRNkzc5zJiIdEDGcRXc5ipBN5aml6BhX4DpVU6T
+         WnEO1lw7j7+Jboue/Kp+42vv1ujEEuR7I+2gtIPq9BYixe4LEN8/xiLz5Dk6+R4UUH
+         AIk96dFP8TxoA==
+X-Virus-Scanned: amavisd-new at consorciolp.com.pe
+Received: from mail.consorciolp.com.pe ([127.0.0.1])
+        by localhost (mail.consorciolp.com.pe [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cvrEEAy7QRDI; Wed, 16 Jun 2021 01:52:27 -0500 (-05)
+Received: from cris-PC.wifi (unknown [105.9.118.225])
+        by mail.consorciolp.com.pe (Postfix) with ESMTPSA id D5627349C2A4E;
+        Wed, 16 Jun 2021 01:49:56 -0500 (-05)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Description: Mail message body
-Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
-To:     Recipients <mpaucar@chalver.com.ec>
-From:   ''Tayeb souami'' <mpaucar@chalver.com.ec>
-Date:   Thu, 10 Jun 2021 08:56:01 +0200
+Subject: spende von 2,000,000 euro
+To:     Recipients <sechegaray@oss.com.pe>
+From:   ''Tayeb souami'' <sechegaray@oss.com.pe>
+Date:   Wed, 16 Jun 2021 08:51:32 +0200
 Reply-To: Tayebsouam.spende@gmail.com
-Message-Id: <20210610064938.7E0E21F2357E@mail.chalver.com.ec>
-X-Laboratorios-Chalver-MailScanner-Information: Please contact the ISP for more information
-X-Laboratorios-Chalver-MailScanner-ID: 7E0E21F2357E.A5375
-X-Laboratorios-Chalver-MailScanner: Not scanned: please contact your Internet E-Mail Service Provider for details
+Message-Id: <20210616064956.D5627349C2A4E@mail.consorciolp.com.pe>
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
-
 
 Lieber Freund,
 
