@@ -2,200 +2,83 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3860A41FA7B
-	for <lists+lvs-devel@lfdr.de>; Sat,  2 Oct 2021 10:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD2E41FB54
+	for <lists+lvs-devel@lfdr.de>; Sat,  2 Oct 2021 14:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbhJBJBV (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 2 Oct 2021 05:01:21 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:42790 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232630AbhJBJBU (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 2 Oct 2021 05:01:20 -0400
-Received: from madeliefje.horms.nl (tulip.horms.nl [83.161.246.101])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 8548425B79F;
-        Sat,  2 Oct 2021 18:59:31 +1000 (AEST)
-Received: by madeliefje.horms.nl (Postfix, from userid 7100)
-        id 7D0ED42E0; Sat,  2 Oct 2021 10:59:29 +0200 (CEST)
-Date:   Sat, 2 Oct 2021 10:59:29 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Cc:     Dust Li <dust.li@linux.alibaba.com>,
-        Wensong Zhang <wensong@linux-vs.org>,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, yunhong-cgl jiang <xintian1976@gmail.com>
-Subject: Re: [PATCH net-next v4] net: ipvs: add sysctl_run_estimation to
- support disable estimation
-Message-ID: <20211002085929.GA27500@vergenet.net>
-References: <20210820053752.11508-1-dust.li@linux.alibaba.com>
- <5f590b6-4668-19fe-b768-15125f48df1e@ssi.bg>
+        id S232865AbhJBMBs (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 2 Oct 2021 08:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232909AbhJBMBr (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 2 Oct 2021 08:01:47 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA2BC0613F0
+        for <lvs-devel@vger.kernel.org>; Sat,  2 Oct 2021 05:00:02 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id y15so13288627ilu.12
+        for <lvs-devel@vger.kernel.org>; Sat, 02 Oct 2021 05:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
+        b=QDHrJ39sMEu8BMYvZU3NCP2xVWJ3apqATlyWIgxLdN63Ytc/PmCEkUySQqDTKjki/+
+         5+tA3YRUJpZ7nDn3GJ1h0RwhhEcKvOi3Jmra6PuIdyfDp0ZSwqg9Gc2GOh0sdkdn+k0z
+         ypW5PoHh4/FmqiTV8LbbhggOTY+ppcY4Ft7Ej01n4FCqYB/VStkUn4kU/W0rZhFzOsMj
+         8iF+xGJ0SyRhCV7Q5lZGfs6YFI3ufLtHnmr29Yt22Rj0y6hyFaAzJjx5nDupaC0gEv+I
+         ZPq6a66zWvReHMJ4QKugue+wFdCNqdgameLCp+MC/PvUXTgUZoO/b5ETB2ZgVRXQPN9U
+         E7Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
+        b=PDhoGFCzFKbVv7o3Kvh6O9BK8XRFfFZz3DEft9+N4h3xApxiGjNVwpzUFWmdqDPueF
+         YsbbhTF+iG66n3Bxj7Sprt5WIKat3DmEDZTO1aBzHhS7uby6zjUjgb0mqeOWCOL0KKaE
+         Us1ijmY/W1FBrxILt15uWYuIwuHYYGZDFk87nekXNP92HTJLqTpvBiDzKtBNKat8xHcT
+         fCTwNzETM6QEr5vEyoKZj5xvQ8QMW0LuEQ8EIV7Y31SCn8kni/xUM8oF/VRApwgU4/7g
+         an8TXqxyhFa5GV42c7AwxbVlCXRfYiv/krnxIubr5QeoVFx/XaC60gkllMN06WIkxpun
+         clng==
+X-Gm-Message-State: AOAM531/KmxiIOu+DNUImU2eD2SLPaQ1MCvHWDUjuGgDs9UbiuQVzFr+
+        4oga1jjvnRdCnb8tF4ArdvrtbkNY+QKyicxu2Lo=
+X-Google-Smtp-Source: ABdhPJxOmjBAVMW2nYT5fvETxLNTAYr9I/JWo+U6VNRy1Lo7vz+8FCkgFUADts0lkCMV8QaEg6eYPcMHcMN2R9RGo3E=
+X-Received: by 2002:a92:ca06:: with SMTP id j6mr2320577ils.42.1633176001719;
+ Sat, 02 Oct 2021 05:00:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5f590b6-4668-19fe-b768-15125f48df1e@ssi.bg>
-Organisation: Horms Solutions BV
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 05:00:01 -0700 (PDT)
+Reply-To: unitednnation0@gmail.com
+From:   "U.n" <wadebaye33@gmail.com>
+Date:   Sat, 2 Oct 2021 00:00:01 -1200
+Message-ID: <CACE0T5XG4wnU7HGqhPD1kVCXttsusQLOaVTrByP4PnaAUtY=Zg@mail.gmail.com>
+Subject: Attention
+To:     unitednnation0@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Sat, Aug 21, 2021 at 11:41:50AM +0300, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Fri, 20 Aug 2021, Dust Li wrote:
-> 
-> > estimation_timer will iterate the est_list to do estimation
-> > for each ipvs stats. When there are lots of services, the
-> > list can be very large.
-> > We found that estimation_timer() run for more then 200ms on a
-> > machine with 104 CPU and 50K services.
-> > 
-> > yunhong-cgl jiang report the same phenomenon before:
-> > https://www.spinics.net/lists/lvs-devel/msg05426.html
-> > 
-> > In some cases(for example a large K8S cluster with many ipvs services),
-> > ipvs estimation may not be needed. So adding a sysctl blob to allow
-> > users to disable this completely.
-> > 
-> > Default is: 1 (enable)
-> > 
-> > Cc: yunhong-cgl jiang <xintian1976@gmail.com>
-> > Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
-> 
-> 	Looks good to me, thanks!
-> 
-> Acked-by: Julian Anastasov <ja@ssi.bg>
+--=20
 
-Likwewise, thanks. And sorry for the delay.
 
-Acked-by: Simon Horman <horms@verge.net.au>
+Attention Sir/Madam
+This is the United Nation (UN). We the United Nations (UN) Globally
+has approved (US$2.500,000)( two Million Five hundred thousand
+dollars) compensation as part of our responsibilities for humanitarian
+Aid for fighting against CoronaVirus and you are among the lucky ones.
 
-Pablo, could you consider picking this up?
 
-> > ---
-> > v2: Use common sysctl facilities
-> > v3: Fix sysctl_run_estimation() redefine when CONFIG_SYSCTL not enabled
-> > v4: Some typo and minor fixes
-> > 
-> >  Documentation/networking/ipvs-sysctl.rst | 11 +++++++++++
-> >  include/net/ip_vs.h                      | 11 +++++++++++
-> >  net/netfilter/ipvs/ip_vs_ctl.c           |  8 ++++++++
-> >  net/netfilter/ipvs/ip_vs_est.c           |  5 +++++
-> >  4 files changed, 35 insertions(+)
-> > 
-> > diff --git a/Documentation/networking/ipvs-sysctl.rst b/Documentation/networking/ipvs-sysctl.rst
-> > index 2afccc63856e..95ef56d62077 100644
-> > --- a/Documentation/networking/ipvs-sysctl.rst
-> > +++ b/Documentation/networking/ipvs-sysctl.rst
-> > @@ -300,3 +300,14 @@ sync_version - INTEGER
-> >  
-> >  	Kernels with this sync_version entry are able to receive messages
-> >  	of both version 1 and version 2 of the synchronisation protocol.
-> > +
-> > +run_estimation - BOOLEAN
-> > +	0 - disabled
-> > +	not 0 - enabled (default)
-> > +
-> > +	If disabled, the estimation will be stop, and you can't see
-> > +	any update on speed estimation data.
-> > +
-> > +	You can always re-enable estimation by setting this value to 1.
-> > +	But be careful, the first estimation after re-enable is not
-> > +	accurate.
-> > diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
-> > index 7cb5a1aace40..ff1804a0c469 100644
-> > --- a/include/net/ip_vs.h
-> > +++ b/include/net/ip_vs.h
-> > @@ -931,6 +931,7 @@ struct netns_ipvs {
-> >  	int			sysctl_conn_reuse_mode;
-> >  	int			sysctl_schedule_icmp;
-> >  	int			sysctl_ignore_tunneled;
-> > +	int			sysctl_run_estimation;
-> >  
-> >  	/* ip_vs_lblc */
-> >  	int			sysctl_lblc_expiration;
-> > @@ -1071,6 +1072,11 @@ static inline int sysctl_cache_bypass(struct netns_ipvs *ipvs)
-> >  	return ipvs->sysctl_cache_bypass;
-> >  }
-> >  
-> > +static inline int sysctl_run_estimation(struct netns_ipvs *ipvs)
-> > +{
-> > +	return ipvs->sysctl_run_estimation;
-> > +}
-> > +
-> >  #else
-> >  
-> >  static inline int sysctl_sync_threshold(struct netns_ipvs *ipvs)
-> > @@ -1163,6 +1169,11 @@ static inline int sysctl_cache_bypass(struct netns_ipvs *ipvs)
-> >  	return 0;
-> >  }
-> >  
-> > +static inline int sysctl_run_estimation(struct netns_ipvs *ipvs)
-> > +{
-> > +	return 1;
-> > +}
-> > +
-> >  #endif
-> >  
-> >  /* IPVS core functions
-> > diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-> > index c25097092a06..cbea5a68afb5 100644
-> > --- a/net/netfilter/ipvs/ip_vs_ctl.c
-> > +++ b/net/netfilter/ipvs/ip_vs_ctl.c
-> > @@ -2017,6 +2017,12 @@ static struct ctl_table vs_vars[] = {
-> >  		.mode		= 0644,
-> >  		.proc_handler	= proc_dointvec,
-> >  	},
-> > +	{
-> > +		.procname	= "run_estimation",
-> > +		.maxlen		= sizeof(int),
-> > +		.mode		= 0644,
-> > +		.proc_handler	= proc_dointvec,
-> > +	},
-> >  #ifdef CONFIG_IP_VS_DEBUG
-> >  	{
-> >  		.procname	= "debug_level",
-> > @@ -4090,6 +4096,8 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
-> >  	tbl[idx++].data = &ipvs->sysctl_conn_reuse_mode;
-> >  	tbl[idx++].data = &ipvs->sysctl_schedule_icmp;
-> >  	tbl[idx++].data = &ipvs->sysctl_ignore_tunneled;
-> > +	ipvs->sysctl_run_estimation = 1;
-> > +	tbl[idx++].data = &ipvs->sysctl_run_estimation;
-> >  
-> >  	ipvs->sysctl_hdr = register_net_sysctl(net, "net/ipv4/vs", tbl);
-> >  	if (ipvs->sysctl_hdr == NULL) {
-> > diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-> > index 05b8112ffb37..9a1a7af6a186 100644
-> > --- a/net/netfilter/ipvs/ip_vs_est.c
-> > +++ b/net/netfilter/ipvs/ip_vs_est.c
-> > @@ -100,6 +100,9 @@ static void estimation_timer(struct timer_list *t)
-> >  	u64 rate;
-> >  	struct netns_ipvs *ipvs = from_timer(ipvs, t, est_timer);
-> >  
-> > +	if (!sysctl_run_estimation(ipvs))
-> > +		goto skip;
-> > +
-> >  	spin_lock(&ipvs->est_lock);
-> >  	list_for_each_entry(e, &ipvs->est_list, list) {
-> >  		s = container_of(e, struct ip_vs_stats, est);
-> > @@ -131,6 +134,8 @@ static void estimation_timer(struct timer_list *t)
-> >  		spin_unlock(&s->lock);
-> >  	}
-> >  	spin_unlock(&ipvs->est_lock);
-> > +
-> > +skip:
-> >  	mod_timer(&ipvs->est_timer, jiffies + 2*HZ);
-> >  }
-> >  
-> > -- 
-> > 2.19.1.3.ge56e4f7
-> > 
-> > 
-> > 
-> 
-> Regards
-> 
-> --
-> Julian Anastasov <ja@ssi.bg>
-> 
+This compensation is for the most affected countries, communities and
+families across the global. Your funds were deposited with Bank in USA
+to transfer your funds to you via Internet Banking. You have to send
+your full details as state below:with this email Address
+  ( unitednnation0@gmail.com )
+Your full names:
+Address:
+Telephone:
+Occupation:
+
+
+
+Yours Sincerely
+Mr. Ant=C3=B3nio Guterres
+United Nations (UN).
