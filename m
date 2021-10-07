@@ -2,83 +2,72 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD2E41FB54
-	for <lists+lvs-devel@lfdr.de>; Sat,  2 Oct 2021 14:00:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273EA425A01
+	for <lists+lvs-devel@lfdr.de>; Thu,  7 Oct 2021 19:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbhJBMBs (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 2 Oct 2021 08:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232909AbhJBMBr (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 2 Oct 2021 08:01:47 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA2BC0613F0
-        for <lvs-devel@vger.kernel.org>; Sat,  2 Oct 2021 05:00:02 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id y15so13288627ilu.12
-        for <lvs-devel@vger.kernel.org>; Sat, 02 Oct 2021 05:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=QDHrJ39sMEu8BMYvZU3NCP2xVWJ3apqATlyWIgxLdN63Ytc/PmCEkUySQqDTKjki/+
-         5+tA3YRUJpZ7nDn3GJ1h0RwhhEcKvOi3Jmra6PuIdyfDp0ZSwqg9Gc2GOh0sdkdn+k0z
-         ypW5PoHh4/FmqiTV8LbbhggOTY+ppcY4Ft7Ej01n4FCqYB/VStkUn4kU/W0rZhFzOsMj
-         8iF+xGJ0SyRhCV7Q5lZGfs6YFI3ufLtHnmr29Yt22Rj0y6hyFaAzJjx5nDupaC0gEv+I
-         ZPq6a66zWvReHMJ4QKugue+wFdCNqdgameLCp+MC/PvUXTgUZoO/b5ETB2ZgVRXQPN9U
-         E7Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=nsZbpm1YBoHMpWTnzHLuE/zYZ0yg4jBiKD5Q7oCTPBE=;
-        b=PDhoGFCzFKbVv7o3Kvh6O9BK8XRFfFZz3DEft9+N4h3xApxiGjNVwpzUFWmdqDPueF
-         YsbbhTF+iG66n3Bxj7Sprt5WIKat3DmEDZTO1aBzHhS7uby6zjUjgb0mqeOWCOL0KKaE
-         Us1ijmY/W1FBrxILt15uWYuIwuHYYGZDFk87nekXNP92HTJLqTpvBiDzKtBNKat8xHcT
-         fCTwNzETM6QEr5vEyoKZj5xvQ8QMW0LuEQ8EIV7Y31SCn8kni/xUM8oF/VRApwgU4/7g
-         an8TXqxyhFa5GV42c7AwxbVlCXRfYiv/krnxIubr5QeoVFx/XaC60gkllMN06WIkxpun
-         clng==
-X-Gm-Message-State: AOAM531/KmxiIOu+DNUImU2eD2SLPaQ1MCvHWDUjuGgDs9UbiuQVzFr+
-        4oga1jjvnRdCnb8tF4ArdvrtbkNY+QKyicxu2Lo=
-X-Google-Smtp-Source: ABdhPJxOmjBAVMW2nYT5fvETxLNTAYr9I/JWo+U6VNRy1Lo7vz+8FCkgFUADts0lkCMV8QaEg6eYPcMHcMN2R9RGo3E=
-X-Received: by 2002:a92:ca06:: with SMTP id j6mr2320577ils.42.1633176001719;
- Sat, 02 Oct 2021 05:00:01 -0700 (PDT)
+        id S242538AbhJGRzc (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 7 Oct 2021 13:55:32 -0400
+Received: from mail.netfilter.org ([217.70.188.207]:60240 "EHLO
+        mail.netfilter.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242757AbhJGRzb (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 7 Oct 2021 13:55:31 -0400
+Received: from netfilter.org (unknown [78.30.35.141])
+        by mail.netfilter.org (Postfix) with ESMTPSA id A88E563EB1;
+        Thu,  7 Oct 2021 19:52:04 +0200 (CEST)
+Date:   Thu, 7 Oct 2021 19:53:32 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     Julian Anastasov <ja@ssi.bg>, Dust Li <dust.li@linux.alibaba.com>,
+        Wensong Zhang <wensong@linux-vs.org>,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, yunhong-cgl jiang <xintian1976@gmail.com>
+Subject: Re: [PATCH net-next v4] net: ipvs: add sysctl_run_estimation to
+ support disable estimation
+Message-ID: <YV80HOzv+2oV4ppf@salvia>
+References: <20210820053752.11508-1-dust.li@linux.alibaba.com>
+ <5f590b6-4668-19fe-b768-15125f48df1e@ssi.bg>
+ <20211002085929.GA27500@vergenet.net>
 MIME-Version: 1.0
-Received: by 2002:a4f:f90d:0:0:0:0:0 with HTTP; Sat, 2 Oct 2021 05:00:01 -0700 (PDT)
-Reply-To: unitednnation0@gmail.com
-From:   "U.n" <wadebaye33@gmail.com>
-Date:   Sat, 2 Oct 2021 00:00:01 -1200
-Message-ID: <CACE0T5XG4wnU7HGqhPD1kVCXttsusQLOaVTrByP4PnaAUtY=Zg@mail.gmail.com>
-Subject: Attention
-To:     unitednnation0@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211002085929.GA27500@vergenet.net>
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
---=20
+On Sat, Oct 02, 2021 at 10:59:29AM +0200, Simon Horman wrote:
+> On Sat, Aug 21, 2021 at 11:41:50AM +0300, Julian Anastasov wrote:
+> > 
+> > 	Hello,
+> > 
+> > On Fri, 20 Aug 2021, Dust Li wrote:
+> > 
+> > > estimation_timer will iterate the est_list to do estimation
+> > > for each ipvs stats. When there are lots of services, the
+> > > list can be very large.
+> > > We found that estimation_timer() run for more then 200ms on a
+> > > machine with 104 CPU and 50K services.
+> > > 
+> > > yunhong-cgl jiang report the same phenomenon before:
+> > > https://www.spinics.net/lists/lvs-devel/msg05426.html
+> > > 
+> > > In some cases(for example a large K8S cluster with many ipvs services),
+> > > ipvs estimation may not be needed. So adding a sysctl blob to allow
+> > > users to disable this completely.
+> > > 
+> > > Default is: 1 (enable)
+> > > 
+> > > Cc: yunhong-cgl jiang <xintian1976@gmail.com>
+> > > Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
+> > 
+> > 	Looks good to me, thanks!
+> > 
+> > Acked-by: Julian Anastasov <ja@ssi.bg>
+> 
+> Likwewise, thanks. And sorry for the delay.
+> 
+> Acked-by: Simon Horman <horms@verge.net.au>
+> 
+> Pablo, could you consider picking this up?
 
-
-Attention Sir/Madam
-This is the United Nation (UN). We the United Nations (UN) Globally
-has approved (US$2.500,000)( two Million Five hundred thousand
-dollars) compensation as part of our responsibilities for humanitarian
-Aid for fighting against CoronaVirus and you are among the lucky ones.
-
-
-This compensation is for the most affected countries, communities and
-families across the global. Your funds were deposited with Bank in USA
-to transfer your funds to you via Internet Banking. You have to send
-your full details as state below:with this email Address
-  ( unitednnation0@gmail.com )
-Your full names:
-Address:
-Telephone:
-Occupation:
-
-
-
-Yours Sincerely
-Mr. Ant=C3=B3nio Guterres
-United Nations (UN).
+Applied, thanks.
