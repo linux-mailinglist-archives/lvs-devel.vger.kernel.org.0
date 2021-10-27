@@ -2,121 +2,42 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9206044031F
-	for <lists+lvs-devel@lfdr.de>; Fri, 29 Oct 2021 21:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D0944066E
+	for <lists+lvs-devel@lfdr.de>; Sat, 30 Oct 2021 02:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbhJ2T2G (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 29 Oct 2021 15:28:06 -0400
-Received: from ink.ssi.bg ([178.16.128.7]:56431 "EHLO ink.ssi.bg"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230287AbhJ2T2F (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Fri, 29 Oct 2021 15:28:05 -0400
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 81BBD3C09BA;
-        Fri, 29 Oct 2021 22:25:32 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 19TJPRVa026763;
-        Fri, 29 Oct 2021 22:25:29 +0300
-Date:   Fri, 29 Oct 2021 22:25:27 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     yangxingwu <xingwu.yang@gmail.com>
-cc:     Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
-        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, legend050709@qq.com
-Subject: Re: [PATCH v2] ipvs: Fix reuse connection if RS weight is 0
-In-Reply-To: <20211029032604.5432-1-xingwu.yang@gmail.com>
-Message-ID: <8bdab9e0-3bd4-c37-94e9-ca1f74883356@ssi.bg>
-References: <20211029032604.5432-1-xingwu.yang@gmail.com>
+        id S231177AbhJ3Ahx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Fri, 29 Oct 2021 20:37:53 -0400
+Received: from 219-87-183-172.static.tfn.net.tw ([219.87.183.172]:53513 "EHLO
+        ms4.kntech.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230506AbhJ3Ahw (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 29 Oct 2021 20:37:52 -0400
+Received: from [103.27.239.15] ([103.27.239.15])
+        (authenticated bits=0)
+        by ms4.kntech.com.tw (8.13.8/8.13.8) with ESMTP id 19RF9JmU028064
+        for <lvs-devel@vger.kernel.org>; Wed, 27 Oct 2021 23:09:30 +0800
+Message-Id: <202110271509.19RF9JmU028064@ms4.kntech.com.tw>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Dear Friend,
+To:     lvs-devel@vger.kernel.org
+From:   "Wahid Majrooh" <wnf@sendayan.com.my>
+Date:   Wed, 27 Oct 2021 22:09:48 +0700
+Reply-To: wfnngaf@gmail.com
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Dear Friend,
 
-	Hello,
+I am writing to you to make a proposal regarding Investing in your
+country. I am proposing to you a business development Investment in
+housing and health sector or any other sector you can recommend. My name
+is Wahid Majrooh. Former  acting Minister of Public Health of
+Afghanistan.
 
-On Fri, 29 Oct 2021, yangxingwu wrote:
 
-> Since commit dc7b3eb900aa ("ipvs: Fix reuse connection if real server is
-> dead"), new connections to dead servers are redistributed immediately to
-> new servers.
-> 
-> Then commit d752c3645717 ("ipvs: allow rescheduling of new connections when
-> port reuse is detected") disable expire_nodest_conn if conn_reuse_mode is
-> 0. And new connection may be distributed to a real server with weight 0.
+Sincerely
 
-	Can you better explain in commit message that we are changing 
-expire_nodest_conn to work even for reused connections when
-conn_reuse_mode=0 but without affecting the controlled/persistent
-connections during the grace period while server is with weight=0.
-
-	Even if you target -next trees adding commit d752c3645717
-as Fixes line would be a good idea. Make sure the tree is specified
-after the v3 tag.
-
-> Co-developed-by: Chuanqi Liu <legend050709@qq.com>
-> Signed-off-by: Chuanqi Liu <legend050709@qq.com>
-> Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
-> ---
->  Documentation/networking/ipvs-sysctl.rst | 3 +--
->  net/netfilter/ipvs/ip_vs_core.c          | 7 ++++---
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/networking/ipvs-sysctl.rst b/Documentation/networking/ipvs-sysctl.rst
-> index 2afccc63856e..1cfbf1add2fc 100644
-> --- a/Documentation/networking/ipvs-sysctl.rst
-> +++ b/Documentation/networking/ipvs-sysctl.rst
-> @@ -37,8 +37,7 @@ conn_reuse_mode - INTEGER
->  
->  	0: disable any special handling on port reuse. The new
->  	connection will be delivered to the same real server that was
-> -	servicing the previous connection. This will effectively
-> -	disable expire_nodest_conn.
-> +	servicing the previous connection.
->  
->  	bit 1: enable rescheduling of new connections when it is safe.
->  	That is, whenever expire_nodest_conn and for TCP sockets, when
-> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-> index 128690c512df..374f4b0b7080 100644
-> --- a/net/netfilter/ipvs/ip_vs_core.c
-> +++ b/net/netfilter/ipvs/ip_vs_core.c
-> @@ -2042,14 +2042,15 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
->  			     ipvs, af, skb, &iph);
->  
->  	conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
-> -	if (conn_reuse_mode && !iph.fragoffs && is_new_conn(skb, &iph) && cp) {
-> +	if (!iph.fragoffs && is_new_conn(skb, &iph) && cp) {
-
-	It is even better to move the !cp->control check above:
-
-	if (!iph.fragoffs && is_new_conn(skb, &iph) && cp && !cp->control) {
-
-	Then is not needed in is_new_conn_expected() anymore.
-
->  		bool old_ct = false, resched = false;
-
-	And now you can move conn_reuse_mode here:
-
-		int conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
-
->  		if (unlikely(sysctl_expire_nodest_conn(ipvs)) && cp->dest &&
-> -		    unlikely(!atomic_read(&cp->dest->weight))) {
-> +		    unlikely(!atomic_read(&cp->dest->weight)) && !cp->control) {
->  			resched = true;
->  			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
-> -		} else if (is_new_conn_expected(cp, conn_reuse_mode)) {
-> +		} else if (conn_reuse_mode &&
-> +			   is_new_conn_expected(cp, conn_reuse_mode)) {
->  			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
->  			if (!atomic_read(&cp->n_control)) {
->  				resched = true;
-> -- 
-> 2.30.2
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
+Wahid
