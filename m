@@ -2,80 +2,116 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70ECE44149C
-	for <lists+lvs-devel@lfdr.de>; Mon,  1 Nov 2021 09:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BF9441FF0
+	for <lists+lvs-devel@lfdr.de>; Mon,  1 Nov 2021 19:22:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbhKAIFd (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 1 Nov 2021 04:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbhKAIFc (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 1 Nov 2021 04:05:32 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70095C0613F5
-        for <lvs-devel@vger.kernel.org>; Mon,  1 Nov 2021 01:02:59 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id e2so28035060ljg.13
-        for <lvs-devel@vger.kernel.org>; Mon, 01 Nov 2021 01:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kTlPYaJ3qmdiuwil3bN4/5BGELxQxYaH2mDV2D/+NOc=;
-        b=afk96XLZPNdq0XUQ+C+Sg/ozYAwaC3yaDksIj/6w1qfCAtpHcUBLhL7vVLQ2g6kyU8
-         HuE8JkrDQw9Pe98zTGVBizjoC/CJ2gIf2SQfvUW4I2bBAgnGSkvoj21GNxy44xhgi8wa
-         zFqdnoxEWlXQcHKmvAjcp9ZZENtgzq59rPy6DMYJA8ElDG6A/MSiYpBhtVSFjq7WeFZP
-         cS6h1mcE593mSy7oo/5H2eZoBJu7VmxoLBdfXFmBSkynwummjWwhugkKOoxpGYUahMwe
-         FMx1gVtUWQYu0DZ7PVYIUCO/5nTM47dFNeeCKaLcfD+PjrFqLHGMy32UvVj5G8XqzaCt
-         nFaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kTlPYaJ3qmdiuwil3bN4/5BGELxQxYaH2mDV2D/+NOc=;
-        b=oT3EALuvk2actehiP4qSEgE6fcDitFFhSL8V0Azx123r3/zPM3UEVxvUZ2KkznqQKQ
-         ifXTVcHzYhPhhjFNYNMpwIcsxwOqCVIqkpoHF1L1w1g2WGQHciZwBuTMpbeJoor/r5ND
-         5Q3Y9C6mFnOKjoQD0xnckHdBiFskrihs1cctBzHVkJVaEDwdT4LnwozuiXHwO3fNgXsq
-         DxZoXPhVkrYNgU+84xiCDOAXGr10R7GJUtVEMNvuBD6+obITpky6G5Doa5/vmIZetYBe
-         HMn5d6YWWw0gPJPOgh56X+wmtJqFvEYuD+ogxcpguX5B5Vk4HIyws73alTHRatSLDLH/
-         e0dw==
-X-Gm-Message-State: AOAM531pmSfmA+sX8b8zG4zsTphPoXbCZDqDndUfYx6YFj1mnLNmnytm
-        E6qwT45AvraMwsW+xbSkYIj8v6fIHvv71U4rJEk=
-X-Google-Smtp-Source: ABdhPJz7bell/PbLM6PCZG9oyOsUGoUjtisMZ1a9wMI9p2Dqg6vVVtPriD7UyogYfoQSpqejN5auU/4R+7TnSX8/I0Y=
-X-Received: by 2002:a05:651c:893:: with SMTP id d19mr30628974ljq.236.1635753777571;
- Mon, 01 Nov 2021 01:02:57 -0700 (PDT)
+        id S229723AbhKASYf (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 1 Nov 2021 14:24:35 -0400
+Received: from ink.ssi.bg ([178.16.128.7]:37455 "EHLO ink.ssi.bg"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231916AbhKASYe (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Mon, 1 Nov 2021 14:24:34 -0400
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 8B0DA3C0332;
+        Mon,  1 Nov 2021 20:21:56 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 1A1ILsOa006822;
+        Mon, 1 Nov 2021 20:21:54 +0200
+Date:   Mon, 1 Nov 2021 20:21:54 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     yangxingwu <xingwu.yang@gmail.com>
+cc:     Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-doc@vger.kernel.org, Chuanqi Liu <legend050709@qq.com>
+Subject: Re: [PATCH nf-next v5] netfilter: ipvs: Fix reuse connection if RS
+ weight is 0
+In-Reply-To: <20211101020416.31402-1-xingwu.yang@gmail.com>
+Message-ID: <ae67eb7b-a25f-57d3-195f-cdbd9247ef5b@ssi.bg>
+References: <20211101020416.31402-1-xingwu.yang@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:02:57
- -0700 (PDT)
-Reply-To: aisha.7d@yahoo.com
-From:   Aisha AG <rbx17058@gmail.com>
-Date:   Mon, 1 Nov 2021 00:02:57 -0800
-Message-ID: <CA+KbyyfmtMHH304LH3vgL9OeVB3eEp+KwfJyCty=yC1JWDycfg@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
--- 
-Hello Dear,
 
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
-Am a Widow and a single Mother with three Children.
+	Hello,
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar $27.500.000.00, and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship
-in the nearest future.
+On Mon, 1 Nov 2021, yangxingwu wrote:
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
+> We are changing expire_nodest_conn to work even for reused connections when
+> conn_reuse_mode=0, just as what was done with commit dc7b3eb900aa ("ipvs:
+> Fix reuse connection if real server is dead").
+> 
+> For controlled and persistent connections, the new connection will get the
+> needed real server depending on the rules in ip_vs_check_template().
+> 
+> Fixes: d752c3645717 ("ipvs: allow rescheduling of new connections when port reuse is detected")
+> Co-developed-by: Chuanqi Liu <legend050709@qq.com>
+> Signed-off-by: Chuanqi Liu <legend050709@qq.com>
+> Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
 
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-Best Regards
-Mrs Aisha Al-Qaddafi.
+	Looks good to me, thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
+> ---
+>  Documentation/networking/ipvs-sysctl.rst | 3 +--
+>  net/netfilter/ipvs/ip_vs_core.c          | 8 ++++----
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/networking/ipvs-sysctl.rst b/Documentation/networking/ipvs-sysctl.rst
+> index 2afccc63856e..1cfbf1add2fc 100644
+> --- a/Documentation/networking/ipvs-sysctl.rst
+> +++ b/Documentation/networking/ipvs-sysctl.rst
+> @@ -37,8 +37,7 @@ conn_reuse_mode - INTEGER
+>  
+>  	0: disable any special handling on port reuse. The new
+>  	connection will be delivered to the same real server that was
+> -	servicing the previous connection. This will effectively
+> -	disable expire_nodest_conn.
+> +	servicing the previous connection.
+>  
+>  	bit 1: enable rescheduling of new connections when it is safe.
+>  	That is, whenever expire_nodest_conn and for TCP sockets, when
+> diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
+> index 128690c512df..f9d65d2c8da8 100644
+> --- a/net/netfilter/ipvs/ip_vs_core.c
+> +++ b/net/netfilter/ipvs/ip_vs_core.c
+> @@ -1964,7 +1964,6 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
+>  	struct ip_vs_proto_data *pd;
+>  	struct ip_vs_conn *cp;
+>  	int ret, pkts;
+> -	int conn_reuse_mode;
+>  	struct sock *sk;
+>  
+>  	/* Already marked as IPVS request or reply? */
+> @@ -2041,15 +2040,16 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
+>  	cp = INDIRECT_CALL_1(pp->conn_in_get, ip_vs_conn_in_get_proto,
+>  			     ipvs, af, skb, &iph);
+>  
+> -	conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
+> -	if (conn_reuse_mode && !iph.fragoffs && is_new_conn(skb, &iph) && cp) {
+> +	if (!iph.fragoffs && is_new_conn(skb, &iph) && cp) {
+>  		bool old_ct = false, resched = false;
+> +		int conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
+>  
+>  		if (unlikely(sysctl_expire_nodest_conn(ipvs)) && cp->dest &&
+>  		    unlikely(!atomic_read(&cp->dest->weight))) {
+>  			resched = true;
+>  			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
+> -		} else if (is_new_conn_expected(cp, conn_reuse_mode)) {
+> +		} else if (conn_reuse_mode &&
+> +			   is_new_conn_expected(cp, conn_reuse_mode)) {
+>  			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
+>  			if (!atomic_read(&cp->n_control)) {
+>  				resched = true;
+> -- 
+> 2.30.2
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
