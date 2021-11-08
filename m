@@ -2,86 +2,61 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0038447700
-	for <lists+lvs-devel@lfdr.de>; Mon,  8 Nov 2021 01:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABEA447AC9
+	for <lists+lvs-devel@lfdr.de>; Mon,  8 Nov 2021 08:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbhKHAso (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sun, 7 Nov 2021 19:48:44 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.219]:59515 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229807AbhKHAso (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 7 Nov 2021 19:48:44 -0500
-X-Greylist: delayed 412 seconds by postgrey-1.27 at vger.kernel.org; Sun, 07 Nov 2021 19:48:42 EST
-HMM_SOURCE_IP: 172.18.0.48:43760.616130149
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-110.80.1.45 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id 1090E2800AF;
-        Mon,  8 Nov 2021 08:38:21 +0800 (CST)
-X-189-SAVE-TO-SEND: +zhenggy@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id a7c1a4c9887d45d59953a2e84212ca75 for lvs-devel@vger.kernel.org;
-        Mon, 08 Nov 2021 08:38:42 CST
-X-Transaction-ID: a7c1a4c9887d45d59953a2e84212ca75
-X-Real-From: zhenggy@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: zhenggy@chinatelecom.cn
-From:   GuoYong Zheng <zhenggy@chinatelecom.cn>
-To:     lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org
-Cc:     horms@verge.net.au, ja@ssi.bg, pablo@netfilter.org,
-        kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel@vger.kernel.org,
-        GuoYong Zheng <zhenggy@chinatelecom.cn>
-Subject: [PATCH] ipvs: remove unused variable for ip_vs_new_dest
-Date:   Fri,  5 Nov 2021 19:39:40 +0800
-Message-Id: <1636112380-11040-1-git-send-email-zhenggy@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
+        id S230052AbhKHH3R (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 8 Nov 2021 02:29:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229550AbhKHH3Q (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 8 Nov 2021 02:29:16 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C886BC061570
+        for <lvs-devel@vger.kernel.org>; Sun,  7 Nov 2021 23:26:32 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id b15so39279683edd.7
+        for <lvs-devel@vger.kernel.org>; Sun, 07 Nov 2021 23:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=TOLHszgKMB8omvyOviFshmZj6mEb3VFl38s2sw9d5hODzwToUW5lcnN2Xv+jvu1cyl
+         tX8ccplME3GSVzzKC5cOB9C26pyriEAaKPJF6A//aop2WOQO97+W2jyO81eVcQO0H8B0
+         g/GrXIrxRZ3uqk4aNaOJ88DW8LtcC46PWbh6188WnMw0sU5/zuI3enfEqUaYmRAyVCOX
+         vRnJozQCBhC0svKZ05kxa3xkR+gjUszGtfXW0uvwqnnNc6nyGLgsB8N+AuEY64vdYBOR
+         bIssxqzx7WJd3MTQ3tvsHUHcQMeS/p1cKv46cWkgQXVSeW/KScqDtCXJPRbsAVDgh3ET
+         qeBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
+        b=X2XFHlzbeY4YNl0beNfi3pJvFSL2JJv+ahBfXFai41VJtNvqHjqYWUEYlP/tnnO/ie
+         KfJ/AYG/f2XkoLHUAN1gsQtMDoCrShKYwxRqwZMLZDlPWoeOObO61gvA73ZC/571ttTn
+         ovavau4aHOGCp7a5Bq9g0Hw8UCOSiOnv73tUFHSt668sJ8hvroSbWKssiAcxmt9J7LKO
+         5mCxC85/PiuLN0mIyBm+Q1RzJNOnfZ2f7QOE9Xk3q73zvOw42UBWH9A0lfv5CLw2nzeT
+         aD1KiFE7DCaXduWA6Q1t9UXnoWTfB1J96n77Af/1a0S+dce7eovEQBr3dyGrS70H7Ggi
+         UbwA==
+X-Gm-Message-State: AOAM532gREm7AEM8Wf6IF0Nf1cS5ytRFS3PwZDEaB1VhWCHt2O6XqV5P
+        vZnYyYgqJUBj/vlhz6O8lbjToz2YCytWGHQVNGs=
+X-Google-Smtp-Source: ABdhPJwyaabMJ3TpRLlDIQWMXuIXcdFmhvSoK4/oWv/dKaQeeFGHqMS+Xa9qQPp8vFUaGVCAcixvXQItNiW9P32hPok=
+X-Received: by 2002:a17:906:2c16:: with SMTP id e22mr22599003ejh.501.1636356391234;
+ Sun, 07 Nov 2021 23:26:31 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:26:30 -0800 (PST)
+Reply-To: mariaschaefler@gmx.com
+From:   Maria Schaefler <ziskoraa@gmail.com>
+Date:   Mon, 8 Nov 2021 07:26:30 +0000
+Message-ID: <CAJh0FjiJtbuf0qUo1a5rKhN43Yj5U3YNGrP==d0JhrJJ2b0RKg@mail.gmail.com>
+Subject: MY HEART CHOOSE YOU.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-The dest variable is not used after ip_vs_new_dest anymore in
-ip_vs_add_dest, do not need pass it to ip_vs_new_dest, remove it.
-
-Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
----
- net/netfilter/ipvs/ip_vs_ctl.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index e62b40b..494399d 100644
---- a/net/netfilter/ipvs/ip_vs_ctl.c
-+++ b/net/netfilter/ipvs/ip_vs_ctl.c
-@@ -959,8 +959,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
-  *	Create a destination for the given service
-  */
- static int
--ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
--	       struct ip_vs_dest **dest_p)
-+ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest)
- {
- 	struct ip_vs_dest *dest;
- 	unsigned int atype, i;
-@@ -1020,8 +1019,6 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
- 	spin_lock_init(&dest->stats.lock);
- 	__ip_vs_update_dest(svc, dest, udest, 1);
- 
--	*dest_p = dest;
--
- 	LeaveFunction(2);
- 	return 0;
- 
-@@ -1095,7 +1092,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
- 		/*
- 		 * Allocate and initialize the dest structure
- 		 */
--		ret = ip_vs_new_dest(svc, udest, &dest);
-+		ret = ip_vs_new_dest(svc, udest);
- 	}
- 	LeaveFunction(2);
- 
--- 
-1.8.3.1
-
+Given my current state of health, I have decided to donate what I
+inherited from my late husband to you to help the poor and needy. I am
+Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
+cancer about 2 years ago and I have few months to live according to
+medical experts. Email me for my directives
