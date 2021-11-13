@@ -2,59 +2,99 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E9144D11D
-	for <lists+lvs-devel@lfdr.de>; Thu, 11 Nov 2021 06:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC86D44F261
+	for <lists+lvs-devel@lfdr.de>; Sat, 13 Nov 2021 10:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbhKKFJa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Thu, 11 Nov 2021 00:09:30 -0500
-Received: from host-200-90-157-143.netpc.ec ([200.90.157.143]:52258 "EHLO
-        mail.gruponetpc.com" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhKKFJ3 (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 11 Nov 2021 00:09:29 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gruponetpc.com (Postfix) with ESMTP id 717F0E0FE46;
-        Wed, 10 Nov 2021 08:37:24 -0500 (-05)
-Received: from mail.gruponetpc.com ([127.0.0.1])
-        by localhost (mail.gruponetpc.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id OJ7LEOsquelg; Wed, 10 Nov 2021 08:37:23 -0500 (-05)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.gruponetpc.com (Postfix) with ESMTP id 99D17866AD8;
-        Tue,  9 Nov 2021 22:22:05 -0500 (-05)
-X-Virus-Scanned: amavisd-new at gruponetpc.com
-Received: from mail.gruponetpc.com ([127.0.0.1])
-        by localhost (mail.gruponetpc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 04PNi1RaVwBz; Tue,  9 Nov 2021 22:22:04 -0500 (-05)
-Received: from [192.168.0.108] (unknown [93.182.105.113])
-        by mail.gruponetpc.com (Postfix) with ESMTPSA id 5E199866AC4;
-        Tue,  9 Nov 2021 15:25:17 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S235772AbhKMJ7m (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 13 Nov 2021 04:59:42 -0500
+Received: from mg.ssi.bg ([193.238.174.37]:34048 "EHLO mg.ssi.bg"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235742AbhKMJ7l (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
+        Sat, 13 Nov 2021 04:59:41 -0500
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 5186B147CC;
+        Sat, 13 Nov 2021 11:56:47 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 99AAB14762;
+        Sat, 13 Nov 2021 11:56:46 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 7434E3C0332;
+        Sat, 13 Nov 2021 11:56:39 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 1AD9ubAJ016028;
+        Sat, 13 Nov 2021 11:56:37 +0200
+Date:   Sat, 13 Nov 2021 11:56:36 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     GuoYong Zheng <zhenggy@chinatelecom.cn>
+cc:     lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
+        netdev@vger.kernel.org, coreteam@netfilter.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ipvs: remove unused variable for ip_vs_new_dest
+In-Reply-To: <1636112380-11040-1-git-send-email-zhenggy@chinatelecom.cn>
+Message-ID: <25e945b7-9027-43cb-f79c-573fdce42a26@ssi.bg>
+References: <1636112380-11040-1-git-send-email-zhenggy@chinatelecom.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: donation
-To:     Recipients <ecouso@mail.gruponetpc.com>
-From:   ecouso@mail.gruponetpc.com
-Date:   Tue, 09 Nov 2021 20:24:44 +0000
-Reply-To: stefanopessina35@gmail.com
-Message-Id: <20211109202517.5E199866AC4@mail.gruponetpc.com>
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
 
+	Hello,
 
-Hallo,
+On Fri, 5 Nov 2021, GuoYong Zheng wrote:
 
-Ich bin STEFANO PESSINA. Ich bin ein italienisch-monegassischer Milliardär und stellvertretender Vorsitzender, Chief Executive Officer (CEO) und größter Einzelaktionär der Walgreens Boots Alliance. Au   fgrund dieser aktuellen Situation (Corona-Virus), die sich auf der ganzen Welt ausbreitet, spenden ich selbst und andere 19 italienische Milliardäre mehr als 45 Millionen US-Dollar, um das Coronavirus in Italien zu bekämpfen. Ich habe auch zugesagt, 1.500.000,00 € an Einzelpersonen, Kirchen und Waisenhäuser usw. zu spenden. Ich habe mich entschieden, Ihnen 1.500.000,00 € zu spenden, da Ihre E-Mail-Adresse zu den glücklichen Gewinnern gehört. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. Du kannst auch über den untenstehenden Link mehr über mich lesen
+> The dest variable is not used after ip_vs_new_dest anymore in
+> ip_vs_add_dest, do not need pass it to ip_vs_new_dest, remove it.
+> 
+> Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
 
-https://en.wikipedia.org/wiki/Stefano_Pessina
+	Looks good to me for -next, thanks!
 
-Herzlicher Gruss
-Stellvertretender Vorsitzender und Geschäftsführer,
-Walgreens Boots-Allianz.
-Stefano Pessina
+Acked-by: Julian Anastasov <ja@ssi.bg>
 
-E-Mail: stefanopessina35@gmail.com
+> ---
+>  net/netfilter/ipvs/ip_vs_ctl.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+> index e62b40b..494399d 100644
+> --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> @@ -959,8 +959,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
+>   *	Create a destination for the given service
+>   */
+>  static int
+> -ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
+> -	       struct ip_vs_dest **dest_p)
+> +ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest)
+>  {
+>  	struct ip_vs_dest *dest;
+>  	unsigned int atype, i;
+> @@ -1020,8 +1019,6 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
+>  	spin_lock_init(&dest->stats.lock);
+>  	__ip_vs_update_dest(svc, dest, udest, 1);
+>  
+> -	*dest_p = dest;
+> -
+>  	LeaveFunction(2);
+>  	return 0;
+>  
+> @@ -1095,7 +1092,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
+>  		/*
+>  		 * Allocate and initialize the dest structure
+>  		 */
+> -		ret = ip_vs_new_dest(svc, udest, &dest);
+> +		ret = ip_vs_new_dest(svc, udest);
+>  	}
+>  	LeaveFunction(2);
+>  
+> -- 
+> 1.8.3.1
 
+Regards
 
+--
+Julian Anastasov <ja@ssi.bg>
 
