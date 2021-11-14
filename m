@@ -2,99 +2,103 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC86D44F261
-	for <lists+lvs-devel@lfdr.de>; Sat, 13 Nov 2021 10:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71F544F9DD
+	for <lists+lvs-devel@lfdr.de>; Sun, 14 Nov 2021 19:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235772AbhKMJ7m (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 13 Nov 2021 04:59:42 -0500
-Received: from mg.ssi.bg ([193.238.174.37]:34048 "EHLO mg.ssi.bg"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235742AbhKMJ7l (ORCPT <rfc822;lvs-devel@vger.kernel.org>);
-        Sat, 13 Nov 2021 04:59:41 -0500
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 5186B147CC;
-        Sat, 13 Nov 2021 11:56:47 +0200 (EET)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 99AAB14762;
-        Sat, 13 Nov 2021 11:56:46 +0200 (EET)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 7434E3C0332;
-        Sat, 13 Nov 2021 11:56:39 +0200 (EET)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 1AD9ubAJ016028;
-        Sat, 13 Nov 2021 11:56:37 +0200
-Date:   Sat, 13 Nov 2021 11:56:36 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     GuoYong Zheng <zhenggy@chinatelecom.cn>
-cc:     lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
-        netdev@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S236127AbhKNSFL (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 14 Nov 2021 13:05:11 -0500
+Received: from kirsty.vergenet.net ([202.4.237.240]:58656 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234525AbhKNSFG (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 14 Nov 2021 13:05:06 -0500
+Received: from madeliefje.horms.nl (tulip.horms.nl [83.161.246.101])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 469AC25AEF5;
+        Mon, 15 Nov 2021 05:02:09 +1100 (AEDT)
+Received: by madeliefje.horms.nl (Postfix, from userid 7100)
+        id E537B27F0; Sun, 14 Nov 2021 19:02:06 +0100 (CET)
+Date:   Sun, 14 Nov 2021 19:02:06 +0100
+From:   Simon Horman <horms@verge.net.au>
+To:     Julian Anastasov <ja@ssi.bg>, pablo@netfilter.org
+Cc:     GuoYong Zheng <zhenggy@chinatelecom.cn>, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        coreteam@netfilter.org, linux-kernel <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] ipvs: remove unused variable for ip_vs_new_dest
-In-Reply-To: <1636112380-11040-1-git-send-email-zhenggy@chinatelecom.cn>
-Message-ID: <25e945b7-9027-43cb-f79c-573fdce42a26@ssi.bg>
+Message-ID: <20211114180206.GA2757@vergenet.net>
 References: <1636112380-11040-1-git-send-email-zhenggy@chinatelecom.cn>
+ <25e945b7-9027-43cb-f79c-573fdce42a26@ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <25e945b7-9027-43cb-f79c-573fdce42a26@ssi.bg>
+Organisation: Horms Solutions BV
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-
-	Hello,
-
-On Fri, 5 Nov 2021, GuoYong Zheng wrote:
-
-> The dest variable is not used after ip_vs_new_dest anymore in
-> ip_vs_add_dest, do not need pass it to ip_vs_new_dest, remove it.
+On Sat, Nov 13, 2021 at 11:56:36AM +0200, Julian Anastasov wrote:
 > 
-> Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
-
-	Looks good to me for -next, thanks!
-
-Acked-by: Julian Anastasov <ja@ssi.bg>
-
-> ---
->  net/netfilter/ipvs/ip_vs_ctl.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+> 	Hello,
 > 
-> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-> index e62b40b..494399d 100644
-> --- a/net/netfilter/ipvs/ip_vs_ctl.c
-> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
-> @@ -959,8 +959,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
->   *	Create a destination for the given service
->   */
->  static int
-> -ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
-> -	       struct ip_vs_dest **dest_p)
-> +ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest)
->  {
->  	struct ip_vs_dest *dest;
->  	unsigned int atype, i;
-> @@ -1020,8 +1019,6 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
->  	spin_lock_init(&dest->stats.lock);
->  	__ip_vs_update_dest(svc, dest, udest, 1);
->  
-> -	*dest_p = dest;
-> -
->  	LeaveFunction(2);
->  	return 0;
->  
-> @@ -1095,7 +1092,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
->  		/*
->  		 * Allocate and initialize the dest structure
->  		 */
-> -		ret = ip_vs_new_dest(svc, udest, &dest);
-> +		ret = ip_vs_new_dest(svc, udest);
->  	}
->  	LeaveFunction(2);
->  
-> -- 
-> 1.8.3.1
+> On Fri, 5 Nov 2021, GuoYong Zheng wrote:
+> 
+> > The dest variable is not used after ip_vs_new_dest anymore in
+> > ip_vs_add_dest, do not need pass it to ip_vs_new_dest, remove it.
+> > 
+> > Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
+> 
+> 	Looks good to me for -next, thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
 
-Regards
+Thanks GuoYong,
 
---
-Julian Anastasov <ja@ssi.bg>
+Acked-by: Simon Horman <horms@verge.net.au>
 
+Pablo, please consider this for nf-next at your convenience.
+
+> 
+> > ---
+> >  net/netfilter/ipvs/ip_vs_ctl.c | 7 ++-----
+> >  1 file changed, 2 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+> > index e62b40b..494399d 100644
+> > --- a/net/netfilter/ipvs/ip_vs_ctl.c
+> > +++ b/net/netfilter/ipvs/ip_vs_ctl.c
+> > @@ -959,8 +959,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
+> >   *	Create a destination for the given service
+> >   */
+> >  static int
+> > -ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
+> > -	       struct ip_vs_dest **dest_p)
+> > +ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest)
+> >  {
+> >  	struct ip_vs_dest *dest;
+> >  	unsigned int atype, i;
+> > @@ -1020,8 +1019,6 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
+> >  	spin_lock_init(&dest->stats.lock);
+> >  	__ip_vs_update_dest(svc, dest, udest, 1);
+> >  
+> > -	*dest_p = dest;
+> > -
+> >  	LeaveFunction(2);
+> >  	return 0;
+> >  
+> > @@ -1095,7 +1092,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
+> >  		/*
+> >  		 * Allocate and initialize the dest structure
+> >  		 */
+> > -		ret = ip_vs_new_dest(svc, udest, &dest);
+> > +		ret = ip_vs_new_dest(svc, udest);
+> >  	}
+> >  	LeaveFunction(2);
+> >  
+> > -- 
+> > 1.8.3.1
+> 
+> Regards
+> 
+> --
+> Julian Anastasov <ja@ssi.bg>
+> 
