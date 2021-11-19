@@ -2,118 +2,59 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E624551FD
-	for <lists+lvs-devel@lfdr.de>; Thu, 18 Nov 2021 02:09:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AF8457CAD
+	for <lists+lvs-devel@lfdr.de>; Sat, 20 Nov 2021 10:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240926AbhKRBMj (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 17 Nov 2021 20:12:39 -0500
-Received: from prt-mail.chinatelecom.cn ([42.123.76.227]:39136 "EHLO
-        chinatelecom.cn" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235976AbhKRBMj (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 17 Nov 2021 20:12:39 -0500
-HMM_SOURCE_IP: 172.18.0.48:51592.85767161
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-110.86.5.93 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id DF2A628008F;
-        Thu, 18 Nov 2021 09:09:20 +0800 (CST)
-X-189-SAVE-TO-SEND: zhenggy@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 80432f6858924d939d5209d0796bb61f for linux-kernel@vger.kernel.org;
-        Thu, 18 Nov 2021 09:09:23 CST
-X-Transaction-ID: 80432f6858924d939d5209d0796bb61f
-X-Real-From: zhenggy@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: zhenggy@chinatelecom.cn
-Subject: Re: [PATCH] ipvs: remove unused variable for ip_vs_new_dest
-To:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
-        pablo@netfilter.org
-Cc:     lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        netdev@vger.kernel.org, coreteam@netfilter.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1636112380-11040-1-git-send-email-zhenggy@chinatelecom.cn>
- <25e945b7-9027-43cb-f79c-573fdce42a26@ssi.bg>
- <20211114180206.GA2757@vergenet.net>
-From:   zhenggy <zhenggy@chinatelecom.cn>
-Message-ID: <97494860-f9d3-44e6-7515-0031ea64f86c@chinatelecom.cn>
-Date:   Thu, 18 Nov 2021 09:09:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        id S230047AbhKTJ0q (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 20 Nov 2021 04:26:46 -0500
+Received: from mx07-00227901.pphosted.com ([185.132.182.185]:55278 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230007AbhKTJ0q (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 20 Nov 2021 04:26:46 -0500
+X-Greylist: delayed 85588 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Nov 2021 04:26:45 EST
+Received: from pps.filterd (m0097675.ppops.net [127.0.0.1])
+        by mx07-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7mU78004792;
+        Fri, 19 Nov 2021 10:33:37 +0100
+Received: from zbw2k16ex03.bardusch.net ([185.80.186.174])
+        by mx07-.pphosted.com (PPS) with ESMTPS id 3cdjtyh6mh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:33:37 +0100
+Received: from zbw2k16ex03.bardusch.net (172.25.1.3) by
+ zbw2k16ex03.bardusch.net (172.25.1.3) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:33:35 +0100
+Received: from User (172.25.1.131) by zbw2k16ex03.bardusch.net (172.25.1.3)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:33:25 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:33:39 -0800
 MIME-Version: 1.0
-In-Reply-To: <20211114180206.GA2757@vergenet.net>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <35cf98a5-7c23-4d33-9d16-768d6f56ad5e@zbw2k16ex03.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-ORIG-GUID: DmphecTecyx2Kkj8IhODjwYTAqAWTzga
+X-Proofpoint-GUID: DmphecTecyx2Kkj8IhODjwYTAqAWTzga
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Thanks for review.
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
 
-ÔÚ 2021/11/15 2:02, Simon Horman Ð´µÀ:
-> On Sat, Nov 13, 2021 at 11:56:36AM +0200, Julian Anastasov wrote:
->>
->> 	Hello,
->>
->> On Fri, 5 Nov 2021, GuoYong Zheng wrote:
->>
->>> The dest variable is not used after ip_vs_new_dest anymore in
->>> ip_vs_add_dest, do not need pass it to ip_vs_new_dest, remove it.
->>>
->>> Signed-off-by: GuoYong Zheng <zhenggy@chinatelecom.cn>
->>
->> 	Looks good to me for -next, thanks!
->>
->> Acked-by: Julian Anastasov <ja@ssi.bg>
-> 
-> Thanks GuoYong,
-> 
-> Acked-by: Simon Horman <horms@verge.net.au>
-> 
-> Pablo, please consider this for nf-next at your convenience.
-> 
->>
->>> ---
->>>  net/netfilter/ipvs/ip_vs_ctl.c | 7 ++-----
->>>  1 file changed, 2 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
->>> index e62b40b..494399d 100644
->>> --- a/net/netfilter/ipvs/ip_vs_ctl.c
->>> +++ b/net/netfilter/ipvs/ip_vs_ctl.c
->>> @@ -959,8 +959,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
->>>   *	Create a destination for the given service
->>>   */
->>>  static int
->>> -ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
->>> -	       struct ip_vs_dest **dest_p)
->>> +ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest)
->>>  {
->>>  	struct ip_vs_dest *dest;
->>>  	unsigned int atype, i;
->>> @@ -1020,8 +1019,6 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
->>>  	spin_lock_init(&dest->stats.lock);
->>>  	__ip_vs_update_dest(svc, dest, udest, 1);
->>>  
->>> -	*dest_p = dest;
->>> -
->>>  	LeaveFunction(2);
->>>  	return 0;
->>>  
->>> @@ -1095,7 +1092,7 @@ static void ip_vs_trash_cleanup(struct netns_ipvs *ipvs)
->>>  		/*
->>>  		 * Allocate and initialize the dest structure
->>>  		 */
->>> -		ret = ip_vs_new_dest(svc, udest, &dest);
->>> +		ret = ip_vs_new_dest(svc, udest);
->>>  	}
->>>  	LeaveFunction(2);
->>>  
->>> -- 
->>> 1.8.3.1
->>
->> Regards
->>
->> --
->> Julian Anastasov <ja@ssi.bg>
->>
+Looking forward to hearing from you.
+
+
+Respectfully!!
+Joseph Choondak
+Account Executive.
