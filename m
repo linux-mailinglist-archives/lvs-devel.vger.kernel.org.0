@@ -2,54 +2,54 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058FB47103D
-	for <lists+lvs-devel@lfdr.de>; Sat, 11 Dec 2021 03:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D634770AA
+	for <lists+lvs-devel@lfdr.de>; Thu, 16 Dec 2021 12:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345675AbhLKCFo (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 10 Dec 2021 21:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S231649AbhLPLmp (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 16 Dec 2021 06:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345673AbhLKCFm (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 10 Dec 2021 21:05:42 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B1DC0698C5
-        for <lvs-devel@vger.kernel.org>; Fri, 10 Dec 2021 18:02:05 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id z8so16138180ljz.9
-        for <lvs-devel@vger.kernel.org>; Fri, 10 Dec 2021 18:02:05 -0800 (PST)
+        with ESMTP id S233444AbhLPLmc (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Dec 2021 06:42:32 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9ADC06179E
+        for <lvs-devel@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id t11so25114609qtw.3
+        for <lvs-devel@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=YLFlW2EU3wC14KpVTk+IM58oSghSYLjMmVu6zQ/IYCwgsR5Sf12xJCL/5+CVpbXsnt
-         22KfNqT06o98mhCtfoOfWNh/4tfFmj2AFDjLdssqJs8+fwuuzWeqstsrP9Eqc87OlMHn
-         TvZYh66KNDgDYMOMzV+7fqlsVNnsPbs5tbKal0uE5CTp2Rk7sipJ65nnPaJWW6urjiYG
-         yjhaQr0+DsLsyIMnaiNd6rjtUc7yQgIo65YEuBLpX5cuMOVjNiZW8dTCMF1ZcQmI8lLg
-         ts2zRNIssQ7WVu8YEQseHp9elEHPuA+qDafMGck3ipNTcw1LcoccQXJFJcltFVTtty4m
-         33gA==
+        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
+        b=XAiY5JQCbKhUV3kfV68NxknTY8076aQ+jZiIG+NNSnrj8SbWsLA5ZyVis9Hv7MDsX5
+         Wp1aJ8rEmDfQ1U3vhA+W5Q6fUW0sQxhqwaHiosPbQFbyYijHt4Icvm/T0vEK5/kKmBc+
+         QqELCOAj0es+5TzRQyWwGBhwQGehjbOewfhMN3/S4hQw7QoR6Y3+tDzh1TbUcqm1TT9t
+         NYT2/qpfB6ahTcpnyVYoBu/0br0EmuZ66fyA68h0ieuZcBkGcxPgfheRqd2GHCJMPyzP
+         6QgpFUXd/uCVTtz1/hZUUGudKd9Q0ZImcSJeB1tjd8lIsCPvJkt1eKVnbTcB60Kk9v0/
+         CoRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=UB8HPXfiFrSS8lJHVD9imqT8IM8lXgQeVTQMVTTdoew=;
-        b=PweKKjyC2FaRCT97xafKeFNoHI0DBgfz2huzSnXfKdJpVgOUJBFAEgDyhu0pBYRcBx
-         yofHgkV9tsYOleFftNs4w9o+dlresAWDUDZ93uZzp+vI6FxcuzrvawX4xXyTi4VKDx8P
-         yhibSWQ4kb5L7AZKWqOie/CapSjomSqaoHTaZdsxbf8LQUidAfAnsyN7o88kkkrO2vf5
-         EP7s7+wx+4j9ikUoOUmPfGwJzBPkRL2u+vK982UN3oK0xqn1pAydAvdB7Vf24x/QXHYr
-         hYBrj14swIgq8rFRI3SNFm/dkGpL+uoqGRBp5qae7/1BythZT0aLwoCTYsQZSu044xsS
-         5jXg==
-X-Gm-Message-State: AOAM532WN/RS83YkqhkbEiurp5TL9SxvnF7F2uDvOXXczm0E42MzulZ/
-        7esj72bS9Iq8T0R4yXiKY52hRx93Nywun9JqiNM=
-X-Google-Smtp-Source: ABdhPJxBVYZ26kuukI+qghu2oEbePULLlY8UzOvy8Thh2XI49DVZF++TlN5eyoWkvajWnohXM36KonRfGTJC1IRe82w=
-X-Received: by 2002:a2e:9d8f:: with SMTP id c15mr17452679ljj.477.1639188123220;
- Fri, 10 Dec 2021 18:02:03 -0800 (PST)
+        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
+        b=vo1UWx/bIE8JWD7XKTXPeLbo+u5/SZIB3Fv5rU444NWY1lgyhLPBxu8zEhMfebNKRx
+         BsFD4gx1Z0jYBskRRwqjLQZEE2mhiJF6N63tqCkyrEsTJnYMVL9xqr2qw7OqYbgKMC6c
+         iE/GY2bQ8h3MwgE2iXAljZPP4gMph9vBEnFsbdu02z4Uxbtg6nZWb6Dl/j2Vdg3CzCat
+         MdK45Tg+dLvhOhY+wK1O2g8L8JuP61sGLeMkVNS0DIZsGeyfVMcTjJTbSYS0hf3GcATj
+         6yoRLRQwQk5a787NGU5aef6C5cve/kn6zZoeAYv+2IZDS7eYlP354FTkO3RRnMSsv61W
+         hsog==
+X-Gm-Message-State: AOAM533VO4huqbfg3MHJDeAkgm/krWyWQd22fOtjhpPoXbGgVS55QYAX
+        sZBckvengyqNHp+nDdz0hlX+8Na0J8WneTCrDA4=
+X-Google-Smtp-Source: ABdhPJxzAaV5DauAecsJzqBWmheSvDxk3ghiLfb6YRovClVg4kL4yUlGwYUFAnV+1q8jYrfo3AT6l8iJutzsg/2jTPA=
+X-Received: by 2002:a05:622a:1d4:: with SMTP id t20mr16497208qtw.84.1639654948506;
+ Thu, 16 Dec 2021 03:42:28 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6512:12c7:0:0:0:0 with HTTP; Fri, 10 Dec 2021 18:02:02
+Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:28
  -0800 (PST)
-Reply-To: internationallmonetary695@gmail.com
-From:   International Monetary fund <abubakarsadiq1297@gmail.com>
-Date:   Fri, 10 Dec 2021 18:02:02 -0800
-Message-ID: <CAHXNoSg3Z7iK4ieUWhau28hUaL637ztb2vgqOT3oZCxEMRC3RQ@mail.gmail.com>
-Subject: Dear Beneficiary,
+Reply-To: selviasantiago1@gmail.com
+From:   Selvia Santiago <mariamatinez119@gmail.com>
+Date:   Thu, 16 Dec 2021 11:42:28 +0000
+Message-ID: <CAONDhKOtxcgjB1YEPd0RXNOVbbQ8k-9k32v_cdFxEKFzk62kJg@mail.gmail.com>
+Subject: Urgent
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -57,22 +57,30 @@ List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
 -- 
- I.M.F Head Office
-#1900 Pennsylvania Ave NW,
-Washington, DC 20431
-INTERNATIONAL MONETARY FUND.
-REF:-XVGNN82010
-internationallmonetary695@gmail.com
-Telephone : +12062785473
+Urgent
 
-This message is from International Monetary fund (IMF) I am Mr Bo Li
-deputy to  Kristalina Georgieva the current president of International
-  Monetary fund (IMF) We are aware of the stress you have been passing
-through and how you have lost your money trying to claim your fund ,
-you have to worry no more for the international monetary fund is fully
- in-charge of your fund now, contact  me for more info on how you will
-receive your fund( internationallmonetary695@gmail.com) or call me
-on-Telephone : +12062785473 for more info.
+I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
+suffering from long time illness (Cancer), there is funds I inherited
+from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
+Million Dollars) which he deposited in bank before his death, I need a
+honest and Faithful person that can use these funds for humanity work.
 
-Regards,
-Mr Bo Li
+I took this decision because I don't have any child that will inherit
+this money and I don't want a situation where this money will be used
+in an ungodly way. That is why I am taking this decision, and my
+doctor has confirmed to me that I have less than two weeks to live,
+having known my condition I decided to donate this fund to a charity
+or individual that will utilize this money to assist the poor and the
+needy in accordance to my instructions.
+
+I want you to use 70% of this funds for orphanages, school, church,
+widows, propagating the word and other humanity works,The remaining
+30% should be yours for your efforts as the new beneficiary.
+
+Please if you would be able to use these funds for humanity work
+kindly reply me. As soon as I have received your response, I will give
+you further directives on how you are to go about the claims of the
+said funds.
+
+Remain blessed.
+Mrs Selvia Santiago.
