@@ -2,62 +2,69 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24758506760
-	for <lists+lvs-devel@lfdr.de>; Tue, 19 Apr 2022 11:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD1C5188CB
+	for <lists+lvs-devel@lfdr.de>; Tue,  3 May 2022 17:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345803AbiDSJHK (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 19 Apr 2022 05:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S237096AbiECPmC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Tue, 3 May 2022 11:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240297AbiDSJHJ (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 19 Apr 2022 05:07:09 -0400
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 653B722B33;
-        Tue, 19 Apr 2022 02:04:27 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 11:04:24 +0200
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, Pengcheng Yang <yangpc@wangsu.com>,
-        lvs-devel@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH nf,v2] ipvs: correctly print the memory size of
- ip_vs_conn_tab
-Message-ID: <Yl57GONaSbzgMJY8@salvia>
-References: <1649761545-1864-1-git-send-email-yangpc@wangsu.com>
- <dd2f82a6-bf70-2b10-46e0-9d81e4dde6@ssi.bg>
- <Yl55e0mDsrgcCAX2@vergenet.net>
+        with ESMTP id S238380AbiECPmB (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 3 May 2022 11:42:01 -0400
+X-Greylist: delayed 3614 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 May 2022 08:38:28 PDT
+Received: from mail.77msk.ru (mail.77msk.ru [84.204.203.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F96E30F53
+        for <lvs-devel@vger.kernel.org>; Tue,  3 May 2022 08:38:28 -0700 (PDT)
+Received: from mail.77msk.ru (proxysrv.domain007.com [192.168.2.20])
+        by hermes.domain007.com (Postfix) with ESMTP id EC70FD49A23
+        for <lvs-devel@vger.kernel.org>; Tue,  3 May 2022 17:22:32 +0300 (MSK)
+Received: from asda.co.uk (unknown [20.97.211.134])
+        by gatekeeper.domain007.com (Postfix) with ESMTPSA id 877793200A3
+        for <lvs-devel@vger.kernel.org>; Tue,  3 May 2022 17:22:32 +0300 (MSK)
+Reply-To: sales@asdaa.uk
+From:   ASDA Stores Limited <Hanes.Thomas44@asda.co.uk>
+To:     lvs-devel@vger.kernel.org
+Subject: ASDA Procurement order
+Date:   03 May 2022 14:22:32 +0000
+Message-ID: <20220503141528.C7B902F58BD3ECC0@asda.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yl55e0mDsrgcCAX2@vergenet.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Virus-Scanned: clamav-milter 0.102.4 at hermes
+X-Virus-Status: Clean
+X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_50,RCVD_IN_PSBL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:57:31AM +0200, Simon Horman wrote:
-> On Fri, Apr 15, 2022 at 04:22:47PM +0300, Julian Anastasov wrote:
-> > 
-> > 	Hello,
-> > 
-> > On Tue, 12 Apr 2022, Pengcheng Yang wrote:
-> > 
-> > > The memory size of ip_vs_conn_tab changed after we use hlist
-> > > instead of list.
-> > > 
-> > > Fixes: 731109e78415 ("ipvs: use hlist instead of list")
-> > > Signed-off-by: Pengcheng Yang <yangpc@wangsu.com>
-> > > ---
-> > 
-> > 	v2 looks better to me for nf-next, thanks!
-> > 
-> > Acked-by: Julian Anastasov <ja@ssi.bg>
-> 
-> Acked-by: Simon Horman <horms@verge.net.au>
+Dear lvs-devel
 
-Applied to nf.git, thanks
+We are interested in having some of your hot selling product in 
+our stores and outlets spread all over United Kingdom, Northern 
+Island and Africa. ASDA Stores Limited is one of the highest-
+ranking Wholesale & Retail outlets in the United Kingdom. 
+  
+We shall furnish our detailed company profile in our next 
+correspondent. However, it would be appreciated if you can send 
+us your catalog through email to learn more about your company's 
+products and wholesale quote. It is hopeful that we can start a 
+viable long-lasting business relationship (partnership) with you.  
+  
+  
+Your prompt response would be delightfully appreciated. 
+  
+Best Wishes 
+  
+  
+Hanes S. Thomas 
+Procurement Office. 
+ASDA Stores Limited 
+Tel:  + 44 - 7451271650 
+WhatsApp: + 44 – 7441440360 
+Website: www.asda.co.uk
