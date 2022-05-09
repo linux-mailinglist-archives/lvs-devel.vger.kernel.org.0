@@ -2,100 +2,160 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FF251B448
-	for <lists+lvs-devel@lfdr.de>; Thu,  5 May 2022 02:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD69A51FCE2
+	for <lists+lvs-devel@lfdr.de>; Mon,  9 May 2022 14:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232486AbiEEAGY (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 4 May 2022 20:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S234455AbiEIMfG (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 9 May 2022 08:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347593AbiEDX6v (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 4 May 2022 19:58:51 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F52A53E0E
-        for <lvs-devel@vger.kernel.org>; Wed,  4 May 2022 16:54:12 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id c5-20020a9d75c5000000b00605ff3b9997so1966951otl.0
-        for <lvs-devel@vger.kernel.org>; Wed, 04 May 2022 16:54:12 -0700 (PDT)
+        with ESMTP id S234432AbiEIMfF (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 9 May 2022 08:35:05 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24011B434C;
+        Mon,  9 May 2022 05:31:11 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id q18so742306pln.12;
+        Mon, 09 May 2022 05:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=Dn1MT8x7p4Rbn+pctwVkt7IgIdUxT0LRLjox/JaF9ttsZ2N8sUUglHFRxQa3sl75aK
-         h1U1JpCoOjPff8rV+LL0edQuBh+YvYlTbZ4zx127Qa80qMcS49J0d2nS2s7mVVadwp/M
-         vGp6wV8qQhR9tMRiQjyWHIJslgvG4HigF7p24aLxixJ1l99K68kLikab9Y0HgtSpkDYW
-         0+riuhXlj9dAnGs04evyYz4sFXKtm0FlJKiBI2Dtbo7ebvKr6E7XJkxgxzCXhReMwL1D
-         yv9OUeo9KjH+/RIlVXefhsYivAQRdlwo604eWoXrrvRFVxcSgXwgPis+UtVhyLpBWx3z
-         WyWg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MBkrt0SUkDfCJX6P4GbifrxeHSLkx5CXpfEy6Fo+oxI=;
+        b=j24J2mmCWVTfciS79l9WsXOME+o2GRmy+XDFsljOg+u/rf3JIlbK8C8C0/obdWTlYs
+         Lyti8j7T+/vIlQ1XYwUg2ldJUT97k2PP1fMeNVClx5eFDgP2NXxMtIYEtBVsPfXd23+k
+         sC6PJPEiTSPZ1oDuttnRAaFAuNgX2OUVT84kuFFx1RVubJu3ba4vG6Th4E96AgExGGeu
+         arf7htlXrjeuT5jr0ESUIH/b6InURDwz8lCl+eKwRXOEzGBcIfi9eoJNdUXsj22MT55A
+         tDsQqKWZw3Q6MEtyxVeyvhSDCEJYD5Ng3OSPtkcvTBCWOwAUXd4MsXOfab9pN6ncp3aj
+         QmGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ampHH5WJLIBWSsxWwzVjbk5pO9UBFxn81pZ6QIDzZtY=;
-        b=rz+gvjYmYZdjSshSxkbAL7fsNEuc8MOIZlZFkxRgEgKbK+p4yZlRc65MAh6lCIYHph
-         KvJyOAIVPjkjzpFQtAZksBYMObbA47GnneoFOLmDRjYuN4A4ALoA/+cmOmkj9/aWwPE1
-         Mu6oZLw/mQHIKC45hXFDmgZr/Vq5FiLmMyo1kdrqiH4ft9Jxv57vRgdgMa/cwGah5Sa8
-         lncyfrd+HJtk836qhh94iOI/S9QMGotUkyYbTgVsSZCwCQjBsMY63nyAGEDaiSodKcke
-         Dc989kioDSZJAxSvZMHbrAn1GWczZJwdjG6w5mcuLidEk76InAvF26WZp+f3SnZ4n6m+
-         Xr6A==
-X-Gm-Message-State: AOAM533x7sxabYPLg+kPkTqiC43R50X0tkp02OZgMXhZ3/mVnzEKGnUm
-        VTeTx3WcSfVjUlnx8VhXzPwbB+6nOJzyikU2gNwcMDaY67kOiA==
-X-Google-Smtp-Source: ABdhPJyXbFHNtxfp8+qt+M9kuv/iG7XfFeFFPd7I4/fmpdxuycMtmf6dIJw5ghtZAT2CwgvAVE/kUl0HxsirxLIU8v0=
-X-Received: by 2002:a9d:6b16:0:b0:605:e0eb:d3d6 with SMTP id
- g22-20020a9d6b16000000b00605e0ebd3d6mr8263208otp.213.1651708440302; Wed, 04
- May 2022 16:54:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MBkrt0SUkDfCJX6P4GbifrxeHSLkx5CXpfEy6Fo+oxI=;
+        b=zjdf0bY0/qQr1is5j5VtF7lJzivPT+1WfyQcNHv9jhgVDLmgS31DTXv7aHth+x4Pnn
+         6Z0U0jT1IRAnPJRw9uazPpZNShUQep5QlEL+4WdklPEu3StY2mbrJyWKqBzWGc0/ud5b
+         ludMXnGPP4xLr+kaQI2h3TSVgWz8I3uyOjhYPVHttPVYI/H5aIcPyfUmU0MJi2Hq+M2z
+         65bnIeM+NaYfN3frJbNXQ/eqw71R9QkjqLDHD4Wa1ouWl6U4D3qzXDcAAjK10bjryIvC
+         cN3aGvioNqB1qMm2uPg/QmPrQnbFlxBEgYBfTSsoRbVDl1F3tHZ1ejLQxXaVWvIqx3pE
+         Idng==
+X-Gm-Message-State: AOAM531KuKq0W1IiZ2VAScNgN2FHsrctYc80d+tTUxUKmiFtZXc6UmZf
+        FLtRAE/LQ7Errocr4Fw+nw8=
+X-Google-Smtp-Source: ABdhPJx0119ewapiTv0gtx/bvLqOkiUycrfiG2H+OZMR7WXYJoc3gdTakKXA4DiXUcUeaux2aKAShQ==
+X-Received: by 2002:a17:902:f681:b0:15e:ade1:b703 with SMTP id l1-20020a170902f68100b0015eade1b703mr16022627plg.112.1652099471413;
+        Mon, 09 May 2022 05:31:11 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.88])
+        by smtp.gmail.com with ESMTPSA id t20-20020a170902b21400b0015e8d4eb269sm7025761plr.179.2022.05.09.05.31.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 05:31:10 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     kuba@kernel.org
+Cc:     horms@verge.net.au, ja@ssi.bg, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH net-next] net: ipvs: random start for RR scheduler
+Date:   Mon,  9 May 2022 20:22:13 +0800
+Message-Id: <20220509122213.19508-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Received: by 2002:a05:6802:1a9:0:0:0:0 with HTTP; Wed, 4 May 2022 16:53:59
- -0700 (PDT)
-Reply-To: ortegainvestmmentforrealinvest@gmail.com
-From:   Info <joybhector64@gmail.com>
-Date:   Thu, 5 May 2022 05:23:59 +0530
-Message-ID: <CAP7KLYgH9LcKHS-KgR0zObHAgC6Fr3D+dOJSbDKurTc_12+iFw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:341 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [joybhector64[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [joybhector64[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
--- 
-I am an investor. I came from the USA and I have many investments all
-over the world.
+From: Menglong Dong <imagedong@tencent.com>
 
-I want you to partner with me to invest in your country I am into many
-investment such as real Estate or buying of properties i can also
-invest money in any of existing business with equity royalty or by %
-percentage so on,
-Warm regards
+For now, the start of the RR scheduler is in the order of dest
+service added, it will result in imbalance if the load balance
+is done in client side and long connect is used.
+
+For example, we have client1, client2, ..., client5 and real service
+service1, service2, service3. All clients have the same ipvs config,
+and each of them will create 2 long TCP connect to the virtual
+service. Therefore, all the clients will connect to service1 and
+service2, leaving service3 free.
+
+Fix this by randomize the start of dest service to RR scheduler when
+IP_VS_SVC_F_SCHED_RR_RANDOM is set.
+
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+ include/uapi/linux/ip_vs.h    |  2 ++
+ net/netfilter/ipvs/ip_vs_rr.c | 25 ++++++++++++++++++++++++-
+ 2 files changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/ip_vs.h b/include/uapi/linux/ip_vs.h
+index 4102ddcb4e14..7f74bafd3211 100644
+--- a/include/uapi/linux/ip_vs.h
++++ b/include/uapi/linux/ip_vs.h
+@@ -28,6 +28,8 @@
+ #define IP_VS_SVC_F_SCHED_SH_FALLBACK	IP_VS_SVC_F_SCHED1 /* SH fallback */
+ #define IP_VS_SVC_F_SCHED_SH_PORT	IP_VS_SVC_F_SCHED2 /* SH use port */
+ 
++#define IP_VS_SVC_F_SCHED_RR_RANDOM	IP_VS_SVC_F_SCHED1 /* random start */
++
+ /*
+  *      Destination Server Flags
+  */
+diff --git a/net/netfilter/ipvs/ip_vs_rr.c b/net/netfilter/ipvs/ip_vs_rr.c
+index 38495c6f6c7c..e309d97bdd08 100644
+--- a/net/netfilter/ipvs/ip_vs_rr.c
++++ b/net/netfilter/ipvs/ip_vs_rr.c
+@@ -22,13 +22,36 @@
+ 
+ #include <net/ip_vs.h>
+ 
++static void ip_vs_rr_random_start(struct ip_vs_service *svc)
++{
++	struct list_head *cur;
++	u32 start;
++
++	if (!(svc->flags | IP_VS_SVC_F_SCHED_RR_RANDOM) ||
++	    svc->num_dests <= 1)
++		return;
++
++	spin_lock_bh(&svc->sched_lock);
++	start = get_random_u32() % svc->num_dests;
++	cur = &svc->destinations;
++	while (start--)
++		cur = cur->next;
++	svc->sched_data = cur;
++	spin_unlock_bh(&svc->sched_lock);
++}
+ 
+ static int ip_vs_rr_init_svc(struct ip_vs_service *svc)
+ {
+ 	svc->sched_data = &svc->destinations;
++	ip_vs_rr_random_start(svc);
+ 	return 0;
+ }
+ 
++static int ip_vs_rr_add_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
++{
++	ip_vs_rr_random_start(svc);
++	return 0;
++}
+ 
+ static int ip_vs_rr_del_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest)
+ {
+@@ -104,7 +127,7 @@ static struct ip_vs_scheduler ip_vs_rr_scheduler = {
+ 	.module =		THIS_MODULE,
+ 	.n_list =		LIST_HEAD_INIT(ip_vs_rr_scheduler.n_list),
+ 	.init_service =		ip_vs_rr_init_svc,
+-	.add_dest =		NULL,
++	.add_dest =		ip_vs_rr_add_dest,
+ 	.del_dest =		ip_vs_rr_del_dest,
+ 	.schedule =		ip_vs_rr_schedule,
+ };
+-- 
+2.36.0
+
