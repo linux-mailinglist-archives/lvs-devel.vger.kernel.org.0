@@ -2,72 +2,84 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EC552560C
-	for <lists+lvs-devel@lfdr.de>; Thu, 12 May 2022 21:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8755257B5
+	for <lists+lvs-devel@lfdr.de>; Fri, 13 May 2022 00:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358184AbiELTvL (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 12 May 2022 15:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
+        id S245095AbiELWYH (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 12 May 2022 18:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358203AbiELTvK (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 12 May 2022 15:51:10 -0400
-Received: from mail.pekanbaru.go.id (mail.pekanbaru.go.id [103.131.245.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C091845AD7
-        for <lvs-devel@vger.kernel.org>; Thu, 12 May 2022 12:51:08 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id EC46696DF5B;
-        Thu, 12 May 2022 10:45:44 +0700 (WIB)
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id YGAddc7cqBxp; Thu, 12 May 2022 10:45:44 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.pekanbaru.go.id (Postfix) with ESMTP id 7E5D898ADE4;
-        Thu, 12 May 2022 10:45:43 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.pekanbaru.go.id 7E5D898ADE4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pekanbaru.go.id;
-        s=EA5C5C9E-4206-11EC-835B-1ADACEA726A0; t=1652327143;
-        bh=WgQd2bW8hb2KeIDNbeIeW1Bb4lp6m29iibMhAQT/egc=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=Kkb9y3GSC0/J+AdoJmmaZdwCk1tdFkK+JVJuNYPYytvV0urEgvveSWvqtmTPLADNd
-         SoBvJB2dsA88pJcE+rWBYZdPKd/NYWBs56rVucfZ9uirIv36sp27dGlXQhLmmjR/Dv
-         5JPbmRKop0LqbgMWMrdaF/4rtMxTIXmrvzHvDs76vnRhXUUzqUsnHPKYiQNAsZQsZL
-         9Jv7X9Rc3mgpcBpQd1Hvijb6F8lslrwqoXhcJNy5Dh27g9+tBdMs+//KpUqgs6OO9A
-         8kNWoNwPR7FVrUE7uVeInqcJb9Slss3K+GZehemDTCSMTnHwwaqB5YNBcoEzDF9+lF
-         Uuilt96CMOw0Q==
-X-Virus-Scanned: amavisd-new at mail.pekanbaru.go.id
-Received: from mail.pekanbaru.go.id ([127.0.0.1])
-        by localhost (mail.pekanbaru.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id lNGemSfgI9Ko; Thu, 12 May 2022 10:45:43 +0700 (WIB)
-Received: from [192.168.15.101] (unknown [41.79.219.176])
-        by mail.pekanbaru.go.id (Postfix) with ESMTPSA id A1C5398ADF7;
-        Thu, 12 May 2022 10:45:34 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S240450AbiELWYG (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 12 May 2022 18:24:06 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B551B281347
+        for <lvs-devel@vger.kernel.org>; Thu, 12 May 2022 15:24:05 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 7D8F213D2D;
+        Fri, 13 May 2022 01:24:03 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 63C8413C57;
+        Fri, 13 May 2022 01:24:02 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 8CABF3C07C8;
+        Fri, 13 May 2022 01:23:58 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.16.1/8.16.1) with ESMTP id 24CMNqMj161753;
+        Fri, 13 May 2022 01:23:54 +0300
+Date:   Fri, 13 May 2022 01:23:52 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+cc:     Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH net-next] net: ipvs: random start for RR scheduler
+In-Reply-To: <b8bf73ea-2ce9-2726-fde1-bd47d3b7a5d@ssi.bg>
+Message-ID: <7e7b6a1-8d52-7274-e4b4-9b8ce3ddc4f9@ssi.bg>
+References: <20220509122213.19508-1-imagedong@tencent.com> <cb8eaad0-83c5-a150-d830-e078682ba18b@ssi.bg> <CADxym3YH_76+5g29QF4Xp4gXJz5bwdQXD_gXv3esAVTgNGkXyg@mail.gmail.com> <b8bf73ea-2ce9-2726-fde1-bd47d3b7a5d@ssi.bg>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Awaiting your response 
-To:     Recipients <waterproject@pekanbaru.go.id>
-From:   waterproject@pekanbaru.go.id
-Date:   Thu, 12 May 2022 04:45:26 +0100
-Reply-To: test@hostnextdoor.com
-Message-Id: <20220512034534.A1C5398ADF7@mail.pekanbaru.go.id>
-X-Spam-Status: No, score=3.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hi =
 
+	Hello,
 
-Did you get my previous email? I have attempted over 3 times to open up com=
-munication with you. Please acknowledge if you receive this email. =
+On Tue, 10 May 2022, Julian Anastasov wrote:
 
+> 	What I see is that the value 128 is good but using
+> 32 (MAX_STEP in the test) gives good enough results (3% diff).
+
+	Looks like I forgot to add this example how to
+reduce code under lock because add/del dest can run in
+parallel with scheduling, something that is a drawback
+in this solution:
+
++static void ip_vs_rr_random_start(struct ip_vs_service *svc)
++{
++	struct list_head *old = READ_ONCE(svc->sched_data), *cur = old;
++	u32 start;
++
++	if (!(svc->flags & IP_VS_SVC_F_SCHED_RR_RANDOM) ||
++		svc->num_dests <= 1)   
++		return;
++
++	start = prandom_u32_max(min(svc->num_dests, 32U));
++	while (start--)
++		cur = cur->next;
++	spin_lock_bh(&svc->sched_lock);
++	cmpxchg(&svc->sched_data, old, cur);
++	spin_unlock_bh(&svc->sched_lock);
++}
 
 Regards
-Morten Friis
+
+--
+Julian Anastasov <ja@ssi.bg>
+
