@@ -2,73 +2,90 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521D8554E85
-	for <lists+lvs-devel@lfdr.de>; Wed, 22 Jun 2022 17:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5447355A288
+	for <lists+lvs-devel@lfdr.de>; Fri, 24 Jun 2022 22:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359014AbiFVPEn (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 22 Jun 2022 11:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S229936AbiFXUW0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+lvs-devel@lfdr.de>); Fri, 24 Jun 2022 16:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358182AbiFVPEE (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 22 Jun 2022 11:04:04 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6D63A187
-        for <lvs-devel@vger.kernel.org>; Wed, 22 Jun 2022 08:04:03 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id r66so10394261pgr.2
-        for <lvs-devel@vger.kernel.org>; Wed, 22 Jun 2022 08:04:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=Jt/qXO7TwQJF3EWuk5p4azKGOCxq/Rzk3KoLqC6Pwff+0tHhs8als9639cidnzFde4
-         ry7ero38QELHA22RBkZWtE0xNRPiiPEWIvKtPd0fZpNhUDrKHRyETW5WgRrbPPmi6/vT
-         vJpxoQNLrGfsMgIfV+PXszjD1nMaBRUe0Gxx0eYZw7YGtSc5pfRkGeshne5cjr5BaKxu
-         3INPcNuWqxw7/0puGY6UuhzUSAv6SoxD7Bz3CVHuDQWru55+lIHO02gOv78FJXnTYNjB
-         rbtWgbiyhkE21LXWR11Bk6fRJOPFFcU92J8XbdNavb7vvb9W0t8MjYRzeI2ufnWOCsiS
-         AGLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=2JiTMIXXeek3ea50bmzbC8A/pxU0pZ2i3eEPagZrJflNgzpVE+q3Sanx+I9p+lVFUK
-         +ROOLeEjkqACkwiaVHA/8ByWKVqg53N9eexu5BniYQECheqehGT2RdWBeZh50VhX9s0v
-         aUBULpZgVByyvO9QiEkcqM80yvOKnlsKCTpA8BOioGbQleoc7/t1a34B1hbUVhQmOyvg
-         FHnytHtRGOtX1lIokjWWKLws0R8WNmtVzBQRbvJ2RgP/XWCBZJm4/3+7CPREqfx4NkxJ
-         erz7AeActSa9RTIfhCR9DHSnzcmBnVA+pid/NVL5LyaDz9194BuNXGF8uu0QPrETC5gF
-         v/xA==
-X-Gm-Message-State: AJIora/5ajNtkaYexQu/qP9hoh8tXpfzYVCwn4+Dmd1pAX/ZMdCp0lWW
-        8vGGxPBbm/I9hhJ+By4ookWCd9ZUauoal4o4oMkvSPcP2TIYqSd0
-X-Google-Smtp-Source: AGRyM1uVFGSnpr+dTCH2B3yi91+xpZWxlNuq532hGAWMLDkFZu1Qrq3wwA6KogrJ63y1ppaQwcWp21NviyeWeo5Xswg=
-X-Received: by 2002:a63:af1c:0:b0:40c:f9fb:deca with SMTP id
- w28-20020a63af1c000000b0040cf9fbdecamr3305128pge.479.1655910232628; Wed, 22
- Jun 2022 08:03:52 -0700 (PDT)
+        with ESMTP id S230308AbiFXUWV (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Fri, 24 Jun 2022 16:22:21 -0400
+X-Greylist: delayed 579 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 24 Jun 2022 13:22:19 PDT
+Received: from mail.transporteandreu.com.ar (unknown [190.15.217.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01B682895
+        for <lvs-devel@vger.kernel.org>; Fri, 24 Jun 2022 13:22:19 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.transporteandreu.com.ar (Postfix) with ESMTP id 23807453C6C04
+        for <lvs-devel@vger.kernel.org>; Fri, 24 Jun 2022 17:12:35 -0300 (-03)
+Received: from mail.transporteandreu.com.ar ([127.0.0.1])
+        by localhost (mail.transporteandreu.com.ar [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id a9VxhRwWS1mD for <lvs-devel@vger.kernel.org>;
+        Fri, 24 Jun 2022 17:12:34 -0300 (-03)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.transporteandreu.com.ar (Postfix) with ESMTP id B853A453C6C1A
+        for <lvs-devel@vger.kernel.org>; Fri, 24 Jun 2022 17:12:34 -0300 (-03)
+X-Virus-Scanned: amavisd-new at transporteandreu.com.ar
+Received: from mail.transporteandreu.com.ar ([127.0.0.1])
+        by localhost (mail.transporteandreu.com.ar [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0M4mPlanGQT0 for <lvs-devel@vger.kernel.org>;
+        Fri, 24 Jun 2022 17:12:34 -0300 (-03)
+Received: from johnlewis.com (ec2-35-89-234-8.us-west-2.compute.amazonaws.com [35.89.234.8])
+        by mail.transporteandreu.com.ar (Postfix) with ESMTPSA id D48A4453DDF9C
+        for <lvs-devel@vger.kernel.org>; Fri, 24 Jun 2022 17:12:33 -0300 (-03)
+Reply-To: robert_turner@johnlewis-trades.com
+From:   John Lewis & Partners <robert_turner043@johnlewis.com>
+To:     lvs-devel@vger.kernel.org
+Subject: Order Emquiry 24/06/22
+Date:   25 Jun 2022 06:12:29 +1000
+Message-ID: <20220625003149.DB42035463AB8D1F@johnlewis.com>
 MIME-Version: 1.0
-Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
- 08:03:51 -0700 (PDT)
-Reply-To: sales0212@asonmedsystemsinc.com
-From:   Prasad Ronni <lerwickfinance7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:03:51 +0100
-Message-ID: <CAFkto5szY9scoLwccBhUx92cgUVnT2cx2c=WmxiOTkm7N_y9gg@mail.gmail.com>
-Subject: Service Needed.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_3_NEW,BAYES_50,
+        KHOP_HELO_FCRDNS,SPF_FAIL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
--- 
-Hi,
+Dear lvs-devel
 
-Are you currently open to work as our executive company representative
-on contractual basis working remotely? If yes, we will be happy to
-share more details. Looking forward to your response.
 
-Regards,
+ 
+The world famous brand John Lewis & Partners, is UK's largest 
+multi-channel retailer with over 126 shops and multiple expansion 
+in Africa furnished by European/Asian/American products. We are
+sourcing new products to attract new customers and also retain 
+our existing ones, create new partnerships with companies dealing 
+with different kinds of goods globally.
+ 
+Your company's products are of interest to our market as we have 
+an amazing market for your products.Provide us your current 
+catalog through email to review more. We hope to be able to order
+with you and start a long-term friendly, respectable and solid 
+business partnership. Please we would appreciate it if you could 
+send us your stock availability via email if any.
+
+ 
+Our payment terms are 15 days net in Europe, 30 days Net in UK 
+and 30 days net in Asia/USA as we have operated with over 5297 
+suppliers around the globe for the past 50 years now. For
+immediate response Send your reply to "robert_turner@johnlewis-
+trades.com" for us to be able to treat with care and urgency.
+ 
+ 
+Best Regards
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trades.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN
+
