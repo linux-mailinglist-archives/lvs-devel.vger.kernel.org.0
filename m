@@ -2,97 +2,70 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2ABA574714
-	for <lists+lvs-devel@lfdr.de>; Thu, 14 Jul 2022 10:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3F8576CB5
+	for <lists+lvs-devel@lfdr.de>; Sat, 16 Jul 2022 11:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbiGNIhR (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S230052AbiGPJMy (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 16 Jul 2022 05:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236911AbiGNIhC (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 14 Jul 2022 04:37:02 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8AB3FA2D
-        for <lvs-devel@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id n18so1666861lfq.1
-        for <lvs-devel@vger.kernel.org>; Thu, 14 Jul 2022 01:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
-         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
-         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
-         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
-         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
-         5LQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=1Ij7dKASL3ElMtfuDlGlrFUEFeB2TsTdL1WCbMPBsMas+KeyXvBkl6jzYpnrJTL1FQ
-         60sktMbUGA1cW9QfiNQSJjapQDHXTeulHhHXyDWgr2ayQCocLUfrwvHpfIusUgMhOn5e
-         Jx+WH3U2p7rOTii+LxPjf4/mzYj9NJm1xNr7KHH7YITw84uJnF9bAAO1qbweS8p7c2XW
-         t5WarGFchKtXFe+r/hK6SSX7fuWgFfBttgrBeXsem+DJbjtRaRwvKT2F5z4t+YDuefjp
-         xElkqdd/8FlQkttOKFtzDLA793gM109YqMH+pIn+DBq0oIvzoauUnLHb72qiA7MPtpjZ
-         lZLA==
-X-Gm-Message-State: AJIora8FJf1No90CkqJx4ubZNBwNOnftz9ENtq8OjjJ3heHB8rlidq6j
-        QmdZ5BB3rflFraLbXr6SIVuwd6oymMdtAYUsCms=
-X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
-X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
- br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
- Jul 2022 01:37:00 -0700 (PDT)
+        with ESMTP id S229502AbiGPJMx (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 16 Jul 2022 05:12:53 -0400
+Received: from zeeaster.vergenet.net (zeeaster.vergenet.net [206.189.110.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFC61EC54;
+        Sat, 16 Jul 2022 02:12:47 -0700 (PDT)
+Received: from madeliefje.horms.nl (86-88-72-229.fixed.kpn.net [86.88.72.229])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by zeeaster.vergenet.net (Postfix) with ESMTPSA id E9B4C20088;
+        Sat, 16 Jul 2022 09:12:44 +0000 (UTC)
+Received: by madeliefje.horms.nl (Postfix, from userid 7100)
+        id 6A21E28BD; Sat, 16 Jul 2022 10:12:44 +0100 (BST)
+Date:   Sat, 16 Jul 2022 11:12:44 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+Subject: Re: [PATCH] netfilter: ipvs: Use the bitmap API to allocate bitmaps
+Message-ID: <YtKBDApu3y4noIGC@vergenet.net>
+References: <420d8b70560e8711726ff639f0a55364e212ff26.1656962678.git.christophe.jaillet@wanadoo.fr>
+ <b69d7ba1-22f8-80c3-c870-debd7aaf4cea@ssi.bg>
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:37:00 +0100
-Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4993]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b69d7ba1-22f8-80c3-c870-debd7aaf4cea@ssi.bg>
+Organisation: Horms Solutions BV
+X-Virus-Scanned: clamav-milter 0.103.6 at zeeaster
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+On Tue, Jul 05, 2022 at 01:05:54PM +0300, Julian Anastasov wrote:
+> 
+> 	Hello,
+> 
+> On Mon, 4 Jul 2022, Christophe JAILLET wrote:
+> 
+> > Use bitmap_zalloc()/bitmap_free() instead of hand-writing them.
+> > 
+> > It is less verbose and it improves the semantic.
+> > 
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> 	Looks good to me for -next! Thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
+
+Acked-by: Simon Horman <horms@verge.net.au>
+
