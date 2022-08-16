@@ -2,43 +2,69 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C155933F7
-	for <lists+lvs-devel@lfdr.de>; Mon, 15 Aug 2022 19:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6832F596014
+	for <lists+lvs-devel@lfdr.de>; Tue, 16 Aug 2022 18:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiHORWg (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 15 Aug 2022 13:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S232754AbiHPQXH (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 16 Aug 2022 12:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiHORWf (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 15 Aug 2022 13:22:35 -0400
-Received: from zeeaster.vergenet.net (zeeaster.vergenet.net [206.189.110.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01051CE0C
-        for <lvs-devel@vger.kernel.org>; Mon, 15 Aug 2022 10:22:35 -0700 (PDT)
-Received: from madeliefje.horms.nl (86-88-72-229.fixed.kpn.net [86.88.72.229])
+        with ESMTP id S236305AbiHPQXC (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 16 Aug 2022 12:23:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90C379A49;
+        Tue, 16 Aug 2022 09:22:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by zeeaster.vergenet.net (Postfix) with ESMTPSA id B5B4520119;
-        Mon, 15 Aug 2022 17:22:03 +0000 (UTC)
-Received: by madeliefje.horms.nl (Postfix, from userid 7100)
-        id 7570CD3C; Mon, 15 Aug 2022 18:22:03 +0100 (BST)
-Date:   Mon, 15 Aug 2022 18:22:03 +0100
-From:   Simon Horman <horms@kernel.org>
-To:     Turritopsis Dohrnii Teo En Ming <tdtemccna@gmail.com>
-Cc:     lvs-devel@vger.kernel.org, ceo@teo-en-ming-corp.com
-Subject: Re: How many physical machines do I need for running the Linux
- Virtual Server?
-Message-ID: <YvqAu4kafE2bElT6@vergenet.net>
-References: <CACsrZYY6aWpVOdZ5SOhDPdU+_=P0LX4=q4xCht+E-+PHRwEhGw@mail.gmail.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7036137645;
+        Tue, 16 Aug 2022 16:22:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660666978; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oJeBNMRfo88AxUhhWQ0t4TxTFqdEjT8eIfnKmX+Lkrg=;
+        b=WW4MUIcKFTW5QnJMfkOhGqQ9Ap07SJnZhbgBx/dohfT7e2Z1OL7W8xqmuLKft9LMUWxfcI
+        y/KwYl268nHGVBftHhct+wj3WtE7/dJ9E4RiCM+wxiz9/DT/SZWatp2z01dvM2QyPYTA6R
+        p10LH3P4I/yk2uq+gnSuRCG0aK36r7k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660666978;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oJeBNMRfo88AxUhhWQ0t4TxTFqdEjT8eIfnKmX+Lkrg=;
+        b=rGUG0IM+6XGR+A0FCPwffxIyze32E0j/WMhhR1nD30ck//eiHvp0le+J6VxRS85PTXk0cI
+        va8HOkEWAOes9HAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 53C63139B7;
+        Tue, 16 Aug 2022 16:22:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zxpoFGLE+2LQNwAAMHmgww
+        (envelope-from <jwiesner@suse.de>); Tue, 16 Aug 2022 16:22:58 +0000
+Received: by incl.suse.cz (Postfix, from userid 1000)
+        id 53E0DDB70; Tue, 16 Aug 2022 18:22:57 +0200 (CEST)
+Date:   Tue, 16 Aug 2022 18:22:57 +0200
+From:   Jiri Wiesner <jwiesner@suse.de>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     netfilter-devel@vger.kernel.org, Simon Horman <horms@verge.net.au>,
+        lvs-devel@vger.kernel.org
+Subject: Re: [RFC PATCH nf-next] netfilter: ipvs: Divide estimators into
+ groups
+Message-ID: <20220816162257.GA18621@incl>
+References: <20220812103459.GA7521@incl>
+ <f1657ace-59fb-7265-faf8-8a1a26aaf560@ssi.bg>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACsrZYY6aWpVOdZ5SOhDPdU+_=P0LX4=q4xCht+E-+PHRwEhGw@mail.gmail.com>
-Organisation: Horms Solutions BV
-X-Virus-Scanned: clamav-milter 0.103.6 at zeeaster
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <f1657ace-59fb-7265-faf8-8a1a26aaf560@ssi.bg>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,19 +72,18 @@ Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 05:43:09PM +0800, Turritopsis Dohrnii Teo En Ming wrote:
-> Subject: How many physical machines do I need for running the Linux
-> Virtual Server?
+On Sat, Aug 13, 2022 at 03:11:48PM +0300, Julian Anastasov wrote:
+> > The intention is to develop this RFC patch into a short series addressing
+> > the design changes proposed in [1]. Also, after moving the rate estimation
+> > out of softirq context, the whole estimator list could be processed
+> > concurrently - more than one work item would be used.
 > 
-> Good day from Singapore,
-> 
-> How many physical machines do I need for running the Linux Virtual Server?
+> 	Other developers tried solutions with workqueues
+> but so far we don't see any results. Give me some days, may be
+> I can come up with solution that uses kthread(s) to allow later
+> nice/cpumask cfg tuning and to avoid overload of the system
+> workqueues.
 
-Hi,
-
-typically you would want one or two load balances, running IPVS.
-And two or more real servers running your application, f.e. a web server.
-
-It is, however possible, to make a minimal configuration with
-only one of each. Or to use VMs to run the entire system
-on one physical server.
+The RFC patch already resolves the issue despite having the code still run in softirq context. Even if estimators were processed in groups, moving the rate estimation out of softirq context is a good idea. I am interested in implementing this. An alternative approach would be moving the rate estimation out of softirq context and reworking locking so that cond_resched() could be used to let other processes run as the scheduler sees fit. I would be willing to try to implement this alternative approach as well.
+Jiri Wiesner
+SUSE Labs
