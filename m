@@ -2,78 +2,165 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13215A0DEE
-	for <lists+lvs-devel@lfdr.de>; Thu, 25 Aug 2022 12:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D809A5A196C
+	for <lists+lvs-devel@lfdr.de>; Thu, 25 Aug 2022 21:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240777AbiHYKcs (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 25 Aug 2022 06:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40696 "EHLO
+        id S241530AbiHYTWN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 25 Aug 2022 15:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237172AbiHYKcr (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 25 Aug 2022 06:32:47 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8931D9C1EB;
-        Thu, 25 Aug 2022 03:32:44 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 31B1529C3F;
-        Thu, 25 Aug 2022 13:32:42 +0300 (EEST)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id E5E5329D09;
-        Thu, 25 Aug 2022 13:32:40 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 69AA33C0325;
-        Thu, 25 Aug 2022 13:32:38 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 27PAWZLJ047634;
-        Thu, 25 Aug 2022 13:32:37 +0300
-Date:   Thu, 25 Aug 2022 13:32:35 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Jiri Wiesner <jwiesner@suse.de>
-cc:     netfilter-devel@vger.kernel.org, Simon Horman <horms@verge.net.au>,
-        lvs-devel@vger.kernel.org
-Subject: Re: [RFC PATCH nf-next] netfilter: ipvs: Divide estimators into
- groups
-In-Reply-To: <20220816162257.GA18621@incl>
-Message-ID: <5af573f-b773-d43-4b11-dea3c2797d7e@ssi.bg>
-References: <20220812103459.GA7521@incl> <f1657ace-59fb-7265-faf8-8a1a26aaf560@ssi.bg> <20220816162257.GA18621@incl>
+        with ESMTP id S243637AbiHYTWJ (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 25 Aug 2022 15:22:09 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7140ABD0A0
+        for <lvs-devel@vger.kernel.org>; Thu, 25 Aug 2022 12:22:03 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id o184so24440205oif.13
+        for <lvs-devel@vger.kernel.org>; Thu, 25 Aug 2022 12:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=j11I9jJbBdP2EsV8zm8vGrZ8to2ALD+DZiEMfyWlhf4=;
+        b=KjzVxnhpw6QKMn5c7oLhZ2YXfy0o0q7ppQDDA/IUG9Tba1CyII5IegLq2jiOsTx6sf
+         9PktWYsvLhv6OduPZa78FKjas33U49IxO+UttcDOMAdp3MTlGJvDXLmU3ofAZEoFFqZT
+         pafvPKdLl3l0hKSE9VWBcm6msZs1UGsFX0W0WhRtsci35MLKycrvSxbg6GiEiXprLSDz
+         35gtzDXDspqbKE6U1rd+mL/P+1w92XWlGqtbdRRUw9gw3+q3FfhdBiDfZom+YIwlZBrE
+         iSIuTPlKIwHdWrtxWrdA/Tch392Qi6e4omMMHzm85TUdvnZFdOZSQACivsWz9KW0c6uk
+         JDjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=j11I9jJbBdP2EsV8zm8vGrZ8to2ALD+DZiEMfyWlhf4=;
+        b=VosIopX/YtPNTY2JdDUeTCRizLEUkUc7b7a2e+4Xj+YiXJvIu3hk5LMfZcjXN4xI/Z
+         e58lmEeHDy3+0e2doN+kNIgksTmSlf6Jl6Lv/vzowG9UNNTl0C+d8ho0MUrbbuXZDRGk
+         LIoj9eixeW3wBos3hXksrFAwiILTBy65TjnCVk/7lXvIFJbd33aXbNrCmn9sygLkpgpJ
+         tDxComOxCOgaRF9Se1VrRxMchkNvjf2tMQBAMYSt63E/b/ZlWJqeInRJVhQSq/mjADMe
+         FQo1D7KQRk5u0/YZ8wCMbsgc3tTVjbZDAllQmuRGJD4TY+gQM9dYEienCHx4CVKEOjTG
+         D+7Q==
+X-Gm-Message-State: ACgBeo3m+glaMNpHGX+6p/aftfNOCVr/S2c2B+/iTc7TZGwpnOKohppM
+        JEcz451Pn8/dLO/N8x/FkTSv0Ex2CWCdfBtHEE2D+uOBqJLy
+X-Google-Smtp-Source: AA6agR5+NrNDgFeVEqQOH6xO8KzleveZvD24+0ma4hp6CR5I88pcrQbnickGgaR7sl54W0OczwK1VkCsRh+9Rsqv/HQ=
+X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id
+ n9-20020a05680803a900b003434b14cccemr243316oie.41.1661455322788; Thu, 25 Aug
+ 2022 12:22:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220825001830.1911524-1-kuba@kernel.org>
+In-Reply-To: <20220825001830.1911524-1-kuba@kernel.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 25 Aug 2022 15:21:52 -0400
+Message-ID: <CAHC9VhSxesi0TSSvcQSr1kDhP3Vce4+O3w2diEExGEGnjGpmiw@mail.gmail.com>
+Subject: Re: [PATCH net-next] genetlink: start to validate reserved header bytes
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+        pabeni@redhat.com, jiri@resnulli.us, johannes@sipsolutions.net,
+        linux-block@vger.kernel.org, osmocom-net-gprs@lists.osmocom.org,
+        linux-wpan@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-pm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-cifs@vger.kernel.org, cluster-devel@redhat.com,
+        mptcp@lists.linux.dev, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, dev@openvswitch.org,
+        linux-s390@vger.kernel.org, tipc-discussion@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+On Wed, Aug 24, 2022 at 8:18 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> We had historically not checked that genlmsghdr.reserved
+> is 0 on input which prevents us from using those precious
+> bytes in the future.
+>
+> One use case would be to extend the cmd field, which is
+> currently just 8 bits wide and 256 is not a lot of commands
+> for some core families.
+>
+> To make sure that new families do the right thing by default
+> put the onus of opting out of validation on existing families.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: jiri@resnulli.us
+> CC: johannes@sipsolutions.net
+> CC: linux-block@vger.kernel.org
+> CC: osmocom-net-gprs@lists.osmocom.org
+> CC: linux-wpan@vger.kernel.org
+> CC: wireguard@lists.zx2c4.com
+> CC: linux-wireless@vger.kernel.org
+> CC: linux-scsi@vger.kernel.org
+> CC: target-devel@vger.kernel.org
+> CC: linux-pm@vger.kernel.org
+> CC: virtualization@lists.linux-foundation.org
+> CC: linux-cifs@vger.kernel.org
+> CC: cluster-devel@redhat.com
+> CC: mptcp@lists.linux.dev
+> CC: lvs-devel@vger.kernel.org
+> CC: netfilter-devel@vger.kernel.org
+> CC: linux-security-module@vger.kernel.org
+> CC: dev@openvswitch.org
+> CC: linux-s390@vger.kernel.org
+> CC: tipc-discussion@lists.sourceforge.net
+> ---
+>  drivers/block/nbd.c                      | 1 +
+>  drivers/net/gtp.c                        | 1 +
+>  drivers/net/ieee802154/mac802154_hwsim.c | 1 +
+>  drivers/net/macsec.c                     | 1 +
+>  drivers/net/team/team.c                  | 1 +
+>  drivers/net/wireguard/netlink.c          | 1 +
+>  drivers/net/wireless/mac80211_hwsim.c    | 1 +
+>  drivers/target/target_core_user.c        | 1 +
+>  drivers/thermal/thermal_netlink.c        | 1 +
+>  drivers/vdpa/vdpa.c                      | 1 +
+>  fs/cifs/netlink.c                        | 1 +
+>  fs/dlm/netlink.c                         | 1 +
+>  fs/ksmbd/transport_ipc.c                 | 1 +
+>  include/linux/genl_magic_func.h          | 1 +
+>  include/net/genetlink.h                  | 3 +++
+>  kernel/taskstats.c                       | 1 +
+>  net/batman-adv/netlink.c                 | 1 +
+>  net/core/devlink.c                       | 1 +
+>  net/core/drop_monitor.c                  | 1 +
+>  net/ethtool/netlink.c                    | 1 +
+>  net/hsr/hsr_netlink.c                    | 1 +
+>  net/ieee802154/netlink.c                 | 1 +
+>  net/ieee802154/nl802154.c                | 1 +
+>  net/ipv4/fou.c                           | 1 +
+>  net/ipv4/tcp_metrics.c                   | 1 +
+>  net/ipv6/ila/ila_main.c                  | 1 +
+>  net/ipv6/ioam6.c                         | 1 +
+>  net/ipv6/seg6.c                          | 1 +
+>  net/l2tp/l2tp_netlink.c                  | 1 +
+>  net/mptcp/pm_netlink.c                   | 1 +
+>  net/ncsi/ncsi-netlink.c                  | 1 +
+>  net/netfilter/ipvs/ip_vs_ctl.c           | 1 +
+>  net/netlabel/netlabel_calipso.c          | 1 +
+>  net/netlabel/netlabel_cipso_v4.c         | 1 +
+>  net/netlabel/netlabel_mgmt.c             | 1 +
+>  net/netlabel/netlabel_unlabeled.c        | 1 +
+>  net/netlink/genetlink.c                  | 4 ++++
+>  net/nfc/netlink.c                        | 1 +
+>  net/openvswitch/conntrack.c              | 1 +
+>  net/openvswitch/datapath.c               | 3 +++
+>  net/openvswitch/meter.c                  | 1 +
+>  net/psample/psample.c                    | 1 +
+>  net/smc/smc_netlink.c                    | 3 ++-
+>  net/smc/smc_pnet.c                       | 3 ++-
+>  net/tipc/netlink.c                       | 1 +
+>  net/tipc/netlink_compat.c                | 1 +
+>  net/wireless/nl80211.c                   | 1 +
+>  47 files changed, 56 insertions(+), 2 deletions(-)
 
-	Hello,
+Acked-by: Paul Moore <paul@paul-moore.com> (NetLabel)
 
-On Tue, 16 Aug 2022, Jiri Wiesner wrote:
-
-> On Sat, Aug 13, 2022 at 03:11:48PM +0300, Julian Anastasov wrote:
-> > > The intention is to develop this RFC patch into a short series addressing
-> > > the design changes proposed in [1]. Also, after moving the rate estimation
-> > > out of softirq context, the whole estimator list could be processed
-> > > concurrently - more than one work item would be used.
-> > 
-> > 	Other developers tried solutions with workqueues
-> > but so far we don't see any results. Give me some days, may be
-> > I can come up with solution that uses kthread(s) to allow later
-> > nice/cpumask cfg tuning and to avoid overload of the system
-> > workqueues.
-> 
-> The RFC patch already resolves the issue despite having the code still run in softirq context. Even if estimators were processed in groups, moving the rate estimation out of softirq context is a good idea. I am interested in implementing this. An alternative approach would be moving the rate estimation out of softirq context and reworking locking so that cond_resched() could be used to let other processes run as the scheduler sees fit. I would be willing to try to implement this alternative approach as well.
-
-	I started reworking the estimation code. I think,
-I'll have results in few days. I'm using kthreads, the
-locking is ready, just finishing the cpumask/nice
-configuration and will do simple tests. When a RFC patch
-is ready we can comment what should be the final version.
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
-
+-- 
+paul-moore.com
