@@ -2,40 +2,40 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B994C5B0C86
-	for <lists+lvs-devel@lfdr.de>; Wed,  7 Sep 2022 20:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21B15B0CCF
+	for <lists+lvs-devel@lfdr.de>; Wed,  7 Sep 2022 21:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiIGSdN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 7 Sep 2022 14:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S229579AbiIGTBh (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 7 Sep 2022 15:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiIGSdN (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 7 Sep 2022 14:33:13 -0400
+        with ESMTP id S229534AbiIGTBf (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 7 Sep 2022 15:01:35 -0400
 Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8946AABF16
-        for <lvs-devel@vger.kernel.org>; Wed,  7 Sep 2022 11:33:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 594FB67159
+        for <lvs-devel@vger.kernel.org>; Wed,  7 Sep 2022 12:01:33 -0700 (PDT)
 Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id D161124C85;
-        Wed,  7 Sep 2022 21:33:10 +0300 (EEST)
+        by mg.ssi.bg (Proxmox) with ESMTP id 9F64424D0A;
+        Wed,  7 Sep 2022 22:01:32 +0300 (EEST)
 Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 1B60F24C80;
-        Wed,  7 Sep 2022 21:33:09 +0300 (EEST)
+        by mg.ssi.bg (Proxmox) with ESMTP id ADA1F24C9D;
+        Wed,  7 Sep 2022 22:01:30 +0300 (EEST)
 Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id EDF143C0437;
-        Wed,  7 Sep 2022 21:33:08 +0300 (EEST)
+        by ink.ssi.bg (Postfix) with ESMTPS id 5AD3B3C0437;
+        Wed,  7 Sep 2022 22:01:30 +0300 (EEST)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 287IX754129707;
-        Wed, 7 Sep 2022 21:33:08 +0300
-Date:   Wed, 7 Sep 2022 21:33:07 +0300 (EEST)
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 287J1RL0133550;
+        Wed, 7 Sep 2022 22:01:28 +0300
+Date:   Wed, 7 Sep 2022 22:01:27 +0300 (EEST)
 From:   Julian Anastasov <ja@ssi.bg>
 To:     Jiri Wiesner <jwiesner@suse.de>
 cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
         yunhong-cgl jiang <xintian1976@gmail.com>,
         dust.li@linux.alibaba.com
-Subject: Re: [RFC PATCH 0/4] Use kthreads for stats
-In-Reply-To: <20220905082642.GB18621@incl>
-Message-ID: <4e16b591-dd0-86e1-afcf-5759362908b@ssi.bg>
-References: <20220827174154.220651-1-ja@ssi.bg> <20220905082642.GB18621@incl>
+Subject: Re: [RFC PATCH 2/4] ipvs: use kthreads for stats estimation
+In-Reply-To: <20220905131905.GD18621@incl>
+Message-ID: <6a7bec4b-557-298b-b2e9-f3a517a47489@ssi.bg>
+References: <20220827174154.220651-1-ja@ssi.bg> <20220827174154.220651-3-ja@ssi.bg> <20220905131905.GD18621@incl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -52,111 +52,183 @@ X-Mailing-List: lvs-devel@vger.kernel.org
 
 On Mon, 5 Sep 2022, Jiri Wiesner wrote:
 
-> I believe allowing the kthread the possibility to block in each iteration - for each estimator - introduces some problems:
-> 1. Non-preemptive kernels should be optimized for throughput not for latency
-> Using the figure reported earlier (50,000 services required 200 ms of processing time) it takes roughly 3 ms to process one chain (32 * 1024 / 50 services). The processing time per chain will vary with the number of NUMA nodes and CPUs. Nevertheless, this number comparable with the processing time limit of __do_softirq() - 2 ms, which gets converted to 1 jiffy. In term of latency of non-preemptive kernels, it is entirely resonable to let one chain be processed without rescheduling the kthread.
-
-	Thank you for the review!
-
-	My worry is that IPVS_EST_MAX_COUNT is not a hard limit,
-we allow this limit to be exceeded when ip_vs_est_add_kthread()
-fails to create kthread (mostly on ENOMEM) or if we add a limit
-for kthreads, so in such cases we can not refuse to add more
-estimators to existing kthreads.
-
-> 2. The priority of the kthreads could be set to lower values than the default priority for SCHED_OTHER. If a user space process was trying to stop an estimator the pointer to which is held by a currently sleeping kthread this would constitute priority inversion. The kd->mutex would not be released until the lower priority thread, the kthread, has started running again. AFAIK, the mutex() locking primitive does not implement priority inheritance on non-preemptive kernels.
-
-	I see, alternative would be wait_event() logic to avoid
-holding mutex during reschedule and causing priority inversion.
-
-> 3. Blocking while in ip_vs_estimation_chain() will results in wrong estimates for the remaining estimators in a chain. The 2 second interval would not be kept, rate estimates would be overestimated in that interval and underestimated in one of the future intervals.
-> In my opinion, any of the above reasons is sufficient to remove ip_vs_est_cond_resched_rcu(), ip_vs_est_wait_resched() and kd->mutex.
-
-	The chains can become too long. I'm not sure it is
-good to avoid cond_resched() for long time. Another solution
-would be to allocate more chains for a tick and apply some
-hard limit for these chains. cond_resched() will be called
-after such chain is processed. But it is difficult to
-calculate hard limit for these chains, it depends on the
-cycles we spend (CPU speed and the number of possible CPUs
-we walk in the loop). For example, we can have again 50 ticks
-but 16 chains per tick, so total 800 chains per kthread (50*16).
-32*1024/800 means 40 estimators per chain before calling
-cond_resched(). And a tick can attach more than 16 chains
-if the est_max_count is exceeded. It will cost some memory
-to provide more chains but it will avoid the kd->mutex
-games.
-
-	struct hlist_head *tick_chain = &kd->tick_chains[row];
-
-	rcu_read_lock();
-	/* tick_chains has no limit of chains */
-	hlist_for_each_entry_rcu(chain, tick_chains, list) {
-		/* This list below is limited */
-		hlist_for_each_entry_rcu(e, &chain->ests, list) {
-			...
-			if (kthread_should_stop())
-				goto end;
-			...
-		}
-		cond_resched_rcu();
-	}
-
-	If we change ip_vs_start_estimator() to return int err
-we can safely allocate new chains and track for ENOMEM.
-I think, this is possible, with some reordering of the
-ip_vs_start_estimator() calls.
-
-> > Kthread data:
-> > 
-> > - every kthread works over its own data structure and all
-> > such structures are attached to array
+> On Sat, Aug 27, 2022 at 08:41:52PM +0300, Julian Anastasov wrote:
+> >  
+> > +static void est_reload_work_handler(struct work_struct *work)
+> > +{
+> > +	struct netns_ipvs *ipvs =
+> > +		container_of(work, struct netns_ipvs, est_reload_work.work);
+> > +	int genid = atomic_read(&ipvs->est_genid);
+> > +	int genid_done = atomic_read(&ipvs->est_genid_done);
+> > +	unsigned long delay = HZ / 10;	/* repeat startups after failure */
+> > +	bool repeat = false;
+> > +	int id;
+> > +
+> > +	mutex_lock(&ipvs->est_mutex);
+> > +	for (id = 0; id < ipvs->est_kt_count; id++) {
+> > +		struct ip_vs_est_kt_data *kd = ipvs->est_kt_arr[id];
+> > +
+> > +		/* netns clean up started, abort delayed work */
+> > +		if (!ipvs->enable)
+> > +			goto unlock;
 > 
-> It seems to me there is no upper bound on the number of kthreads that could be forked. Therefore, it should be possible to devise an attack that would force the system to run out of PIDs:
-> 1. Start adding services so that all chains of kthread A would be used.
-> 2. Add one more service to force the forking of kthread B, thus advancing ipvs->est_add_ktid.
-> 3. Remove all but one service from kthread A.
-> 4. Repeat steps 1-3 but with kthread B.
-> I think I could come up with a reproducer if need be.
+> It would save some code to move the ipvs->enable check before the critical section and use a return statement right away.
 
-	Agreed, the chains management can be made more robust.
-This patchset is initial version that can serve as basis.
-We should consider such things:
+	I preferred to react to cleanup_net() faster and
+avoid creating threads if this is what we try to do here.
 
-- we do not know how many estimators will be added, if we
-limit the number of kthreads, then they will be overloaded
-
-- add/del can be made to allocate memory for chains, if needed.
-We should not spend many cycles in adding/deleting estimators.
-
-- try more hard to spread estimators to chains, even with
-the risk of applying initially a smaller timer for the newly
-added estimator.
-
-> Unbalanced chains would not be fatal to the system but there is risk of introducing scheduling latencies tens or even hundreds of milliseconds long. There are patterns of adding and removing chains that would results in chain imbalance getting so severe that a handful of chains would have estimators in them while the rest would be empty or almost empty. Some examples:
-> 1. Adding a new service each second after sleeping for 1 second. This would use the add_row value at the time of adding the estimator, which would result in 2 chains holding all the estimators.
-> 2. Repeated addition and removal of services. There would always be more services added than removed. The additions would be carried out in bursts. The forking of a new kthread would not be triggered because the number of services would stay under IPVS_EST_MAX_COUNT (32 * 1024).
 > 
-> The problem is that the code does not guarantee that the length of chains always stays under IPVS_EST_MAX_COUNT / IPVS_EST_NCHAINS (32 * 1024 / 50) estimators. A check and a cycle iterating over available rows could be added to ip_vs_start_estimator() to find the rows that still have fewer estimators than IPVS_EST_MAX_COUNT / IPVS_EST_NCHAINS. This would come at the expense of having inaccurate estimates for a few intervals but I think the trade-off is worth it. Also, the estimates will be inaccurate when estimators are added in bursts. If, depending on how services are added and removed, the code could introduce scheduling latencies there would be someone running into this sooner or later. The probability of severe chain imbalance being low is not good enough there should be a guarantee.
+> > +		if (!kd)
+> > +			continue;
+> > +		/* New config ? Stop kthread tasks */
+> > +		if (genid != genid_done)
+> > +			ip_vs_est_kthread_stop(kd);
+> > +		if (!kd->task && ip_vs_est_kthread_start(ipvs, kd) < 0)
+> > +			repeat = true;
+> > +	}
+> > +
+> > +	atomic_set(&ipvs->est_genid_done, genid);
+> > +
+> > +unlock:
+> > +	mutex_unlock(&ipvs->est_mutex);
+> > +
+> > +	if (!ipvs->enable)
+> > +		return;
+> > +	if (genid != atomic_read(&ipvs->est_genid))
+> > +		delay = 1;
+> > +	else if (!repeat)
+> > +		return;
+> > +	queue_delayed_work(system_long_wq, &ipvs->est_reload_work, delay);
+> > +}
+> > +
 
-	About balancing the chains: not sure if it is possible
-while serving some row for current tick, to look ahead and
-advance the current tick work with estimators from the next
-tick. Such decisions can be made every tick. I.e. we do not
-move entries between the chains but we can walk one chain and
-possibly part of the other chain. If we have more chains per
-tick, it will be more easy, for example, if current tick
-processes 16 chains by default, it can process some from the  
-next 16 chains, say 16+8 in total. After 2 seconds, this tick can
-process 16+16+8, for example. It will depend on the currently
-added estimators per tick and its chains. Every 2 seconds
-we can advance with one tick, so that an estimator is
-served every 2 seconds or atleast after 1960ms if such
-chain stealing happens. Such logic will allow the
-estimators to be spread in time even while they are attached   
-to chains and ticks with different length. As result, we will
-process equal number of estimators per tick by slowly
-adjusting to their current number and chain lengths.
+> > +		spin_lock_bh(&s->lock);
+> 
+> Per-CPU counters are updated from softirq context and read by user space processes and kthreads. The per-CPU counters are protected by the syncp member. Kthreads sum up the per-CPU counters and calculate rate estimates. Both the counters sums and rates are read (or reset) by user space processes. What I am building to is: Bottom halves should stay enabled unless it is necessary to disable them to ensure data consistency. It should not be necessary to disable bottom halves here because the spin lock only protects the counter sums and rates and synchronizes kthreads and user space processes. Following this logic, disabling bottom halves could be dropped in ip_vs_copy_stats() and ip_vs_zero_stats(). Am I wrong about this?
+
+	Yes, removing _bh is correct. The risk is the
+other processes to spin if kthread is interrupted by BH.
+While the correct method to use for processes is mutex,
+due to RCU we can not use it. So, I preferred the _bh
+calls for now.
+
+> > +		row++;
+> > +		if (row >= IPVS_EST_NCHAINS)
+> > +			row = 0;
+> > +		kd->est_row = row;
+> > +		/* add_row best to point after the just estimated row */
+> > +		WRITE_ONCE(kd->add_row, row);
+> 
+> One of the effects of setting add_row here is that it will randomize the chains to which estimators are added when estimators are added in many short bursts with time intervals between the bursts exceeding IPVS_EST_TICK. I guess that is what we want.
+
+	Yes, what we want here is to apply an initial
+2-second timer for the newly added ests but the first
+priority is to reduce this initial timer if the chain
+is overloaded.
+
+	This code just ensures 2-second initial timer,
+it gives add_row as a hint if we add few estimators but
+if many estimators are added they will occupy more/all
+chains, if needed. It can happen before the first
+estimation if all config is created at start and
+not changed later.
+
+> > +/* Stop (bump=true)/start kthread tasks */
+> > +void ip_vs_est_reload_start(struct netns_ipvs *ipvs, bool bump)
+> 
+> The variable name "bump" is not make it obvious what will be the action taken after setting bump to true.
+
+	Yes, more comments should be added. bump=true causes
+restart while bump=false just keeps them started. When
+we change ip_vs_start_estimator() to propagate the
+errors from ip_vs_est_kthread_start() this var will be
+removed.
+
+> > +	/* Start kthread tasks only when services are present */
+> > +	if (ipvs->enable) {
+> > +		/* On failure, try to start the task again later */
+> > +		if (ip_vs_est_kthread_start(ipvs, kd) < 0)
+> > +			ip_vs_est_reload_start(ipvs, false);
+> > +	}
+> > +
+> > +	if (arr)
+> > +		ipvs->est_kt_count++;
+> > +	ipvs->est_kt_arr[id] = kd;
+> > +	/* Use most recent kthread for new ests */
+> > +	ipvs->est_add_ktid = id;
+> > +
+> 
+> To consolidate the code paths, the out label could be moved here after getting rid of the dead code and changing err.
+> 
+> > +	mutex_unlock(&ipvs->est_mutex);
+> > +
+> > +	return 0;
+> > +
+> > +out:
+> > +	mutex_unlock(&ipvs->est_mutex);
+> > +	if (kd) {
+> 
+> The kd variable above does not evaluate to true in this code path. This is dead code:
+
+	Yes, it used to fail on ip_vs_est_kthread_start() failure
+but not in this patch version.
+
+> > +		mutex_destroy(&kd->mutex);
+> > +		kfree(kd);
+> > +	}
+> > +	return err;
+> > +}
+> > +
+> > +/* Add estimator to current kthread (est_add_ktid) */
+> >  void ip_vs_start_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
+> >  {
+> >  	struct ip_vs_estimator *est = &stats->est;
+> > +	struct ip_vs_est_kt_data *kd = NULL;
+> > +	int ktid, row;
+> > +
+> > +	INIT_HLIST_NODE(&est->list);
+> > +	ip_vs_est_init_resched_rcu(est);
+> > +
+> > +	if (ipvs->est_add_ktid < ipvs->est_kt_count) {
+> > +		kd = ipvs->est_kt_arr[ipvs->est_add_ktid];
+> > +		if (!kd)
+> > +			goto add_kt;
+> > +		if (kd->est_count < kd->est_max_count)
+> > +			goto add_est;
+> > +	}
+> >  
+> > -	INIT_LIST_HEAD(&est->list);
+> > +add_kt:
+> > +	/* Create new kthread but we can exceed est_max_count on failure */
+> > +	if (ip_vs_est_add_kthread(ipvs) < 0) {
+> > +		if (!kd || kd->est_count >= INT_MAX / 2)
+> > +			goto out;
+> > +	}
+> > +	kd = ipvs->est_kt_arr[ipvs->est_add_ktid];
+> > +	if (!kd)
+> > +		goto out;
+> > +
+> > +add_est:
+> > +	ktid = kd->id;
+> > +	/* add_row points after the row we should use */
+> > +	row = READ_ONCE(kd->add_row) - 1;
+> > +	if (row < 0)
+> > +		row = IPVS_EST_NCHAINS - 1;
+> > +
+> > +	kd->est_count++;
+> > +	kd->chain_len[row]++;
+> > +	/* Multiple ests added together? Fill chains one by one. */
+> > +	if (!(kd->chain_len[row] & (IPVS_EST_BURST_LEN - 1)))
+> > +		kd->add_row = row;
+> > +	est->ktid = ktid;
+> > +	est->ktrow = row;
+> > +	hlist_add_head_rcu(&est->list, &kd->chains[row]);
+> > +
+> > +out:
+> 
+> The out label is needless. There is no error handling. A return statement instead of the gotos would express the intention more clearly. (It applies to other functions in the patch as well.)
+
+	I'll probably change ip_vs_start_estimator to return error.
 
 Regards
 
