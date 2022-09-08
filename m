@@ -2,149 +2,210 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CCB5B1C35
-	for <lists+lvs-devel@lfdr.de>; Thu,  8 Sep 2022 14:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D675B2273
+	for <lists+lvs-devel@lfdr.de>; Thu,  8 Sep 2022 17:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiIHMIT (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 8 Sep 2022 08:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S230354AbiIHPf3 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 8 Sep 2022 11:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiIHMIS (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 8 Sep 2022 08:08:18 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66FAF7752
-        for <lvs-devel@vger.kernel.org>; Thu,  8 Sep 2022 05:08:16 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id b16so24037241edd.4
-        for <lvs-devel@vger.kernel.org>; Thu, 08 Sep 2022 05:08:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=61JNgHFLNVCOHtS3GBlVT+sTDzg02TjYElOUCZQYEf8=;
-        b=fB7cMmJZecHPOKB3Z8noXSh3nyk7SCfspnZh2oIb4O50/qdkqFaQMziLvxlSvIiIt6
-         pN753GBMT+E9ZscrWVIXFjxko948eN8H59PAKMZAv8JkMVOUpJAhxlGfSCzm8GsW+q1n
-         upM2foml2VlSsCCZvkaihJQfeYFtn0QGqlEmaQtkIpfpjiighqQcOcMZkqhTDPLmfC0a
-         Mb2DUyeraPF0dd93HGewWfKBvUpegULk/f0MEw9wDx+5Q9Y5AlVpHYZLwK27I/6s0+eA
-         INBeFsmLOIh/178BawROOD3ryWzW3mFojOK+Zh9gyjzUvlsWYP+z5uIrhdWKDAgatlY6
-         iSUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=61JNgHFLNVCOHtS3GBlVT+sTDzg02TjYElOUCZQYEf8=;
-        b=mbT+oZXi4xSetlN/E+AY94mLGuP4R3eyLjlEW+VcTMArdBkT5xXQGkh2XKvxNLBRuo
-         lCA6qeSu0qFlentxwErOfZAW/RQ/8GQj2Uh726GIUua6W60s6Zq1ycb9GKTy44W0XIjr
-         Lii02KKu2r0F0lsbpvMouU4U3VfOdtRBTLYL8/5MPENxDE/KUMusfkXgirWZyDlA1WTY
-         NDS9w44kDwP2jfsteAs+WEGb9lFsc+RSjFJHdiMguSPOwRi55o3fhifgRxjFNHj/YzbX
-         FC0qt92yD02m9d8Ew7TLuyyzPVWr0i5xVSV+Rg+lAbgx2XofQSetzVX9S94XmKmUl9ov
-         8C/g==
-X-Gm-Message-State: ACgBeo14fKBwNwV+CGweijwKQRm8r57jJubC8NL7trYZgbu/4uQIAiFl
-        NnfUcuzsdkRnALe7VtNnihsK4w0+ISMZYJmTFAw=
-X-Google-Smtp-Source: AA6agR6/l6kaUpyA57nnCo74Ubn+dDDtDPe32yK+WPKnjy+hvd1z33iKWZsVN1M2B3Odk3PDwnNCzYnsE1/arJ5GHxk=
-X-Received: by 2002:a05:6402:33c5:b0:447:e4a3:c930 with SMTP id
- a5-20020a05640233c500b00447e4a3c930mr6907728edc.401.1662638894899; Thu, 08
- Sep 2022 05:08:14 -0700 (PDT)
+        with ESMTP id S229880AbiIHPf0 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 8 Sep 2022 11:35:26 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2798095AF0
+        for <lvs-devel@vger.kernel.org>; Thu,  8 Sep 2022 08:35:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EC5E21F6E6;
+        Thu,  8 Sep 2022 15:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662651321; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UEF7HIS1ycxzXhUxKUsoEIb9Ka83zXtifGjnH2/P5VA=;
+        b=c5Wrai4j5X5KX4DOZhKzfmG3S50sqBfrbKdWD3vaYt21dCAcYDRNOoDFZR/FCEK6jzRdzt
+        URSpUjPxtrBIHN1rsjE0+M9xupf+Xgu6cPA0kE47t9Sv2rPHQTzJBHFmyfu125mB5S0tT9
+        WeZbg0zI0y5VX6mWV5I+K1bqdr4mkFI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662651321;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UEF7HIS1ycxzXhUxKUsoEIb9Ka83zXtifGjnH2/P5VA=;
+        b=K5mwidxjR/wxiA0sXusvgcwAQklRdnk4E7+nfKmyHQMk0ctyCK5vw1wLFWBgZsjnFRHyep
+        /zGmhGWQSfoNOXCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DE48B1322C;
+        Thu,  8 Sep 2022 15:35:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 34M+NrkLGmPVcgAAMHmgww
+        (envelope-from <jwiesner@suse.de>); Thu, 08 Sep 2022 15:35:21 +0000
+Received: by incl.suse.cz (Postfix, from userid 1000)
+        id 75BBB10C7F; Thu,  8 Sep 2022 17:35:21 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 17:35:21 +0200
+From:   Jiri Wiesner <jwiesner@suse.de>
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        yunhong-cgl jiang <xintian1976@gmail.com>,
+        dust.li@linux.alibaba.com
+Subject: Re: [RFC PATCH 0/4] Use kthreads for stats
+Message-ID: <20220908153521.GG18621@incl>
+References: <20220827174154.220651-1-ja@ssi.bg>
+ <20220905082642.GB18621@incl>
+ <4e16b591-dd0-86e1-afcf-5759362908b@ssi.bg>
 MIME-Version: 1.0
-Received: by 2002:a17:906:749d:b0:743:2e24:e8cd with HTTP; Thu, 8 Sep 2022
- 05:08:14 -0700 (PDT)
-Reply-To: mrtonyelumelu98@gmail.com
-From:   "Mrs. Cristalina Georgieva" <nastyanastya88889@gmail.com>
-Date:   Thu, 8 Sep 2022 13:08:14 +0100
-Message-ID: <CADsX60C16shtjnAHFuh8PKPdUJa+HgQUv0pK-WyyYnevMX20ww@mail.gmail.com>
-Subject: hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e16b591-dd0-86e1-afcf-5759362908b@ssi.bg>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-2LXZhtiv2YjZgiDYp9mE2YbZgtivINin2YTYr9mI2YTZiiAoSS5NLkYpDQrYtNi52KjYqSDYpdiv
-2KfYsdipINin2YTYr9mK2YjZhiDYp9mE2K/ZiNmE2YrYqSDYjA0KIyAxOTAwINiMINi02KfYsdi5
-INin2YTYsdim2YrYsw0KDQrZhdix2K3YqNmL2Kcg2KjZg9mFINmB2Yog2LnZhtmI2KfZhiDYp9mE
-2KjYsdmK2K8g2KfZhNil2YTZg9iq2LHZiNmG2Yog2KfZhNix2LPZhdmKINmE2YTZhdiv2YrYsSBJ
-Lk0uRi4g2YPYsdmK2LPYqtin2YTZitmG2Kcg2KzZiNix2KzZitmB2KcNCg0KDQrYudiy2YrYstmK
-INin2YTZhdiz2KrZgdmK2K8hDQoNCtmE2YLYryDYs9mF2K0g2YTZhtinINmI2LLZitixINin2YTY
-rtiy2KfZhtipINin2YTZhdi52YrZhiDYrdiv2YrYq9mL2Kcg2YjYp9mE2YfZitim2Kkg2KfZhNit
-2KfZg9mF2Kkg2YTZhNiz2YTYt9ipINin2YTZhtmC2K/ZitipDQrZhNmE2KPZhdmFINin2YTZhdiq
-2K3Yr9ipINio2YHYrdi1INin2YTYo9mF2YjYp9mEINin2YTYqtmKINmE2YUg2KrYqtmFINin2YTZ
-hdi32KfZhNio2Kkg2KjZh9inINmI2KfZhNiq2Yog2YTYt9in2YTZhdinINmD2KfZhtiqDQrZhdiv
-2YrZhtipINmE2K3Zg9mI2YXYqSDYp9mE2KPZhdmFINin2YTZhdiq2K3Yr9ipINiMINmE2LDZhNmD
-INiq2YUg2KfYqtmH2KfZhSDZhdin2YTZg9mK2YfYpyDYqNin2YTYp9it2KrZitin2YQuDQrYp9mE
-2YXYrdiq2KfZhNmI2YYg2KfZhNiw2YrZhiDZitiz2KrYrtiv2YXZiNmGINin2LPZhSDYp9mE2KPZ
-hdmFINin2YTZhdiq2K3Yr9ipINiMINmI2YHZgtmL2Kcg2YTYs9is2YQg2KrYrtiy2YrZhiDYp9mE
-2KjZitin2YbYp9iqDQrZhdi5INi52YbZiNin2YYg2KfZhNio2LHZitivINin2YTYpdmE2YPYqtix
-2YjZhtmKINmE2YbYuNin2YXZhtinINij2KvZhtin2KEg2KfZhNiq2K3ZgtmK2YIg2KfZhNiw2Yog
-2KPYrNix2YrZhtin2Ycg2Iwg2YHYpdmGDQrYr9mB2LnYqtmDINmF2K/Ysdis2Kkg2YHZiiDZgtin
-2KbZhdipINiq2LbZhSAxNTAg2YXYs9iq2YHZitiv2YvYpyDZgdmKINin2YTZgdim2KfYqiDYp9mE
-2KrYp9mE2YrYqTog2LXZhtiv2YjZgiDZitin2YbYtdmK2KgNCti62YrYsSDZhdmP2LPZhNmO2ZHZ
-hSAvINi12YbYr9mI2YIg2YrYp9mG2LXZitioINi62YrYsSDZhdiv2YHZiNi5IC8g2YjYsdin2KvY
-qSDZhtmC2YQg2LrZitixINmF2YPYqtmF2YTYqSAvINij2YXZiNin2YQNCtin2YTYudmC2K8uDQoN
-CtmC2KfZhSDZhdiz2KTZiNmE2Ygg2KfZhNio2YbZgyDYp9mE2YHYp9iz2K8g2Iwg2KfZhNiw2YrZ
-hiDYp9ix2KrZg9io2YjYpyDYp9mE2YHYs9in2K8g2YXZhiDYo9is2YQg2KfZhNin2K3YqtmK2KfZ
-hCDYudmE2YkNCtij2YXZiNin2YTZgyDYjCDYqNiq2KPYrtmK2LEg2K/Zgdi52YMg2KjYtNmD2YQg
-2LrZitixINmF2LnZgtmI2YQg2Iwg2YXZhdinINij2K/ZiSDYpdmE2Ykg2KrYrdmF2YTZgyDYp9mE
-2YPYq9mK2LEg2YXZhg0K2KfZhNiq2YPYp9mE2YrZgSDZiNiq2KPYrtmK2LEg2LrZitixINmF2LnZ
-gtmI2YQg2YHZiiDZgtio2YjZhCDZhdiv2YHZiNi52KfYqtmDLiDYp9iu2KrYp9ix2Kog2KfZhNij
-2YXZhSDYp9mE2YXYqtit2K/YqQ0K2YjYtdmG2K/ZiNmCINin2YTZhtmC2K8g2KfZhNiv2YjZhNmK
-IChJTUYpINiv2YHYuSDYrNmF2YrYuSDYp9mE2KrYudmI2YrYttin2Kog2YTZgCAxNTAg2YXYs9iq
-2YHZitiv2YvYpyDYqNin2LPYqtiu2K/Yp9mFDQrYqNi32KfZgtin2KogVmlzYSBBVE0g2YXZhiDY
-o9mF2LHZitmD2Kcg2KfZhNi02YXYp9mE2YrYqSDZiNij2YXYsdmK2YPYpyDYp9mE2KzZhtmI2KjZ
-itipINmI2KfZhNmI2YTYp9mK2KfYqiDYp9mE2YXYqtit2K/YqQ0K2YjYo9mI2LHZiNio2Kcg2YjY
-otiz2YrYpyDZiNit2YjZhCDYp9mE2LnYp9mE2YUg2Iwg2K3ZitirINiq2KrZiNmB2LEg2KrZgtmG
-2YrYqSDYp9mE2K/Zgdi5INin2YTYudin2YTZhdmK2Kkg2YfYsNmHDQrZhNmE2YXYs9iq2YfZhNmD
-2YrZhiDZiNin2YTYtNix2YPYp9iqINmI2KfZhNmF2KTYs9iz2KfYqiDYp9mE2YXYp9mE2YrYqS4g
-2YjZitiz2YXYrSDZhNmE2K3Zg9mI2YXYp9iqINio2KfYs9iq2K7Yr9in2YUg2KfZhNi52YXZhNin
-2KoNCtin2YTYsdmC2YXZitipINio2K/ZhNin2Ysg2YXZhiDYp9mE2YbZgtivINmI2KfZhNi02YrZ
-g9in2KouDQoNCtmE2YLYryDZgtmF2YbYpyDYqNin2YTYqtix2KrZitioINmE2LPYr9in2K8g2YXY
-r9mB2YjYudin2KrZgyDYqNin2LPYqtiu2K/Yp9mFINio2LfYp9mC2KkgVmlzYSBBVE0g2YjYs9mK
-2KrZhSDYpdi12K/Yp9ix2YfYpw0K2YTZgyDZiNil2LHYs9in2YTZh9inINmF2KjYp9i02LHYqdmL
-INil2YTZiSDYudmG2YjYp9mG2YMg2LnYqNixINij2Yog2K7Yr9mF2KfYqiDYqNix2YrYryDYs9ix
-2YrYuSDZhdiq2KfYrdipLiDYqNi52K8NCtin2YTYp9iq2LXYp9mEINio2YbYpyDYjCDYs9mK2KrZ
-hSDYqtit2YjZitmEINmF2KjZhNi6IDHYjDUwMNiMMDAwLjAwINiv2YjZhNin2LEg2KPZhdix2YrZ
-g9mKINil2YTZiSDYqNi32KfZgtipIFZpc2ENCkFUTSDYjCDZiNin2YTYqtmKINiz2KrYs9mF2K0g
-2YTZgyDYqNiz2K3YqCDYo9mF2YjYp9mE2YMg2LnZhiDYt9ix2YrZgiDYs9it2Kgg2YXYpyDZhNin
-INmK2YLZhCDYudmGIDEw2IwwMDAg2K/ZiNmE2KfYsQ0K2KPZhdix2YrZg9mKINmB2Yog2KfZhNmK
-2YjZhSDZhdmGINij2Yog2YXYp9mD2YrZhtipINi12LHYp9mBINii2YTZiiDZgdmKINio2YTYr9mD
-LiDYqNmG2KfYodmLINi52YTZiSDYt9mE2KjZgyDYjCDZitmF2YPZhtmDDQrYstmK2KfYr9ipINin
-2YTYrdivINil2YTZiSAyMNiMMDAwLjAwINiv2YjZhNin2LEg2YHZiiDYp9mE2YrZiNmFLiDZgdmK
-INmH2LDYpyDYp9mE2LXYr9ivINiMINmK2KzYqCDYudmE2YrZgw0K2KfZhNin2KrYtdin2YQg2KjY
-pdiv2KfYsdipINin2YTZhdiv2YHZiNi52KfYqiDZiNin2YTYqtit2YjZitmE2KfYqiDYp9mE2K/Z
-iNmE2YrYqSDZiNiq2YLYr9mK2YUg2KfZhNmF2LnZhNmI2YXYp9iqINin2YTZhdi32YTZiNio2KkN
-CtmF2YYg2K7ZhNin2YQ6DQoNCjEuINin2LPZhdmDINin2YTZg9in2YXZhCAuLi4uLi4uLi4uLi4u
-Lg0KMi4g2LnZhtmI2KfZhtmDINin2YTZg9in2YXZhCAuLi4NCjMuINin2YTYrNmG2LPZitipIC4u
-Li4uLi4uLi4uLi4uLi4NCjQuINiq2KfYsdmK2K4g2KfZhNmF2YrZhNin2K8gLyDYp9mE2KzZhtiz
-IC4uLi4uLi4uLg0KNS4g2KfZhNiq2K7Ytdi1IC4uLg0KNi4g2LHZgtmFINin2YTZh9in2KrZgSAu
-Li4uLi4uLi4NCjcuINi52YbZiNin2YYg2KfZhNio2LHZitivINin2YTYpdmE2YPYqtix2YjZhtmK
-INmE2LTYsdmD2KrZgyAuLi4uLi4NCjguINi52YbZiNin2YYg2KfZhNio2LHZitivINin2YTYpdmE
-2YPYqtix2YjZhtmKINin2YTYtNiu2LXZiiAuLi4uLi4NCg0KDQrZhNiq2K3Yr9mK2K8g2YfYsNin
-INin2YTYsdmF2LIgKNin2YTYsdin2KjYtzogQ0xJRU5ULTk2Ni8xNikg2Iwg2KfYs9iq2K7Yr9mF
-2Ycg2YPZhdmI2LbZiNi5INmE2YTYqNix2YrYrw0K2KfZhNil2YTZg9iq2LHZiNmG2Yog2KfZhNiu
-2KfYtSDYqNmDINmI2K3Yp9mI2YQg2KrZgtiv2YrZhSDYp9mE2YXYudmE2YjZhdin2Kog2KfZhNmF
-2LDZg9mI2LHYqSDYo9i52YTYp9mHINil2YTZiSDYp9mE2YXZiNi42YHZitmGDQrYp9mE2KrYp9mE
-2YrZitmGINmE2KXYtdiv2KfYsSDZiNiq2LPZhNmK2YUg2KjYt9in2YLYqSBWaXNhIEFUTSDYmw0K
-DQrZhtmI2LXZitmDINio2YHYqtitINi52YbZiNin2YYg2KjYsdmK2K8g2KXZhNmD2KrYsdmI2YbZ
-iiDYtNiu2LXZiiDYqNix2YLZhSDYrNiv2YrYryDZhNmE2LPZhdin2K0g2YTZiNmD2YrZhCDYp9mE
-2KjZhtmDINio2KrYqtio2LkNCtmH2LDZhyDYp9mE2YXYr9mB2YjYudin2Kog2YjYqtio2KfYr9mE
-INin2YTYsdiz2KfYptmEINmE2YXZhti5INin2YTZhdiy2YrYryDZhdmGINin2YTYqtij2K7Zitix
-INij2Ygg2KfZhNiq2YjYrNmK2Ycg2KfZhNiu2KfYt9imDQrZhNij2YXZiNin2YTZgy4g2KfYqti1
-2YQg2KjZiNmD2YrZhCDYp9mE2KjZhtmDINin2YTYpdmB2LHZitmC2Yog2KfZhNmF2KrYrdivINin
-2YTYotmGINio2KfYs9iq2K7Yr9in2YUg2YXYudmE2YjZhdin2KoNCtin2YTYp9iq2LXYp9mEINij
-2K/Zhtin2Yc6DQoNCtin2YTYtNiu2LUg2KfZhNmF2LPYpNmI2YQ6INin2YTYs9mK2K8g2KrZiNmG
-2Yog2KXZhNmI2YXZitmE2YgNCtil2K/Yp9ix2Kkg2KrYrdmI2YrZhCDYo9mF2YjYp9mEINin2YTY
-qti52YjZiti22KfYqiDYjCDYrNmH2Kkg2KfZhNin2KrYtdin2YQg2KjYp9mE2KjYsdmK2K8g2KfZ
-hNil2YTZg9iq2LHZiNmG2Yog2YTYqNmG2YMNCtil2YHYsdmK2YLZitinINin2YTZhdiq2K3Yrzog
-KG1ydG9ueWVsdW1lbHU5OEBnbWFpbC5jb20pDQoNCtmG2K3Yqtin2Kwg2KXZhNmJINix2K8g2LPY
-sdmK2Lkg2LnZhNmJINmH2LDYpyDYp9mE2KjYsdmK2K8g2KfZhNil2YTZg9iq2LHZiNmG2Yog2YTY
-qtis2YbYqCDYp9mE2YXYstmK2K8g2YXZhiDYp9mE2KrYo9iu2YrYsS4NCg0K2LXYr9mK2YLZgyDY
-p9mE2YXYrtmE2LUNCtin2YTYs9mR2YrYr9ipLiDZg9ix2YrYs9iq2KfZhNmK2YbYpyDYrNmI2LHY
-rNmK2YHYpw0K
+On Wed, Sep 07, 2022 at 09:33:07PM +0300, Julian Anastasov wrote:
+> On Mon, 5 Sep 2022, Jiri Wiesner wrote:
+> 
+> > I believe allowing the kthread the possibility to block in each iteration - for each estimator - introduces some problems:
+> > 1. Non-preemptive kernels should be optimized for throughput not for latency
+> > Using the figure reported earlier (50,000 services required 200 ms of processing time) it takes roughly 3 ms to process one chain (32 * 1024 / 50 services). The processing time per chain will vary with the number of NUMA nodes and CPUs. Nevertheless, this number comparable with the processing time limit of __do_softirq() - 2 ms, which gets converted to 1 jiffy. In term of latency of non-preemptive kernels, it is entirely resonable to let one chain be processed without rescheduling the kthread.
+> 
+> 	My worry is that IPVS_EST_MAX_COUNT is not a hard limit,
+> we allow this limit to be exceeded when ip_vs_est_add_kthread()
+> fails to create kthread (mostly on ENOMEM)
+
+A design decision has been taken to allow more than IPVS_EST_MAX_COUNT estimators in a kthread. The reason is to be able to add estimators even if there is no memory to create a new kthread. Under such memory conditions, user space would not be able to fork new processes - the shell could not execute commands. The system is practically unusable until the OOM killer frees some memory. No production system should be expected to function in a long term when there is not enough memory to fork new processes. The solutions are: add more RAM, decrease workload or resolve memory leak bugs. Not being able to create a kthread can be expected to occur seldom, and it would have to occur while services or destination are being reconfigured. So, why bother with allowing more than IPVS_EST_MAX_COUNT estimators in a kthread. It is common to return -ENOMEM to user space under such conditions.
+
+> or if we add a limit
+> for kthreads, so in such cases we can not refuse to add more
+> estimators to existing kthreads.
+
+As for limiting the number of kthreads, the limit could implemented as a sysctl variable. The default should be large enough for most deployments. I guess it could accomodate more than 900,000 estimators, which means 30 kthreads. The maximum number of destinations I have seen on a system was 110,000, with 7,000 services (but I have not seen many production systems running IPVS).
+
+The current design does not take into account estimators that have been removed. As a result, kthreads that are not the last kthread could have fewer than IPVS_EST_MAX_COUNT estimators. This could be prevented by changing ipvs->est_add_ktid in ip_vs_stop_estimator() if the value of est->ktid is lower than the current ipvs->est_add_ktid. Ip_vs_start_estimator() would have to increment ipvs->est_add_ktid until it finds a kthread with fewer than IPVS_EST_MAX_COUNT estimators or it has to create a new kthread.
+
+> > 3. Blocking while in ip_vs_estimation_chain() will results in wrong estimates for the remaining estimators in a chain. The 2 second interval would not be kept, rate estimates would be overestimated in that interval and underestimated in one of the future intervals.
+> > In my opinion, any of the above reasons is sufficient to remove ip_vs_est_cond_resched_rcu(), ip_vs_est_wait_resched() and kd->mutex.
+> 
+> 	The chains can become too long. I'm not sure it is
+> good to avoid cond_resched() for long time. Another solution
+> would be to allocate more chains for a tick and apply some
+> hard limit for these chains. cond_resched() will be called
+> after such chain is processed. But it is difficult to
+> calculate hard limit for these chains, it depends on the
+> cycles we spend (CPU speed and the number of possible CPUs
+> we walk in the loop). For example, we can have again 50 ticks
+> but 16 chains per tick, so total 800 chains per kthread (50*16).
+> 32*1024/800 means 40 estimators per chain before calling
+> cond_resched().
+
+OK, this seems workable. All the chains could be in one array
+        struct hlist_head       chains[IPVS_EST_NCHAINS * 16];
+and you would increment row by 16 in ip_vs_estimation_kthread().
+
+> And a tick can attach more than 16 chains
+> if the est_max_count is exceeded. It will cost some memory
+> to provide more chains but it will avoid the kd->mutex
+> games.
+> 
+> 	struct hlist_head *tick_chain = &kd->tick_chains[row];
+> 
+> 	rcu_read_lock();
+> 	/* tick_chains has no limit of chains */
+> 	hlist_for_each_entry_rcu(chain, tick_chains, list) {
+> 		/* This list below is limited */
+> 		hlist_for_each_entry_rcu(e, &chain->ests, list) {
+> 			...
+> 			if (kthread_should_stop())
+> 				goto end;
+> 			...
+> 		}
+> 		cond_resched_rcu();
+> 	}
+
+So, you set a limit - IPVS_EST_MAX_COUNT - but you also allow this limit to be ignored because of a corner case. As a result, tick_chains must not have a limit of chains because of that. I lean towards keeping the maximum of IPVS_EST_MAX_COUNT estimators per kthread.
+
+There is an alternative design where you could increase kd->est_max_count for all kthreads once all of the available kthreads have kd->est_max_count estimators. Nevertheless, there would also have to be a limit to the value of kd->est_max_count. Imagine the estimation during a single tick would take so long that the gap variable in ip_vs_estimation_kthread() would become negative. You would need to have circa 250,000 estimators per kthread. Since you are already measuring the timeout you need for schedule_timeout() in ip_vs_estimation_kthread(), it should be possible to set the kd->est_max_count limit based on the maximum processing time per chain. It could be half a IPVS_EST_TICK, for example.
+
+But it seems to me that the alternative design - increasing kd->est_max_count - should have some support in what is used in production. Are there servers with more than 983,040 estimators (which would be IPVS_EST_MAX_COUNT * 30 kthreads) or even one third of that?
+
+> 	If we change ip_vs_start_estimator() to return int err
+> we can safely allocate new chains and track for ENOMEM.
+> I think, this is possible, with some reordering of the
+> ip_vs_start_estimator() calls.
+
+I think ip_vs_start_estimator() should return an int.
+
+> > > Kthread data:
+> > > 
+> > > - every kthread works over its own data structure and all
+> > > such structures are attached to array
+> > 
+> > It seems to me there is no upper bound on the number of kthreads that could be forked. Therefore, it should be possible to devise an attack that would force the system to run out of PIDs:
+> > 1. Start adding services so that all chains of kthread A would be used.
+> > 2. Add one more service to force the forking of kthread B, thus advancing ipvs->est_add_ktid.
+> > 3. Remove all but one service from kthread A.
+> > 4. Repeat steps 1-3 but with kthread B.
+> > I think I could come up with a reproducer if need be.
+> 
+> 	Agreed, the chains management can be made more robust.
+> This patchset is initial version that can serve as basis.
+> We should consider such things:
+> 
+> - we do not know how many estimators will be added, if we
+> limit the number of kthreads, then they will be overloaded
+
+Not all kthreads would be overloaded. The current desing would add all the excess estimators into the last kthread.
+
+> - add/del can be made to allocate memory for chains, if needed.
+> We should not spend many cycles in adding/deleting estimators.
+
+The fewer allocations the better. I would not use a linked list as described above - kd->tick_chains.
+
+> - try more hard to spread estimators to chains, even with
+> the risk of applying initially a smaller timer for the newly
+> added estimator.
+
+Yes.
+
+> > Unbalanced chains would not be fatal to the system but there is risk of introducing scheduling latencies tens or even hundreds of milliseconds long. There are patterns of adding and removing chains that would results in chain imbalance getting so severe that a handful of chains would have estimators in them while the rest would be empty or almost empty. Some examples:
+> > 1. Adding a new service each second after sleeping for 1 second. This would use the add_row value at the time of adding the estimator, which would result in 2 chains holding all the estimators.
+> > 2. Repeated addition and removal of services. There would always be more services added than removed. The additions would be carried out in bursts. The forking of a new kthread would not be triggered because the number of services would stay under IPVS_EST_MAX_COUNT (32 * 1024).
+> > 
+> > The problem is that the code does not guarantee that the length of chains always stays under IPVS_EST_MAX_COUNT / IPVS_EST_NCHAINS (32 * 1024 / 50) estimators. A check and a cycle iterating over available rows could be added to ip_vs_start_estimator() to find the rows that still have fewer estimators than IPVS_EST_MAX_COUNT / IPVS_EST_NCHAINS. This would come at the expense of having inaccurate estimates for a few intervals but I think the trade-off is worth it. Also, the estimates will be inaccurate when estimators are added in bursts. If, depending on how services are added and removed, the code could introduce scheduling latencies there would be someone running into this sooner or later. The probability of severe chain imbalance being low is not good enough there should be a guarantee.
+> 
+> 	About balancing the chains: not sure if it is possible
+> while serving some row for current tick, to look ahead and
+> advance the current tick work with estimators from the next
+> tick. Such decisions can be made every tick. I.e. we do not
+> move entries between the chains but we can walk one chain and
+> possibly part of the other chain. If we have more chains per
+> tick, it will be more easy, for example, if current tick
+> processes 16 chains by default, it can process some from the  
+> next 16 chains, say 16+8 in total. After 2 seconds, this tick can
+> process 16+16+8, for example. It will depend on the currently
+> added estimators per tick and its chains. Every 2 seconds
+> we can advance with one tick, so that an estimator is
+> served every 2 seconds or atleast after 1960ms if such
+> chain stealing happens. Such logic will allow the
+> estimators to be spread in time even while they are attached   
+> to chains and ticks with different length. As result, we will
+> process equal number of estimators per tick by slowly
+> adjusting to their current number and chain lengths.
+
+I am definitely not suggesting to implement balancing. I propose that each chain have a hard limit on the number of estimators.
+
+-- 
+Jiri Wiesner
+SUSE Labs
