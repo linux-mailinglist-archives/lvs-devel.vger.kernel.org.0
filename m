@@ -2,103 +2,139 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E465B25CC
-	for <lists+lvs-devel@lfdr.de>; Thu,  8 Sep 2022 20:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4B75B292E
+	for <lists+lvs-devel@lfdr.de>; Fri,  9 Sep 2022 00:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiIHSck (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 8 Sep 2022 14:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52374 "EHLO
+        id S229543AbiIHWWE (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 8 Sep 2022 18:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiIHScj (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 8 Sep 2022 14:32:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA14E55A0
-        for <lvs-devel@vger.kernel.org>; Thu,  8 Sep 2022 11:32:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D164C1F8C4;
-        Thu,  8 Sep 2022 18:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662661954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VhVkHTNnDQYtQ3LHoYDD+5gX21eI/lJMeBrBHVuEkOM=;
-        b=WhaLj4OnZMDyVEqW9si1I+p3gGh1o6CSFvOZMP9RCJLK9s4HgNotSftkCHivZ6Cf2b6nh2
-        FcNUC/4Sr7weO+P2FE5oHEt+0GDjHrUZgxTBLe5RigGWfkoBtENXnCSLdht/ajKjKvi/J2
-        g8Pw6nO7D5pCXX6xgKcDqy0jTwsgUfU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662661954;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VhVkHTNnDQYtQ3LHoYDD+5gX21eI/lJMeBrBHVuEkOM=;
-        b=koxxmLTeckiolJS4azL7Hwf97rUNW3ODtw7fJUOEn13Be1y2pRK57EyXi7xCCNyiwAxyrr
-        Y7lS4mIUhC4VQSBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C021513A6D;
-        Thu,  8 Sep 2022 18:32:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id PyHlLkI1GmPpNwAAMHmgww
-        (envelope-from <jwiesner@suse.de>); Thu, 08 Sep 2022 18:32:34 +0000
-Received: by incl.suse.cz (Postfix, from userid 1000)
-        id 4E82410CB1; Thu,  8 Sep 2022 20:32:34 +0200 (CEST)
-Date:   Thu, 8 Sep 2022 20:32:34 +0200
-From:   Jiri Wiesner <jwiesner@suse.de>
-To:     Julian Anastasov <ja@ssi.bg>
+        with ESMTP id S230058AbiIHWV6 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 8 Sep 2022 18:21:58 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 37323F2D62
+        for <lvs-devel@vger.kernel.org>; Thu,  8 Sep 2022 15:21:57 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id B24D52BD64;
+        Fri,  9 Sep 2022 01:21:54 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 3BAC22BE86;
+        Fri,  9 Sep 2022 01:21:53 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 4A65D3C0437;
+        Fri,  9 Sep 2022 01:21:52 +0300 (EEST)
+Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 288MLqwU147600;
+        Fri, 9 Sep 2022 01:21:52 +0300
+Received: (from root@localhost)
+        by ja.home.ssi.bg (8.17.1/8.17.1/Submit) id 288MLlJ5147586;
+        Fri, 9 Sep 2022 01:21:47 +0300
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Jiri Wiesner <jwiesner@suse.de>
 Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
         yunhong-cgl jiang <xintian1976@gmail.com>,
         dust.li@linux.alibaba.com
-Subject: Re: [RFC PATCH 0/4] Use kthreads for stats
-Message-ID: <20220908183234.GI18621@incl>
-References: <20220827174154.220651-1-ja@ssi.bg>
- <20220905082642.GB18621@incl>
- <4e16b591-dd0-86e1-afcf-5759362908b@ssi.bg>
- <20220908153521.GG18621@incl>
+Subject: [RFC PATCHv2 0/4] ipvs: Use kthreads for stats
+Date:   Fri,  9 Sep 2022 01:21:05 +0300
+Message-Id: <20220908222109.147452-1-ja@ssi.bg>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908153521.GG18621@incl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 05:35:21PM +0200, Jiri Wiesner wrote:
-> There is an alternative design where you could increase kd->est_max_count for all kthreads once all of the available kthreads have kd->est_max_count estimators. Nevertheless, there would also have to be a limit to the value of kd->est_max_count. Imagine the estimation during a single tick would take so long that the gap variable in ip_vs_estimation_kthread() would become negative. You would need to have circa 250,000 estimators per kthread. Since you are already measuring the timeout you need for schedule_timeout() in ip_vs_estimation_kthread(), it should be possible to set the kd->est_max_count limit based on the maximum processing time per chain. It could be half a IPVS_EST_TICK, for example.
-> 
-> But it seems to me that the alternative design - increasing kd->est_max_count - should have some support in what is used in production. Are there servers with more than 983,040 estimators (which would be IPVS_EST_MAX_COUNT * 30 kthreads) or even one third of that?
+	Hello,
 
-I did some profiling (but could have just looked at top, actually) of a kthread with IPVS_EST_MAX_COUNT estimators for 100 seconds:
-# Samples: 4K of event 'bus-cycles'
-# Event count (approx.): 125024900
-# Overhead        Period  Command          Shared Object      Symbol
-# ........  ............  ...............  .................  .........................................
-#
-    76.44%      95570475  ipvs-e:0:0       [kernel.kallsyms]  [k] ip_vs_estimation_kthread
-     8.75%      10935925  ipvs-e:0:0       [kernel.kallsyms]  [k] _find_next_bit
-     3.18%       3978975  swapper          [kernel.kallsyms]  [k] intel_idle
-     1.00%       1251250  ipvs-e:0:0       [kernel.kallsyms]  [k] _raw_spin_lock_bh
-     0.36%        450450  swapper          [kernel.kallsyms]  [k] _raw_spin_lock
-     0.36%        450450  swapper          [kernel.kallsyms]  [k] update_rq_clock
+	This patchset implements stats estimation in
+kthread context. Simple tests do not show any problem.
 
-The bus-cycles event on this particular machine makes 25,000,000 events per second. Based on the period in the profile, the CPU utilization for various functions is:
-ip_vs_estimation_kthread: 95570475/100/25000000*100 = 3.82%
-_find_next_bit: 10935925/100/25000000*100 = 0.44%
-_raw_spin_lock_bh: 1251250/100/25000000*100 = 0.05%
+	As it is late here, I'm sending v2 for
+review. It is interesting to know what value for
+IPVS_EST_TICK_CHAINS to use, it is used for the
+IPVS_EST_MAX_COUNT calculation. We should determine
+it from tests once the loops are in final form.
+Now the limit increased a little bit to 38400.
+Tomorrow I'll check again the patches for possible
+problems.
 
-The kthread could definitely utilize the CPU more, which is an argument for increasing kd->est_max_count.
+	Overview of the basic concepts. More in the
+commit messages...
+
+RCU Locking:
+
+- As stats are now RCU-locked, tot_stats, svc and dest which
+hold estimator structures are now always freed from RCU
+callback. This ensures RCU grace period after the
+ip_vs_stop_estimator() call.
+
+Kthread data:
+
+- every kthread works over its own data structure and all
+such structures are attached to array
+
+- even while there can be a kthread structure, its task
+may not be running, eg. before first service is added or
+while the sysctl var is set to an empty cpulist or
+when run_estimation is 0.
+
+- a task and its structure may be released if all
+estimators are unlinked from its chains, leaving the
+slot in the array empty
+
+- every kthread data structure allows limited number
+of estimators
+
+- to add new estimators we use the last added kthread
+context (est_add_ktid). The new estimators are linked to
+the chains just before the estimated one, based on add_row.
+This ensures their estimation will start after 2 seconds.
+If estimators are added in bursts, common case if all
+services and dests are initially configured, we may
+spread the estimators to more chains. This will reduce
+the chain imbalance.
+
+Not done yet:
+* limit for kthreads (sysctl var)
+
+Changes in v2:
+Patch 2:
+* kd->mutex is gone, cond_resched rate determined by
+  IPVS_EST_CHAIN_DEPTH
+* IPVS_EST_MAX_COUNT is a hard limit now
+* kthread data is now 1-50 allocated tick structures,
+  each containing heads for limited chains. Bitmaps
+  should allow faster access. We avoid large
+  allocations for structs.
+* as the td->present bitmap is shared, use atomic bitops
+* ip_vs_start_estimator now returns error code
+* _bh locking removed from stats->lock
+* bump arg is gone from ip_vs_est_reload_start
+* prepare for upcoming changes that remove _irq
+  from u64_stats_fetch_begin_irq/u64_stats_fetch_retry_irq
+* est_add_ktid is now always valid
+Patch 3:
+* use .. in est_nice docs
+
+Julian Anastasov (4):
+  ipvs: add rcu protection to stats
+  ipvs: use kthreads for stats estimation
+  ipvs: add est_cpulist and est_nice sysctl vars
+  ipvs: run_estimation should control the kthread tasks
+
+ Documentation/networking/ipvs-sysctl.rst |  24 +-
+ include/net/ip_vs.h                      | 122 +++++-
+ net/netfilter/ipvs/ip_vs_core.c          |  10 +-
+ net/netfilter/ipvs/ip_vs_ctl.c           | 367 +++++++++++++++---
+ net/netfilter/ipvs/ip_vs_est.c           | 450 +++++++++++++++++++----
+ 5 files changed, 843 insertions(+), 130 deletions(-)
 
 -- 
-Jiri Wiesner
-SUSE Labs
+2.37.3
+
+
