@@ -2,199 +2,253 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC205F3E88
-	for <lists+lvs-devel@lfdr.de>; Tue,  4 Oct 2022 10:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4965F6720
+	for <lists+lvs-devel@lfdr.de>; Thu,  6 Oct 2022 15:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiJDIjN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 4 Oct 2022 04:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S231425AbiJFNBx (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 6 Oct 2022 09:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiJDIjN (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 4 Oct 2022 04:39:13 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAFD3A17C
-        for <lvs-devel@vger.kernel.org>; Tue,  4 Oct 2022 01:39:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 16AF821908;
-        Tue,  4 Oct 2022 08:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1664872750; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsmPyTDHsE2dW9LcCuL2pqbFa8xNjtXwQczrnsFUqDk=;
-        b=vSGVQmX3cXC5FdmvoyTMxqzX/byyTAsTgh+38NZPAMnjmj6i/dL8NEteRV7vtbL05efYCc
-        7uDutVwjbgAkQVNVfdWKnBJW7+HLD4+lIBtNPC7IbA5jpaLGYgOpxZ2EhjmeAjbfDlItzp
-        YHzJoIEH5uneY/eXSV+S3IGI75rALOQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1664872750;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qsmPyTDHsE2dW9LcCuL2pqbFa8xNjtXwQczrnsFUqDk=;
-        b=UPjgVDue1JYuIMAh2/hkJYHBV1vZhRHzGa4YGYI0RAyyiQ9uazJxcS06ToaCma/OK5R00t
-        xaOyQtebP2oGgpBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 08686139D2;
-        Tue,  4 Oct 2022 08:39:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id B0sHAi7xO2M0VQAAMHmgww
-        (envelope-from <jwiesner@suse.de>); Tue, 04 Oct 2022 08:39:10 +0000
-Received: by incl.suse.cz (Postfix, from userid 1000)
-        id 9C64B1777F; Tue,  4 Oct 2022 10:39:09 +0200 (CEST)
-Date:   Tue, 4 Oct 2022 10:39:09 +0200
-From:   Jiri Wiesner <jwiesner@suse.de>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        yunhong-cgl jiang <xintian1976@gmail.com>,
-        dust.li@linux.alibaba.com
-Subject: Re: [RFC PATCHv4 2/5] ipvs: use kthreads for stats estimation
-Message-ID: <20221004083909.GB20326@incl>
-References: <20220920135332.153732-1-ja@ssi.bg>
- <20220920135332.153732-3-ja@ssi.bg>
- <20221001105234.GA20326@incl>
- <ee1fceff-6be2-1584-f8f2-cda492fd884@ssi.bg>
+        with ESMTP id S230133AbiJFNBn (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 6 Oct 2022 09:01:43 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C8E8A1FC;
+        Thu,  6 Oct 2022 06:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665061302; x=1696597302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ru6CnBvVhIEhYJCAeuuxpRt9HHeJLOxAuoa9BjBuh8k=;
+  b=AGWKWrAmNTte351h2k1feYl2fEi8rMwITVCJk7pNUXa1Ng0fQ3b2azOq
+   uKuvJLxK0mA9Tqu3UQrxcvZhNBZH7+ufyXr/eCl51aK2E+6alzDUNMpev
+   Nal/AmQePVXxf51aw66W9WRCAYm+XU/TtJLHLlzK0fLBMpvOkNSKnYU6a
+   G0RPB2YNDasi333P00LsC+HLiCjUDiLmBkQrJ9Dt5KAHtZ7QeMOcScwI0
+   yVVxu3xrA0z8zp+mB6pCuwFd+t1IPnDGoJrgOtk/mfFAE1KbrDX96OsuA
+   Q6dzk7SPLhjyK1/yFBt+FIYuNforlaW4X0SnFFSBR/uzfXEGd3cKuEo3f
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="283804515"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="283804515"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 06:01:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="767139765"
+X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
+   d="scan'208";a="767139765"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Oct 2022 06:01:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ogQUx-0039Oq-2J;
+        Thu, 06 Oct 2022 16:01:11 +0300
+Date:   Thu, 6 Oct 2022 16:01:11 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Jan Kara <jack@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        dri-devel@lists.freedesktop.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-sctp@vger.kernel.org,
+        "Md . Haris Iqbal" <haris.iqbal@ionos.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Sergey Matyukevich <geomatsi@gmail.com>,
+        Rohit Maheshwari <rohitm@chelsio.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        ceph-devel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Nilesh Javali <njavali@marvell.com>,
+        Jean-Paul Roubelat <jpr@f6fbb.org>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Potnuri Bharat Teja <bharat@chelsio.com>,
+        Vinay Kumar Yadav <vinay.yadav@chelsio.com>,
+        linux-nfs@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Igor Mitsyanko <imitsyanko@quantenna.com>,
+        Andy Lutomirski <luto@kernel.org>, linux-hams@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        linux-raid@vger.kernel.org, Neil Horman <nhorman@tuxdriver.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Michael Chan <michael.chan@broadcom.com>,
+        linux-kernel@vger.kernel.org, Varun Prakash <varun@chelsio.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        netfilter-devel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Jan Kara <jack@suse.com>,
+        linux-fsdevel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        linux-media@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        linux-fbdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Song Liu <song@kernel.org>, Eric Dumazet <edumazet@google.com>,
+        target-devel@vger.kernel.org, John Stultz <jstultz@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        drbd-dev@lists.linbit.com, dev@openvswitch.org,
+        Leon Romanovsky <leon@kernel.org>,
+        Helge Deller <deller@gmx.de>, Hugh Dickins <hughd@google.com>,
+        James Smart <james.smart@broadcom.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        Julian Anastasov <ja@ssi.bg>, coreteam@netfilter.org,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        linux-crypto@vger.kernel.org,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        linux-actions@lists.infradead.org,
+        Simon Horman <horms@verge.net.au>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+        Hao Luo <haoluo@google.com>, Theodore Ts'o <tytso@mit.edu>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Florian Westphal <fw@strlen.de>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Haoyue Xu <xuhaoyue1@hisilicon.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-wireless@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-nvme@lists.infradead.org,
+        Michal Januszewski <spock@gentoo.org>,
+        linux-mtd@lists.infradead.org, kasan-dev@googlegroups.com,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Thomas Sailer <t.sailer@alumni.ethz.ch>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        Xiubo Li <xiubli@redhat.com>, Sagi Grimberg <sagi@grimberg.me>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-rdma@vger.kernel.org,
+        lvs-devel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Marco Elver <elver@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Yury Norov <yury.norov@gmail.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        KP Singh <kpsingh@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        linux-ext4@vger.kernel.org,
+        Wenpeng Liang <liangwenpeng@huawei.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Jeff Layton <jlayton@kernel.org>, linux-xfs@vger.kernel.org,
+        netdev@vger.kernel.org, Ying Xue <ying.xue@windriver.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>, linux-mm@kvack.org,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Ayush Sawal <ayush.sawal@chelsio.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        rds-devel@oss.oracle.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-scsi@vger.kernel.org, dccp@vger.kernel.org,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        SHA-cyfmac-dev-list@infineon.com, Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        linux-block@vger.kernel.org, dmaengine@vger.kernel.org,
+        Hannes Reinecke <hare@suse.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jens Axboe <axboe@kernel.dk>, cake@lists.bufferbloat.net,
+        brcm80211-dev-list.pdl@broadcom.com,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        linuxppc-dev@lists.ozlabs.org, David Ahern <dsahern@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Christoph =?iso-8859-1?Q?B=F6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Vinod Koul <vkoul@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, Thomas Graf <tgraf@suug.ch>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Subject: Re: [f2fs-dev] [PATCH v1 3/5] treewide: use get_random_u32() when
+ possible
+Message-ID: <Yz7Rl7BXamKQhRzH@smile.fi.intel.com>
+References: <20221005214844.2699-1-Jason@zx2c4.com>
+ <20221005214844.2699-4-Jason@zx2c4.com>
+ <20221006084331.4bdktc2zlvbaszym@quack3>
+ <Yz7LCyIAHC6l5mG9@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ee1fceff-6be2-1584-f8f2-cda492fd884@ssi.bg>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yz7LCyIAHC6l5mG9@zx2c4.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Sun, Oct 02, 2022 at 05:12:41PM +0300, Julian Anastasov wrote:
-> > In both cases, these are results from a second test. The command were:
-> > modprobe ip_vs; perf record -e bus-cycles -a sleep 2 & ipvsadm -A -t 10.10.10.1:2000
-> > ipvsadm -D -t 10.10.10.1:2000; modprobe -r ip_vs_wlc ip_vs
-> > modprobe ip_vs; perf record -e bus-cycles -a sleep 2 & ipvsadm -A -t 10.10.10.1:2000
-> > The kernel log from the first tests contains a warning printed by krealloc_array() because the requested size exceeds the object size that SLUB is able to allocate.
+On Thu, Oct 06, 2022 at 06:33:15AM -0600, Jason A. Donenfeld wrote:
+> On Thu, Oct 06, 2022 at 10:43:31AM +0200, Jan Kara wrote:
+
+...
+
+> > The code here is effectively doing the
 > > 
-> > Both the chain_max_len and the profiles (and instructions taking the most time) from the test using est_temp_list estimators are similar to the test with the v4 code. In other words, there is no observable difference between the test using est_temp_list estimators and allocating new estimators in my tests (the machine has 64 CPUs and 2 NUMA nodes). Allocating new estimators in ip_vs_est_calc_limits() seems unnecessary.
-> 
-> 	OK, so caching effects do not matter.
-
-I must argue against my own argument: I would not claim exactly that. I would be reluctant to generalize the statement even for modern CPUs manufactured by Intel. Whether or not caching (including fetching a cache line from a different NUMA node) matters depends on a particular CPU implementation and architecture. I only showed that always allocating new estimators and reusing the estimators from the est_temp_list yields similar results. A closer look at the results indicates that the first estimate is almost 4 times larger than the second estimate. My hackish modification caused the ntest 1 run to process 2 estimators while making the algorithm think it was testing only 1 estimator, hence the time diffs obtained from the ntest 1 run and the ntest 2 run should be similar. Apparently, they are not:
-> [   89.364408][  T493] IPVS: starting estimator thread 0...
-> [   89.370467][ T8039] IPVS: calc: nodes 2
-> [   89.374824][ T8039] IPVS: calc: diff 4354 ntest 1 min_est 4354 max 21
-> [   89.382081][ T8039] IPVS: calc: diff 1125 ntest 2 min_est 562 max 169
-> [   89.389329][ T8039] IPVS: calc: diff 2083 ntest 4 min_est 520 max 182
-This results could actually be caused by reading cache-cold memory regions. Caching might play a role and the most accurate estimate would be obtained from the very first test. Testing just once and just 1 or 2 estimators (depending on what is available on the est_temp_list) while also switching off interrupts and preemption makes sense to me. The algorithm would be simpler and ip_vs_est_calc_limits() would be done sooner.
-
-> The problem
-> of using est_temp_list is that ip_vs_chain_estimation()
-> walks the whole chain. It is less risky to do tests
-> with allocated chain with known length and it was not a
-> big deal to allocate 128 estimators. If allocation could
-> fail, we can move 128 entries from est_temp_list to
-> the test chain and then to move them back after the test.
-> But in any case, if we test with estimators from a
-> est_temp_list, as we run without any locked mutex
-> the entries could be deleted while we are testing
-> them. As result, we do not know how many estimators
-> were really tested. More than one test could be needed for
-> sure, i.e. the length of the tested temp chain should
-> not change before/after the test.
-
-I see that leaving the algorithm as it is and only substituting newly allocated estimators with estimators from the est_temp_list brings more problems than what it solves.
-
-> 	And it would be better to call ip_vs_est_calc_limits
-> after all tasks are stopped and estimators moved to
-> est_temp_list.
-> 
-> > > +	for (;;) {
-> > > +		/* Too much tests? */
-> > > +		if (n >= 128)
-> > > +			goto out;
-> > > +
-> > > +		/* Dequeue old estimators from chain to avoid CPU caching */
-> > > +		for (;;) {
-> > > +			est = hlist_entry_safe(chain.first,
-> > > +					       struct ip_vs_estimator,
-> > > +					       list);
-> > > +			if (!est)
-> > > +				break;
-> > > +			hlist_del_init(&est->list);
+> > 	parent_group = prandom_u32_max(ngroups);
 > > 
-> > Unlinking every estimator seems unnecessary - they are discarded before the function exits.
-> 
-> 	The goal was tested estimators to not be tested again.
-
-The usual approach is to initialize the head and leave the list as it is (since an array holds the pointers, which will be used for deallocation) or splice it onto a different head.
-
-> > > +		}
-> > > +
-> > > +		cond_resched();
-> > > +		if (!is_fifo) {
-> > > +			is_fifo = true;
-> > > +			sched_set_fifo(current);
-> > > +		}
-> > > +		rcu_read_lock();
+> > Similarly here we can use prandom_u32_max(ngroups) like:
 > > 
-> > I suggest disabling preemption and interrupts on the local CPU. To get the minimal time need to process an estimator there is no need for interference from interrupt processing or context switches in this specific part of the code.
+> > 		if (qstr) {
+> > 			...
+> > 			parent_group = hinfo.hash % ngroups;
+> > 		} else
+> > 			parent_group = prandom_u32_max(ngroups);
 > 
-> 	I preferred not to be so rude to other kthreads in the system.
-> I hope several tests give enough approximation for the
-> estimation speed.
+> Nice catch. I'll move these to patch #1.
 
-The way in which the measurement is carried out depends on what value is expected to be measured and how that value is used. There is a catch when it comes to caching, as described above.
-1. The value being measured could be the minimal time needed to process an estimator without including the time needed for interrupt processing. As it is written now, the algorithm determines approximately this value despite preemption and interrupts being enabled, which will result in some noise. The result of this approach is that a fully loaded kthread reached more than 50% of CPU utilization on my testing system (2 NUMA nodes, 64 CPUs):
-> j=30; time for ((i=0; i < 500000; i++)); do p=$((i % 60000)); if [ $p -eq 0 ]; then j=$((j + 1)); echo 10.10.10.$j; fi; ipvsadm -A -t 10.10.10.$j:$((2000+$p)); done
->   PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
->  7993 root      20   0       0      0      0 R 52.99 0.000   6:16.24 ipvs-e:0:0
-> 12913 root      20   0       0      0      0 I 5.090 0.000   0:15.31 ipvs-e:0:1
-The debugging kernel printed while estimators were being added:
-> [  168.667468] IPVS: starting estimator thread 0...
-> [  168.674322] IPVS: calc: chain_max_len=191, single est=496ns, diff=64965, retry=1, ntest=128
-> [  168.684550] IPVS: dequeue: 293ns
-> [  168.688965] IPVS: using max 9168 ests per chain, 458400 per kthread
-> [  170.613320] IPVS: tick time: 1676379ns for 64 CPUs, 1392 ests, 1 chains, chain_max_len=9168
-> [  234.634576] IPVS: tick time: 18958330ns for 64 CPUs, 9168 ests, 1 chains, chain_max_len=9168
-> ...
-> [ 1770.630740] IPVS: tick time: 19127043ns for 64 CPUs, 9168 ests, 1 chains, chain_max_len=9168
-This is more than 4 times the expected CPU utilization - 12%. So, minimal time needed to process an estimator would need to be applied in a different way - there would have to be other parameters to scale it to determine the chain length that yields 12% CPU utilization.
-
-2. The value being measured would include interference from interrupt processing but not from context switching (due to preemption being disabled). In this case, a sliding average could be computed or something along these lines.
-
-3. The value being measured would include interference from interrupt processing and from context switching. I cannot imagine a workable approach to use this.
-
-> > > +walk_chain:
-> > > +	if (kthread_should_stop())
-> > > +		goto unlock;
-> > > +	step++;
-> > > +	if (!(step & 63)) {
-> > > +		/* Give chance estimators to be added (to est_temp_list)
-> > > +		 * and deleted (releasing kthread contexts)
-> > > +		 */
-> > > +		mutex_unlock(&__ip_vs_mutex);
-> > > +		cond_resched();
-> > > +		mutex_lock(&__ip_vs_mutex);
-> > 
-> > Is there any data backing the decision to cond_resched() here? What non-functional requirement were used to make this design decision?
-> 
-> 	kt 0 runs in parallel with netlink, we do not want
-> to delay such processes that want to unlink estimators,
-> we can be relinking 448800 estimators as in your test.
-
-I commented out the cond_resched() and the locking statement around it, fully loaded a kthread and this was the result:
-> [ 5060.214676] IPVS: starting estimator thread 0...
-> [ 5060.222050] IPVS: calc: chain_max_len=144, single est=656ns, diff=91657, retry=1, ntest=128
-> [ 5060.318628] IPVS: dequeue: 86284729ns
-> [ 5060.323527] IPVS: using max 6912 ests per chain, 345600 per kthread
-86 milliseconds is far too long, which justifies the cond_resched() and the additional trouble it brings.
+I believe coccinelle is able to handle this kind of code as well, so Kees'
+proposal to use it seems more plausible since it's less error prone and more
+flexible / powerful.
 
 -- 
-Jiri Wiesner
-SUSE Labs
+With Best Regards,
+Andy Shevchenko
+
+
