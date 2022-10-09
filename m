@@ -2,131 +2,227 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB335F67B7
-	for <lists+lvs-devel@lfdr.de>; Thu,  6 Oct 2022 15:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC0D5F8C0C
+	for <lists+lvs-devel@lfdr.de>; Sun,  9 Oct 2022 17:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiJFNUz (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 6 Oct 2022 09:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S229954AbiJIPhq (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 9 Oct 2022 11:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiJFNUr (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 6 Oct 2022 09:20:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793B49AFFE;
-        Thu,  6 Oct 2022 06:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665062447; x=1696598447;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EU0abpI6YFdk3YA4KGgLZ9e2cnqNyTF/1r17KmA6WbU=;
-  b=H/rXg2onBw8kdQTJR9j91bg7GaQ9NTLI4VQaO5RUMKhgyGVdTsqC0ihZ
-   ZFrzupyxaktvnWl0/oAO1N0j+d7VdJ7vhM5jhQno6ZKD98/lmLTbJHLEk
-   YdnjF2+yZPR82O204zlslKkxKat4YQqK1Imt18zDrXqo1ccS1JJsVSyxk
-   MRKlQcD0RpszRcaGv0aLNg8NB07bkMRbNN5u6y9NvDUd9Pep7UTxlCSgc
-   gMlNjOL77ikXzd/PJ+sKmxYh/x98yvYK62uMdNxBx1YoiL7Kpv6EnctwN
-   rw/6E45iagBLiy4ub27Y6WReJAotEZtIYsSDo2cskapKSLTwKhAf1RYEB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="290697978"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="290697978"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 06:20:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="729143418"
-X-IronPort-AV: E=Sophos;i="5.95,163,1661842800"; 
-   d="scan'208";a="729143418"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Oct 2022 06:20:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ogQng-0039rX-0O;
-        Thu, 06 Oct 2022 16:20:32 +0300
-Date:   Thu, 6 Oct 2022 16:20:31 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com, cake@lists.bufferbloat.net,
-        ceph-devel@vger.kernel.org, coreteam@netfilter.org,
-        dccp@vger.kernel.org, dev@openvswitch.org,
-        dmaengine@vger.kernel.org, drbd-dev@lists.linbit.com,
-        dri-devel@lists.freedesktop.org, kasan-dev@googlegroups.com,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fbdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mm@kvack.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-raid@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-sctp@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        lvs-devel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, rds-devel@oss.oracle.com,
-        SHA-cyfmac-dev-list@infineon.com, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net
-Subject: Re: [PATCH v1 3/5] treewide: use get_random_u32() when possible
-Message-ID: <Yz7WHyD+teLOh2ho@smile.fi.intel.com>
-References: <20221005214844.2699-1-Jason@zx2c4.com>
- <20221005214844.2699-4-Jason@zx2c4.com>
- <Yz7OdfKZeGkpZSKb@ziepe.ca>
- <CAHmME9r_vNRFFjUvqx8QkBddg_kQU=FMgpk9TqOVZdvX6zXHNg@mail.gmail.com>
+        with ESMTP id S230040AbiJIPhp (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 9 Oct 2022 11:37:45 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C3301D0E9
+        for <lvs-devel@vger.kernel.org>; Sun,  9 Oct 2022 08:37:44 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 9EE6523E7F;
+        Sun,  9 Oct 2022 18:37:43 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id A5A7A23E7D;
+        Sun,  9 Oct 2022 18:37:41 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 69E8E3C043C;
+        Sun,  9 Oct 2022 18:37:37 +0300 (EEST)
+Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 299Fba1l126018;
+        Sun, 9 Oct 2022 18:37:36 +0300
+Received: (from root@localhost)
+        by ja.home.ssi.bg (8.17.1/8.17.1/Submit) id 299FbUKl125996;
+        Sun, 9 Oct 2022 18:37:30 +0300
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Jiri Wiesner <jwiesner@suse.de>
+Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        yunhong-cgl jiang <xintian1976@gmail.com>,
+        dust.li@linux.alibaba.com
+Subject: [RFC PATCHv5 0/6] ipvs: Use kthreads for stats
+Date:   Sun,  9 Oct 2022 18:37:04 +0300
+Message-Id: <20221009153710.125919-1-ja@ssi.bg>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9r_vNRFFjUvqx8QkBddg_kQU=FMgpk9TqOVZdvX6zXHNg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 07:05:48AM -0600, Jason A. Donenfeld wrote:
-> On Thu, Oct 6, 2022 at 6:47 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > On Wed, Oct 05, 2022 at 11:48:42PM +0200, Jason A. Donenfeld wrote:
+	Hello,
 
-...
+	Posting v5 (no new ideas for now). New patch
+inserted at 2nd position. Patch 6 just for debugging,
+do not apply if not needed. 
 
-> > > -     u32 isn = (prandom_u32() & ~7UL) - 1;
-> > > +     u32 isn = (get_random_u32() & ~7UL) - 1;
-> >
-> > Maybe this wants to be written as
-> >
-> > (prandom_max(U32_MAX >> 7) << 7) | 7
+	This patchset implements stats estimation in
+kthread context. Simple tests do not show any problem.
+If testing, check that calculated chain_max does not
+deviates much. 
 
-> > ?
-> 
-> Holy smokes. Yea I guess maybe? It doesn't exactly gain anything or
-> make the code clearer though, and is a little bit more magical than
-> I'd like on a first pass.
+	cache_factor = 4 needs to be tested with different
+configurations. Now ip_vs_est_calc_limits() is simpler.
+BH locking is used, IRQ locking looks dangerous to me,
+it can hurt systems that do not have TSC clocksource,
+not sure if that can affect ktime.
 
-Shouldn't the two first 7s to be 3s?
+	Overview of the basic concepts. More in the
+commit messages...
 
-...
+RCU Locking:
 
-> > > -     psn = prandom_u32() & 0xffffff;
-> > > +     psn = get_random_u32() & 0xffffff;
-> >
-> >  prandom_max(0xffffff + 1)
-> 
-> That'd work, but again it's not more clear. Authors here are going for
-> a 24-bit number, and masking seems like a clear way to express that.
+- As stats are now RCU-locked, tot_stats, svc and dest which
+hold estimator structures are now always freed from RCU
+callback. This ensures RCU grace period after the
+ip_vs_stop_estimator() call.
 
-We have some 24-bit APIs (and 48-bit) already in kernel, why not to have
-get_random_u24() ?
+Kthread data:
 
+- every kthread works over its own data structure and all
+such structures are attached to array. For now we
+apply a rlimit as max kthreads to create.
+
+- even while there can be a kthread structure, its task
+may not be running, eg. before first service is added or
+while the sysctl var is set to an empty cpulist or
+when run_estimation is 0.
+
+- the allocated kthread context may grow from 1 to 50
+allocated structures for ticks which saves memory for
+setups with small number of estimators
+
+- a task and its structure may be released if all
+estimators are unlinked from its chains, leaving the
+slot in the array empty
+
+- every kthread data structure allows limited number
+of estimators. Kthread 0 is also used to initially
+calculate the number of estimators to allow in every
+chain considering a sub-100 microsecond cond_resched
+rate. This number can be from 1 to hundreds.
+
+- kthread 0 has an additional job of optimizing the
+adding of estimators: they are first added in
+temp list (est_temp_list) and later kthread 0
+distributes them to other kthreads. The optimization
+is based on the fact that newly added estimator
+should be estimated after 2 seconds, so we have the
+time to offload the adding to chain from controlling
+process to kthread 0.
+
+- to add new estimators we use the last added kthread
+context (est_add_ktid). The new estimators are linked to
+the chains just before the estimated one, based on add_row.
+This ensures their estimation will start after 2 seconds.
+If estimators are added in bursts, common case if all
+services and dests are initially configured, we may
+spread the estimators to more chains. This will reduce
+the chain imbalance.
+
+	There are things that I don't like but for now
+I don't have a better idea for them:
+
+- calculation of chain_max can go wrong, depending
+on the current load, CPU speed, memory speeds, running in
+VM, whether tested estimators are in CPU cache, even if
+we are doing it in SCHED_FIFO mode or with BH disabled.
+I expect such noise to be insignificant but who knows.
+
+- ip_vs_stop_estimator is not a simple unlinking of
+list node, we spend cycles to account for the removed
+estimator
+
+- __ip_vs_mutex is global mutex for all netns. But it
+protects hash tables that are still global ones.
+
+
+Changes in v5:
+Patch 4 (was 3 in v4):
+* use ip_vs_est_max_threads() helper
+Patch 3 (was 2 in v4):
+* kthread 0 now disables BH instead of using SCHED_FIFO mode,
+  this should work because now we perform less number of repeated
+  test over pre-allocated kd->calc_stats structure. Use
+  cache_factor = 4 to approximate the time non-cached (due to large
+  number) per-cpu stats are estimated compared to the cached data
+  we estimate in calc phase. This needs to be tested with
+  different number of CPUs and NUMA nodes.
+* limit max threads using the formula 4 * Number of CPUs, not on rlimit
+* remove _len suffix from vars like chain_max_len, tick_max_len,
+  est_chain_max_len
+Patch 2:
+* new patch that adds functions for stats allocations
+
+Changes in v4:
+Patch 2:
+* kthread 0 can start with calculation phase in SCHED_FIFO mode
+  to determine chain_max_len suitable for 100us cond_resched
+  rate and 12% of 40ms CPU usage in a tick. Current value of
+  IPVS_EST_TICK_CHAINS=48 determines tick time of 4.8ms (i.e.
+  in units of 100us) which is 12% of max tick time of 40ms.
+  The question is how reliable will be such calculation test.
+* est_calc_phase indicates a mode where we dequeue estimators
+  from kthreads, apply new chain_max_len and enqueue again
+  all estimators to kthreads, done by kthread 0
+* est->ktid now can be -1 to indicate est is in est_temp_list
+  ready to be distributed to kthread by kt 0, done in
+  ip_vs_est_drain_temp_list(). kthread 0 data is now released
+  only after the data for others kthreads
+* ip_vs_start_estimator was not setting ret = 0
+* READ_ONCE not needed for volatile jiffies
+Patch 3:
+* restrict cpulist based on the cpus_allowed of
+  process that assigns cpulist, not on cpu_possible_mask
+* change of cpulist will trigger calc phase
+Patch 5:
+* print message every minute, not 2 seconds
+
+Changes in v3:
+Patch 2:
+* calculate chain_max_len (was IPVS_EST_CHAIN_DEPTH) but
+  it needs further tuning based on real estimation test
+* est_max_threads set from rlimit(RLIMIT_NPROC). I don't
+  see analog to get_ucounts_value() to get the max value.
+* the atomic bitop for td->present is not needed,
+  remove it
+* start filling based on est_row after 2 ticks are
+  fully allocated. As 2/50 is 4% this can be increased
+  more.
+
+Changes in v2:
+Patch 2:
+* kd->mutex is gone, cond_resched rate determined by
+  IPVS_EST_CHAIN_DEPTH
+* IPVS_EST_MAX_COUNT is a hard limit now
+* kthread data is now 1-50 allocated tick structures,
+  each containing heads for limited chains. Bitmaps
+  should allow faster access. We avoid large
+  allocations for structs.
+* as the td->present bitmap is shared, use atomic bitops
+* ip_vs_start_estimator now returns error code
+* _bh locking removed from stats->lock
+* bump arg is gone from ip_vs_est_reload_start
+* prepare for upcoming changes that remove _irq
+  from u64_stats_fetch_begin_irq/u64_stats_fetch_retry_irq
+* est_add_ktid is now always valid
+Patch 3:
+* use .. in est_nice docs
+
+Julian Anastasov (6):
+  ipvs: add rcu protection to stats
+  ipvs: use common functions for stats allocation
+  ipvs: use kthreads for stats estimation
+  ipvs: add est_cpulist and est_nice sysctl vars
+  ipvs: run_estimation should control the kthread tasks
+  ipvs: debug the tick time
+
+ Documentation/networking/ipvs-sysctl.rst |  24 +-
+ include/net/ip_vs.h                      | 144 +++-
+ net/netfilter/ipvs/ip_vs_core.c          |  10 +-
+ net/netfilter/ipvs/ip_vs_ctl.c           | 442 +++++++++---
+ net/netfilter/ipvs/ip_vs_est.c           | 862 +++++++++++++++++++++--
+ 5 files changed, 1320 insertions(+), 162 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.3
 
 
