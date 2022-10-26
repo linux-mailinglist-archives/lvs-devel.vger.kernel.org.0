@@ -2,41 +2,40 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A838060E3F7
-	for <lists+lvs-devel@lfdr.de>; Wed, 26 Oct 2022 17:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C5460E47C
+	for <lists+lvs-devel@lfdr.de>; Wed, 26 Oct 2022 17:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJZPBQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 26 Oct 2022 11:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S234557AbiJZP3u (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 26 Oct 2022 11:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJZPBP (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 26 Oct 2022 11:01:15 -0400
+        with ESMTP id S234540AbiJZP3t (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 26 Oct 2022 11:29:49 -0400
 Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2047F101CF;
-        Wed, 26 Oct 2022 08:01:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBD50EE19
+        for <lvs-devel@vger.kernel.org>; Wed, 26 Oct 2022 08:29:46 -0700 (PDT)
 Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id C601A11DDB;
-        Wed, 26 Oct 2022 18:01:11 +0300 (EEST)
+        by mg.ssi.bg (Proxmox) with ESMTP id 4D9BD120AA;
+        Wed, 26 Oct 2022 18:29:45 +0300 (EEST)
 Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 9092211DDA;
-        Wed, 26 Oct 2022 18:01:10 +0300 (EEST)
+        by mg.ssi.bg (Proxmox) with ESMTP id 1F6BD120A9;
+        Wed, 26 Oct 2022 18:29:44 +0300 (EEST)
 Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 654093C07E1;
-        Wed, 26 Oct 2022 18:01:10 +0300 (EEST)
+        by ink.ssi.bg (Postfix) with ESMTPS id CA06D3C07E1;
+        Wed, 26 Oct 2022 18:29:43 +0300 (EEST)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QF19DQ097559;
-        Wed, 26 Oct 2022 18:01:09 +0300
-Date:   Wed, 26 Oct 2022 18:01:09 +0300 (EEST)
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QFTdZh103583;
+        Wed, 26 Oct 2022 18:29:42 +0300
+Date:   Wed, 26 Oct 2022 18:29:39 +0300 (EEST)
 From:   Julian Anastasov <ja@ssi.bg>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>, stable@vger.kernel.org
-Subject: Re: [PATCH] ipvs: use explicitly signed chars
-In-Reply-To: <Y1lEebYfRwrtliDL@zx2c4.com>
-Message-ID: <bb93406f-6935-deee-22e4-c4b4be55bc60@ssi.bg>
-References: <20221026123216.1575440-1-Jason@zx2c4.com> <4cc36ff5-46fd-c2b3-3292-d6369337fec1@ssi.bg> <Y1lEebYfRwrtliDL@zx2c4.com>
+To:     Jiri Wiesner <jwiesner@suse.de>
+cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        yunhong-cgl jiang <xintian1976@gmail.com>,
+        dust.li@linux.alibaba.com
+Subject: Re: [RFC PATCHv5 3/6] ipvs: use kthreads for stats estimation
+In-Reply-To: <b279182b-58ee-1c76-e194-31539d95982@ssi.bg>
+Message-ID: <bc1d5e15-9c1f-4f4a-152f-2e49e472963@ssi.bg>
+References: <20221009153710.125919-1-ja@ssi.bg> <20221009153710.125919-4-ja@ssi.bg> <20221015092158.GA3484@incl> <64d2975-357d-75f7-1d34-c43a1b3fc72a@ssi.bg> <20221022181513.GB3484@incl> <b279182b-58ee-1c76-e194-31539d95982@ssi.bg>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -50,33 +49,27 @@ X-Mailing-List: lvs-devel@vger.kernel.org
 
 	Hello,
 
-On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
+On Mon, 24 Oct 2022, Julian Anastasov wrote:
 
-> On Wed, Oct 26, 2022 at 05:20:03PM +0300, Julian Anastasov wrote:
-> > 
-> > 	Hello,
-> > 
-> > On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
-> > 
-> > > The `char` type with no explicit sign is sometimes signed and sometimes
-> > > unsigned. This code will break on platforms such as arm, where char is
-> > > unsigned. So mark it here as explicitly signed, so that the
-> > > todrop_counter decrement and subsequent comparison is correct.
-> > > 
-> > > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> > > Cc: Julian Anastasov <ja@ssi.bg>
-> > > Cc: Simon Horman <horms@verge.net.au>
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > 
-> > 	Looks good to me for -next, thanks!
-> 
-> This is actually net.git material, not net-next.git material,
-> considering it fixes a bug on arm and many other archs, and is marked
-> with a stable@ tag.
+> 	While finishing this posting, I'm investigating
+> the idea to use structures without chains (no relinking),
+> without chain_len, tick_len, etc. But let me first see
+> if such idea can work...
 
-	OK. As algorithm is not SMP safe, the problem is
-not just for the first 256 packets on these platforms.
+	Hm, I tried some ideas but result is not good at all.
+chain_max looks like a good implicit way to apply cond_resched
+rate and to return to some safe position on return. Other methods
+with arrays will (1) allocate more memory or (2) slowdown searching
+for free slot while adding or (3) slowdown while walking during
+estimation. Now we benefit from long chains (33/38 as in your
+setup) to (1) use less memory to store ests in chains and (2) to
+reduce the cost from for_each_set_bit() operation.
+
+	So, for now I don't have any better idea to change
+the data structures.
+
+	After your feedback I can prepare next version by adding
+wait_event_idle_timeout() calls as pause between tests.
 
 Regards
 
