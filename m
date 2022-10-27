@@ -2,66 +2,28 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80E661027B
-	for <lists+lvs-devel@lfdr.de>; Thu, 27 Oct 2022 22:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D521D6102C1
+	for <lists+lvs-devel@lfdr.de>; Thu, 27 Oct 2022 22:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236745AbiJ0UPy (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 27 Oct 2022 16:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S235586AbiJ0Ues (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 27 Oct 2022 16:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbiJ0UPx (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 27 Oct 2022 16:15:53 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CFF6068B
-        for <lvs-devel@vger.kernel.org>; Thu, 27 Oct 2022 13:15:51 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id m5-20020a9d73c5000000b0066738ce4f12so1750393otk.12
-        for <lvs-devel@vger.kernel.org>; Thu, 27 Oct 2022 13:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PkxtUHaGFDycP6D2luIHLSXJkXOzlvpiMUNbGq0VIDw=;
-        b=AiYRsbNPUrZt3HPq+xtJfDrvafoV3sgbBvDsYvDt8alNybjtz3OkR1xymRkE3QILqj
-         mmJ4n9e+K/PVts3cQ2eJ5htk2mJ+mPxzhWMdsaeW6GINZP2CIccvVT49FekPjg7PRFXI
-         92WGHwoPAVqBkaMzcdjnmCw5MEE1uFvTm34eA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PkxtUHaGFDycP6D2luIHLSXJkXOzlvpiMUNbGq0VIDw=;
-        b=NBbUNvAgWip0OzoPZ/1dKbEZJr4n94sNwYYa2T7dcFa5BFgRYjhBT/14uWRH//aqe1
-         ylcHLEzhTLp95WAnHSbsXTrLUD3GZnb1dNY+FF1PnPxQrlNmpIQoSu4sXj8FG24ErZ9w
-         F9GNbxEE4oAOBo/ZSFHRcHkKbFF8fH1/AA6R3D9ojrmwpCxXX/PIVBKIeFqGUorGPpHW
-         8NIlEqsUfYv3PCv53ZchGd0MpBSICkA22wy/3Krd9nfDNtrC+Y+SPyInHkWT3EeOg+h7
-         CdGdt4pttFQXMRJglbCLhztRqO/Brrw7xdiB9qLntsZ8gme1SzDd3ibYMd7IMxuZSv4R
-         hNSA==
-X-Gm-Message-State: ACrzQf1xzZgQSxvhLO4JO0hfM1LotUfu1UdszkiyBKSEZak5GQS6E1dH
-        bV+nk8D/45mTcIKVimqAYRJNar3bNOHS8Q==
-X-Google-Smtp-Source: AMsMyM7ReYOXAv63n1wxZSxmGLPKwDxplU14ZHRQdlCz7eH7Xj1XJMoPsqMAoxbK8Vjn07ztEwd5Ww==
-X-Received: by 2002:a05:6830:1496:b0:661:b657:25c0 with SMTP id s22-20020a056830149600b00661b65725c0mr25421026otq.147.1666901750983;
-        Thu, 27 Oct 2022 13:15:50 -0700 (PDT)
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com. [209.85.161.42])
-        by smtp.gmail.com with ESMTPSA id r140-20020acaa892000000b00353ef11d6c9sm787177oie.19.2022.10.27.13.15.50
-        for <lvs-devel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 13:15:50 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so473652oop.9
-        for <lvs-devel@vger.kernel.org>; Thu, 27 Oct 2022 13:15:50 -0700 (PDT)
-X-Received: by 2002:a81:d34c:0:b0:349:1e37:ce4e with SMTP id
- d12-20020a81d34c000000b003491e37ce4emr46057341ywl.112.1666901739776; Thu, 27
- Oct 2022 13:15:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221027150525.753064657@goodmis.org> <20221027150928.780676863@goodmis.org>
- <20221027155513.60b211e2@gandalf.local.home>
-In-Reply-To: <20221027155513.60b211e2@gandalf.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Oct 2022 13:15:23 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-Message-ID: <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
- before freeing timer
-To:     Steven Rostedt <rostedt@goodmis.org>
+        with ESMTP id S233652AbiJ0Uer (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 27 Oct 2022 16:34:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453DA32076;
+        Thu, 27 Oct 2022 13:34:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0160EB827D3;
+        Thu, 27 Oct 2022 20:34:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EBAC433D7;
+        Thu, 27 Oct 2022 20:34:39 +0000 (UTC)
+Date:   Thu, 27 Oct 2022 16:34:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -83,49 +45,74 @@ Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
         coreteam@netfilter.org, lvs-devel@vger.kernel.org,
         linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
         tipc-discussion@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Re: [RFC][PATCH v2 19/31] timers: net: Use del_timer_shutdown()
+ before freeing timer
+Message-ID: <20221027163453.383bbf8e@gandalf.local.home>
+In-Reply-To: <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+References: <20221027150525.753064657@goodmis.org>
+        <20221027150928.780676863@goodmis.org>
+        <20221027155513.60b211e2@gandalf.local.home>
+        <CAHk-=wjAjW2P5To82+CAM0Rx8RexQBHPTVZBWBPHyEPGm37oFA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:55 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Thu, 27 Oct 2022 13:15:23 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Thu, Oct 27, 2022 at 12:55 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > I think we need to update this code to squeeze in a del_timer_shutdown() to
+> > make sure that the timers are never restarted.  
+> 
+> So the reason the networking code does this is that it can't just do
+> the old 'sync()' thing, the timers are deleted in contexts where that
+> isn't valid.
+> 
+> Which is also afaik why the networking code does that whole "timer
+> implies a refcount to the socket" and then does the
+> 
+>     if (del_timer(timer))
+>            sock_put()
+> 
+> thing (ie if the del_timer failed - possibly because it was already
+> running - you leave the refcount alone).
+
+OK, so the above is assuming that the timer is always active, and
+del_timer() returns if it successfully removed it (where it can call
+sock_put()), but if del_timer() returns 0, that means the timer is
+currently running (or about to be), so it doesn't call sock_put().
+
+> 
+> So the networking code cannot do the del_timer_shutdown() for the same
+> reason it cannot do the del_timer_sync(): it can't afford to wait for
+> the timer to stop running.
+> 
+> I suspect it needs something like a new "del_timer_shutdown_async()"
+> that isn't synchronous, but does that
+> 
+>  - acts as del_timer in that it doesn't wait, and returns a success if
+> it could just remove the pending case
+> 
+>  - does that "mark timer for shutdown" in that success case
+> 
+> or something similar.
 >
-> I think we need to update this code to squeeze in a del_timer_shutdown() to
-> make sure that the timers are never restarted.
 
-So the reason the networking code does this is that it can't just do
-the old 'sync()' thing, the timers are deleted in contexts where that
-isn't valid.
+What about del_timer_try_shutdown(), that if it removes the timer, it sets
+the function to NULL (making it equivalent to a successful shutdown),
+otherwise it does nothing. Allowing the the timer to be rearmed.
 
-Which is also afaik why the networking code does that whole "timer
-implies a refcount to the socket" and then does the
+I think this would work in this case.
 
-    if (del_timer(timer))
-           sock_put()
+-- Steve
 
-thing (ie if the del_timer failed - possibly because it was already
-running - you leave the refcount alone).
-
-So the networking code cannot do the del_timer_shutdown() for the same
-reason it cannot do the del_timer_sync(): it can't afford to wait for
-the timer to stop running.
-
-I suspect it needs something like a new "del_timer_shutdown_async()"
-that isn't synchronous, but does that
-
- - acts as del_timer in that it doesn't wait, and returns a success if
-it could just remove the pending case
-
- - does that "mark timer for shutdown" in that success case
-
-or something similar.
-
-But the networking people will know better.
-
-               Linus
