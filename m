@@ -2,46 +2,44 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7E9613979
-	for <lists+lvs-devel@lfdr.de>; Mon, 31 Oct 2022 15:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9F16139A7
+	for <lists+lvs-devel@lfdr.de>; Mon, 31 Oct 2022 16:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiJaO53 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 31 Oct 2022 10:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S229875AbiJaPFJ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 31 Oct 2022 11:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231738AbiJaO5U (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 31 Oct 2022 10:57:20 -0400
+        with ESMTP id S230056AbiJaPFI (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 31 Oct 2022 11:05:08 -0400
 Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA2BA1007E
-        for <lvs-devel@vger.kernel.org>; Mon, 31 Oct 2022 07:57:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8CAD1117F;
+        Mon, 31 Oct 2022 08:05:07 -0700 (PDT)
 Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id 44C7D21AE1;
-        Mon, 31 Oct 2022 16:57:18 +0200 (EET)
+        by mg.ssi.bg (Proxmox) with ESMTP id 3FACE21BA0;
+        Mon, 31 Oct 2022 17:05:07 +0200 (EET)
 Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 2148C219CD;
-        Mon, 31 Oct 2022 16:57:16 +0200 (EET)
+        by mg.ssi.bg (Proxmox) with ESMTP id 20DCC21B9F;
+        Mon, 31 Oct 2022 17:05:06 +0200 (EET)
 Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id DF4923C0505;
-        Mon, 31 Oct 2022 16:57:08 +0200 (EET)
-Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29VEv8so157043;
-        Mon, 31 Oct 2022 16:57:08 +0200
-Received: (from root@localhost)
-        by ja.home.ssi.bg (8.17.1/8.17.1/Submit) id 29VEv8f1157042;
-        Mon, 31 Oct 2022 16:57:08 +0200
+        by ink.ssi.bg (Postfix) with ESMTPS id E692D3C0437;
+        Mon, 31 Oct 2022 17:05:03 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29VF52rh159370;
+        Mon, 31 Oct 2022 17:05:03 +0200
+Date:   Mon, 31 Oct 2022 17:05:02 +0200 (EET)
 From:   Julian Anastasov <ja@ssi.bg>
-To:     Jiri Wiesner <jwiesner@suse.de>
-Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        yunhong-cgl jiang <xintian1976@gmail.com>,
-        dust.li@linux.alibaba.com
-Subject: [RFC PATCHv6 7/7] ipvs: debug the tick time
-Date:   Mon, 31 Oct 2022 16:56:47 +0200
-Message-Id: <20221031145647.156930-8-ja@ssi.bg>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221031145647.156930-1-ja@ssi.bg>
-References: <20221031145647.156930-1-ja@ssi.bg>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>
+cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Simon Horman <horms@verge.net.au>, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, weiyongjun1@huawei.com,
+        yuehaibing@huawei.com
+Subject: Re: [PATCH net,v2 0/2] fix WARNING when removing file in ipvs
+In-Reply-To: <20221031120705.230059-1-shaozhengchao@huawei.com>
+Message-ID: <9dfd739c-f7b-e758-9b46-f79ba9cec82@ssi.bg>
+References: <20221031120705.230059-1-shaozhengchao@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,95 +48,36 @@ Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Just for testing print the tick time every minute
 
-Signed-off-by: Julian Anastasov <ja@ssi.bg>
----
- net/netfilter/ipvs/ip_vs_est.c | 28 ++++++++++++++++++++++++++--
- 1 file changed, 26 insertions(+), 2 deletions(-)
+	Hello,
 
-diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
-index 526100976d59..4489a3dbad1e 100644
---- a/net/netfilter/ipvs/ip_vs_est.c
-+++ b/net/netfilter/ipvs/ip_vs_est.c
-@@ -147,7 +147,14 @@ static void ip_vs_tick_estimation(struct ip_vs_est_kt_data *kd, int row)
- {
- 	struct ip_vs_est_tick_data *td;
- 	int cid;
--
-+	u64 ns = 0;
-+	static int used_row = -1;
-+	static int pass;
-+
-+	if (used_row < 0)
-+		used_row = row;
-+	if (row == used_row && !kd->id && !(pass & 31))
-+		ns = ktime_get_ns();
- 	rcu_read_lock();
- 	td = rcu_dereference(kd->ticks[row]);
- 	if (!td)
-@@ -164,6 +171,16 @@ static void ip_vs_tick_estimation(struct ip_vs_est_kt_data *kd, int row)
- 
- out:
- 	rcu_read_unlock();
-+	if (row == used_row && !kd->id && !(pass++ & 31)) {
-+		static int ncpu;
-+
-+		ns = ktime_get_ns() - ns;
-+		if (!ncpu)
-+			ncpu = num_possible_cpus();
-+		pr_info("tick time: %lluns for %d CPUs, %d ests, %d chains, chain_max=%d\n",
-+			(unsigned long long)ns, ncpu, kd->tick_len[row],
-+			IPVS_EST_TICK_CHAINS, kd->chain_max);
-+	}
- }
- 
- static int ip_vs_estimation_kthread(void *data)
-@@ -637,7 +654,7 @@ static int ip_vs_est_calc_limits(struct netns_ipvs *ipvs, int *chain_max)
- 	int i, loops, ntest;
- 	s32 min_est = 0;
- 	ktime_t t1, t2;
--	s64 diff, val;
-+	s64 diff = 0, val;
- 	int max = 8;
- 	int ret = 1;
- 
-@@ -702,6 +719,8 @@ static int ip_vs_est_calc_limits(struct netns_ipvs *ipvs, int *chain_max)
- 	}
- 
- out:
-+	pr_info("calc: chain_max=%d, single est=%dns, diff=%d, loops=%d, ntest=%d\n",
-+		max, min_est, (int)diff, loops, ntest);
- 	if (s)
- 		hlist_del_init(&s->est.list);
- 	*chain_max = max;
-@@ -737,6 +756,7 @@ static void ip_vs_est_calc_phase(struct netns_ipvs *ipvs)
- 	int id, row, cid, delay;
- 	bool last, last_td;
- 	int chain_max;
-+	u64 ns = 0;
- 	int step;
- 
- 	if (!ip_vs_est_calc_limits(ipvs, &chain_max))
-@@ -770,6 +790,8 @@ static void ip_vs_est_calc_phase(struct netns_ipvs *ipvs)
- 	 */
- 	delay = IPVS_EST_NTICKS;
- 
-+	ns = ktime_get_ns();
-+
- next_delay:
- 	delay--;
- 	if (delay < 0)
-@@ -856,6 +878,8 @@ static void ip_vs_est_calc_phase(struct netns_ipvs *ipvs)
- 	goto walk_chain;
- 
- end_dequeue:
-+	ns = ktime_get_ns() - ns;
-+	pr_info("dequeue: %lluns\n", (unsigned long long)ns);
- 	/* All estimators removed while calculating ? */
- 	if (!ipvs->est_kt_count)
- 		goto unlock;
--- 
-2.38.1
+On Mon, 31 Oct 2022, Zhengchao Shao wrote:
 
+> When using strace for fault injection, some warnings are trigged when
+> files are removed. This is because the file fails to be created during
+> the initialization, but the initialization continues normally. Therefore,
+> a WARNING is reported when the file is removed during the exit.
+> 
+> ---
+> v2: add macro isolation
+> ---
+> Zhengchao Shao (2):
+>   ipvs: fix WARNING in __ip_vs_cleanup_batch()
+>   ipvs: fix WARNING in ip_vs_app_net_cleanup()
+
+	Both patches in v2 look good to me, thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
+>  net/netfilter/ipvs/ip_vs_app.c  | 10 ++++++++--
+>  net/netfilter/ipvs/ip_vs_conn.c | 26 +++++++++++++++++++++-----
+>  2 files changed, 29 insertions(+), 7 deletions(-)
+> 
+> -- 
+> 2.17.1
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
 
