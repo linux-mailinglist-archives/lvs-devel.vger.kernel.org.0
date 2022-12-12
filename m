@@ -2,45 +2,54 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE21648BE4
-	for <lists+lvs-devel@lfdr.de>; Sat, 10 Dec 2022 01:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4685064992E
+	for <lists+lvs-devel@lfdr.de>; Mon, 12 Dec 2022 08:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiLJAsF (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 9 Dec 2022 19:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S231395AbiLLHFj (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 12 Dec 2022 02:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLJAsE (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 9 Dec 2022 19:48:04 -0500
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 795BB21270;
-        Fri,  9 Dec 2022 16:48:02 -0800 (PST)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id EDF703C7AB;
-        Sat, 10 Dec 2022 02:47:59 +0200 (EET)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 907993C811;
-        Sat, 10 Dec 2022 02:47:55 +0200 (EET)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id BDF6F3C07EF;
-        Sat, 10 Dec 2022 02:47:51 +0200 (EET)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 2BA0ljIP161290;
-        Sat, 10 Dec 2022 02:47:46 +0200
-Date:   Sat, 10 Dec 2022 02:47:45 +0200 (EET)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, Jiri Wiesner <jwiesner@suse.de>,
-        yunhong-cgl jiang <xintian1976@gmail.com>,
-        dust.li@linux.alibaba.com
-Subject: Re: [PATCHv7 0/6] ipvs: Use kthreads for stats
-In-Reply-To: <Y5OhfLeQiOXhQ2/s@salvia>
-Message-ID: <6d155743-5bd-ba4e-225d-ac2875c99c76@ssi.bg>
-References: <20221122164604.66621-1-ja@ssi.bg> <Y5HTM6jY/ZRw+ar0@salvia> <Y5HV0EpOrQtdU11y@salvia> <1866fdd6-dff-67b5-cd66-41bc8962957d@ssi.bg> <Y5OhfLeQiOXhQ2/s@salvia>
+        with ESMTP id S230427AbiLLHFh (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 12 Dec 2022 02:05:37 -0500
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB319384;
+        Sun, 11 Dec 2022 23:05:35 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 1B6211E80D9E;
+        Mon, 12 Dec 2022 15:00:59 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TFNPOjJsgLJx; Mon, 12 Dec 2022 15:00:56 +0800 (CST)
+Received: from [172.30.38.124] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id D415A1E80D9B;
+        Mon, 12 Dec 2022 15:00:55 +0800 (CST)
+Subject: Re: [PATCH] ipvs: initialize 'ret' variable in do_ip_vs_set_ctl()
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Dan Carpenter <error27@gmail.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Yu Zhe <yuzhe@nfschina.com>
+References: <20221202032511.1435-1-liqiong@nfschina.com>
+ <Y4nORiViTw0XlU2a@kadam> <9bc0af1a-3cf0-de4e-7073-0f7895b7f6eb@nfschina.com>
+ <Y4nSu7D5T2jDkXGK@kadam> <7758482-42e8-9057-b568-3980858267f@ssi.bg>
+From:   liqiong <liqiong@nfschina.com>
+Message-ID: <272315c8-5e3b-e8ca-3c7f-68eccd0f2430@nfschina.com>
+Date:   Mon, 12 Dec 2022 15:05:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7758482-42e8-9057-b568-3980858267f@ssi.bg>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -48,78 +57,62 @@ List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
 
-	Hello,
 
-On Fri, 9 Dec 2022, Pablo Neira Ayuso wrote:
-
-> On Thu, Dec 08, 2022 at 07:03:44PM +0200, Julian Anastasov wrote:
-> > 
-> > > Is there any particular reason for not using the generic workqueue
-> > > infrastructure? I could not find a reason in the commit logs.
-> > 
-> > 	The estimation can take long time when using
-> > multiple IPVS rules (eg. millions estimator structures) and
-> > especially when box has multiple CPUs due to the for_each_possible_cpu
-> > usage that expects packets from any CPU. With est_nice sysctl
-> > we have more control how to prioritize the estimation
-> > kthreads compared to other processes/kthreads that
-> > have latency requirements (such as servers). As a benefit,
-> > we can see these kthreads in top and decide if we will
-> > need some further control to limit their CPU usage (max
-> > number of structure to estimate per kthread).
-> 
-> OK, then my understanding is that you have requirements to have more
-> control on the kthreads than what the workqueue interface provides.
-> 
-> I can see there is WQ_HIGHPRI and WQ_CPU_INTENSIVE flags to signal
-> latency sensitive and work taking long time to complete in the
-> workqueue respectively, but I have never used them though. sysfs also
-> exposes cpumask and nice, but you set the nice level while creating
-> kthreads on-demand from the kernel itself using the value provided by
-> new sysctl knob to set the nice value.
-
-	There are probably more reasons why kthreads look
-better:
-
-- with kthreads we run code that is read-mostly, no write/lock
-operations to process the estimators in 2-second intervals
-
-- work items are one-shot: as estimators are processed every
-2 seconds, they need to be re-added every time. This again
-loads the timers (add_timer) if we use delayed works, as there are
-no kthreads to do the timings.
-
-> I'd like to include the text above you wrote in the pull request.
-> Please, let me know if you would like to expand it, I'll apply these
-> to nf-next and prepare the pull request by tomorrow.
-
-	There is such paragraph in 0/6:
-
-===
-	Spread the estimation on multiple (configured) CPUs and
-multiple time slots (timer ticks) by using multiple chains
-organized under RCU rules. When stats are not needed, it is recommended
-to use run_estimation=0 as already implemented before this change.
-===
-
-	After it we can add something like that which
-explains why we prefer kthreads over work queue from
-performance point of view:
-
-===
-	Solution with kthreads was preferred over workqueues
-because there is less overhead to process the entries in
-specific time intervals:
-
-- entries are not unlinked before processing, so no write/lock
-operations to re-queue them
-- not using kernel timers as it is done by the delayed works,
-the entries do not change position in lists and processing
-is read-only
-===
-
-Regards
-
---
-Julian Anastasov <ja@ssi.bg>
+在 2022年12月02日 19:26, Julian Anastasov 写道:
+> 	Hello,
+>
+> On Fri, 2 Dec 2022, Dan Carpenter wrote:
+>
+>> On Fri, Dec 02, 2022 at 06:18:37PM +0800, liqiong wrote:
+>>>
+>>> 在 2022年12月02日 18:07, Dan Carpenter 写道:
+>>>> On Fri, Dec 02, 2022 at 11:25:11AM +0800, Li Qiong wrote:
+>>>>> The 'ret' should need to be initialized to 0, in case
+>>>>> return a uninitialized value because no default process
+>>>>> for "switch (cmd)".
+>>>>>
+>>>>> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+>>>> If this is a real bug, then it needs a fixes tag.  The fixes tag helps
+>>>> us know whether to back port or not and it also helps in reviewing the
+>>>> patch.  Also get_maintainer.pl will CC the person who introduced the
+>>>> bug so they can review it.  They are normally the best person to review
+>>>> their own code.
+>>>>
+>>>> Here it would be:
+>>>> Fixes: c5a8a8498eed ("ipvs: Fix uninit-value in do_ip_vs_set_ctl()")
+>>>>
+>>>> Which is strange...  Also it suggest that the correct value is -EINVAL
+>>>> and not 0.
+>>>>
+>>>> The thing about uninitialized variable bugs is that Smatch and Clang
+>>>> both warn about them so they tend to get reported pretty quick.
+>>>> Apparently neither Nathan nor I sent forwarded this static checker
+>>>> warning.  :/
+>>>>
+>>>> regards,
+>>>> dan carpenter
+>>> It is not a real bug,   I  use tool (eg: smatch, sparse) to audit the
+>>> code,  got this warning and check it, found may be a real problem.
+>> Yeah.  If it is a false positive just ignore it, do not bother to
+>> silence wrong static checker warnings.
+>>
+>> The code in question here is:
+>>
+>> 	if (len != set_arglen[CMDID(cmd)]) {
+>>
+>> The only time that condition can be true is for the cases in the switch
+>> statement.  So Peilin's patch is correct.
+>>
+>> Smatch is bad at understanding arrays so Smatch cannot parse the if
+>> statement above as a human reader can.
+> 	Yes, no bug in current code. But it is better to return the 
+> default switch case with -EINVAL (not 0), in case new commands are added.
+> Such patch should target net-next, it is just for compilers/tools
+> that do not look into set_arglen[].
+>
+> Regards
+>
+> --
+> Julian Anastasov <ja@ssi.bg>
+Thanks, I will send a v2 patch.
 
