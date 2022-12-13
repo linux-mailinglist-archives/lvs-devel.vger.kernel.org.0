@@ -2,33 +2,37 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15A664B3D6
-	for <lists+lvs-devel@lfdr.de>; Tue, 13 Dec 2022 12:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DDC64B434
+	for <lists+lvs-devel@lfdr.de>; Tue, 13 Dec 2022 12:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235360AbiLMLKt (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 13 Dec 2022 06:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S235403AbiLML3H (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 13 Dec 2022 06:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235333AbiLMLKD (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 13 Dec 2022 06:10:03 -0500
+        with ESMTP id S230093AbiLML2j (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 13 Dec 2022 06:28:39 -0500
 Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04058193D8;
-        Tue, 13 Dec 2022 03:09:31 -0800 (PST)
-Date:   Tue, 13 Dec 2022 12:09:28 +0100
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2127F1D0E9;
+        Tue, 13 Dec 2022 03:28:27 -0800 (PST)
+Date:   Tue, 13 Dec 2022 12:28:24 +0100
 From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-        pabeni@redhat.com, horms@verge.net.au, ja@ssi.bg,
-        kadlec@netfilter.org, fw@strlen.de, jwiesner@suse.de,
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Li Qiong <liqiong@nfschina.com>, Simon Horman <horms@verge.net.au>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org
-Subject: Re: [PATCH net-next] ipvs: fix type warning in do_div() on 32 bit
-Message-ID: <Y5hdaLpctttoNTLx@salvia>
-References: <20221213032037.844517-1-kuba@kernel.org>
+        kernel-janitors@vger.kernel.org, coreteam@netfilter.org,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: Re: [PATCH v2] ipvs: add a 'default' case in do_ip_vs_set_ctl()
+Message-ID: <Y5hh2NPmmkmD4VTt@salvia>
+References: <272315c8-5e3b-e8ca-3c7f-68eccd0f2430@nfschina.com>
+ <20221212074351.26440-1-liqiong@nfschina.com>
+ <c3ca27a-f923-6eb6-bbe4-5e99b65c5940@ssi.bg>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221213032037.844517-1-kuba@kernel.org>
+In-Reply-To: <c3ca27a-f923-6eb6-bbe4-5e99b65c5940@ssi.bg>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -37,32 +41,21 @@ Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Hi Jakub,
-
-On Mon, Dec 12, 2022 at 07:20:37PM -0800, Jakub Kicinski wrote:
-> 32 bit platforms without 64bit div generate the following warning:
+On Mon, Dec 12, 2022 at 04:20:41PM +0200, Julian Anastasov wrote:
 > 
-> net/netfilter/ipvs/ip_vs_est.c: In function 'ip_vs_est_calc_limits':
-> include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
->   222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
->       |                                   ^~
-> net/netfilter/ipvs/ip_vs_est.c:694:17: note: in expansion of macro 'do_div'
->   694 |                 do_div(val, loops);
->       |                 ^~~~~~
-> include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
->   222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
->       |                                   ^~
-> net/netfilter/ipvs/ip_vs_est.c:700:33: note: in expansion of macro 'do_div'
->   700 |                                 do_div(val, min_est);
->       |                                 ^~~~~~
+> 	Hello,
 > 
-> first argument of do_div() should be unsigned. We can't just cast
-> as do_div() updates it as well, so we need an lval.
-> Make val unsigned in the first place, all paths check that the value
-> they assign to this variables are non-negative already.
+> On Mon, 12 Dec 2022, Li Qiong wrote:
+> 
+> > It is better to return the default switch case with
+> > '-EINVAL', in case new commands are added. otherwise,
+> > return a uninitialized value of ret.
+> > 
+> > Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> > Reviewed-by: Simon Horman <horms@verge.net.au>
+> 
+> 	Change looks correct to me for -next, thanks!
+> 
+> Acked-by: Julian Anastasov <ja@ssi.bg>
 
-Your patch is very similar to what Julian posted:
-
-https://patchwork.ozlabs.org/project/netfilter-devel/patch/20221212195845.101844-1-ja@ssi.bg/
-
-Thanks.
+Applied, thanks.
