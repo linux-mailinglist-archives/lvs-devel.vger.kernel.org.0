@@ -2,87 +2,71 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0358655261
-	for <lists+lvs-devel@lfdr.de>; Fri, 23 Dec 2022 16:41:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7346065D35A
+	for <lists+lvs-devel@lfdr.de>; Wed,  4 Jan 2023 13:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbiLWPlf (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 23 Dec 2022 10:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S239187AbjADM4P (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 4 Jan 2023 07:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236522AbiLWPlV (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 23 Dec 2022 10:41:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3314A1148;
-        Fri, 23 Dec 2022 07:41:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9E326158B;
-        Fri, 23 Dec 2022 15:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F15C433D2;
-        Fri, 23 Dec 2022 15:41:15 +0000 (UTC)
-Date:   Fri, 23 Dec 2022 10:41:13 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>, linux-sh@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-bluetooth@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-scsi@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-ext4@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, bridge@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        lvs-devel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Subject: Re: [PATCH] treewide: Convert del_timer*() to timer_shutdown*()
-Message-ID: <20221223104113.0bc8d37f@gandalf.local.home>
-In-Reply-To: <20221220134519.3dd1318b@gandalf.local.home>
-References: <20221220134519.3dd1318b@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S239245AbjADMz5 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 4 Jan 2023 07:55:57 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6631D0E1
+        for <lvs-devel@vger.kernel.org>; Wed,  4 Jan 2023 04:55:37 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id i19so22398886ljg.8
+        for <lvs-devel@vger.kernel.org>; Wed, 04 Jan 2023 04:55:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=WaRW1340A/QkJQWV6zgM5BJsZ0ybbzzVVpOuvHgUIbt61IugYee4YkL+IgnHuzX8CH
+         8PklYjmo72EHadIxqmBsXhvyk1HIjKglPXgTzLNWzxKSFVDwjrJ+a14JYaWmHSsiQQQk
+         5lo8VlUP+FEtz4Ej7i+2OwvGYZiU8fhDzKsSUIz7sjKk53z0WERF2UNyJa844SKWVYgy
+         U1ZsfJaw6LlJQ1+hH+kDofCU1KBAAjCRlfb3QHEPZB3QYMgwT85yJGVRzJCtpypQEm57
+         nKLP07D/PXztfZP+WumswBxd0GKB2MVQA2YBxxz/dmTacqRmDu+YWr3ZAcBN59Mkt8+r
+         SUQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
+        b=S9elGJkLH8aa+vl7s/EZxK3XDHwz9SBSzs7psK/8+XSSybT2jxeK3x+f7cQUPFdaGe
+         kZEq1lV31/XMgNwBn5GFVo57bEq75gGJrCAnj0pEuXWcUFuOTc5P/HTrIxlndoV+UCH+
+         ECcDHMwpLSuMMMeE1awq5S7MTY6nxmtRbIEGRppPLF/L/JzFrqaiQCheaSHto1rPwcOn
+         lwLT4WSEl6boPTo3cFze0wYEd3uwarUYPJhfSsihJ2HxPQJv7hTphcCzSH5AmHn1twq0
+         3MKEBEc+41t6PUkcY3KgZTTyKi7wVG7tsNkuErrxaQDVMMz5u9QtJkbFiAG2IR8/KUqG
+         jbcw==
+X-Gm-Message-State: AFqh2koooLcV6BLX1uZ0EIW9aAxvX5UgM21r54u9dp8w2hr9imQQpy92
+        y6EogURFEKG5xnpPdkSMAqv2k+8dXHJqGGGd+A==
+X-Google-Smtp-Source: AMrXdXskh5sw/zoJK6qGT8Fz7L58JTTqgYYR6RiJXsV9GZ6sCtTWrvyBnkR/xoAYVjpSgNphnMFZlri55LW2Wo/J81o=
+X-Received: by 2002:a2e:bea8:0:b0:27f:b76b:629c with SMTP id
+ a40-20020a2ebea8000000b0027fb76b629cmr2025457ljr.162.1672836935546; Wed, 04
+ Jan 2023 04:55:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6022:58d:b0:35:ec7:21d2 with HTTP; Wed, 4 Jan 2023
+ 04:55:34 -0800 (PST)
+Reply-To: Gregdenzell9@gmail.com
+From:   Greg Denzell <miajohn0300@gmail.com>
+Date:   Wed, 4 Jan 2023 12:55:34 +0000
+Message-ID: <CANx7L2_Zt=2oybS74BhKqzOwPrkFGstj7cbSajcG3F8xv11CLw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Tue, 20 Dec 2022 13:45:19 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Seasons Greetings!
 
-> [
->   Linus,
-> 
->     I ran the script against your latest master branch:
->     commit b6bb9676f2165d518b35ba3bea5f1fcfc0d969bf
-> 
->     As the timer_shutdown*() code is now in your tree, I figured
->     we can start doing the conversions. At least add the trivial ones
->     now as Thomas suggested that this gets applied at the end of the
->     merge window, to avoid conflicts with linux-next during the
->     development cycle. I can wait to Friday to run it again, and
->     resubmit.
-> 
->     What is the best way to handle this?
-> ]
-
-Note, I just did a git remote update, checked out the latest, re-ran the
-script, and this patch hasn't changed.
-
--- Steve
+This will remind you again that I have not yet received your reply to
+my last message to you.
