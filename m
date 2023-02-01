@@ -2,68 +2,87 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E44668C74
-	for <lists+lvs-devel@lfdr.de>; Fri, 13 Jan 2023 07:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1D0686D7D
+	for <lists+lvs-devel@lfdr.de>; Wed,  1 Feb 2023 18:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjAMGWQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 13 Jan 2023 01:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
+        id S229771AbjBAR60 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 1 Feb 2023 12:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235391AbjAMGVB (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 13 Jan 2023 01:21:01 -0500
-X-Greylist: delayed 566 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Jan 2023 22:20:43 PST
-Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C58E69B20
-        for <lvs-devel@vger.kernel.org>; Thu, 12 Jan 2023 22:20:42 -0800 (PST)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id C2CF4E17BF;
-        Fri, 13 Jan 2023 06:11:15 +0000 (UTC)
-Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
-        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 868422689A;
-        Fri, 13 Jan 2023 06:11:15 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: 3.651
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
-        SPF_PASS,SUBJ_ALL_CAPS autolearn=no autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
-        with ESMTP id tWnx-ECvgt5z; Fri, 13 Jan 2023 06:11:15 +0000 (UTC)
-Received: from localhost (unknown [208.85.220.72])
-        by mail.ca.inter.net (Postfix) with ESMTP id D6AC226898;
-        Fri, 13 Jan 2023 06:11:10 +0000 (UTC)
-Received: from reverse.rain.network (reverse.rain.network [197.184.176.8])
- by webmail.ca.inter.net (Horde Framework) with HTTP; Fri, 13 Jan 2023
- 01:11:10 -0500
-Message-ID: <20230113011110.130946svqtv0j3su@webmail.ca.inter.net>
-Date:   Fri, 13 Jan 2023 01:11:10 -0500
-From:   INFO <boothg@istar.ca>
-Reply-to: s.g0392440821@gmail.com
-To:     undisclosed-recipients:;
-Subject: IST DIESE E-MAIL AKTIV?
+        with ESMTP id S229609AbjBAR6Z (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 1 Feb 2023 12:58:25 -0500
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5806D13D69;
+        Wed,  1 Feb 2023 09:58:24 -0800 (PST)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 9DD964DF1A;
+        Wed,  1 Feb 2023 19:58:22 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id F20DD4DE6F;
+        Wed,  1 Feb 2023 19:58:18 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 6D9273C0439;
+        Wed,  1 Feb 2023 19:58:16 +0200 (EET)
+Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 311HwGdp114534;
+        Wed, 1 Feb 2023 19:58:16 +0200
+Received: (from root@localhost)
+        by ja.home.ssi.bg (8.17.1/8.17.1/Submit) id 311HwC8W114527;
+        Wed, 1 Feb 2023 19:58:12 +0200
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        Uladzislau Rezki <urezki@gmail.com>
+Subject: [PATCH net-next] ipvs: avoid kfree_rcu without 2nd arg
+Date:   Wed,  1 Feb 2023 19:56:53 +0200
+Message-Id: <20230201175653.114334-1-ja@ssi.bg>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=ISO-8859-1;
- DelSp="Yes";
- format="flowed"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-User-Agent: Internet Messaging Program (IMP) H3 (4.3.7)
-X-Originating-User-Info: boothg@istar.ca 208.85.219.96
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
+Avoid possible synchronize_rcu() as part from the
+kfree_rcu() call when 2nd arg is not provided.
 
+Signed-off-by: Julian Anastasov <ja@ssi.bg>
+---
+ include/net/ip_vs.h            | 1 +
+ net/netfilter/ipvs/ip_vs_est.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Sehr geehrter E-Mail-Begünstigter, Sie wurden für eine Spende in Höhe  
-von 3.500.000,00 ? ausgewählt. Wenden Sie sich an diese  
-E-Mail-Adresse: s.g0392440821@gmail.com, um weitere Informationen zum  
-Erhalt Ihrer Spende zu erhalten. Vielen Dank
+diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+index c6c61100d244..6d71a5ff52df 100644
+--- a/include/net/ip_vs.h
++++ b/include/net/ip_vs.h
+@@ -461,6 +461,7 @@ void ip_vs_stats_free(struct ip_vs_stats *stats);
+ 
+ /* Multiple chains processed in same tick */
+ struct ip_vs_est_tick_data {
++	struct rcu_head		rcu_head;
+ 	struct hlist_head	chains[IPVS_EST_TICK_CHAINS];
+ 	DECLARE_BITMAP(present, IPVS_EST_TICK_CHAINS);
+ 	DECLARE_BITMAP(full, IPVS_EST_TICK_CHAINS);
+diff --git a/net/netfilter/ipvs/ip_vs_est.c b/net/netfilter/ipvs/ip_vs_est.c
+index df56073bb282..25c7118d9348 100644
+--- a/net/netfilter/ipvs/ip_vs_est.c
++++ b/net/netfilter/ipvs/ip_vs_est.c
+@@ -549,7 +549,7 @@ void ip_vs_stop_estimator(struct netns_ipvs *ipvs, struct ip_vs_stats *stats)
+ 	__set_bit(row, kd->avail);
+ 	if (!kd->tick_len[row]) {
+ 		RCU_INIT_POINTER(kd->ticks[row], NULL);
+-		kfree_rcu(td);
++		kfree_rcu(td, rcu_head);
+ 	}
+ 	kd->est_count--;
+ 	if (kd->est_count) {
+-- 
+2.39.1
+
 
