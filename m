@@ -2,58 +2,67 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CB26BCA6C
-	for <lists+lvs-devel@lfdr.de>; Thu, 16 Mar 2023 10:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6486BDFAC
+	for <lists+lvs-devel@lfdr.de>; Fri, 17 Mar 2023 04:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjCPJKy (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 16 Mar 2023 05:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S229599AbjCQDfT (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 16 Mar 2023 23:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjCPJKv (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Mar 2023 05:10:51 -0400
-Received: from mail.paretdee.com (mail.paretdee.com [141.95.17.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA721739
-        for <lvs-devel@vger.kernel.org>; Thu, 16 Mar 2023 02:10:36 -0700 (PDT)
-Received: by mail.paretdee.com (Postfix, from userid 1002)
-        id ACCBFA3071; Thu, 16 Mar 2023 09:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=paretdee.com; s=mail;
-        t=1678957834; bh=FLMIyM7qOCOVEMp1o/ltkgnLeuU0ZBlT9xWiZMBZ7Ag=;
-        h=Date:From:To:Subject:From;
-        b=QVEj/bCPqpxNkU6VXvKfJpznn2xITS1QT0PsqBEFE7i8X68Xwx/P/XVf23Kt6WY9r
-         MUrh4b79BPHr4024PvxUB4+/lmDewcUM4I31KaptZHX79xMAi4c1X2NNRPmkVFnzuM
-         GLFFPAZdHOEmuC2qtFhckT5AzaQfGlvrWRavtOTiMB+kujNb/pxkInlBbWgzaxBZGX
-         XFJPrWvSY/oHz+9b7qwhMVCbPP7BBb6+9EBx3MFO6m5dxZToeqQ1GhBwRHI1yPQxDu
-         GM51G93BmfFR/vxd3w/8U+KCVH74JS9ebzIqMiKoqHflx6Nk7IKLqylkzmkCQEOZx5
-         e+BdIVfI3HJ+g==
-Received: by mail.paretdee.com for <lvs-devel@vger.kernel.org>; Thu, 16 Mar 2023 09:10:33 GMT
-Message-ID: <20230316074500-0.1.5h.cqc9.0.pab5lc0fbz@paretdee.com>
-Date:   Thu, 16 Mar 2023 09:10:33 GMT
-From:   "Zbynek Spacek" <zbynek.spacek@paretdee.com>
-To:     <lvs-devel@vger.kernel.org>
-Subject: Rubber Molded
-X-Mailer: mail.paretdee.com
+        with ESMTP id S229590AbjCQDfS (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Mar 2023 23:35:18 -0400
+Received: from sragenkab.go.id (mail.sragenkab.go.id [103.172.109.4])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B8A821CF63
+        for <lvs-devel@vger.kernel.org>; Thu, 16 Mar 2023 20:35:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=sragenkab.go.id;
+         h=mime-version:content-type:content-transfer-encoding:date:from
+        :to:subject:reply-to:message-id; q=dns/txt; s=dkim1; bh=QGcIAmD5
+        O/Y9qXzDV8MxyimbsW3+rMaQ/kz75GzBHbk=; b=kScNrJJGYANBMWIf3zPV+H7e
+        41bSH+XdGncuoBSv6TrytiXxDa7O06gkeFSaW+Mm06xGwiH7ngtozTcdsjGcJcWe
+        kf8cFX9crGk2+avo8OtdSXEe/GombJEsVexvhFxWREK0TW38SxLYunY7Vn268YAw
+        /rkjnipFxXPDHxCkMzrxD9OE9snuNwcvoSCqvKinYIxBBwC798aEC1wbstphtF2x
+        4G+kwjcUIrJkf/yRrQPvcj7xYNIAOBBkHBgO0XnDIFtfRasOJtHNTsiw7gEUw68E
+        XiYv+soS5c5IsbRF7iw+J18HAl8qjlTgnWjOTeNIBaRaYUckiVSnPAKboM3zHw==
+Received: (qmail 70865 invoked from network); 15 Mar 2023 02:29:06 -0000
+Received: from localhost (HELO mail2.sragenkab.go.id) (127.0.0.1)
+  by localhost with SMTP; 15 Mar 2023 02:29:06 -0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 14 Mar 2023 19:29:05 -0700
+From:   Ibrahim Tafa <jurnalsukowati@sragenkab.go.id>
+To:     undisclosed-recipients:;
+Subject: <LOAN OPPORTUNITY AT LOW-INTEREST RATE>
+Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
+Mail-Reply-To: <ibrahimtafa@abienceinvestmentsfze.com>
+Message-ID: <a27ea81cc720103991ab599166667f5a@sragenkab.go.id>
+X-Sender: jurnalsukowati@sragenkab.go.id
+User-Agent: Roundcube Webmail/0.8.1
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,SUBJ_ALL_CAPS,UNDISC_MONEY,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Good morning,
-
-we can offer unbeatable conditions for the supply of various silicone com=
-pounds and rubbers, liquid silicone rubber (LSR).
-
-In our assortment you will also find cross-linking agents, stabilizers, d=
-yes and individual silicone mixtures that we will develop for your needs.
-
-Do you want to know what we can offer you?
 
 
-Best regards
-Zbynek Spacek
+-- 
+Greetings,
+   I am contacting you based on the Investment/Loan opportunity for 
+companies in need of financing a project/business, We have developed a 
+new method of financing that doesn't take long to receive financing from 
+our clients.
+    If you are looking for funds to finance your project/Business or if 
+you are willing to work as our agent in your country to find clients in 
+need of financing and earn commissions, then get back to me for more 
+details.
+
+Regards,
+Ibrahim Tafa
+ABIENCE INVESTMENT GROUP FZE, United Arab Emirates
