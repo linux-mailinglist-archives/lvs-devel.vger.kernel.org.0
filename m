@@ -2,125 +2,100 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229916C9F40
-	for <lists+lvs-devel@lfdr.de>; Mon, 27 Mar 2023 11:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA98C6DC538
+	for <lists+lvs-devel@lfdr.de>; Mon, 10 Apr 2023 11:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjC0JWY (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Mon, 27 Mar 2023 05:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S229661AbjDJJm4 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 10 Apr 2023 05:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbjC0JWR (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Mon, 27 Mar 2023 05:22:17 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71D640EC
-        for <lvs-devel@vger.kernel.org>; Mon, 27 Mar 2023 02:22:16 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id r11so33125195edd.5
-        for <lvs-devel@vger.kernel.org>; Mon, 27 Mar 2023 02:22:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679908935;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BYcZPqH3I6SUi+3HZiGlz7bBbKQQVG9vXsJL8zyyX8g=;
-        b=fEHxBw7C12saI5rcCYhV5BepvdBiAI0OGHQoi1RftECxo6F1taHcxuZrZYM7FTOtsm
-         jJAnNIxE1D/Z0P82QKvsn21VBIS8BYvE/uxqQ3BmEzmEHiMC+wl6KExwtUOD8AL3BZto
-         Mtv2Zg2RxQCQfC5nPJRHE9nhlyaJRUoK23AeAZti26t1udkNS6E6nZRwRGnv5wHVKgZG
-         UdSBIy+8qS01juESvF3BM7xSLQ5Ep4haiIVACXwj5eUxdzgKiJC8jFd9oltS16RWIerS
-         QvUZ2u6JFlwBzWQ8phvd8GKQ3EFQBO4XDkRLR7ciUKxU3fSwIwgCBG7hmGVBTC6tyXvl
-         Bk8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679908935;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BYcZPqH3I6SUi+3HZiGlz7bBbKQQVG9vXsJL8zyyX8g=;
-        b=hviP19qjD7KJXrLBOX0J9s+ULIYkS39ubJgMzwsbA8OgOIrQEqH13theYs+9pEe3Iv
-         pYQDSDKuwUBOS2kJVq+iBkUbuHeUez3wWU2vHNqJLaH3C8iX+lTyo8V2HTOKuzRoL3z0
-         6izYxI1+TJAplITVrrU55ZZ7j0QFFDdar395UVt8R7bFFPGyWyNWuFK+yqkc0UaTSHLi
-         ovzCutILAqfXqw0Z3/6hPxvrG0tI/cxSy6PMwfb6+R7K/leWaUT3x8PSDizjGTDfEYdb
-         AurxPTg189bRaz+bCz+jK+DzteX80ZjjvrwwOKaLXjizu2vDDM6Lw0hUU93NQIdvUiyj
-         tZag==
-X-Gm-Message-State: AAQBX9dMjrC/MGtKjCoBKoNvevLykM53+fZiR6s+P9sGaM6Jv/kYg2ta
-        FsVzSjVEnvsok8wuPN38GYlw2E14rxXlE6e8iGo=
-X-Google-Smtp-Source: AKy350Y0CS2YsAxdrCfO6ZC88GjR05zD3CEovlu4ykhpvWyvSAo1D5DzgMmBXAjdQmjxSqgMZSyRpx9LCSyt+wY4/vA=
-X-Received: by 2002:a17:906:eda6:b0:8dd:70a:3a76 with SMTP id
- sa6-20020a170906eda600b008dd070a3a76mr5634769ejb.11.1679908934943; Mon, 27
- Mar 2023 02:22:14 -0700 (PDT)
+        with ESMTP id S229504AbjDJJmy (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 10 Apr 2023 05:42:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C7B1FDD;
+        Mon, 10 Apr 2023 02:42:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4C5861173;
+        Mon, 10 Apr 2023 09:42:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B68C433EF;
+        Mon, 10 Apr 2023 09:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681119772;
+        bh=8mrBnTnoB7t/AMZsj2+xBakPM4atwfooXq/n+Cg7RAQ=;
+        h=From:Subject:Date:To:Cc:From;
+        b=CoX2RYe8cQ2we16K9+P55yWV+r9uxBDPNf0hWTcGUACIfXRRqeDcN1VkZU+6mm+mv
+         AoRfKYjoc2F4JbJ23/gZQ/9JjKsClQi3txlYZ6+/f0BrNv0wy5ckQjOe7Aqjcg/pul
+         +jHotl140CMH4UQy+wOxj8t14N5Xp1S+zWGcM1mQvxCjqY40tzXn5od0JzuAgHb45A
+         /VmOT16YeUmHikK6S1hgYbKnA9SsZDh72reIyMcIg8vloChzQqQE61jjc41sKYfLp2
+         ntF0OeY+Fd7XCSlOYd6GeKg4wUydE/SxJHXSEmXcfYwfi4J/pYB4c+iTw79bHeHbTW
+         rAvL5dTr6HAmQ==
+From:   Simon Horman <horms@kernel.org>
+Subject: [PATCH nf-next 0/4] ipvs: Cleanups for v6.4
+Date:   Mon, 10 Apr 2023 11:42:34 +0200
+Message-Id: <20230409-ipvs-cleanup-v1-0-98cdc242feb0@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:907:8e9a:b0:930:91f3:9ae2 with HTTP; Mon, 27 Mar 2023
- 02:22:14 -0700 (PDT)
-Reply-To: annamalgorzata587@gmail.com
-From:   "Leszczynska Anna Malgorzata." <mrspprriscastewart@gmail.com>
-Date:   Mon, 27 Mar 2023 02:22:14 -0700
-Message-ID: <CAAA90zzJwz6d=gXDG4O37_nnP7DWp--_HAwX3zFc31v3MKJrKg@mail.gmail.com>
-Subject: Mrs. Leszczynska Anna Malgorzata.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=ADVANCE_FEE_5_NEW,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,FROM_LOCAL_NOVOWEL,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  0.5 FROM_LOCAL_NOVOWEL From: localpart has series of non-vowel
-        *      letters
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrspprriscastewart[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [annamalgorzata587[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.8 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAraM2QC/x2NSQrDMAwAvxJ0rsBVupB+pfQgu0ojMKqxkhAI+
+ XtNjzMwzA4uVcXh0e1QZVXXrzU4nzpIE9tHUN+NgQL14RIG1LI6pixsS8GYBr4S072nG7Qksgv
+ GypamFtmSc5Olyqjb//EEG9Fkm+F1HD8K/rUrfAAAAA==
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
--- 
-I am Mrs. Leszczynska Anna Malgorzatafrom Germany . Presently admitted
- in one of the hospitals here in Ivory Coast.
+Hi Pablo,
 
-I and my late husband do not have any child that is why I am donating
-this money to you having known my condition that I will join my late
-husband soonest.
+this series aims to clean up IPVS in several ways without
+implementing any functional changes, aside from removing
+some debugging output.
 
-I wish to donate towards education and the less privileged I ask for
-your assistance. I am suffering from colon cancer I have some few
-weeks to live according to my doctor.
+Patch 1/4: Update width of source for ip_vs_sync_con_options
+           The operation is safe, use an annotation to describe it properly.
 
-The money should be used for this purpose.
-Motherless babies
-Children orphaned by aids.
-Destitute children
-Widows and Widowers.
-Children who cannot afford education.
+Patch 2/4: Consistently use array_size() in ip_vs_conn_init()
+           It seems better to use helpers consistently.
 
-My husband stressed the importance of education and the less
-privileged I feel that this is what he would have wanted me to do with
-the money that he left for charity.
+Patch 3/4: Remove {Enter,Leave}Function
+           These seem to be well past their use-by date.
 
-These services bring so much joy to the kids. Together we are
-transforming lives and building brighter futures - but without you, it
-just would not be possible.
-I am using translation to communicate with you in case there is any
-mistake in my writing please correct me.
-Sincerely,
+Patch 4/4: Correct spelling in comments
+	   I can't spell. But codespell helps me these days.
 
-Mrs. Leszczynska Anna Malgorzata.
+All changes: compile tested only!
+
+---
+Simon Horman (4):
+      ipvs: Update width of source for ip_vs_sync_con_options
+      ipvs: Consistently use array_size() in ip_vs_conn_init()
+      ipvs: Remove {Enter,Leave}Function
+      ipvs: Correct spelling in comments
+
+ include/net/ip_vs.h             | 32 +++++----------------
+ net/netfilter/ipvs/ip_vs_conn.c | 12 ++++----
+ net/netfilter/ipvs/ip_vs_core.c |  8 ------
+ net/netfilter/ipvs/ip_vs_ctl.c  | 26 +----------------
+ net/netfilter/ipvs/ip_vs_sync.c |  7 +----
+ net/netfilter/ipvs/ip_vs_xmit.c | 62 ++++++-----------------------------------
+ 6 files changed, 23 insertions(+), 124 deletions(-)
+
+base-commit: 9b7c68b3911aef84afa4cbfc31bce20f10570d51
+
