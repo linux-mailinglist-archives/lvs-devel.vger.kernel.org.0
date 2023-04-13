@@ -2,62 +2,34 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2916D6E0B79
-	for <lists+lvs-devel@lfdr.de>; Thu, 13 Apr 2023 12:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4456E0D2D
+	for <lists+lvs-devel@lfdr.de>; Thu, 13 Apr 2023 14:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjDMKgc (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Thu, 13 Apr 2023 06:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S229708AbjDMMBh (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 13 Apr 2023 08:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbjDMKgb (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Thu, 13 Apr 2023 06:36:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90896468D
-        for <lvs-devel@vger.kernel.org>; Thu, 13 Apr 2023 03:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681382151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=itT3WRdataR3mc3HSH4d4WnSN/G47tLHOz7nmNIZqZs=;
-        b=Ka14W+C7mXhQBpZ4hCWx2JwS5mrKYtzniN3UryqRg/NzO/7mrkhuw61RnClyJov4cVaqdX
-        XMdLrFogGUeXyM5ry35mzkYvoHbqG45aNN2JG0CLo7H/AExzO8s0TAI0E7NoJiT+pzNOpS
-        pP3NM7O0iEM0AbPyvdoo3cLH3SYGjmk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-157-dq8_HWjHNaqMTf4jiNaWpQ-1; Thu, 13 Apr 2023 06:35:50 -0400
-X-MC-Unique: dq8_HWjHNaqMTf4jiNaWpQ-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-506752f399cso680150a12.0
-        for <lvs-devel@vger.kernel.org>; Thu, 13 Apr 2023 03:35:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681382149; x=1683974149;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=itT3WRdataR3mc3HSH4d4WnSN/G47tLHOz7nmNIZqZs=;
-        b=Zj8yklFtVMrrO956PcWkv4u3Ht9C6qkupbLF7unWxZOXweqQCLvbwdsJjMzoO7eeMI
-         UK/apAEQX4Lj+dsUMRaSfCqFXFJCEWVVy0RiPUnpYqIlrV3lDE57gi0i/TD8/XdKqClh
-         l7yp9XU67Od9iLZ/Kb1Pjd55MmIIzEsZ1kQctBzweQoRV/PJxgH5agpT6ePj1dMX1uv3
-         3l5Ac8ctqPRsizPjqeLZdNDlxe4zex5BdHMA6Siyu54Hpnbt0/xbcu4F8hPXd9mvPNWI
-         X52g4SwiCPblsMXvvr6Uptm8dLtoFTwyJZBSjCVRPI/8sDxoy+/Wizey3JUAkdBTz3dL
-         NyLg==
-X-Gm-Message-State: AAQBX9fUj/DHnmRDI20/l0PgIlh4kpv1MGxToTzlT2M9i6FFD8VeqEYW
-        A7/ZKYROE2yNH5/lEMiUCeKvzWLlY21/JpH1euHFA57IA4WLHDKtrAXJEbWQ2AHRqkwEUD6i8+2
-        9VOAlOdEx++qaIHY1RtleBv+EHB0p
-X-Received: by 2002:a05:6402:1804:b0:505:43e9:6ff7 with SMTP id g4-20020a056402180400b0050543e96ff7mr1397630edy.7.1681382148837;
-        Thu, 13 Apr 2023 03:35:48 -0700 (PDT)
-X-Google-Smtp-Source: AKy350ZvapUCs5yvALVfiM8gaOeYsZIZZa+WkvEHbTKA39JH/fvn1Hiiib2L0yY3rVUMuVDAMmZp6Q==
-X-Received: by 2002:a05:6402:1804:b0:505:43e9:6ff7 with SMTP id g4-20020a056402180400b0050543e96ff7mr1397609edy.7.1681382148525;
-        Thu, 13 Apr 2023 03:35:48 -0700 (PDT)
-Received: from localhost ([37.160.12.137])
-        by smtp.gmail.com with ESMTPSA id p4-20020a056402044400b00501c96564b5sm641951edw.93.2023.04.13.03.35.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 03:35:48 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 12:35:43 +0200
-From:   Andrea Claudi <aclaudi@redhat.com>
-To:     abhijeet.1989@gmail.com
-Cc:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        with ESMTP id S229480AbjDMMBf (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 13 Apr 2023 08:01:35 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A98E0;
+        Thu, 13 Apr 2023 05:01:33 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 15BDAD636;
+        Thu, 13 Apr 2023 14:49:22 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id F37ABD632;
+        Thu, 13 Apr 2023 14:49:21 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 8D15F3C0322;
+        Thu, 13 Apr 2023 14:49:14 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 33DBnCGp027072;
+        Thu, 13 Apr 2023 14:49:13 +0300
+Date:   Thu, 13 Apr 2023 14:49:12 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Abhijeet Rastogi <abhijeet.1989@gmail.com>
+cc:     Simon Horman <horms@verge.net.au>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>,
@@ -68,23 +40,24 @@ Cc:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
         lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
         coreteam@netfilter.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] ipvs: change ip_vs_conn_tab_bits range to [8,31]
-Message-ID: <ZDfa/wuJTp8vk+wI@renaissance-vector>
+In-Reply-To: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
+Message-ID: <d2519ce3-e49b-a544-b79d-42905f4a2a9a@ssi.bg>
 References: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Apr 12, 2023 at 01:49:08PM -0700, Abhijeet Rastogi via B4 Relay wrote:
+
+	Hello,
+
+On Wed, 12 Apr 2023, Abhijeet Rastogi via B4 Relay wrote:
+
 > From: Abhijeet Rastogi <abhijeet.1989@gmail.com>
 > 
 > Current range [8, 20] is set purely due to historical reasons
@@ -103,13 +76,15 @@ On Wed, Apr 12, 2023 at 01:49:08PM -0700, Abhijeet Rastogi via B4 Relay wrote:
 > The upper limit for algo is any bit size less than 32, so this
 > change will allow us to set bit size > 20. Today, it is common to have
 > RAM available to handle greater than 2^20 connections per-host.
-> 
+
+	This is not a limit of number of connections. I prefer
+not to allow value above 24 without adding checks for the
+available memory, this more concern for 32-bit. Blindly
+allocating 2^20 (1048576 pointers which is 8MB) should not
+cause OOM but selecting large value and then using this
+kernel on boxes with less memory is dangerous.
+
 > Distros like RHEL already have higher limits set.
-
-Hi Abhijeet,
-for the record, RHEL ships with CONFIG_IP_VS_TAB_BITS set to 12 as
-default.
-
 > ---
 >  net/netfilter/ipvs/Kconfig      | 4 ++--
 >  net/netfilter/ipvs/ip_vs_conn.c | 4 ++--
@@ -160,9 +135,9 @@ default.
 > Best regards,
 > -- 
 > Abhijeet Rastogi <abhijeet.1989@gmail.com>
->
 
-Looks good to me.
+Regards
 
-Reviewed-by: Andrea Claudi <aclaudi@redhat.com>
+--
+Julian Anastasov <ja@ssi.bg>
 
