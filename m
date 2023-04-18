@@ -2,74 +2,153 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299B06E5909
-	for <lists+lvs-devel@lfdr.de>; Tue, 18 Apr 2023 08:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2336A6E60A4
+	for <lists+lvs-devel@lfdr.de>; Tue, 18 Apr 2023 14:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjDRGAQ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 18 Apr 2023 02:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S230399AbjDRMIN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 18 Apr 2023 08:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbjDRGAI (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 18 Apr 2023 02:00:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F965596
-        for <lvs-devel@vger.kernel.org>; Mon, 17 Apr 2023 23:00:08 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ec8149907aso1957631e87.1
-        for <lvs-devel@vger.kernel.org>; Mon, 17 Apr 2023 23:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681797606; x=1684389606;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=hkbRoiZS7FucX9xmmxzNlce3tLzifJRKFjSE7VHdSn9G6r5RSkZiL8maQ/YDAXP5Kg
-         FJrAc4MRE5lNN5Pg6Q1ihVxvuJCbh5SWOgpZM3YZzAis+ij7YuvGZgf1YeGdInjyCGuQ
-         RLQZ9nXb0iZmrwdsspvu26x6MIY0ZHN11j57gc/R7oNxhGA+mvCd+eNuboGaVHfOYdZx
-         NREntn+M2oB2Rwk/FnCqxb+mfHxY1GOhtliEg4TLeNldsCxFOEawpoJHS0YB/jS9C/Ko
-         w3LYo0WMHFITZLFJBBAphkFi8Uzw94X/RW7dt/GNJrG+mT2Ja1ooP0G5OuWpXjEh22ch
-         2nlg==
+        with ESMTP id S229564AbjDRMH7 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 18 Apr 2023 08:07:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F0ECC17
+        for <lvs-devel@vger.kernel.org>; Tue, 18 Apr 2023 04:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681819133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ic+G8JxkY030ztDDxrSVr0gIWS+MILOdZNy5BfZjtHQ=;
+        b=GRokVicCAK5z3JYvEz1SaiJmczut8JZ4kCvrVdQz46bWtN3LyCV0MvTo/UL8QPWaWl2/mS
+        olStiqtLIENXN96jgEO0eOILmEWJ7y5O1LyhGKxyDiWvl0NW1aQheQYjMl1SWksJeewSpc
+        0u87/uSfQlvOJaTwTjhwtbH11RodILM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-661-LT_dp_1QPhqZGLRH0mafoA-1; Tue, 18 Apr 2023 07:58:52 -0400
+X-MC-Unique: LT_dp_1QPhqZGLRH0mafoA-1
+Received: by mail-wm1-f71.google.com with SMTP id w16-20020a05600c475000b003f082eecdcaso11738864wmo.6
+        for <lvs-devel@vger.kernel.org>; Tue, 18 Apr 2023 04:58:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681797606; x=1684389606;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=inhPALwh+yiL2l+CkVAwgH2laKoN2KlAraboI3ghgObuLT1Jy8ffZh44boZufVfjBQ
-         knutXqrOjU2ufYKYfQD+l0aZ7edJDdRL4b6jjSTZYP7UJCb5T109SrpBO5XtKm5MlmDW
-         6rSazO3Wjvkz7IhPFUTGTruD9FsqbislG3iZySlEQvPECyRE5NQgNG7WT7/iNOwQbucp
-         a2e+rB0Ci0f33POWn4V2HF18pZMiSf9i10h7pZWczPceXNSRpzPZWR+MPrJyC5GCdIWn
-         w0jqnJb9l0heI0Iy2eT9tbKE/W/21NiT3VAwrUQCyI0ZeumiIP66urpCi90z6aLP5DC4
-         HrlA==
-X-Gm-Message-State: AAQBX9c32lZJL2G6AI3u+FFf5gsBS2E5dz03+xroZYcKOMu98oO5qgx3
-        WWCPhFrzEXhVIKr+DisZXQgB7SmaCUuvdejNS6k=
-X-Google-Smtp-Source: AKy350YD0gJsTq/g+Mo7iK6C4wIvHg2uqoxmyLgkVYJ8qMY7kmaIfZC4vX+0Ba0JtWa5iVKi14YlAwV+V/Rc4p+OO1E=
-X-Received: by 2002:ac2:528b:0:b0:4eb:93a:41f0 with SMTP id
- q11-20020ac2528b000000b004eb093a41f0mr2941474lfm.4.1681797605997; Mon, 17 Apr
- 2023 23:00:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681819131; x=1684411131;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ic+G8JxkY030ztDDxrSVr0gIWS+MILOdZNy5BfZjtHQ=;
+        b=hIJbu7SVJwmWroVCBEnXympbqzs6EuZRrzo6KrKXMnev8At7t2X+hovg4D57pMesn6
+         3m5hIm3KcX7kSBPY9/EWin9QlfivHaRFXv1eglpLzLd+D6UM9y6aKpviWc2T3clnkgBC
+         +xxa+XkMevyueVCBkclEpWahJ7b3Hes6e7xozi3635HI89ssztzAH0wLk1JW17v6wspR
+         JKLIH65OGmNzDr7PGkyiX7orMZw8WezHKRIj1a1BCC67O/GCz+BTcLpNE7NcQydeJuTN
+         q3fEhjqwqPrpU3qDO+9X/W+7zGDfnKsimALrVQK7gNe6kJrMBOauxA/hFCwNvOYVTOHc
+         9gCw==
+X-Gm-Message-State: AAQBX9cYdRXbipuXq00br682jDEfXT+bIW3dOzqWSQYsapvAUaA139gH
+        VOWHrUHDzbDWogFJnwwhbhAg/PN07Y1VriewGD2zLmtqnoQCKsR4f1VNIOv+6yR9Wc+TatjZiei
+        tI4ucAOkLa8K4jjkNWZT4vGngdCvS
+X-Received: by 2002:a7b:cb07:0:b0:3f0:5519:9049 with SMTP id u7-20020a7bcb07000000b003f055199049mr13710162wmj.8.1681819131389;
+        Tue, 18 Apr 2023 04:58:51 -0700 (PDT)
+X-Google-Smtp-Source: AKy350YYPfT3gB+38KJa3OuGZh4qKj+97YG3AusxGQ1ufp+BlxDKePtvpPOBSG270xYpIPQ/XjAu0Q==
+X-Received: by 2002:a7b:cb07:0:b0:3f0:5519:9049 with SMTP id u7-20020a7bcb07000000b003f055199049mr13710144wmj.8.1681819131056;
+        Tue, 18 Apr 2023 04:58:51 -0700 (PDT)
+Received: from localhost ([37.160.130.245])
+        by smtp.gmail.com with ESMTPSA id m4-20020a05600c4f4400b003f0ae957fcesm12903095wmq.42.2023.04.18.04.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Apr 2023 04:58:50 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 13:58:46 +0200
+From:   Andrea Claudi <aclaudi@redhat.com>
+To:     Abhijeet Rastogi <abhijeet.1989@gmail.com>
+Cc:     Julian Anastasov <ja@ssi.bg>, Simon Horman <horms@verge.net.au>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ipvs: change ip_vs_conn_tab_bits range to [8,31]
+Message-ID: <ZD6F9l2yE0i42YE5@renaissance-vector>
+References: <20230412-increase_ipvs_conn_tab_bits-v1-1-60a4f9f4c8f2@gmail.com>
+ <d2519ce3-e49b-a544-b79d-42905f4a2a9a@ssi.bg>
+ <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:ab2:2681:0:b0:1b6:840f:9075 with HTTP; Mon, 17 Apr 2023
- 23:00:05 -0700 (PDT)
-Reply-To: mariamkouame.info@myself.com
-From:   Mariam Kouame <mariamkouame1992@gmail.com>
-Date:   Mon, 17 Apr 2023 23:00:05 -0700
-Message-ID: <CADUz=aji5FqoYe8fUB8_9J4tWbhcHu9x7pT8RbXRozf8HpBNXQ@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACXxYfxLU0jWmq0W7YxX=44XFCGvgMX2HwTFUUHCUMjO28g5BA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Dear,
+On Thu, Apr 13, 2023 at 06:58:06PM -0700, Abhijeet Rastogi wrote:
+> Hi Simon, Andrea and Julian,
+> 
+> I really appreciate you taking the time to respond to my patch. Some follow up
+> questions that I'll appreciate a response for.
+> 
+> @Simon Horman
+> >In any case, I think this patch is an improvement on the current situation.
+> 
+> +1 to this. I wanted to add that, we're not changing the defaults
+> here, the default still stays at 2^12. If a kernel user changes the
+> default, they probably already know what the limitations are, so I
+> personally don't think it is a big concern.
+> 
+> @Andrea Claudi
+> >for the record, RHEL ships with CONFIG_IP_VS_TAB_BITS set to 12 as
+> default.
+> 
+> Sorry, I should have been clearer. RHEL ships with the same default,
+> yes, but it doesn't have the range check, at least, on the version I'm
+> using right now (3.10.0-1160.62.1.el7.x86_64).
+> 
+> On this version, I'm able to load with bit size 30, 31 gives me error
+> regarding allocating memory (64GB host) and anything beyond 31 is
+> mysteriously switched to a lower number. The following dmesg on my
+> host confirms that the bitsize 30 worked, which is not possible
+> without a patch on the current kernel version.
+> 
+> "[Fri Apr 14 01:14:51 2023] IPVS: Connection hash table configured (size=1073741
+> 824, memory=16777216Kbytes)"
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+I see. This makes sense to me as RHEL 7 does not include the range
+check, while RHEL 8 and RHEL 9 both includes it.
 
-Mrs. Mariam Kouame
+The reason why any number beyond 31 results in a lower number is to be
+searched in gcc implementation. IIRC shifting an int by more than 31 or
+less than 0 results in an undefined behaviour, according to the C
+standard.
+
+> 
+> @Julian Anastasov,
+> >This is not a limit of number of connections. I prefer
+> not to allow value above 24 without adding checks for the
+> available memory,
+> 
+> Interesting that you brought up that number 24, that is exactly what
+> we use in production today. One IPVS node is able to handle spikes of
+> 10M active connections without issues. This patch idea originated as
+> my company is migrating from the ancient RHEL version to a somewhat
+> newer CentOS (5.* kernel) and noticed that we were unable to load the
+> ip_vs kernel module with anything greater than 20 bits. Another
+> motivation for kernel upgrade is utilizing maglev to reduce table size
+> but that's out of context in this discussion.
+> 
+> My request is, can we increase the range from 20 to something larger?
+> If 31 seems a bit excessive, maybe, we can settle for something like
+> [8,30] or even lower. With conn_tab_bits=30, it allocates 16GB at
+> initialization time, it is not entirely absurd by today's standards.
+> 
+> I can revise my patch to a lower range as you guys see fit.
+> 
+> --
+> Cheers,
+> Abhijeet (https://abhi.host)
+> 
+
