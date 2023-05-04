@@ -2,75 +2,147 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442A36EFBC8
-	for <lists+lvs-devel@lfdr.de>; Wed, 26 Apr 2023 22:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446DF6F7409
+	for <lists+lvs-devel@lfdr.de>; Thu,  4 May 2023 21:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbjDZUij (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 26 Apr 2023 16:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S231146AbjEDTrn (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 4 May 2023 15:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbjDZUii (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 26 Apr 2023 16:38:38 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A9010DE
-        for <lvs-devel@vger.kernel.org>; Wed, 26 Apr 2023 13:38:37 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-74fc1452fbdso199679485a.2
-        for <lvs-devel@vger.kernel.org>; Wed, 26 Apr 2023 13:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682541517; x=1685133517;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JL3yT3Q33W5/BCQtgOVvz2cK4S2v0dqNTi6RS5aes9g=;
-        b=OvQqWKtnHE9ZYSOGWQiek75elK/AS5J2BUX9CwuSoKShoVo0Ise6FWhfma/gcRaI2r
-         4JFpmFRAaSg6hu/+VeLLx+9MW7RzVW35HL8C0/xkDeMi7k5l3LJbhZnF9vpSrFfRcZgx
-         E9RLvPuGgL/NZf1ni2UWzZPMEEfn6K6xfMAEaq/PuMr4f84ErGXbrf2b6qR6UNzx1FWf
-         GfyD1P15JXyIkDo2WuxInfMmiTNXfJLykGMlOOg5NvLAdljiDWZtRUddSi6ta9gx/d+w
-         PIH7qejQ8/7PhlZT/zMF6mAJE0u/qFTyo62sNwWd0mHXJ3VeKm+0gMQCIxYW4WoPFstR
-         2qkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682541517; x=1685133517;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JL3yT3Q33W5/BCQtgOVvz2cK4S2v0dqNTi6RS5aes9g=;
-        b=JLZmZOAaodxrAheDDUpBAySM7rxSWtqe2QE0nmdCG7qKsOqZvNXBf3zdSgMx/c1vkp
-         PR4Q3fu0ElOgo7CpYN4VBjHAICLSGQTUL0Tcqf4PCtxrkzgXuFt4Dpj32FHcTsw4twML
-         tzX/etTVUEqaaa4wXaHoxrtDrKOLJnwQwcO7RTzPtyzGv5CyBNu8+0TQqGmqfvlmEYTu
-         XM81/DzN6/RUUODXFc6uDNG+MqCW98mc6CR9To+DYGIvT968ovo0c9Z0W8h8aWff616E
-         Q+rxZzf8WFUOK9CHc2DgA5eo3ARrTXNXNb2diEqQVlVf98lbSdbR8o2y/LQcRkcI/189
-         yuKA==
-X-Gm-Message-State: AAQBX9cWsTE34s41z3ry/ci0RllLMgFcqcEfK28A5PIFPrKgDi65H2If
-        IFBUj1fL9K14H2IT0ZqwLBd2XrcjMFsxzrCCYi8=
-X-Google-Smtp-Source: AKy350aahtT5urGRpRt0dmA3+1cGpPY1YEGq3M9gCFbNPtkMSZ2OjV05EO7SLcW4lSbkAUDp7UiNgM2A3R68/j5eVPQ=
-X-Received: by 2002:ac8:5812:0:b0:3ef:58f5:a001 with SMTP id
- g18-20020ac85812000000b003ef58f5a001mr35727525qtg.44.1682541516703; Wed, 26
- Apr 2023 13:38:36 -0700 (PDT)
+        with ESMTP id S231134AbjEDTq6 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 4 May 2023 15:46:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5085731B0A;
+        Thu,  4 May 2023 12:45:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A35563762;
+        Thu,  4 May 2023 19:43:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE9B6C4339B;
+        Thu,  4 May 2023 19:43:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683229436;
+        bh=zNeqN+hMy+J1p0zzphizoeIvRmJhxaCtWdQH88DtmSg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vMggAvrjQTPRmFii9JKf7Gs+ufFhOGDzw2zAZ1LzlKz5dytncF+JdruyHlYFtjntp
+         CvHy1sI20ldA9oFr1yE1O6Eav1Dl8ZcTpDF4nodhftRu1Mo/u7kdMyFDgNhBRJh0cS
+         5yGj1ZbuOSatuurCX/vDQTly2Rf6+4fk/5ty04KH3JyelGdM+qu4+KwrFa57SvC99q
+         7mEMdDPi+3/npN/FNbgk7FliQpWyrers44gK4UJ+pBQzoicRjXfE+NQi3HRsO9R6DG
+         Wxb1Fp0d7NVuKqgXHLWRzS5PVPIatbb3kn96jOmEsWWh48RXxaXamHiGdsEDrZRDl1
+         /F6bqz1iAihkA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Simon Horman <horms@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>, horms@verge.net.au, ja@ssi.bg,
+        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, kadlec@netfilter.org,
+        fw@strlen.de, netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: [PATCH AUTOSEL 6.3 49/59] ipvs: Update width of source for ip_vs_sync_conn_options
+Date:   Thu,  4 May 2023 15:41:32 -0400
+Message-Id: <20230504194142.3805425-49-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230504194142.3805425-1-sashal@kernel.org>
+References: <20230504194142.3805425-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:622a:1391:b0:3b8:6d45:da15 with HTTP; Wed, 26 Apr 2023
- 13:38:36 -0700 (PDT)
-Reply-To: klassoumark@gmail.com
-From:   Mark Klassou <georgerown101@gmail.com>
-Date:   Wed, 26 Apr 2023 20:38:36 +0000
-Message-ID: <CAHmBb7tucZuQ0ROUiFYY3mxfmnDP64+Xz2so2JPVkRCM6-hvsw@mail.gmail.com>
-Subject: Re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Good Morning,
+From: Simon Horman <horms@kernel.org>
 
-I was only wondering if you got my previous email? I have been trying
-to reach you by email. Kindly get back to me swiftly, it is very
-important.
+[ Upstream commit e3478c68f6704638d08f437cbc552ca5970c151a ]
 
-Yours faithfully
-Mark Klassou.
+In ip_vs_sync_conn_v0() copy is made to struct ip_vs_sync_conn_options.
+That structure looks like this:
+
+struct ip_vs_sync_conn_options {
+        struct ip_vs_seq        in_seq;
+        struct ip_vs_seq        out_seq;
+};
+
+The source of the copy is the in_seq field of struct ip_vs_conn.  Whose
+type is struct ip_vs_seq. Thus we can see that the source - is not as
+wide as the amount of data copied, which is the width of struct
+ip_vs_sync_conn_option.
+
+The copy is safe because the next field in is another struct ip_vs_seq.
+Make use of struct_group() to annotate this.
+
+Flagged by gcc-13 as:
+
+ In file included from ./include/linux/string.h:254,
+                  from ./include/linux/bitmap.h:11,
+                  from ./include/linux/cpumask.h:12,
+                  from ./arch/x86/include/asm/paravirt.h:17,
+                  from ./arch/x86/include/asm/cpuid.h:62,
+                  from ./arch/x86/include/asm/processor.h:19,
+                  from ./arch/x86/include/asm/timex.h:5,
+                  from ./include/linux/timex.h:67,
+                  from ./include/linux/time32.h:13,
+                  from ./include/linux/time.h:60,
+                  from ./include/linux/stat.h:19,
+                  from ./include/linux/module.h:13,
+                  from net/netfilter/ipvs/ip_vs_sync.c:38:
+ In function 'fortify_memcpy_chk',
+     inlined from 'ip_vs_sync_conn_v0' at net/netfilter/ipvs/ip_vs_sync.c:606:3:
+ ./include/linux/fortify-string.h:529:25: error: call to '__read_overflow2_field' declared with attribute warning: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Werror=attribute-warning]
+   529 |                         __read_overflow2_field(q_size_field, size);
+       |
+
+Compile tested only.
+
+Signed-off-by: Simon Horman <horms@kernel.org>
+Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/net/ip_vs.h             | 6 ++++--
+ net/netfilter/ipvs/ip_vs_sync.c | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+index 6d71a5ff52dfd..e20f1f92066d1 100644
+--- a/include/net/ip_vs.h
++++ b/include/net/ip_vs.h
+@@ -630,8 +630,10 @@ struct ip_vs_conn {
+ 	 */
+ 	struct ip_vs_app        *app;           /* bound ip_vs_app object */
+ 	void                    *app_data;      /* Application private data */
+-	struct ip_vs_seq        in_seq;         /* incoming seq. struct */
+-	struct ip_vs_seq        out_seq;        /* outgoing seq. struct */
++	struct_group(sync_conn_opt,
++		struct ip_vs_seq  in_seq;       /* incoming seq. struct */
++		struct ip_vs_seq  out_seq;      /* outgoing seq. struct */
++	);
+ 
+ 	const struct ip_vs_pe	*pe;
+ 	char			*pe_data;
+diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
+index 4963fec815da3..d4fe7bb4f853a 100644
+--- a/net/netfilter/ipvs/ip_vs_sync.c
++++ b/net/netfilter/ipvs/ip_vs_sync.c
+@@ -603,7 +603,7 @@ static void ip_vs_sync_conn_v0(struct netns_ipvs *ipvs, struct ip_vs_conn *cp,
+ 	if (cp->flags & IP_VS_CONN_F_SEQ_MASK) {
+ 		struct ip_vs_sync_conn_options *opt =
+ 			(struct ip_vs_sync_conn_options *)&s[1];
+-		memcpy(opt, &cp->in_seq, sizeof(*opt));
++		memcpy(opt, &cp->sync_conn_opt, sizeof(*opt));
+ 	}
+ 
+ 	m->nr_conns++;
+-- 
+2.39.2
+
