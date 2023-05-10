@@ -2,70 +2,77 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4D26F9A90
-	for <lists+lvs-devel@lfdr.de>; Sun,  7 May 2023 19:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531AB6FE0B6
+	for <lists+lvs-devel@lfdr.de>; Wed, 10 May 2023 16:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjEGRae convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Sun, 7 May 2023 13:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S237595AbjEJOqU (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Wed, 10 May 2023 10:46:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjEGRad (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sun, 7 May 2023 13:30:33 -0400
-Received: from mail.bpip.go.id (unknown [103.166.134.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6890E1156D;
-        Sun,  7 May 2023 10:30:30 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.bpip.go.id (Postfix) with ESMTP id D3F41BCCBF3;
-        Sun,  7 May 2023 06:57:31 +0700 (WIB)
-Received: from mail.bpip.go.id ([127.0.0.1])
-        by localhost (mail.bpip.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id egUMpeRPiJft; Sun,  7 May 2023 06:57:31 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.bpip.go.id (Postfix) with ESMTP id 8EC08B4D710;
-        Sat,  6 May 2023 19:52:09 +0700 (WIB)
-X-Amavis-Modified: Mail body modified (using disclaimer) - mail.bpip.go.id
-X-Virus-Scanned: amavisd-new at bpip.go.id
-Received: from mail.bpip.go.id ([127.0.0.1])
-        by localhost (mail.bpip.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SNAIa99o813e; Sat,  6 May 2023 19:52:09 +0700 (WIB)
-Received: from [103.167.91.37] (unknown [103.167.91.37])
-        by mail.bpip.go.id (Postfix) with ESMTPSA id D0488BCC760;
-        Sat,  6 May 2023 08:34:27 +0700 (WIB)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S237593AbjEJOqR (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Wed, 10 May 2023 10:46:17 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C9A59F3
+        for <lvs-devel@vger.kernel.org>; Wed, 10 May 2023 07:46:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9619095f479so1170437766b.1
+        for <lvs-devel@vger.kernel.org>; Wed, 10 May 2023 07:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683729975; x=1686321975;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
+        b=jZv3FUrBl62Fvs9pKWQlJOarnYq6yUsJd+wINBi1wshRDPyl7808tWx74fTw07fw3B
+         tqV/frHxW/L9WTUI41Lp6+Qwok9Fl3kxZimSgfFWmphb8Br7Go8RpfKGMWZ27EZjjQdd
+         1LDT4T7mKJ/bfyFNdbHo65i5Mz6PSF+ZAEJDz2gC2v4HPnUXI1hsu+lttau7pl7sam06
+         s89fj8ODjzmybM42E4YUuTUdmlI6Q+ICekPpz0VCiRwwCppZGRtfARGmGZ19DZwfwflJ
+         UsJcb4Iaon0OzbWKU5ttUNQ3XfcnGUlGE5vgjsUZhD56e3aAUNFSjHkPYpH9/RUO+ygr
+         hmcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683729975; x=1686321975;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oDVdWICwavrWQ8UAVYhe8ynFXsBBW1vVQ7W08zgiq24=;
+        b=OFQiHFan3XVjAdPz773x1pOahQV+nxmxrpTpLVBWKLeoc6Ta/5LK9DSiU221/EBoox
+         IxWYGcEngdj7GLgMnrocPls2WnAjr42bkxnIFUhcabq29aunFHs8/z/AlZsApUqJSnpV
+         lP1Bd4QEDdKUR51TXbnk9B04MF0N7WgBjnzbB5zqhcPSSW9halSdwbNDqeYSOMqX7XyK
+         CMfYrdHF8vVHtTRWJMSkyVuzm22FsdaraxHlRmebknbtwyBS3cAfBK48vzS59DHpuBNY
+         pq/3xrlbkbxYzymmzrJ5YTLG4F+kOXQsgFnW9kXSso5vpPzFq34OkIh+fJW6PlYz36Ed
+         YXmg==
+X-Gm-Message-State: AC+VfDyhvEjiQubeqJhkMQRmz1ZJQM6xFChB7o8bHid9sjbOiKrJx4yX
+        P2LxoXk/PKOz/YxTj/PCuap4YqZCTXTOXQhe5M0=
+X-Google-Smtp-Source: ACHHUZ7rAhyuO6gR2eRcdghZARXnWmCCHHkGRaTAlp+LnS/OO6qk4Cd4G+ePXzhacUWe9BawVTSMvFmw82ZBcY9fSUE=
+X-Received: by 2002:a17:907:3686:b0:965:fa3b:7478 with SMTP id
+ bi6-20020a170907368600b00965fa3b7478mr14819264ejc.53.1683729974927; Wed, 10
+ May 2023 07:46:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Letzte Erinnerung
-To:     Recipients <persuratan@bpip.go.id>
-From:   "Qatar Foundation" <persuratan@bpip.go.id>
-Date:   Fri, 05 May 2023 18:34:24 -0700
-Reply-To: qf.qatarcares.org@gmail.com
-Message-Id: <20230506013428.D0488BCC760@mail.bpip.go.id>
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,NIXSPAM_IXHASH,RCVD_IN_SBL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [103.167.91.37 listed in zen.spamhaus.org]
-        *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+Received: by 2002:ab4:a502:0:b0:209:c5a4:ad9a with HTTP; Wed, 10 May 2023
+ 07:46:14 -0700 (PDT)
+Reply-To: ninacoulibaly03@hotmail.com
+From:   nina coulibaly <coulibalynina09@gmail.com>
+Date:   Wed, 10 May 2023 07:46:14 -0700
+Message-ID: <CABeZed5cvXFhRkL2Gq-8JnKkAhU16zGuO1fD5i1VV7iNihtK6A@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Sehr geehrter Begünstigter,
+Dear,
 
-Sie wurden ausgewählt,  (995.000,00 €) von Katar Foundation zu erhalten, antworten Sie bitte mit Ihrem vollständigen Namen und Ihrer Adresse, um weitere Informationen zu erhalten. E-mail:qf.qatarcares.org@gmail.com
+I am interested to invest with you in your country with total trust
+and i hope you will give me total support, sincerity and commitment.
+Please get back to me as soon as possible so that i can give you my
+proposed details of funding and others.
 
-Mit Freundlichen Grüßen,
-Herr Rashid Al-Naimi.
-Chief Executive Officer der Qatar Foundation Endowment.
-(null)
+Best Regards.
+
+Mrs Nina Coulibaly
