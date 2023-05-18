@@ -2,132 +2,74 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F370683F
-	for <lists+lvs-devel@lfdr.de>; Wed, 17 May 2023 14:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4BA707CE3
+	for <lists+lvs-devel@lfdr.de>; Thu, 18 May 2023 11:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbjEQMiC (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 17 May 2023 08:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S230020AbjERJaN (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 18 May 2023 05:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjEQMiB (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 17 May 2023 08:38:01 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7351BFC;
-        Wed, 17 May 2023 05:38:00 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 4F4E019F77;
-        Wed, 17 May 2023 15:37:59 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id 2BFF719E58;
-        Wed, 17 May 2023 15:37:59 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id EC3E53C0323;
-        Wed, 17 May 2023 15:37:58 +0300 (EEST)
-Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 34HCbwjO056801;
-        Wed, 17 May 2023 15:37:58 +0300
-Received: (from root@localhost)
-        by ja.home.ssi.bg (8.17.1/8.17.1/Submit) id 34HCbv0o056798;
-        Wed, 17 May 2023 15:37:57 +0300
-From:   Julian Anastasov <ja@ssi.bg>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        netfilter-devel@vger.kernel.org,
-        Abhijeet Rastogi <abhijeet.1989@gmail.com>
-Subject: [PATCH net-next] ipvs: dynamically limit the connection hash table
-Date:   Wed, 17 May 2023 15:37:31 +0300
-Message-Id: <20230517123731.56733-1-ja@ssi.bg>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S230062AbjERJaM (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 18 May 2023 05:30:12 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284292122
+        for <lvs-devel@vger.kernel.org>; Thu, 18 May 2023 02:29:54 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so280818566b.2
+        for <lvs-devel@vger.kernel.org>; Thu, 18 May 2023 02:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684402192; x=1686994192;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zYlqmqzmZQIzuckqyml+D+cUQfB/LAmhyfGQVjeCZAE=;
+        b=ip3VwFMhd0/gsbLPeyblqtJK83rIEIgpC+1wj2brgyyKA7TtC82RrjfOMscZexla5y
+         la/iOLYuJZUz5f1/35+XTafliDkIHbyqDzl8bp1AH51IG5LvDZq/U/z3OX310g/I6CMz
+         jqtV/0QjqLXpP1u2ePU3HbdXxIRHhFx1A+S4DBohRhCSzpameao2SBDWcByGpbYTkZmk
+         kmnX/Ub5w6CFCFVulht3a6td9RZk3Ctu8PyEmr2iRMP3GAClyt22cuuQz2HJ4LW4qUA+
+         XffQ1WBTd291jpy1RkGBLi2MhGXpdiNblkwNzkvyOLtJ6eqwzsLRUlWaq8xo5KJ2Hiom
+         vTvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684402192; x=1686994192;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zYlqmqzmZQIzuckqyml+D+cUQfB/LAmhyfGQVjeCZAE=;
+        b=j7k3LhMbtgrLLItGuY2bLyNVNGnREC1cQq3WCrRv9MOLkMuO1UANq7pw5OgtNFR3Cd
+         k86WRySKuf3VLXM5wbBsjJFwxt7T9GvQilPM4jI1zIkNaNx2mr3NCvKEeazHJcTgxdpS
+         5cMWqE88yX/grzY6H89EIr1QhRM8V0xKh21vKJ9YV3rl85/WQM4idF8g9f/T3BpkIDtk
+         eNTLN2FE3uM4WLC/cXAbfUceorYnoKg18aLzbVFbAvGcPRVMCsRqxhxOwMpkSxb41CqL
+         wQJRd8T7C2oxIYJe8jGFsA3x7FjQOcbC0HWXCPVANAXR2jx4ZvXUHi9y3bYjZRX76iVW
+         BjqA==
+X-Gm-Message-State: AC+VfDxcETWb26zeOX1862DfURwGckyXhVF8QT5BbW/LAq4FZ/v56LNx
+        gkyoAmeuFhh/N9SjMHJNmDCWhXsOqIQPwvaD4+E=
+X-Google-Smtp-Source: ACHHUZ7ymR8xg6gmlimJikqdTdN9EwjsIAMtiY6mantPHzxDcOMsx6EXIKP09xGuiPoZExiZXrKbbCNsxKb4RZ6Zh7M=
+X-Received: by 2002:a17:907:1c23:b0:966:2984:3da0 with SMTP id
+ nc35-20020a1709071c2300b0096629843da0mr40602921ejc.63.1684402192335; Thu, 18
+ May 2023 02:29:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a17:906:dace:b0:94a:7e28:ef2d with HTTP; Thu, 18 May 2023
+ 02:29:51 -0700 (PDT)
+Reply-To: ninacoulibaly03@myself.com
+From:   nina coulibaly <ninacoulibaly013@gmail.com>
+Date:   Thu, 18 May 2023 02:29:51 -0700
+Message-ID: <CAHS6EwUN1hPTfwdP2X6-1hjfuShzCTkxBJQqRaJ3H7yU8uGBLw@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-As we allow the hash table to be configured to rows above 2^20,
-we should limit it depending on the available memory to some
-sane values. Switch to kvmalloc allocation to better select
-the needed allocation type.
+Dear,
 
-Signed-off-by: Julian Anastasov <ja@ssi.bg>
----
- net/netfilter/ipvs/ip_vs_conn.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
 
- NOTE: This patch needs to be applied on top of V3 (or above) of patch
- "ipvs: increase ip_vs_conn_tab_bits range for 64BIT" from Abhijeet
-
-diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index f4c55e65abd1..79d7ae8e50e5 100644
---- a/net/netfilter/ipvs/ip_vs_conn.c
-+++ b/net/netfilter/ipvs/ip_vs_conn.c
-@@ -26,7 +26,6 @@
- #include <linux/net.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/vmalloc.h>
- #include <linux/proc_fs.h>		/* for proc_net_* */
- #include <linux/slab.h>
- #include <linux/seq_file.h>
-@@ -1482,13 +1481,21 @@ void __net_exit ip_vs_conn_net_cleanup(struct netns_ipvs *ipvs)
- int __init ip_vs_conn_init(void)
- {
- 	size_t tab_array_size;
-+	int max_avail;
-+#if BITS_PER_LONG > 32
-+	int max = 27;
-+#else
-+	int max = 20;
-+#endif
-+	int min = 8;
- 	int idx;
- 
--	/* Compute size and mask */
--	if (ip_vs_conn_tab_bits < 8 || ip_vs_conn_tab_bits > 27) {
--		pr_info("conn_tab_bits not in [8, 27]. Using default value\n");
--		ip_vs_conn_tab_bits = CONFIG_IP_VS_TAB_BITS;
--	}
-+	max_avail = order_base_2(totalram_pages()) + PAGE_SHIFT;
-+	max_avail -= 2;		/* ~4 in hash row */
-+	max_avail -= 1;		/* IPVS up to 1/2 of mem */
-+	max_avail -= order_base_2(sizeof(struct ip_vs_conn));
-+	max = clamp(max, min, max_avail);
-+	ip_vs_conn_tab_bits = clamp_val(ip_vs_conn_tab_bits, min, max);
- 	ip_vs_conn_tab_size = 1 << ip_vs_conn_tab_bits;
- 	ip_vs_conn_tab_mask = ip_vs_conn_tab_size - 1;
- 
-@@ -1497,7 +1504,8 @@ int __init ip_vs_conn_init(void)
- 	 */
- 	tab_array_size = array_size(ip_vs_conn_tab_size,
- 				    sizeof(*ip_vs_conn_tab));
--	ip_vs_conn_tab = vmalloc(tab_array_size);
-+	ip_vs_conn_tab = kvmalloc_array(ip_vs_conn_tab_size,
-+					sizeof(*ip_vs_conn_tab), GFP_KERNEL);
- 	if (!ip_vs_conn_tab)
- 		return -ENOMEM;
- 
-@@ -1506,7 +1514,7 @@ int __init ip_vs_conn_init(void)
- 					      sizeof(struct ip_vs_conn), 0,
- 					      SLAB_HWCACHE_ALIGN, NULL);
- 	if (!ip_vs_conn_cachep) {
--		vfree(ip_vs_conn_tab);
-+		kvfree(ip_vs_conn_tab);
- 		return -ENOMEM;
- 	}
- 
-@@ -1534,5 +1542,5 @@ void ip_vs_conn_cleanup(void)
- 	rcu_barrier();
- 	/* Release the empty cache */
- 	kmem_cache_destroy(ip_vs_conn_cachep);
--	vfree(ip_vs_conn_tab);
-+	kvfree(ip_vs_conn_tab);
- }
--- 
-2.40.1
-
-
+Mrs. Nina Coulibaly
