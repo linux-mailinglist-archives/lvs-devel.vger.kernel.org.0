@@ -2,69 +2,62 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E7777A011
-	for <lists+lvs-devel@lfdr.de>; Sat, 12 Aug 2023 15:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FADF77C620
+	for <lists+lvs-devel@lfdr.de>; Tue, 15 Aug 2023 04:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjHLNKt (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Sat, 12 Aug 2023 09:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
+        id S233724AbjHOCyC (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 14 Aug 2023 22:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjHLNKs (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Sat, 12 Aug 2023 09:10:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A4B172E;
-        Sat, 12 Aug 2023 06:10:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A4D061783;
-        Sat, 12 Aug 2023 13:10:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320AAC433C9;
-        Sat, 12 Aug 2023 13:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691845850;
-        bh=PTDMYrMnnvEC3+6KgZIJedMq4d0m0EkMnMs4B0NEo/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lkan7IkCezGBzBZdH+bNQraGsS/Vq27RKUllz0Ms58XnOsbSODxEGxmwwZkDHIjmG
-         Y/GMdlW6xS/+IN1aPCcjRXKnAYZI+31YfkLJTuDU6NvXReqtBcsO+USHEbe0zr35rx
-         6G9tqb17jkhNQDfEYnW8K57GbX2R6+y7qrS8xnxC1doM9BE0RJm//nrz6UB2WSf1Ib
-         GisCbgbVV//awI8/nWE0dtYs7n6ytZBfD6A2vetNMygE9GQBA6I9bT3wYDmcmyWfjP
-         1vqfSAIM2bqyp2eSTWw8sfTIrJ5HbTV9FO63IJb+qL4oLwhE6Y0FI4ZbGG39KWQZXW
-         SKtQ54VZbhT0Q==
-Date:   Sat, 12 Aug 2023 15:10:46 +0200
-From:   Simon Horman <horms@kernel.org>
+        with ESMTP id S233204AbjHOCxu (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 14 Aug 2023 22:53:50 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61ECE7A;
+        Mon, 14 Aug 2023 19:53:47 -0700 (PDT)
+Received: from mg.bb.i.ssi.bg (localhost [127.0.0.1])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 4B46AAE6C;
+        Tue, 15 Aug 2023 05:53:46 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id 2FCC6AE67;
+        Tue, 15 Aug 2023 05:53:46 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [213.16.62.126])
+        by ink.ssi.bg (Postfix) with ESMTPSA id 659DF3C0441;
+        Tue, 15 Aug 2023 05:53:45 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
+        t=1692068026; bh=W+Z0WTspsdbpobGPJx4v2/IEO37df2Pimxz6FZTRsNE=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References;
+        b=TxeJO+ezb/1Wg1XWK+Ukj/7m27bcaURRNEeMnmJPVOkj2TNxLakBZs35qdLh0Yq0o
+         KkCIiZa2vVNK47+s7XUCZCUbfgJ7hXKgufxg0HhnJyM+MspOxpt6k/AwfLPNb26xo4
+         /SFxFbRVCj4TYu8jmeL6Aa2iJgeDnFhnGNlJnzPQ=
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.17.1) with ESMTP id 37F2rhLv026279;
+        Tue, 15 Aug 2023 05:53:44 +0300
+Date:   Tue, 15 Aug 2023 05:53:43 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
 To:     Sishuai Gong <sishuai.system@gmail.com>
-Cc:     ja@ssi.bg,
+cc:     Simon Horman <horms@verge.net.au>,
         Linux Kernel Network Developers <netdev@vger.kernel.org>,
         lvs-devel@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+        netfilter-devel@vger.kernel.org
 Subject: Re: [PATCH] ipvs: fix racy memcpy in proc_do_sync_threshold
-Message-ID: <ZNeE1nYMgWAZqRfc@vergenet.net>
+In-Reply-To: <B556FD7B-3190-4C8F-BA83-FC5C147FEAE1@gmail.com>
+Message-ID: <359e4898-01fe-775f-d6a5-753caa585642@ssi.bg>
 References: <B556FD7B-3190-4C8F-BA83-FC5C147FEAE1@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <B556FD7B-3190-4C8F-BA83-FC5C147FEAE1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 03:12:42PM -0400, Sishuai Gong wrote:
 
-+ Pablo Neira Ayuso <pablo@netfilter.org>
-  Florian Westphal <fw@strlen.de>
-  Jozsef Kadlecsik <kadlec@netfilter.org>
-  netfilter-devel@vger.kernel.org
-  coreteam@netfilter.org
+	Hello,
+
+On Thu, 10 Aug 2023, Sishuai Gong wrote:
 
 > When two threads run proc_do_sync_threshold() in parallel,
 > data races could happen between the two memcpy():
@@ -80,13 +73,9 @@ On Thu, Aug 10, 2023 at 03:12:42PM -0400, Sishuai Gong wrote:
 > 
 > Signed-off-by: Sishuai Gong <sishuai.system@gmail.com>
 
-Probably this is a fix for nf and should have:
+	Looks good to me for net/nf, thanks!
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
-In any case, this change looks good to me.
-
-Acked-by: Simon Horman <horms@kernel.org>
+Acked-by: Julian Anastasov <ja@ssi.bg>
 
 > ---
 >  net/netfilter/ipvs/ip_vs_ctl.c | 4 ++++
@@ -130,4 +119,9 @@ Acked-by: Simon Horman <horms@kernel.org>
 >  	tbl[idx++].data = &ipvs->sysctl_sync_refresh_period;
 > -- 
 > 2.39.2 (Apple Git-143)
-> 
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
