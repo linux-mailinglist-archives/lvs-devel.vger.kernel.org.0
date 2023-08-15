@@ -2,114 +2,223 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23DB77D5EB
-	for <lists+lvs-devel@lfdr.de>; Wed, 16 Aug 2023 00:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3947177D7EF
+	for <lists+lvs-devel@lfdr.de>; Wed, 16 Aug 2023 03:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240036AbjHOW1j (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 15 Aug 2023 18:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S241156AbjHPB5o (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Tue, 15 Aug 2023 21:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240396AbjHOW1e (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 15 Aug 2023 18:27:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D881BFF;
-        Tue, 15 Aug 2023 15:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aFm90R+tDTFvDBLdwRCYQE4Y41kg8AEvvcWG6AcDlHc=; b=m+Hvj3w2nGUh/z5FvuS2WaFvCP
-        E9VTMTriBBsaYE1DW7gg45cfxPOHyZo+qnJy5YDlRNwx/8IEd6QSy1kFsWmCaI6Ayn2U1e18uzlwr
-        1+Iy9qd60pMllaFg/MtWE7G1QlLCx82ZCCAIzB8O5VbfxRwp9DMOrRwt9Ca10lMltY10Km8PtNXu/
-        L6WobTanJRf/8tEi6GPMdzrRmGdH4Dw9KByfrbTqLo06X3hWeNkANUIM+i1BPRo1BIMLMC8dpsrXD
-        Hz59LovBcm5X+3VH7+EtsxrFP7ARkSjVCRHEyC2IZkI52jv17UdFdX7UcYwBUjCHLaKBVrUaPumbs
-        W9PGgB4A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qW2VM-002iR6-1x;
-        Tue, 15 Aug 2023 22:27:12 +0000
-Date:   Tue, 15 Aug 2023 15:27:12 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Joel Granados <joel.granados@gmail.com>
-Cc:     rds-devel@oss.oracle.com, "David S. Miller" <davem@davemloft.net>,
-        Florian Westphal <fw@strlen.de>, willy@infradead.org,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Simon Horman <horms@verge.net.au>,
-        Tony Lu <tonylu@linux.alibaba.com>, linux-wpan@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        mptcp@lists.linux.dev, Heiko Carstens <hca@linux.ibm.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Will Deacon <will@kernel.org>, Julian Anastasov <ja@ssi.bg>,
-        netfilter-devel@vger.kernel.org, Joerg Reuter <jreuter@yaina.de>,
-        linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-sctp@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-hams@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        coreteam@netfilter.org, Ralf Baechle <ralf@linux-mips.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        keescook@chromium.org, Roopa Prabhu <roopa@nvidia.com>,
-        David Ahern <dsahern@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>, josh@joshtriplett.org,
-        linux-fsdevel@vger.kernel.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        netdev@vger.kernel.org,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        linux-s390@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
-        "D. Wythe" <alibuda@linux.alibaba.com>,
-        Eric Dumazet <edumazet@google.com>, lvs-devel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        bridge@lists.linux-foundation.org,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Mat Martineau <martineau@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Granados <j.granados@samsung.com>
-Subject: Re: [PATCH v3 00/14] sysctl: Add a size argument to register
- functions in sysctl
-Message-ID: <ZNv7wOmUPpCUFnHA@bombadil.infradead.org>
-References: <20230809105006.1198165-1-j.granados@samsung.com>
+        with ESMTP id S241191AbjHPB5Z (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Tue, 15 Aug 2023 21:57:25 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC2010D1;
+        Tue, 15 Aug 2023 18:57:19 -0700 (PDT)
+Received: from mg.bb.i.ssi.bg (localhost [127.0.0.1])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTP id 72AE1121AC;
+        Wed, 16 Aug 2023 04:57:18 +0300 (EEST)
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+        by mg.bb.i.ssi.bg (Proxmox) with ESMTPS id 5DFF4121AB;
+        Wed, 16 Aug 2023 04:57:18 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [213.16.62.126])
+        by ink.ssi.bg (Postfix) with ESMTPSA id 965443C07D1;
+        Wed, 16 Aug 2023 04:57:08 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
+        t=1692151028; bh=XcE1ptLktK3uyDhF6WKrZKptpn4/xt5YFEG2dA+VJOw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=JPkuukBASlvVKL1yNJnIrsZyqEjhMKJkhNin+U9S9X7CUofZMhFYgTtSrRU128w1/
+         E57lfLX5Q+uqw7sixPaxqk54AQsk1vz35YjGQ/U0kGYXLoXsiS6fn4GCKj6+ixGtSI
+         jjfzpdQkHWVjdkl33I75CpI7QiRCcaEWqfbuGx6g=
+Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.17.1) with ESMTP id 37FHWGcP168627;
+        Tue, 15 Aug 2023 20:32:16 +0300
+Received: (from root@localhost)
+        by ja.home.ssi.bg (8.17.1/8.17.1/Submit) id 37FHWGrx168626;
+        Tue, 15 Aug 2023 20:32:16 +0300
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Simon Horman <horms@verge.net.au>
+Cc:     lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        netdev@vger.kernel.org, "Paul E . McKenney" <paulmck@kernel.org>,
+        rcu@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
+        Jiejian Wu <jiejian@linux.alibaba.com>,
+        Jiri Wiesner <jwiesner@suse.de>
+Subject: [PATCH RFC net-next 05/14] ipvs: do not keep dest_dst after dest is removed
+Date:   Tue, 15 Aug 2023 20:30:22 +0300
+Message-ID: <20230815173031.168344-6-ja@ssi.bg>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230815173031.168344-1-ja@ssi.bg>
+References: <20230815173031.168344-1-ja@ssi.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230809105006.1198165-1-j.granados@samsung.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Aug 09, 2023 at 12:49:52PM +0200, Joel Granados wrote:
-> What?
-> These commits set things up so we can start removing the sentinel elements.
-> They modify sysctl and net_sysctl internals so that registering a ctl_table
-> that contains a sentinel gives the same result as passing a table_size
-> calculated from the ctl_table array without a sentinel. We accomplish this by
-> introducing a table_size argument in the same place where procname is checked
-> for NULL. The idea is for it to keep stopping when it hits ->procname == NULL,
-> while the sentinel is still present. And when the sentinel is removed, it will
-> stop on the table_size (thx to jani.nikula@linux.intel.com for the discussion
-> that led to this). This allows us to remove sentinels from one (or several)
-> files at a time.
-> 
-> These commits are part of a bigger set containing the removal of ctl_table sentinel
-> (https://github.com/Joelgranados/linux/tree/tag/sysctl_remove_empty_elem_V3).
-> The idea is to make the review process easier by chunking the 65+ commits into
-> manageable pieces.
+Before now dest->dest_dst is not released when server is moved into
+dest_trash list after removal. As result, we can keep dst/dev
+references for long time without actively using them.
 
-Thanks, I've dropped the old set and merged this updated one onto sysctl-next.
+It is better to avoid walking the dest_trash list when
+ip_vs_dst_event() receives dev events. So, make sure we do not
+hold dev references in dest_trash list. As packets can be flying
+while server is being removed, check the IP_VS_DEST_F_AVAILABLE
+flag in slow path to ensure we do not save new dev references to
+removed servers.
 
-  Luis
+Signed-off-by: Julian Anastasov <ja@ssi.bg>
+---
+ net/netfilter/ipvs/ip_vs_ctl.c  | 20 +++++++----------
+ net/netfilter/ipvs/ip_vs_xmit.c | 39 ++++++++++++++++++++++++---------
+ 2 files changed, 37 insertions(+), 22 deletions(-)
+
+diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
+index 5b865c87e63d..475521af5530 100644
+--- a/net/netfilter/ipvs/ip_vs_ctl.c
++++ b/net/netfilter/ipvs/ip_vs_ctl.c
+@@ -810,7 +810,6 @@ static void ip_vs_dest_free(struct ip_vs_dest *dest)
+ {
+ 	struct ip_vs_service *svc = rcu_dereference_protected(dest->svc, 1);
+ 
+-	__ip_vs_dst_cache_reset(dest);
+ 	__ip_vs_svc_put(svc);
+ 	call_rcu(&dest->rcu_head, ip_vs_dest_rcu_free);
+ }
+@@ -1013,10 +1012,6 @@ __ip_vs_update_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest,
+ 
+ 	dest->af = udest->af;
+ 
+-	spin_lock_bh(&dest->dst_lock);
+-	__ip_vs_dst_cache_reset(dest);
+-	spin_unlock_bh(&dest->dst_lock);
+-
+ 	if (add) {
+ 		list_add_rcu(&dest->n_list, &svc->destinations);
+ 		svc->num_dests++;
+@@ -1024,6 +1019,10 @@ __ip_vs_update_dest(struct ip_vs_service *svc, struct ip_vs_dest *dest,
+ 		if (sched && sched->add_dest)
+ 			sched->add_dest(svc, dest);
+ 	} else {
++		spin_lock_bh(&dest->dst_lock);
++		__ip_vs_dst_cache_reset(dest);
++		spin_unlock_bh(&dest->dst_lock);
++
+ 		sched = rcu_dereference_protected(svc->scheduler, 1);
+ 		if (sched && sched->upd_dest)
+ 			sched->upd_dest(svc, dest);
+@@ -1258,6 +1257,10 @@ static void __ip_vs_unlink_dest(struct ip_vs_service *svc,
+ {
+ 	dest->flags &= ~IP_VS_DEST_F_AVAILABLE;
+ 
++	spin_lock_bh(&dest->dst_lock);
++	__ip_vs_dst_cache_reset(dest);
++	spin_unlock_bh(&dest->dst_lock);
++
+ 	/*
+ 	 *  Remove it from the d-linked destination list.
+ 	 */
+@@ -1747,13 +1750,6 @@ static int ip_vs_dst_event(struct notifier_block *this, unsigned long event,
+ 	}
+ 	rcu_read_unlock();
+ 
+-	mutex_lock(&ipvs->service_mutex);
+-	spin_lock_bh(&ipvs->dest_trash_lock);
+-	list_for_each_entry(dest, &ipvs->dest_trash, t_list) {
+-		ip_vs_forget_dev(dest, dev);
+-	}
+-	spin_unlock_bh(&ipvs->dest_trash_lock);
+-	mutex_unlock(&ipvs->service_mutex);
+ 	return NOTIFY_DONE;
+ }
+ 
+diff --git a/net/netfilter/ipvs/ip_vs_xmit.c b/net/netfilter/ipvs/ip_vs_xmit.c
+index 9193e109e6b3..d7499f1e3af2 100644
+--- a/net/netfilter/ipvs/ip_vs_xmit.c
++++ b/net/netfilter/ipvs/ip_vs_xmit.c
+@@ -317,9 +317,11 @@ __ip_vs_get_out_rt(struct netns_ipvs *ipvs, int skb_af, struct sk_buff *skb,
+ 
+ 	if (dest) {
+ 		dest_dst = __ip_vs_dst_check(dest);
+-		if (likely(dest_dst))
++		if (likely(dest_dst)) {
+ 			rt = (struct rtable *) dest_dst->dst_cache;
+-		else {
++			if (ret_saddr)
++				*ret_saddr = dest_dst->dst_saddr.ip;
++		} else {
+ 			dest_dst = ip_vs_dest_dst_alloc();
+ 			spin_lock_bh(&dest->dst_lock);
+ 			if (!dest_dst) {
+@@ -335,14 +337,24 @@ __ip_vs_get_out_rt(struct netns_ipvs *ipvs, int skb_af, struct sk_buff *skb,
+ 				ip_vs_dest_dst_free(dest_dst);
+ 				goto err_unreach;
+ 			}
+-			__ip_vs_dst_set(dest, dest_dst, &rt->dst, 0);
++			/* It is forbidden to attach dest->dest_dst if
++			 * server is deleted. We can see the flag going down,
++			 * for very short period and it must be checked under
++			 * dst_lock.
++			 */
++			if (dest->flags & IP_VS_DEST_F_AVAILABLE)
++				__ip_vs_dst_set(dest, dest_dst, &rt->dst, 0);
++			else
++				noref = 0;
+ 			spin_unlock_bh(&dest->dst_lock);
+ 			IP_VS_DBG(10, "new dst %pI4, src %pI4, refcnt=%d\n",
+ 				  &dest->addr.ip, &dest_dst->dst_saddr.ip,
+ 				  rcuref_read(&rt->dst.__rcuref));
++			if (ret_saddr)
++				*ret_saddr = dest_dst->dst_saddr.ip;
++			if (!noref)
++				ip_vs_dest_dst_free(dest_dst);
+ 		}
+-		if (ret_saddr)
+-			*ret_saddr = dest_dst->dst_saddr.ip;
+ 	} else {
+ 		__be32 saddr = htonl(INADDR_ANY);
+ 
+@@ -480,9 +492,11 @@ __ip_vs_get_out_rt_v6(struct netns_ipvs *ipvs, int skb_af, struct sk_buff *skb,
+ 
+ 	if (dest) {
+ 		dest_dst = __ip_vs_dst_check(dest);
+-		if (likely(dest_dst))
++		if (likely(dest_dst)) {
+ 			rt = (struct rt6_info *) dest_dst->dst_cache;
+-		else {
++			if (ret_saddr)
++				*ret_saddr = dest_dst->dst_saddr.in6;
++		} else {
+ 			u32 cookie;
+ 
+ 			dest_dst = ip_vs_dest_dst_alloc();
+@@ -503,14 +517,19 @@ __ip_vs_get_out_rt_v6(struct netns_ipvs *ipvs, int skb_af, struct sk_buff *skb,
+ 			}
+ 			rt = (struct rt6_info *) dst;
+ 			cookie = rt6_get_cookie(rt);
+-			__ip_vs_dst_set(dest, dest_dst, &rt->dst, cookie);
++			if (dest->flags & IP_VS_DEST_F_AVAILABLE)
++				__ip_vs_dst_set(dest, dest_dst, &rt->dst, cookie);
++			else
++				noref = 0;
+ 			spin_unlock_bh(&dest->dst_lock);
+ 			IP_VS_DBG(10, "new dst %pI6, src %pI6, refcnt=%d\n",
+ 				  &dest->addr.in6, &dest_dst->dst_saddr.in6,
+ 				  rcuref_read(&rt->dst.__rcuref));
++			if (ret_saddr)
++				*ret_saddr = dest_dst->dst_saddr.in6;
++			if (!noref)
++				ip_vs_dest_dst_free(dest_dst);
+ 		}
+-		if (ret_saddr)
+-			*ret_saddr = dest_dst->dst_saddr.in6;
+ 	} else {
+ 		noref = 0;
+ 		dst = __ip_vs_route_output_v6(net, daddr, ret_saddr, do_xfrm,
+-- 
+2.41.0
+
+
