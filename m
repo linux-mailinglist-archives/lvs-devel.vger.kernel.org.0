@@ -2,226 +2,114 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B622B77ED76
-	for <lists+lvs-devel@lfdr.de>; Thu, 17 Aug 2023 00:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29327817F0
+	for <lists+lvs-devel@lfdr.de>; Sat, 19 Aug 2023 09:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347048AbjHPWyo (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Wed, 16 Aug 2023 18:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50442 "EHLO
+        id S238422AbjHSHHe (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sat, 19 Aug 2023 03:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347050AbjHPWyR (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Wed, 16 Aug 2023 18:54:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E4926AB;
-        Wed, 16 Aug 2023 15:54:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 736D965199;
-        Wed, 16 Aug 2023 22:54:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2923C433C7;
-        Wed, 16 Aug 2023 22:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692226453;
-        bh=4Dc1pPQ00w8T+b3juVWVBwfn7XCRj0VA2rEerIOG0Cs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=npRkxJP/p4JQpppL2ScYRvGf3egdej/XkDmag8vlr8UVPhZvZYZK8uYeclJeKCpfE
-         aBjkq9lhwF6kGzedEpLEQZPhAl64YIFqCS2wAIxSGPhM6dYC4ss46x/iGj9znLw9Zj
-         VKC+omSN9l/olm8I9ZmqkiMmil9Oetwbx3I1WSJthHifpHUENOUKqraViWtyHV476/
-         46QJE4bry6xND0xY6nSFV02YeBegLZXesT1T9IdiiVsvst0rxiJ2H6jOo/bcYu1D9e
-         ODKnetBn6hKhgsK1Hqu/I7NbeciW/zTR2+UjE3eAR3uHLxZ5z7xGBfn7eK+60BqZme
-         EFUl81V2mwiLA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 7236BCE0593; Wed, 16 Aug 2023 15:54:13 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 15:54:13 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Julian Anastasov <ja@ssi.bg>
-Cc:     Simon Horman <horms@verge.net.au>, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
-        Jiejian Wu <jiejian@linux.alibaba.com>,
-        Jiri Wiesner <jwiesner@suse.de>
-Subject: Re: [PATCH RFC net-next 01/14] rculist_bl: add
- hlist_bl_for_each_entry_continue_rcu
-Message-ID: <9f236f42-8aee-411c-9bd4-d7029c49a0a1@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230815173031.168344-1-ja@ssi.bg>
- <20230815173031.168344-2-ja@ssi.bg>
- <958d687d-9f7f-4baf-af26-2ec351ef8699@paulmck-laptop>
- <a3bba801-5253-5ab1-4dce-43c5b7cb407c@ssi.bg>
+        with ESMTP id S237088AbjHSHHM (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sat, 19 Aug 2023 03:07:12 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB5630F6
+        for <lvs-devel@vger.kernel.org>; Sat, 19 Aug 2023 00:07:11 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-79a46f02d45so519611241.0
+        for <lvs-devel@vger.kernel.org>; Sat, 19 Aug 2023 00:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692428830; x=1693033630;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=FQF0pdx0P7Ipp1cP/bojMQG8xRb+2sOD4SW1J6qcVUgmjVXxX0edlW012XGEE78U77
+         +AAyp6KG+YBQB/2iqj4ER+o8ppcUnr8IeO77m3fv2ePr8zUxBMony1VElzefdOilcslQ
+         QaM7Kk4B7hDmErTexMB5ZQlY9Sh+q0ryM2QDXTMDgRnXsml+sCPOzOQJGYnXDsJt8gwT
+         TGRcK61VCp2todvv3DDs4oC8IieQoA/R9R2r0WOC/XIyIuVpDd/9M+fYStNCy9isSosY
+         dlVXHqyqZJjwvfeUCDZh7+Bl+anlkktg+9X8wEqQweniI/ps/58TVCy+Kpuq5mJ0S5NK
+         zIeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692428830; x=1693033630;
+        h=content-transfer-encoding:to:subject:message-id:date:from:sender
+         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
+        b=dynXeFyGa57kG8fZ2z8DKkIbmPm9/CJ8zlMdc0+B8c17ufYqQzyGpBwZPxBTVnRMzj
+         /jqjZwV4aOt1Xm3aNujjDR7vZikdU4ps+GZbxgwZuqsMF7oNq0jA1DgL/g2vy5ocbi0y
+         Xm4WW6MHKT4geEiAgiFI5BWan9IuNdqG2J1cjIPkboBhvK7Jz5+NsJZcnjt1IraQbBU5
+         JCYXfxUoXV5j72BJVEEKIj+UfyqX6z7Ht3UkkmDRzUWo8VOq3Xh81xeq329Zb6k1lOKE
+         W6STyRoevFDdbO6f9+apNAJyH8B13wTEdy8MlwranqbjwCJPO12pJX1a9mQwkFSeqMcF
+         pVnA==
+X-Gm-Message-State: AOJu0Ywg6bTVXamv9Brx3/TDlJVGWW8C1HjgP64nG1EWt0dPwsyGiMI7
+        1gV3iDvtxhpV38hwUinwlrnWGfY/nwU8x5+OwWQ=
+X-Google-Smtp-Source: AGHT+IGI1YURS/IR0+2EeUJwucyp0i30ZGoD6hyEvMG7UMW/LGIcsC0pQphGqPkMlL0HQ6MaRzta5+NJL6fVHFM4bfs=
+X-Received: by 2002:a67:fe0e:0:b0:447:d044:3e3e with SMTP id
+ l14-20020a67fe0e000000b00447d0443e3emr1681424vsr.27.1692428829986; Sat, 19
+ Aug 2023 00:07:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a3bba801-5253-5ab1-4dce-43c5b7cb407c@ssi.bg>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: razumkoykhailo@gmail.com
+Sender: tombaba466@gmail.com
+Received: by 2002:a59:b964:0:b0:3f1:7ec9:9804 with HTTP; Sat, 19 Aug 2023
+ 00:07:09 -0700 (PDT)
+From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
+Date:   Sat, 19 Aug 2023 00:07:09 -0700
+X-Google-Sender-Auth: qSdBTEzbbJI1xWcJpMKBMwjaRI0
+Message-ID: <CAOwfnHbazE94+B_gWd8L=0fLkKZqyxJqpN+5Pt7QhDRPV2Qe-w@mail.gmail.com>
+Subject: Greetings from Ukraine,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_USD,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 07:02:39PM +0300, Julian Anastasov wrote:
-> 
-> 	Hello,
-> 
-> On Tue, 15 Aug 2023, Paul E. McKenney wrote:
-> 
-> > On Tue, Aug 15, 2023 at 08:30:18PM +0300, Julian Anastasov wrote:
-> > > Add hlist_bl_for_each_entry_continue_rcu and hlist_bl_next_rcu
-> > > 
-> > > Signed-off-by: Julian Anastasov <ja@ssi.bg>
-> > > ---
-> > >  include/linux/rculist_bl.h | 17 +++++++++++++++++
-> > >  1 file changed, 17 insertions(+)
-> > > 
-> > > diff --git a/include/linux/rculist_bl.h b/include/linux/rculist_bl.h
-> > > index 0b952d06eb0b..93a757793d83 100644
-> > > --- a/include/linux/rculist_bl.h
-> > > +++ b/include/linux/rculist_bl.h
-> > > @@ -24,6 +24,10 @@ static inline struct hlist_bl_node *hlist_bl_first_rcu(struct hlist_bl_head *h)
-> > >  		((unsigned long)rcu_dereference_check(h->first, hlist_bl_is_locked(h)) & ~LIST_BL_LOCKMASK);
-> > >  }
-> > >  
-> > > +/* return the next element in an RCU protected list */
-> > > +#define hlist_bl_next_rcu(node)	\
-> > > +	(*((struct hlist_bl_node __rcu **)(&(node)->next)))
-> > > +
-> > >  /**
-> > >   * hlist_bl_del_rcu - deletes entry from hash list without re-initialization
-> > >   * @n: the element to delete from the hash list.
-> > > @@ -98,4 +102,17 @@ static inline void hlist_bl_add_head_rcu(struct hlist_bl_node *n,
-> > >  		({ tpos = hlist_bl_entry(pos, typeof(*tpos), member); 1; }); \
-> > >  		pos = rcu_dereference_raw(pos->next))
-> > >  
-> > > +/**
-> > > + * hlist_bl_for_each_entry_continue_rcu - iterate over a list continuing after
-> > > + *   current point
-> > 
-> > Please add a comment to the effect that the element continued from
-> > must have been either: (1) Iterated to within the same RCU read-side
-> > critical section or (2) Nailed down using some lock, reference count,
-> > or whatever suffices to keep the continued-from element from being freed
-> > in the meantime.
-> 
-> 	I created 2nd version which has more changes. I'm not sure
-> what are the desired steps for this patch, should I keep it as part
-> of my patchset if accepted? Or should I post it separately? Here it
-> is v2 for comments.
-
-This looks plausible to me, but of course needs more eyes and more
-testing.
-
-						Thanx, Paul
-
-> [PATCHv2 RFC] rculist_bl: add hlist_bl_for_each_entry_continue_rcu
-> 
-> Change the old hlist_bl_first_rcu to hlist_bl_first_rcu_dereference
-> to indicate that it is a RCU dereference.
-> 
-> Add hlist_bl_next_rcu and hlist_bl_first_rcu to use RCU pointers
-> and use them to fix sparse warnings.
-> 
-> Add hlist_bl_for_each_entry_continue_rcu.
-> 
-> Signed-off-by: Julian Anastasov <ja@ssi.bg>
-> ---
->  include/linux/rculist_bl.h | 49 +++++++++++++++++++++++++++++++-------
->  1 file changed, 40 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/rculist_bl.h b/include/linux/rculist_bl.h
-> index 0b952d06eb0b..36363b876e53 100644
-> --- a/include/linux/rculist_bl.h
-> +++ b/include/linux/rculist_bl.h
-> @@ -8,21 +8,31 @@
->  #include <linux/list_bl.h>
->  #include <linux/rcupdate.h>
->  
-> +/* return the first ptr or next element in an RCU protected list */
-> +#define hlist_bl_first_rcu(head)	\
-> +	(*((struct hlist_bl_node __rcu **)(&(head)->first)))
-> +#define hlist_bl_next_rcu(node)	\
-> +	(*((struct hlist_bl_node __rcu **)(&(node)->next)))
-> +
->  static inline void hlist_bl_set_first_rcu(struct hlist_bl_head *h,
->  					struct hlist_bl_node *n)
->  {
->  	LIST_BL_BUG_ON((unsigned long)n & LIST_BL_LOCKMASK);
->  	LIST_BL_BUG_ON(((unsigned long)h->first & LIST_BL_LOCKMASK) !=
->  							LIST_BL_LOCKMASK);
-> -	rcu_assign_pointer(h->first,
-> +	rcu_assign_pointer(hlist_bl_first_rcu(h),
->  		(struct hlist_bl_node *)((unsigned long)n | LIST_BL_LOCKMASK));
->  }
->  
-> -static inline struct hlist_bl_node *hlist_bl_first_rcu(struct hlist_bl_head *h)
-> -{
-> -	return (struct hlist_bl_node *)
-> -		((unsigned long)rcu_dereference_check(h->first, hlist_bl_is_locked(h)) & ~LIST_BL_LOCKMASK);
-> -}
-> +#define hlist_bl_first_rcu_dereference(head)				\
-> +({									\
-> +	struct hlist_bl_head *__head = (head);				\
-> +									\
-> +	(struct hlist_bl_node *)					\
-> +	((unsigned long)rcu_dereference_check(hlist_bl_first_rcu(__head), \
-> +					      hlist_bl_is_locked(__head)) & \
-> +					      ~LIST_BL_LOCKMASK);	\
-> +})
->  
->  /**
->   * hlist_bl_del_rcu - deletes entry from hash list without re-initialization
-> @@ -73,7 +83,7 @@ static inline void hlist_bl_add_head_rcu(struct hlist_bl_node *n,
->  {
->  	struct hlist_bl_node *first;
->  
-> -	/* don't need hlist_bl_first_rcu because we're under lock */
-> +	/* don't need hlist_bl_first_rcu* because we're under lock */
->  	first = hlist_bl_first(h);
->  
->  	n->next = first;
-> @@ -93,9 +103,30 @@ static inline void hlist_bl_add_head_rcu(struct hlist_bl_node *n,
->   *
->   */
->  #define hlist_bl_for_each_entry_rcu(tpos, pos, head, member)		\
-> -	for (pos = hlist_bl_first_rcu(head);				\
-> +	for (pos = hlist_bl_first_rcu_dereference(head);		\
->  		pos &&							\
->  		({ tpos = hlist_bl_entry(pos, typeof(*tpos), member); 1; }); \
-> -		pos = rcu_dereference_raw(pos->next))
-> +		pos = rcu_dereference_raw(hlist_bl_next_rcu(pos)))
-> +
-> +/**
-> + * hlist_bl_for_each_entry_continue_rcu - continue iteration over list of given
-> + *   type
-> + * @tpos:	the type * to use as a loop cursor.
-> + * @pos:	the &struct hlist_bl_node to use as a loop cursor.
-> + * @member:	the name of the hlist_bl_node within the struct.
-> + *
-> + * Continue to iterate over list of given type, continuing after
-> + * the current position which must have been in the list when the RCU read
-> + * lock was taken.
-> + * This would typically require either that you obtained the node from a
-> + * previous walk of the list in the same RCU read-side critical section, or
-> + * that you held some sort of non-RCU reference (such as a reference count)
-> + * to keep the node alive *and* in the list.
-> + */
-> +#define hlist_bl_for_each_entry_continue_rcu(tpos, pos, member)		\
-> +	for (pos = rcu_dereference_raw(hlist_bl_next_rcu(&(tpos)->member)); \
-> +	     pos &&							\
-> +	     ({ tpos = hlist_bl_entry(pos, typeof(*tpos), member); 1; }); \
-> +	     pos = rcu_dereference_raw(hlist_bl_next_rcu(pos)))
->  
->  #endif
-> -- 
-> 2.41.0
-> 
-> 
-> Regards
-> 
-> --
-> Julian Anastasov <ja@ssi.bg>
-> 
+R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
+wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
+aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
+aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
+YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
+b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
+CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
+wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
+ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
+aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
+bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
+oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
+cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
+bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
+bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
+wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
+aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
+bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
+wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
+LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
+wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
+YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
+bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
+dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
+d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
+b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
+dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
+Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
+oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
+wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
+wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
+oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
+dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
+dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
+wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
+wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
+DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
+Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
+oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
+bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
+ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
+YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
+ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
