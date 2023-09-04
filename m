@@ -2,203 +2,118 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF19778CDC4
-	for <lists+lvs-devel@lfdr.de>; Tue, 29 Aug 2023 22:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1888791591
+	for <lists+lvs-devel@lfdr.de>; Mon,  4 Sep 2023 12:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240537AbjH2Up3 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 29 Aug 2023 16:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S236539AbjIDKPw (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 4 Sep 2023 06:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240188AbjH2UpM (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 29 Aug 2023 16:45:12 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FD21BB;
-        Tue, 29 Aug 2023 13:45:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=qqpCUFR3P/c8X+gNxuXmGaV/FqFgRToVQytMVMpzzZU=; b=Dve5+6o8hMnkJ5nWqXTD/1k5Ig
-        c+eL+0Tiv6N9rCEFJgeCjKJ4omPyPHn9fnqB3Jf8MqMaOyZqL+1UBHqlsS5YXH7+VQoXGOrthij6U
-        wXE8kb0bhwdeKsa8zyMuKPbVXAZmTXwfMMt3f1XiBd7bIzJsMtP+il1X36DMva9FrwpSsxX2Bbm+7
-        EuvcibeFMzWbVd3TNrqT4ZRzkQJ0Q9NQiatktpBmVWsXjDxGZFkVQEKbevr1IsN647m6SvvMo+viz
-        Yvy04a63uv+YPdHNtPwsUdAKlVbW2MWxd4cief6pa6kf+sxylyo5091Al/BfKdZkegt5uFBdYqewR
-        nJDOB6Og==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qb5a3-00CF5F-1u;
-        Tue, 29 Aug 2023 20:44:55 +0000
-Date:   Tue, 29 Aug 2023 13:44:55 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Joel Granados <joel.granados@gmail.com>,
-        linux-fsdevel@vger.kernel.org, rds-devel@oss.oracle.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Westphal <fw@strlen.de>, willy@infradead.org,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Wen Gu <guwen@linux.alibaba.com>,
-        Simon Horman <horms@verge.net.au>,
-        Tony Lu <tonylu@linux.alibaba.com>, linux-wpan@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        mptcp@lists.linux.dev, Heiko Carstens <hca@linux.ibm.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Will Deacon <will@kernel.org>, Julian Anastasov <ja@ssi.bg>,
-        netfilter-devel@vger.kernel.org, Joerg Reuter <jreuter@yaina.de>,
-        linux-kernel@vger.kernel.org,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-sctp@vger.kernel.org, Xin Long <lucien.xin@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-hams@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        coreteam@netfilter.org, Ralf Baechle <ralf@linux-mips.org>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        keescook@chromium.org, Roopa Prabhu <roopa@nvidia.com>,
-        David Ahern <dsahern@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>, josh@joshtriplett.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        netdev@vger.kernel.org,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        linux-s390@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
-        "D. Wythe" <alibuda@linux.alibaba.com>,
-        Eric Dumazet <edumazet@google.com>, lvs-devel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        bridge@lists.linux-foundation.org,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Mat Martineau <martineau@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Granados <j.granados@samsung.com>, mcgrof@kernel.org
-Subject: [GIT PULL] sysctl changes for v6.6-rc1
-Message-ID: <ZO5Yx5JFogGi/cBo@bombadil.infradead.org>
+        with ESMTP id S239249AbjIDKPu (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 4 Sep 2023 06:15:50 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A801B5
+        for <lvs-devel@vger.kernel.org>; Mon,  4 Sep 2023 03:15:45 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-44e8fc5dc63so188032137.2
+        for <lvs-devel@vger.kernel.org>; Mon, 04 Sep 2023 03:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693822545; x=1694427345; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YqoQwotzhMNaRU2qkT/+yRd7xaxRmvW/PXDwvubnW7I=;
+        b=X5fKwc00v7r7H90U9lQgfEBzH/IXLQyB6MWHesBFo0MW3thh9Si5MgBodSm8tyTNiC
+         7YClFWdQEExCbqwb37Cz87NfHC8t1JtWVlpmEeqkbPFpOpCilyrvyfhVS6WmCcwG4EAZ
+         yfG98/Z37SpXBnYZywW0BigHyPJ7+8x/flAgOfXfwT3QT19igWRVLWmG7cYGaUNhTnug
+         EACpRt1swMvFtl34P65+zknsxcHRk0ZAQU/hIF6nqcj0vO/v0vIYgX06jlsl30rhJoWS
+         YggIGTQNjuobHW8NBNWEyTA5bw6akGrrYzFLCR+tlXZD0GbayJ6C8BBA0AHd9a7gqtJ0
+         AdAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693822545; x=1694427345;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqoQwotzhMNaRU2qkT/+yRd7xaxRmvW/PXDwvubnW7I=;
+        b=X+3TuGs5YSrcCwycu/TnuFOPCnWGsIDKrSNbdltqBXz66rVpBPNjZ/oM6QLbQ24hsf
+         /AHrE8v+9ofOLpSQRjtlwrSSIo1SDhSE0YhNtn8v7JnubyX2+1oa7IUJmJemfslRB3iE
+         NTJkjnaHJu2z9mzXbsdqLmvIhydHukjF+EcdV1TxLU86d/IAuVEu9F4YDKXSu0AU5NBX
+         Xwf+EXMRHuVORztWJf0AEDiWzdZjyghOn4YGM8cZ+eyGOpcTzki9A8NdWo8/+yHBejpO
+         aq2f1GR2Dj26vzPx+lsmFo7lqtK+vIW/bp5be9JkvU8OiYcwY8v0mOO1uEDH846JHdvk
+         M1ZA==
+X-Gm-Message-State: AOJu0Yxity5TT2d7aIC4qvo6sif+W/FycKkv3O7QsxGR1m5gj6Vkzh92
+        GuMHI6svFv9RipaXBNDOnIUpCyPPpQwu2Guptbk=
+X-Google-Smtp-Source: AGHT+IFOqEzEmzfwpZ1B8i/HJ3dtaEXCgiiUhm/JQ/OcBrhPi5oDtnDPXp21L3sk78KxeyDV9yk6/uOSem5uMAJ5FaQ=
+X-Received: by 2002:a67:ce0c:0:b0:44d:476b:3bbf with SMTP id
+ s12-20020a67ce0c000000b0044d476b3bbfmr5530758vsl.33.1693822544571; Mon, 04
+ Sep 2023 03:15:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Reply-To: mrsnh001@gmail.com
+Sender: aamirah.banneth555@gmail.com
+Received: by 2002:ab0:3a89:0:b0:7a5:1da8:bbc1 with HTTP; Mon, 4 Sep 2023
+ 03:15:43 -0700 (PDT)
+From:   "Mrs. Holofcener" <001nicole.h@gmail.com>
+Date:   Mon, 4 Sep 2023 11:15:43 +0100
+X-Google-Sender-Auth: oqRmgXOf-99_998ttWUyBya2lTw
+Message-ID: <CAHGp-4=3yWS0aFwRA4k7opupD2O_FkyuD=wShmUDR6JhAPYTFg@mail.gmail.com>
+Subject: Waiting to hear from you.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
+        *      DNSWL was blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [2607:f8b0:4864:20:0:0:0:e34 listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9752]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrsnh001[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [aamirah.banneth555[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [aamirah.banneth555[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+Good Day,
 
-  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+It's our pleasure communicating with you, I am Mrs. Nicole Holofcener
+from the USA and I have been diagnosed with ovarian cancer for 2
+years, I have a fund left in the bank which I want to donate to assist
+the needy and to building an orphanage home for the less privilege,
+please reply to me if you are willing to carry out the humanitarian
+charity mission, it's very important I explain all in details to you
+and you must assure me that 30% will be enough for you as your
+share/gift, while the rest to of the 70% will be for the poor less
+privilege and building of the orphanage homes.
 
-are available in the Git repository at:
+Thanks for waiting to hear from you.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/sysctl-6.6-rc1
-
-for you to fetch changes up to 53f3811dfd5e39507ee3aaea1be09aabce8f9c98:
-
-  sysctl: Use ctl_table_size as stopping criteria for list macro (2023-08-15 15:26:18 -0700)
-
-----------------------------------------------------------------
-sysctl-6.6-rc1
-
-Long ago we set out to remove the kitchen sink on kernel/sysctl.c arrays and
-placings sysctls to their own sybsystem or file to help avoid merge conflicts.
-Matthew Wilcox pointed out though that if we're going to do that we might as
-well also *save* space while at it and try to remove the extra last sysctl
-entry added at the end of each array, a sentintel, instead of bloating the
-kernel by adding a new sentinel with each array moved.
-
-Doing that was not so trivial, and has required slowing down the moves of
-kernel/sysctl.c arrays and measuring the impact on size by each new move.
-
-The complex part of the effort to help reduce the size of each sysctl is being
-done by the patient work of el señor Don Joel Granados. A lot of this is truly
-painful code refactoring and testing and then trying to measure the savings of
-each move and removing the sentinels. Although Joel already has code which does
-most of this work, experience with sysctl moves in the past shows is we need to
-be careful due to the slew of odd build failures that are possible due to the
-amount of random Kconfig options sysctls use.
-
-To that end Joel's work is split by first addressing the major housekeeping
-needed to remove the sentinels, which is part of this merge request. The rest
-of the work to actually remove the sentinels will be done later in future
-kernel releases.
-
-At first I was only going to send his first 7 patches of his patch series,
-posted 1 month ago, but in retrospect due to the testing the changes have
-received in linux-next and the minor changes they make this goes with the
-entire set of patches Joel had planned: just sysctl house keeping. There are
-networking changes but these are part of the house keeping too.
-
-The preliminary math is showing this will all help reduce the overall build
-time size of the kernel and run time memory consumed by the kernel by about
-~64 bytes per array where we are able to remove each sentinel in the future.
-That also means there is no more bloating the kernel with the extra ~64 bytes
-per array moved as no new sentinels are created.
-
-Most of this has been in linux-next for about a month, the last 7 patches took
-a minor refresh 2 week ago based on feedback.
-
-----------------------------------------------------------------
-Joel Granados (14):
-      sysctl: Prefer ctl_table_header in proc_sysctl
-      sysctl: Use ctl_table_header in list_for_each_table_entry
-      sysctl: Add ctl_table_size to ctl_table_header
-      sysctl: Add size argument to init_header
-      sysctl: Add a size arg to __register_sysctl_table
-      sysctl: Add size to register_sysctl
-      sysctl: Add size arg to __register_sysctl_init
-      sysctl: Add size to register_net_sysctl function
-      ax.25: Update to register_net_sysctl_sz
-      netfilter: Update to register_net_sysctl_sz
-      networking: Update to register_net_sysctl_sz
-      vrf: Update to register_net_sysctl_sz
-      sysctl: SIZE_MAX->ARRAY_SIZE in register_net_sysctl
-      sysctl: Use ctl_table_size as stopping criteria for list macro
-
- arch/arm64/kernel/armv8_deprecated.c    |  2 +-
- arch/s390/appldata/appldata_base.c      |  2 +-
- drivers/net/vrf.c                       |  3 +-
- fs/proc/proc_sysctl.c                   | 90 +++++++++++++++++----------------
- include/linux/sysctl.h                  | 31 +++++++++---
- include/net/ipv6.h                      |  2 +
- include/net/net_namespace.h             | 10 ++--
- ipc/ipc_sysctl.c                        |  4 +-
- ipc/mq_sysctl.c                         |  4 +-
- kernel/ucount.c                         |  5 +-
- net/ax25/sysctl_net_ax25.c              |  3 +-
- net/bridge/br_netfilter_hooks.c         |  3 +-
- net/core/neighbour.c                    |  8 ++-
- net/core/sysctl_net_core.c              |  3 +-
- net/ieee802154/6lowpan/reassembly.c     |  8 ++-
- net/ipv4/devinet.c                      |  3 +-
- net/ipv4/ip_fragment.c                  |  3 +-
- net/ipv4/route.c                        |  8 ++-
- net/ipv4/sysctl_net_ipv4.c              |  3 +-
- net/ipv4/xfrm4_policy.c                 |  3 +-
- net/ipv6/addrconf.c                     |  3 +-
- net/ipv6/icmp.c                         |  5 ++
- net/ipv6/netfilter/nf_conntrack_reasm.c |  3 +-
- net/ipv6/reassembly.c                   |  3 +-
- net/ipv6/route.c                        |  9 ++++
- net/ipv6/sysctl_net_ipv6.c              | 16 ++++--
- net/ipv6/xfrm6_policy.c                 |  3 +-
- net/mpls/af_mpls.c                      |  6 ++-
- net/mptcp/ctrl.c                        |  3 +-
- net/netfilter/ipvs/ip_vs_ctl.c          |  8 ++-
- net/netfilter/ipvs/ip_vs_lblc.c         | 10 ++--
- net/netfilter/ipvs/ip_vs_lblcr.c        | 10 ++--
- net/netfilter/nf_conntrack_standalone.c |  4 +-
- net/netfilter/nf_log.c                  |  7 +--
- net/rds/tcp.c                           |  3 +-
- net/sctp/sysctl.c                       |  4 +-
- net/smc/smc_sysctl.c                    |  3 +-
- net/sysctl_net.c                        | 26 +++++++---
- net/unix/sysctl_net_unix.c              |  3 +-
- net/xfrm/xfrm_sysctl.c                  |  8 ++-
- 40 files changed, 222 insertions(+), 113 deletions(-)
+Yours sincerely,
+Mrs. Nicole Holofcener.
+Email: nicole.holo@yahoo.com
