@@ -2,165 +2,93 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4A77AF4BC
-	for <lists+lvs-devel@lfdr.de>; Tue, 26 Sep 2023 22:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA847B493C
+	for <lists+lvs-devel@lfdr.de>; Sun,  1 Oct 2023 20:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbjIZUFZ (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Tue, 26 Sep 2023 16:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S235299AbjJASka (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Sun, 1 Oct 2023 14:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235810AbjIZUFY (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 26 Sep 2023 16:05:24 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6171D136
-        for <lvs-devel@vger.kernel.org>; Tue, 26 Sep 2023 13:05:17 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59f616f4660so129047737b3.1
-        for <lvs-devel@vger.kernel.org>; Tue, 26 Sep 2023 13:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695758716; x=1696363516; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iUWT+ccHYSlqR7Gmrnq8A76xPWnK8wJVTcz3EkgFwkk=;
-        b=fHvz/oXfN/BEP2dph9JC3zX7RplJK25pHOYQ4k6IYY2hH90LJ9R8h6X9CBSdVPWzOA
-         zZ/uFcKpr7u4eQsd5O2ZSK+xcQXrOywBXajCGjcm0whNsAFfSsrd738LczlzCSllqloF
-         pEzhSw4I1X44/guUCDwGqfzt9QuibRzEndhzaLrYP7lK6AG64NG8oc2alRg7CkTJ7JOZ
-         bOx/0fu4TVsqxt+gD/reQgOiiGqTXzlYIgCQRXfciGybYOOS7c1U9Q1SAtvzHOyiSP4G
-         taSxv0/UENApCkCQ7xsaAMjZBN1Pgu/eEuwoYJpS59T8gWm6HkncOggfOM07dVhLywpq
-         HUEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695758716; x=1696363516;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iUWT+ccHYSlqR7Gmrnq8A76xPWnK8wJVTcz3EkgFwkk=;
-        b=TC0VfyFwuMvHNwUBQEHkXGqsiI4J2x0V2+wQkVr+5vTuZfJ7eAjd/rWb5n8e2/DK3x
-         wneWL6VNHRhp28eVYA9doUNwt5iK7Mz9ZXCwCNAoyhnSIUVBMh4ISvKnp/+4EXeSiB8F
-         hUenHLuazgE6Dj4NqZcl+hCxhTRcEA4TNyzRpcHL2VAVZ5dAlq3pqn3CuqjVj9nFwL6T
-         FoCWJ+Yu/gmIy1f9QJqts5fySgGxkTeer05PQWeCcRTuFDCdIEUG2lz07VINLv4TZP4f
-         639Qc1kOtvaGGkp0AS2nrk/8L1gxMMyBw8oyPHUdecHH9N+EZFH/h3hYoWYVQNGPEOGi
-         qmaQ==
-X-Gm-Message-State: AOJu0YyZt/szuEb3MbzHhkxFw46hjZdRZPATR0QU4xGgYOWwqQFmtwhX
-        B3NL2QPBZnT4Oc7ogQ0NobI7bCfkLg==
-X-Google-Smtp-Source: AGHT+IEUd45Rw2MBKHocGo/lYiGWT9CIksAVWd6cnwx9BMyxx8zuAa0FUl0Vs9Eq31nY+vAcjI1OSk/2lQ==
-X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a81:af60:0:b0:59b:ca80:919a with SMTP id
- x32-20020a81af60000000b0059bca80919amr428ywj.0.1695758716434; Tue, 26 Sep
- 2023 13:05:16 -0700 (PDT)
-Date:   Tue, 26 Sep 2023 15:05:05 -0500
-In-Reply-To: <20230926200505.2804266-1-jrife@google.com>
-Mime-Version: 1.0
+        with ESMTP id S229505AbjJASk3 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Sun, 1 Oct 2023 14:40:29 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA498D9;
+        Sun,  1 Oct 2023 11:40:25 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 73002C433CA;
+        Sun,  1 Oct 2023 18:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696185625;
+        bh=vHpYQw4Xo9ncTL+cTD5bhjtdjFWeRqIriCu/Ce16oc4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BEstLtKJIXt0IJ4gCEvv4DRQRrPAiKpdLtX0LWl0eWl3Nty1flLkeAMAk6VoQ3hFH
+         zfw2pT3j66ZWc4mAFtr0hI1r+/FdoaNS5LzyTt6pfQTwiVmIB3ytjv0Jx8v8IPwEBb
+         Lswz85b/WEMSd+P5Aqfm8HJK4pxY7Vc3lDKxHO2ou4ct8H8qk6GPllQmsiRm14NXTE
+         PExldMIYnTMvAOv5UWs9RqqO5bctrk+swoNCnH8Je1QlBthCz46pHYh+NRrdY+sVYa
+         8FInmRSG0tvh+6NaOnjbWMJZ8lSCfrKmpZj7YuRXGfRFBRx+qMZRFTMMqhW2JbMr+k
+         JgyencAyzITyw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4CF22C73FE1;
+        Sun,  1 Oct 2023 18:40:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v6 0/3] Insulate Kernel Space From SOCK_ADDR Hooks
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169618562530.20334.3438760815048190740.git-patchwork-notify@kernel.org>
+Date:   Sun, 01 Oct 2023 18:40:25 +0000
 References: <20230926200505.2804266-1-jrife@google.com>
-X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Message-ID: <20230926200505.2804266-4-jrife@google.com>
-Subject: [PATCH net v6 3/3] net: prevent address rewrite in kernel_bind()
-From:   Jordan Rife <jrife@google.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+In-Reply-To: <20230926200505.2804266-1-jrife@google.com>
+To:     Jordan Rife <jrife@google.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
-        netdev@vger.kernel.org
-Cc:     dborkman@kernel.org, horms@verge.net.au, pablo@netfilter.org,
-        kadlec@netfilter.org, fw@strlen.de, santosh.shilimkar@oracle.com,
-        ast@kernel.org, rdna@fb.com, linux-rdma@vger.kernel.org,
-        rds-devel@oss.oracle.com, coreteam@netfilter.org,
-        netfilter-devel@vger.kernel.org, ja@ssi.bg,
+        netdev@vger.kernel.org, dborkman@kernel.org, horms@verge.net.au,
+        pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        santosh.shilimkar@oracle.com, ast@kernel.org, rdna@fb.com,
+        linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
+        coreteam@netfilter.org, netfilter-devel@vger.kernel.org, ja@ssi.bg,
         lvs-devel@vger.kernel.org, kafai@fb.com, daniel@iogearbox.net,
-        daan.j.demeyer@gmail.com, Jordan Rife <jrife@google.com>,
-        stable@vger.kernel.org, Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        daan.j.demeyer@gmail.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-Similar to the change in commit 0bdf399342c5("net: Avoid address
-overwrite in kernel_connect"), BPF hooks run on bind may rewrite the
-address passed to kernel_bind(). This change
+Hello:
 
-1) Makes a copy of the bind address in kernel_bind() to insulate
-   callers.
-2) Replaces direct calls to sock->ops->bind() in net with kernel_bind()
+This series was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Link: https://lore.kernel.org/netdev/20230912013332.2048422-1-jrife@google.com/
-Fixes: 4fbac77d2d09 ("bpf: Hooks for sys_bind")
-Cc: stable@vger.kernel.org
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Jordan Rife <jrife@google.com>
----
- net/netfilter/ipvs/ip_vs_sync.c | 4 ++--
- net/rds/tcp_connect.c           | 2 +-
- net/rds/tcp_listen.c            | 2 +-
- net/socket.c                    | 7 ++++++-
- 4 files changed, 10 insertions(+), 5 deletions(-)
+On Tue, 26 Sep 2023 15:05:02 -0500 you wrote:
+> ==OVERVIEW==
+> 
+> The sock_sendmsg(), kernel_connect(), and kernel_bind() functions
+> provide kernel space equivalents to the sendmsg(), connect(), and bind()
+> system calls.
+> 
+> When used in conjunction with BPF SOCK_ADDR hooks that rewrite the send,
+> connect, or bind address, callers may observe that the address passed to
+> the call is modified. This is a problem not just in theory, but in
+> practice, with uninsulated calls to kernel_connect() causing issues with
+> broken NFS and CIFS mounts.
+> 
+> [...]
 
-diff --git a/net/netfilter/ipvs/ip_vs_sync.c b/net/netfilter/ipvs/ip_vs_sync.c
-index 6e4ed1e11a3b7..4174076c66fa7 100644
---- a/net/netfilter/ipvs/ip_vs_sync.c
-+++ b/net/netfilter/ipvs/ip_vs_sync.c
-@@ -1439,7 +1439,7 @@ static int bind_mcastif_addr(struct socket *sock, struct net_device *dev)
- 	sin.sin_addr.s_addr  = addr;
- 	sin.sin_port         = 0;
- 
--	return sock->ops->bind(sock, (struct sockaddr*)&sin, sizeof(sin));
-+	return kernel_bind(sock, (struct sockaddr *)&sin, sizeof(sin));
- }
- 
- static void get_mcast_sockaddr(union ipvs_sockaddr *sa, int *salen,
-@@ -1546,7 +1546,7 @@ static int make_receive_sock(struct netns_ipvs *ipvs, int id,
- 
- 	get_mcast_sockaddr(&mcast_addr, &salen, &ipvs->bcfg, id);
- 	sock->sk->sk_bound_dev_if = dev->ifindex;
--	result = sock->ops->bind(sock, (struct sockaddr *)&mcast_addr, salen);
-+	result = kernel_bind(sock, (struct sockaddr *)&mcast_addr, salen);
- 	if (result < 0) {
- 		pr_err("Error binding to the multicast addr\n");
- 		goto error;
-diff --git a/net/rds/tcp_connect.c b/net/rds/tcp_connect.c
-index d788c6d28986f..a0046e99d6df7 100644
---- a/net/rds/tcp_connect.c
-+++ b/net/rds/tcp_connect.c
-@@ -145,7 +145,7 @@ int rds_tcp_conn_path_connect(struct rds_conn_path *cp)
- 		addrlen = sizeof(sin);
- 	}
- 
--	ret = sock->ops->bind(sock, addr, addrlen);
-+	ret = kernel_bind(sock, addr, addrlen);
- 	if (ret) {
- 		rdsdebug("bind failed with %d at address %pI6c\n",
- 			 ret, &conn->c_laddr);
-diff --git a/net/rds/tcp_listen.c b/net/rds/tcp_listen.c
-index 014fa24418c12..53b3535a1e4a8 100644
---- a/net/rds/tcp_listen.c
-+++ b/net/rds/tcp_listen.c
-@@ -306,7 +306,7 @@ struct socket *rds_tcp_listen_init(struct net *net, bool isv6)
- 		addr_len = sizeof(*sin);
- 	}
- 
--	ret = sock->ops->bind(sock, (struct sockaddr *)&ss, addr_len);
-+	ret = kernel_bind(sock, (struct sockaddr *)&ss, addr_len);
- 	if (ret < 0) {
- 		rdsdebug("could not bind %s listener socket: %d\n",
- 			 isv6 ? "IPv6" : "IPv4", ret);
-diff --git a/net/socket.c b/net/socket.c
-index 107a257a75186..3408bd6bb1e5a 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -3518,7 +3518,12 @@ static long compat_sock_ioctl(struct file *file, unsigned int cmd,
- 
- int kernel_bind(struct socket *sock, struct sockaddr *addr, int addrlen)
- {
--	return READ_ONCE(sock->ops)->bind(sock, addr, addrlen);
-+	struct sockaddr_storage address;
-+
-+	memcpy(&address, addr, addrlen);
-+
-+	return READ_ONCE(sock->ops)->bind(sock, (struct sockaddr *)&address,
-+					  addrlen);
- }
- EXPORT_SYMBOL(kernel_bind);
- 
+Here is the summary with links:
+  - [net,v6,1/3] net: replace calls to sock->ops->connect() with kernel_connect()
+    https://git.kernel.org/netdev/net/c/26297b4ce1ce
+  - [net,v6,2/3] net: prevent rewrite of msg_name and msg_namelen in sock_sendmsg()
+    (no matching commit)
+  - [net,v6,3/3] net: prevent address rewrite in kernel_bind()
+    https://git.kernel.org/netdev/net/c/c889a99a21bf
+
+You are awesome, thank you!
 -- 
-2.42.0.515.g380fc7ccd1-goog
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
