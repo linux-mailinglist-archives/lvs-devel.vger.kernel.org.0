@@ -2,76 +2,105 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150FD7C8E0D
-	for <lists+lvs-devel@lfdr.de>; Fri, 13 Oct 2023 22:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7282F7D2AC9
+	for <lists+lvs-devel@lfdr.de>; Mon, 23 Oct 2023 08:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjJMUBq (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
-        Fri, 13 Oct 2023 16:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
+        id S229607AbjJWG70 (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Mon, 23 Oct 2023 02:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjJMUBp (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Fri, 13 Oct 2023 16:01:45 -0400
-Received: from orbyte.nwl.cc (orbyte.nwl.cc [IPv6:2001:41d0:e:133a::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90349B7
-        for <lvs-devel@vger.kernel.org>; Fri, 13 Oct 2023 13:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nwl.cc;
-        s=mail2022; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=zXDLb76PDXqdMqLINzEX5dpLOSN1jrNYpcwengtND44=; b=Lim5HBk9ifa5hqUhPGis1KCvHs
-        s/Zaz0xDPdBuswPJf5SUKLqKndPLUuNI4RI2dg+9e45UuTUvVpwSVQFakZ5gWMtMYsK4UchMRPurH
-        tFHmMs24TBgsXsxRQn210I9I21Qta1E0AviXR8g37s54jBatD7m1rbc64rGPfcrYVauA5FtmWEXD4
-        31IAGeAnPDNWMZrg9PQSI26hj/e7gmaTmxoXAEWX8/NP+tsR7gIz1wWoqJDSwSYcjowogEYStpAAk
-        CLrAV6aevm5F42DIQH8hOEueHYqesEynIx1Gbj/erruEjnqz4Akn+m1T/ozEy9t77Lj0cmH7mn7JY
-        AzJVo36w==;
-Received: from localhost ([::1] helo=xic)
-        by orbyte.nwl.cc with esmtp (Exim 4.94.2)
-        (envelope-from <phil@nwl.cc>)
-        id 1qrOLs-00044A-92; Fri, 13 Oct 2023 22:01:40 +0200
-From:   Phil Sutter <phil@nwl.cc>
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, lvs-devel@vger.kernel.org
-Subject: [PATCH] selftests: netfilter: Avoid hanging ipvs.sh
-Date:   Fri, 13 Oct 2023 22:01:36 +0200
-Message-ID: <20231013200136.6548-1-phil@nwl.cc>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S229450AbjJWG7Y (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Mon, 23 Oct 2023 02:59:24 -0400
+X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 Oct 2023 23:59:21 PDT
+Received: from omta037.useast.a.cloudfilter.net (omta037.useast.a.cloudfilter.net [44.202.169.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF525F7
+        for <lvs-devel@vger.kernel.org>; Sun, 22 Oct 2023 23:59:21 -0700 (PDT)
+Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
+        by cmsmtp with ESMTPS
+        id uas4qbCivWcCIuosnqbwA9; Mon, 23 Oct 2023 06:57:50 +0000
+Received: from 162-240-83-27.unifiedlayer.com ([137.59.148.200])
+        by cmsmtp with ESMTPS
+        id uosnqnyzowasUuosnqzYrm; Mon, 23 Oct 2023 06:57:49 +0000
+X-Authority-Analysis: v=2.4 cv=ZpP+lv3G c=1 sm=1 tr=0 ts=6536196d
+ a=MgGYFET5X96nYrQ76toljg==:117 a=32wkWZdPouleh9wPFPhphQ==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=kj9zAlcOel0A:10 a=bhdUkHdE2iEA:10 a=lUDAUsI-kUQA:10
+ a=9m64_h_j2zU8ieQoq-sA:9 a=CjuIK1q_8ugA:10
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=35686686.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Dm1nus89JLbD/65ItGQLhdR/UwQLhddPM+BxEJ7yOwM=; b=ZlssKYC/c4m5hR1ZA9loZRqTwW
+        hh3CQt+dmpjbFw1XQcWkVD1UdXCO2mvxRszXTg/vk8a+0vb6ZxaD2omsUqJow0tdSMJVi3tKNNR1G
+        VE5BxFrLjixwPQF5q4zGwUHldJAjc2esY60e/Rstlw5LV9pckwnqwVTZSmW+qHCh8QgbYW3jdADxQ
+        ORIMez1q4RnNYf+O9U93RMlv0Sronlk9mJHfdHWKR2+3L+o0yP4+saiusXYEISo1Dlv2WJGqyKyIN
+        ikhtUEZcuJ4y+k9p9JEc32XAxdlND32yA2PEfqInPJiFXjnq3mBk5093ig0vt1ptWmt07TamnpyGr
+        SGXizQ0g==;
+Received: from md-hk-12.webhostbox.net ([137.59.148.200]:37418)
+        by md-hk-12.webhostbox.net with esmtpa (Exim 4.96.2)
+        (envelope-from <jc@35686686.com>)
+        id 1qukKJ-002ryX-0k;
+        Mon, 23 Oct 2023 07:35:55 +0530
+Received: from [181.214.94.88]
+ by 35686686.com
+ with HTTP (HTTP/1.1 POST); Mon, 23 Oct 2023 07:35:49 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 23 Oct 2023 10:05:49 +0800
+From:   jc@35686686.com
+To:     undisclosed-recipients:;
+Subject: LOAN SCHEME
+Reply-To: info@kafurinvestment.com
+Mail-Reply-To: info@kafurinvestment.com
+User-Agent: Roundcube Webmail/1.6.0
+Message-ID: <810bf61d8574367f4755872834282c37@35686686.com>
+X-Sender: jc@35686686.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - md-hk-12.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - 35686686.com
+X-BWhitelist: no
+X-Source-IP: 137.59.148.200
+X-Source-L: No
+X-Exim-ID: 1qukKJ-002ryX-0k
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: md-hk-12.webhostbox.net [137.59.148.200]:37418
+X-Source-Auth: jc@35686686.com
+X-Email-Count: 0
+X-Org:  HG=dishared_whb_net_legacy;ORG=directi;
+X-Source-Cap: ZmJkZXN4amc7Ymx1ZWhvc3Q7bWQtaGstMTIud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfKtB7A6fWtIgt9u2vjo8fW6HKtNwOTOFdV730udSCwlgt8V2Lg1i8HlHpmKA/amFO892JkO1L5SIawqA0V0LwM5JKOt8Api35KlkmTz7Mtc19zKPRcZM
+ 3gmBcUOm3lDmaeYxhEi40Z0GTIXh+UdhF6u0mFsSRPe6h79GtPemojEDuCi6umqgdpc/6zvqbokeesjRRSnMTZOaloB4qZDLbgA=
+X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,SUBJ_ALL_CAPS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-If the client can't reach the server, the latter remains listening
-forever. Kill it after 3s of waiting.
+Greetings:
 
-Fixes: 867d2190799ab ("selftests: netfilter: add ipvs test script")
-Signed-off-by: Phil Sutter <phil@nwl.cc>
----
- tools/testing/selftests/netfilter/ipvs.sh | 4 ++++
- 1 file changed, 4 insertions(+)
+I am Mr. Faheem Badawi, working as a project facilitator for (Kafur 
+Project Management Services) also, with numerous investors worldwide. As 
+a means of widening our global portfolio we would like to know if you 
+have any project(s) requiring funding. We also offer business, personal 
+and home loans to finance new projects as well as expansion capital.
 
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index c3b8f90c497e0..bc5bda5c13000 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -124,6 +124,10 @@ client_connect() {
- }
- 
- verify_data() {
-+	waitpid -t 3 "${server_pid}"
-+	if [ $? -eq 3 ]; then
-+		kill "${server_pid}"
-+	fi
- 	wait "${server_pid}"
- 	cmp "$infile" "$outfile" 2>/dev/null
- }
--- 
-2.41.0
+For more updates on the mode of operation send a reply.
 
+Waiting for your prompt response.
+
+Kind regards,
+Faheem Badawi.
+(Financial Advisory - KPMS)
