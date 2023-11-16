@@ -2,44 +2,76 @@ Return-Path: <lvs-devel-owner@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F207EB9B4
-	for <lists+lvs-devel@lfdr.de>; Tue, 14 Nov 2023 23:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20607EE11A
+	for <lists+lvs-devel@lfdr.de>; Thu, 16 Nov 2023 14:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232322AbjKNW7x convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+lvs-devel@lfdr.de>); Tue, 14 Nov 2023 17:59:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
+        id S230182AbjKPNMa (ORCPT <rfc822;lists+lvs-devel@lfdr.de>);
+        Thu, 16 Nov 2023 08:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjKNW7w (ORCPT
-        <rfc822;lvs-devel@vger.kernel.org>); Tue, 14 Nov 2023 17:59:52 -0500
-X-Greylist: delayed 1561 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Nov 2023 14:59:49 PST
-Received: from mail.jan.ne.jp (mail.jan.ne.jp [211.10.90.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6487D0
-        for <lvs-devel@vger.kernel.org>; Tue, 14 Nov 2023 14:59:49 -0800 (PST)
-Received: from www10.jan.ne.jp (www10.jan.ne.jp [211.10.90.141])
-        by mail.jan.ne.jp (Postfix) with SMTP id D152619B7F0
-        for <lvs-devel@vger.kernel.org>; Wed, 15 Nov 2023 07:27:17 +0900 (JST)
-Received: (qmail 16203 invoked from network); 15 Nov 2023 05:34:30 +0900
-Received: from unknown (HELO ?51.195.53.194?) (eiji.i@isono-body.co.jp@51.195.53.194)
-  by www10.jan.ne.jp with SMTP; 15 Nov 2023 05:34:30 +0900
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S229919AbjKPNM3 (ORCPT
+        <rfc822;lvs-devel@vger.kernel.org>); Thu, 16 Nov 2023 08:12:29 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C896B182
+        for <lvs-devel@vger.kernel.org>; Thu, 16 Nov 2023 05:12:26 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1cc58219376so7049815ad.1
+        for <lvs-devel@vger.kernel.org>; Thu, 16 Nov 2023 05:12:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700140346; x=1700745146; darn=vger.kernel.org;
+        h=mime-version:date:subject:to:reply-to:message-id:from:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l9eK3ocpMbY4mbOKT8EatthY1rZTGU14/x7HKUGp56A=;
+        b=Ym0ITXgOuAZnMTCbPNC3oZg4uor4675hfDrw2MsGkkmHIEzjGtdmM6ake5pjTJLG04
+         vIKGiVjStfBD8ED+jzrPZq1NWGdSS4nBGWAPwK9ldy8ARwWgUtvWYQsmdbPjqe49Pugb
+         Kvybjipm8LgEljL8mUFlwvi6lv3ADBh7L1j0wDFfmu1VNHmQJIYNIhGoifgUIrydwCyZ
+         fTy4RBxMJjwi1q4Ijf4YuBpBdl5sRYvMxvblYES5ggfc5qlq46wZNr3DoPTIF6+2ZLw6
+         hAlM86Bvi7gxfWhjoMGj8p9hCOp5JHNN/0/n/eZdsgcWv5zYkVPVKKRbhxTMEkRh9o9V
+         OdZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700140346; x=1700745146;
+        h=mime-version:date:subject:to:reply-to:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l9eK3ocpMbY4mbOKT8EatthY1rZTGU14/x7HKUGp56A=;
+        b=nIQTXb4suy0hKPQ6bEwJgtl0Ssny/GCOF1dUM9yCn7pZBgT6RMjMQlFG6C1Rpo4DLP
+         A7pydiGBWxg3Qa+tWOzisNgTeIrRROpeZmcIlvxIetbjaJyecdnNJqEyQ+VXywxJzYRa
+         ev5qG4oxWXlQ+AGK81GNKcXM4DQHNtdaoR5vKUvmZubi4+T80reQTFzj4/qxQAjLdOPF
+         40Ak2nnZxxGUFghcInRkFu3CwoIl5XZlsA4bziyI5XuQqWA0vcsmlnBna92++ltbaCfu
+         673Yldh0ZUsSmHUIlhL2GOFhwOY9AlSxxWfRZVtojXTjjLklNsPcOo+rs/bX65RYUfLJ
+         qBTQ==
+X-Gm-Message-State: AOJu0YwOWMy3ryt68Oi7XIaouIDlgwgBv5uMZoCyR7ljG1FLb2XLIfOL
+        M0H7td1QsCBIggwf42LvGSJb5SFrFJs=
+X-Google-Smtp-Source: AGHT+IFWN4cfCwQ+WeBNLvAGNaV6N57/KJpA4N69HNVaBxc1LcKNM++5QFISEjmFvMag+YlKVtTKZA==
+X-Received: by 2002:a17:902:694a:b0:1cc:bfb4:2dca with SMTP id k10-20020a170902694a00b001ccbfb42dcamr8173996plt.6.1700140345794;
+        Thu, 16 Nov 2023 05:12:25 -0800 (PST)
+Received: from [198.135.52.44] ([198.135.52.44])
+        by smtp.gmail.com with ESMTPSA id o2-20020a1709026b0200b001a98f844e60sm9107984plk.263.2023.11.16.05.12.24
+        for <lvs-devel@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 16 Nov 2023 05:12:25 -0800 (PST)
+From:   Peter Wilson <joykanini15@gmail.com>
+X-Google-Original-From: Peter Wilson <info@alrigga.com>
+Message-ID: <17a2f7aac05ce1361d9b91c576d52d08a3b163526b2c94dca1067dcda9534571@mx.google.com>
+Reply-To: mrmo754abc@gmail.com
+To:     lvs-devel@vger.kernel.org
+Subject: :once again
+Date:   Thu, 16 Nov 2023 05:12:14 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: my subject
-To:     Recipients <eiji.i@isono-body.co.jp>
-From:   "Ms Toni" <eiji.i@isono-body.co.jp>
-Date:   Tue, 14 Nov 2023 12:34:17 -0800
-Reply-To: tran24358@gmail.com
-Message-ID: <20231114203430.15767.qmail@www10.jan.ne.jp>
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <lvs-devel.vger.kernel.org>
 X-Mailing-List: lvs-devel@vger.kernel.org
 
-I'm Toni Harris and I'm looking for a partner to work with in your country. I need assistance investing funds in your country. Email me to discuss this opportunity with you. Contact email: tran24358@gmail.com
+Hello lvs-devel,
+
+Are you Thinking of starting a new project or expanding your business? We can fund it. Terms and Conditions Apply.
+
+Regards,
+Peter Wilson
