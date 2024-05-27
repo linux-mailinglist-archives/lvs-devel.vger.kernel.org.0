@@ -1,174 +1,152 @@
-Return-Path: <lvs-devel+bounces-220-lists+lvs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <lvs-devel+bounces-225-lists+lvs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 785C68CD8BB
-	for <lists+lvs-devel@lfdr.de>; Thu, 23 May 2024 18:54:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57E7E8D0921
+	for <lists+lvs-devel@lfdr.de>; Mon, 27 May 2024 19:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E645A1F225BB
-	for <lists+lvs-devel@lfdr.de>; Thu, 23 May 2024 16:54:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09D67284DC7
+	for <lists+lvs-devel@lfdr.de>; Mon, 27 May 2024 17:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B87621CF9A;
-	Thu, 23 May 2024 16:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7257D15FA95;
+	Mon, 27 May 2024 17:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lwgFh6Gu";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Of5P/s3g";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lwgFh6Gu";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Of5P/s3g"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="lykB7CEV"
 X-Original-To: lvs-devel@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A752B22334;
-	Thu, 23 May 2024 16:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BCF15A870;
+	Mon, 27 May 2024 17:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716483291; cv=none; b=Gdg5t53hYGZrC870XLNnQ+JU0qJJZzc+zJMQQXb3SKMzY8fxXqzxJJZW3M6HzRyq6RKUIX7Y154fP/mD8g4rsKa+NaKaqpxrJXLRz/HpGhrzU7v0OA7yQjP0u3DM78wZB7paC/pjMFqpbR3ZjsbKjKlT66yN3qZ2+c/rzKiKW+g=
+	t=1716829480; cv=none; b=gr9m070DRQ60oowKbSCgbRLQYNPCDe1fZAm8fVzSp9H3EXvfWbF8RZT/rDQTGAK9fJQa5weYRJdu1JaWMrRk2iHsKFp6XobITPZ0kC0CuQuVl4JiOVlFu/4P4to1k43LGvldp1sqBwA33mrjYAC8crT8B5yvmxrO5nNzVhioL0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716483291; c=relaxed/simple;
-	bh=eYRTP55zHPTx1wqIyD0CwxUVER7F1bNXTCqO7Z2cUeE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GCUgcKxLJ1/rX8D0QdNTmRrROvqCs/wNibo0vIvms5f3mNJAE7q9VTwwCpdBYOLRHFjUlGRSeXzBw52QnoS7f2OT1i0LQP+aLC4U++Kh8FeZC8qxE73nK6VVdOOUisZuv6Xs3Wn3Ovm0oP7E6Epio8LG0XIXoFiOqFnQLtcqBvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lwgFh6Gu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Of5P/s3g; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lwgFh6Gu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Of5P/s3g; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 7ECC42036A;
-	Thu, 23 May 2024 16:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1716483287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8dXeplD1JrXrU/dHr8hrBZ3Tb1p6ZC/7YwQd+1tVqb8=;
-	b=lwgFh6Gubysg2jLJrdwJfqEdWiYVYdoeCQbmgSacaROl6wot0vSXiipzhGt+sADPA/moWN
-	nPmF+gQeb3nF/z2pDA5sx9ksAZ84VSf8jCdv1IpRiVIsYzcD+yRa4S+Z3gZn/6XUWrGFPk
-	nlJed8gFdnaU8P0xRtLyugf6wlAxCW4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1716483287;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8dXeplD1JrXrU/dHr8hrBZ3Tb1p6ZC/7YwQd+1tVqb8=;
-	b=Of5P/s3g5djlbJvdQ9bIs63NtrddvumKnxoeHxqG6R0e76IfAXVDOx1JJzG6vCAXCNTmiP
-	+ymvF9TG1pSyn1Bg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1716483287; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8dXeplD1JrXrU/dHr8hrBZ3Tb1p6ZC/7YwQd+1tVqb8=;
-	b=lwgFh6Gubysg2jLJrdwJfqEdWiYVYdoeCQbmgSacaROl6wot0vSXiipzhGt+sADPA/moWN
-	nPmF+gQeb3nF/z2pDA5sx9ksAZ84VSf8jCdv1IpRiVIsYzcD+yRa4S+Z3gZn/6XUWrGFPk
-	nlJed8gFdnaU8P0xRtLyugf6wlAxCW4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1716483287;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8dXeplD1JrXrU/dHr8hrBZ3Tb1p6ZC/7YwQd+1tVqb8=;
-	b=Of5P/s3g5djlbJvdQ9bIs63NtrddvumKnxoeHxqG6R0e76IfAXVDOx1JJzG6vCAXCNTmiP
-	+ymvF9TG1pSyn1Bg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5B10313A6B;
-	Thu, 23 May 2024 16:54:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 9rFJE9d0T2bzeQAAD6G6ig
-	(envelope-from <iluceno@suse.de>); Thu, 23 May 2024 16:54:47 +0000
-From: Ismael Luceno <iluceno@suse.de>
-To: linux-kernel@vger.kernel.org
-Cc: Ismael Luceno <iluceno@suse.de>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	=?UTF-8?q?Michal=20Kube=C4=8Dek?= <mkubecek@suse.com>,
-	Simon Horman <horms@verge.net.au>,
-	Julian Anastasov <ja@ssi.bg>,
-	lvs-devel@vger.kernel.org,
-	netfilter-devel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	coreteam@netfilter.org
-Subject: [PATCH] ipvs: Avoid unnecessary calls to skb_is_gso_sctp
-Date: Thu, 23 May 2024 18:54:44 +0200
-Message-ID: <20240523165445.24016-1-iluceno@suse.de>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1716829480; c=relaxed/simple;
+	bh=H80RF2inJH8hQaBcuvduDFgfzcA+VjplAQ5kFQmL1Po=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IBSJPBC9pT1sJ1+iCGITJAeIs/LjcZGyEXEIaVdiz4GZUeYY6XxXrTNZkOkgIxCZ3m9Iz8a1JLEiuwFh+TWKdom6/2HL0LJ9tBuT1t/PAfpRSny91Mb14pusV/aEmChCPWZP8iH/HLwxOkyDxb2kuxK/qxBHX34DZuDSUjv7xhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=lykB7CEV; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1716829474;
+	bh=H80RF2inJH8hQaBcuvduDFgfzcA+VjplAQ5kFQmL1Po=;
+	h=From:Subject:Date:To:Cc:From;
+	b=lykB7CEVDVoVA59YXs49BpHm+KO0HE1bRyCr4QnyY6p6dzahJubclXYE9w2KFZxsN
+	 nlJ/Ak7Ll+fbij3g1EMOHNWJlC1HrhJjcvSJ2Zu87gAUibw+czUOOMaKfG62gaM9BI
+	 Wxh1XNdhsZGUQ887OBq5Gcem/Mnr1f+g7bkN71l4=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH net-next 0/5] net: constify ctl_table arguments of utility
+ functions
+Date: Mon, 27 May 2024 19:04:18 +0200
+Message-Id: <20240527-sysctl-const-handler-net-v1-0-16523767d0b2@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: lvs-devel@vger.kernel.org
 List-Id: <lvs-devel.vger.kernel.org>
 List-Subscribe: <mailto:lvs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:lvs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_TLS_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,netfilter.org:email,suse.de:email]
+X-B4-Tracking: v=1; b=H4sIABK9VGYC/x2MQQrDIBAAvxL2nAVjFEq/EnIQ3bYLYS2uhATJ3
+ 2N7HJiZBkqFSeE5NCi0s3KWDtM4QPwEeRNy6gzWWGe8nVFPjXXDmEUrdiNtVFCo4sO65ELyYfI
+ Bev4t9OLjv17gJwgdFdbrugFryPDjdAAAAA==
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>, 
+ Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>, 
+ Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: Joel Granados <j.granados@samsung.com>, 
+ Luis Chamberlain <mcgrof@kernel.org>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, lvs-devel@vger.kernel.org, 
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1716829474; l=3222;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=H80RF2inJH8hQaBcuvduDFgfzcA+VjplAQ5kFQmL1Po=;
+ b=f4dtzPRwq7hYsYkNlNaMAgNAjPEchqO7TPLED6v0BvG/ikf1UG8uMn/l+V1i+txS4gPhKQtp4
+ 8/NtVLwuqwXDNf8sY091gbCsbUzHVD6WB09Nf02qaGf7uLoKHjT1P9b
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-In the context of the SCTP SNAT/DNAT handler, these calls can only
-return true.
+The sysctl core is preparing to only expose instances of
+struct ctl_table as "const".
+This will also affect the ctl_table argument of sysctl handlers.
 
-Ref: e10d3ba4d434 ("ipvs: Fix checksumming on GSO of SCTP packets")
-Signed-off-by: Ismael Luceno <iluceno@suse.de>
-CC: Pablo Neira Ayuso <pablo@netfilter.org>
-CC: Michal Kubeček <mkubecek@suse.com>
-CC: Simon Horman <horms@verge.net.au>
-CC: Julian Anastasov <ja@ssi.bg>
-CC: lvs-devel@vger.kernel.org
-CC: netfilter-devel@vger.kernel.org
-CC: netdev@vger.kernel.org
-CC: coreteam@netfilter.org
+As the function prototype of all sysctl handlers throughout the tree
+needs to stay consistent that change will be done in one commit.
+
+To reduce the size of that final commit, switch utility functions which
+are not bound by "typedef proc_handler" to "const struct ctl_table".
+
+No functional change.
+
+This patch(set) is meant to be applied through your subsystem tree.
+Or at your preference through the sysctl tree.
+
+Motivation
+==========
+
+Moving structures containing function pointers into unmodifiable .rodata
+prevents attackers or bugs from corrupting and diverting those pointers.
+
+Also the "struct ctl_table" exposed by the sysctl core were never meant
+to be mutated by users.
+
+For this goal changes to both the sysctl core and "const" qualifiers for
+various sysctl APIs are necessary.
+
+Full Process
+============
+
+* Drop ctl_table modifications from the sysctl core ([0], in mainline)
+* Constify arguments to ctl_table_root::{set_ownership,permissions}
+  ([1], in mainline)
+* Migrate users of "ctl_table_header::ctl_table_arg" to "const".
+  (in mainline)
+* Afterwards convert "ctl_table_header::ctl_table_arg" itself to const.
+  (in mainline)
+* Prepare helpers used to implement proc_handlers throughout the tree to
+  use "const struct ctl_table *". ([2], in progress, this patch)
+* Afterwards switch over all proc_handlers callbacks to use
+  "const struct ctl_table *" in one commit. ([2], in progress)
+  Only custom handlers will be affected, the big commit avoids a
+  disruptive and messy transition phase.
+* Switch over the internals of the sysctl core to "const struct ctl_table *" (to be done)
+* Switch include/linux/sysctl.h to "const struct ctl_table *" (to be done)
+* Transition instances of "struct ctl_table" through the tree to const (to be done)
+
+A work-in-progress view containing all the outlined changes can be found at
+https://git.sr.ht/~t-8ch/linux sysctl-constfy
+
+[0] https://lore.kernel.org/lkml/20240322-sysctl-empty-dir-v2-0-e559cf8ec7c0@weissschuh.net/
+[1] https://lore.kernel.org/lkml/20240315-sysctl-const-ownership-v3-0-b86680eae02e@weissschuh.net/
+[2] https://lore.kernel.org/lkml/20240423-sysctl-const-handler-v3-0-e0beccb836e2@weissschuh.net/
+
 ---
- net/netfilter/ipvs/ip_vs_proto_sctp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thomas Weißschuh (5):
+      net/neighbour: constify ctl_table arguments of utility function
+      net/ipv4/sysctl: constify ctl_table arguments of utility functions
+      net/ipv6/addrconf: constify ctl_table arguments of utility functions
+      net/ipv6/ndisc: constify ctl_table arguments of utility function
+      ipvs: constify ctl_table arguments of utility functions
 
-diff --git a/net/netfilter/ipvs/ip_vs_proto_sctp.c b/net/netfilter/ipvs/ip_vs_proto_sctp.c
-index 1e689c714127..83e452916403 100644
---- a/net/netfilter/ipvs/ip_vs_proto_sctp.c
-+++ b/net/netfilter/ipvs/ip_vs_proto_sctp.c
-@@ -126,7 +126,7 @@ sctp_snat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
- 	if (sctph->source != cp->vport || payload_csum ||
- 	    skb->ip_summed == CHECKSUM_PARTIAL) {
- 		sctph->source = cp->vport;
--		if (!skb_is_gso(skb) || !skb_is_gso_sctp(skb))
-+		if (!skb_is_gso(skb))
- 			sctp_nat_csum(skb, sctph, sctphoff);
- 	} else {
- 		skb->ip_summed = CHECKSUM_UNNECESSARY;
-@@ -175,7 +175,7 @@ sctp_dnat_handler(struct sk_buff *skb, struct ip_vs_protocol *pp,
- 	    (skb->ip_summed == CHECKSUM_PARTIAL &&
- 	     !(skb_dst(skb)->dev->features & NETIF_F_SCTP_CRC))) {
- 		sctph->dest = cp->dport;
--		if (!skb_is_gso(skb) || !skb_is_gso_sctp(skb))
-+		if (!skb_is_gso(skb))
- 			sctp_nat_csum(skb, sctph, sctphoff);
- 	} else if (skb->ip_summed != CHECKSUM_PARTIAL) {
- 		skb->ip_summed = CHECKSUM_UNNECESSARY;
+ net/core/neighbour.c           | 2 +-
+ net/ipv4/sysctl_net_ipv4.c     | 6 ++++--
+ net/ipv6/addrconf.c            | 8 ++++----
+ net/ipv6/ndisc.c               | 2 +-
+ net/netfilter/ipvs/ip_vs_ctl.c | 7 ++++---
+ 5 files changed, 14 insertions(+), 11 deletions(-)
+---
+base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+change-id: 20240523-sysctl-const-handler-net-824d4ad5a15a
+
+Best regards,
 -- 
-2.44.0
+Thomas Weißschuh <linux@weissschuh.net>
 
 
