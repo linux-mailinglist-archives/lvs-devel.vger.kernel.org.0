@@ -1,68 +1,50 @@
-Return-Path: <lvs-devel+bounces-235-lists+lvs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <lvs-devel+bounces-243-lists+lvs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 482988D15CE
-	for <lists+lvs-devel@lfdr.de>; Tue, 28 May 2024 10:06:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 505EE8D2B34
+	for <lists+lvs-devel@lfdr.de>; Wed, 29 May 2024 04:57:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AB251C21E8D
-	for <lists+lvs-devel@lfdr.de>; Tue, 28 May 2024 08:06:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD7051F2540A
+	for <lists+lvs-devel@lfdr.de>; Wed, 29 May 2024 02:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC7B13048C;
-	Tue, 28 May 2024 08:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4237415B11C;
+	Wed, 29 May 2024 02:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="uEFn6rer"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DRmgg0lO"
 X-Original-To: lvs-devel@vger.kernel.org
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A085450297;
-	Tue, 28 May 2024 08:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1184A15B0E1;
+	Wed, 29 May 2024 02:57:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716883610; cv=none; b=lzXs3tSy7sFddt3Vx8vxdGFxQ4Xl4eGBP0NOR085mV3qK4o7PETYRNEMrq29OMkT4XwjoXFfL3eGsPKn0o6GtZeX52rYC+kS1ZsvnI9WcpvE7Rw3uEQBudRTZTOGENVhCBUcDnBUADqNwdeX4tUkl/0HEmiXwiFdrt509Y7SR9s=
+	t=1716951422; cv=none; b=qJ/pHaTRbS+moU8MytfJqhkpQ+XYuudjsHitD+6MIWbQQ9NtqxS8YNH5jzoafAlKSxgQfPkpdTN6GFvC9XaWiFE2mHpcJo1p8QZsYv0jh9VJUo3yJd729ZbnxT7BCOxIjt6wWMiAVvVWvMqDqa9MpkZIKFU3z9iULSN9dMd7SW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716883610; c=relaxed/simple;
-	bh=XC7O/aZ4sAiFYXgG9FXKm6vW6pQXTcFHr3xz1IFdQ9Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JGz++4SxZkuvvzm+tBmfmiF/bF22GxQo80edS8vySz/XUSrVAKp9cWDMoypTibRkWgKGYRWQ9s2ljn53xXjwHleL8Ru3CBByuUbTwS+WVUDCxiKtfhRXYDjfhsHkF3EHN4ZuDqeGAO1jRaV6egoiTqUEe+1ti+2cYbIvxY6Z+F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (1024-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=uEFn6rer; arc=none smtp.client-ip=193.238.174.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ssi.bg
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-	by mg.ssi.bg (Proxmox) with ESMTP id 1445F87B0;
-	Tue, 28 May 2024 11:06:47 +0300 (EEST)
-Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
-	by mg.ssi.bg (Proxmox) with ESMTPS;
-	Tue, 28 May 2024 11:06:45 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [213.16.62.126])
-	by ink.ssi.bg (Postfix) with ESMTPSA id D6909900899;
-	Tue, 28 May 2024 11:06:33 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ssi.bg; s=ink;
-	t=1716883593; bh=XC7O/aZ4sAiFYXgG9FXKm6vW6pQXTcFHr3xz1IFdQ9Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=uEFn6rerQChlsdC5geb4ek1uaTcZsRadu7zehgU4TiUiHxOc1ud42SZahIc0zhJTy
-	 mPO7qfNZjd1X1FmdCG73bMySYtImAzAEKMV7WR71QL+xr/erpzI0kDk156k7ZHLnuV
-	 1YYV6vxg8yk+RpRNgVDXYi6ztHMwrFFCBxgdBb1Y=
-Received: from ja.home.ssi.bg (localhost.localdomain [127.0.0.1])
-	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 44S82thp010233;
-	Tue, 28 May 2024 11:02:55 +0300
-Received: (from root@localhost)
-	by ja.home.ssi.bg (8.18.1/8.18.1/Submit) id 44S82tRf010232;
-	Tue, 28 May 2024 11:02:55 +0300
-From: Julian Anastasov <ja@ssi.bg>
-To: Simon Horman <horms@verge.net.au>
-Cc: lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        Dust Li <dust.li@linux.alibaba.com>,
-        Jiejian Wu <jiejian@linux.alibaba.com>, rcu@vger.kernel.org
-Subject: [PATCHv4 net-next 13/14] ipvs: add ip_vs_status info
-Date: Tue, 28 May 2024 11:02:33 +0300
-Message-ID: <20240528080234.10148-14-ja@ssi.bg>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240528080234.10148-1-ja@ssi.bg>
-References: <20240528080234.10148-1-ja@ssi.bg>
+	s=arc-20240116; t=1716951422; c=relaxed/simple;
+	bh=kCbn1M2QOr3tg0aboBFXxUAzlVonui9TIyWgU01m2Nk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=QuTaIHQocP6Yw9F+/N3K2Svn81apA8QP048D4EEfibf27YECWq1ZE9ut2OlMM7K/dj84aGIQR5wSM532dWS9l4T0ow0016mzDxVcUIzg/nuBpX5cAefJWWLhxRsNPfnwRq9+eEputW90onxkBwGXexUFI1VfEAto8Hmxx+GvcQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DRmgg0lO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D33A3C3277B;
+	Wed, 29 May 2024 02:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716951421;
+	bh=kCbn1M2QOr3tg0aboBFXxUAzlVonui9TIyWgU01m2Nk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=DRmgg0lOo0L4ifi/LB0XfpRsqdBtydGjIX7my18yNfwjQcriNscOSRuXWMTpY698I
+	 /IqfHdL1yOtMsed78VDH4bmSQuPwzBjY3mnG9w02jlq3ENJbUhu02IE2EWdJEQ2HvW
+	 /9Wq/al86Tjq0iP/2riknMLNxtywD/lcgRc7EICaMsb1fht8oACq/Q51UFY7BQRwI6
+	 OgcxXl43pCi88QZEfctytaFUFYmkdD6clS8EHbWTH9t4DC5/llQ67cU/1RNCCOx/Ds
+	 1Ld2V11RyMpLP9FFPtKDZz4q30HN5OeFkhRTeIuJxuqhn/ar2XSaceTVsQ7A4ljoxx
+	 uCJHpvVBVXA8A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C79F3C4361C;
+	Wed, 29 May 2024 02:57:01 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: lvs-devel@vger.kernel.org
 List-Id: <lvs-devel.vger.kernel.org>
@@ -70,193 +52,53 @@ List-Subscribe: <mailto:lvs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:lvs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/5] net: constify ctl_table arguments of utility
+ functions
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171695142181.13406.6878241525958954105.git-patchwork-notify@kernel.org>
+Date: Wed, 29 May 2024 02:57:01 +0000
+References: <20240527-sysctl-const-handler-net-v1-0-16523767d0b2@weissschuh.net>
+In-Reply-To: <20240527-sysctl-const-handler-net-v1-0-16523767d0b2@weissschuh.net>
+To: =?utf-8?q?Thomas_Wei=C3=9Fschuh_=3Clinux=40weissschuh=2Enet=3E?=@codeaurora.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, dsahern@kernel.org, horms@verge.net.au, ja@ssi.bg,
+ pablo@netfilter.org, kadlec@netfilter.org, j.granados@samsung.com,
+ mcgrof@kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org
 
-Add /proc/net/ip_vs_status to show current state of IPVS.
+Hello:
 
-Signed-off-by: Julian Anastasov <ja@ssi.bg>
----
- net/netfilter/ipvs/ip_vs_ctl.c | 145 +++++++++++++++++++++++++++++++++
- 1 file changed, 145 insertions(+)
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 187a5e238231..6b84b6f17a32 100644
---- a/net/netfilter/ipvs/ip_vs_ctl.c
-+++ b/net/netfilter/ipvs/ip_vs_ctl.c
-@@ -2913,6 +2913,144 @@ static int ip_vs_stats_percpu_show(struct seq_file *seq, void *v)
- 
- 	return 0;
- }
-+
-+static int ip_vs_status_show(struct seq_file *seq, void *v)
-+{
-+	struct net *net = seq_file_single_net(seq);
-+	struct netns_ipvs *ipvs = net_ipvs(net);
-+	unsigned int resched_score = 0;
-+	struct ip_vs_conn_hnode *hn;
-+	struct hlist_bl_head *head;
-+	struct ip_vs_service *svc;
-+	struct ip_vs_rht *t, *pt;
-+	struct hlist_bl_node *e;
-+	int old_gen, new_gen;
-+	u32 counts[8];
-+	u32 bucket;
-+	int count;
-+	u32 sum1;
-+	u32 sum;
-+	int i;
-+
-+	rcu_read_lock();
-+
-+	t = rcu_dereference(ipvs->conn_tab);
-+
-+	seq_printf(seq, "Conns:\t%d\n", atomic_read(&ipvs->conn_count));
-+	seq_printf(seq, "Conn buckets:\t%d (%d bits, lfactor %d)\n",
-+		   t ? t->size : 0, t ? t->bits : 0, t ? t->lfactor : 0);
-+
-+	if (!atomic_read(&ipvs->conn_count))
-+		goto after_conns;
-+	old_gen = atomic_read(&ipvs->conn_tab_changes);
-+
-+repeat_conn:
-+	smp_rmb(); /* ipvs->conn_tab and conn_tab_changes */
-+	memset(counts, 0, sizeof(counts));
-+	ip_vs_rht_for_each_table_rcu(ipvs->conn_tab, t, pt) {
-+		for (bucket = 0; bucket < t->size; bucket++) {
-+			DECLARE_IP_VS_RHT_WALK_BUCKET_RCU();
-+
-+			count = 0;
-+			resched_score++;
-+			ip_vs_rht_walk_bucket_rcu(t, bucket, head) {
-+				count = 0;
-+				hlist_bl_for_each_entry_rcu(hn, e, head, node)
-+					count++;
-+			}
-+			resched_score += count;
-+			if (resched_score >= 100) {
-+				resched_score = 0;
-+				cond_resched_rcu();
-+				new_gen = atomic_read(&ipvs->conn_tab_changes);
-+				/* New table installed ? */
-+				if (old_gen != new_gen) {
-+					old_gen = new_gen;
-+					goto repeat_conn;
-+				}
-+			}
-+			counts[min(count, (int)ARRAY_SIZE(counts) - 1)]++;
-+		}
-+	}
-+	for (sum = 0, i = 0; i < ARRAY_SIZE(counts); i++)
-+		sum += counts[i];
-+	sum1 = sum - counts[0];
-+	seq_printf(seq, "Conn buckets empty:\t%u (%lu%%)\n",
-+		   counts[0], (unsigned long)counts[0] * 100 / max(sum, 1U));
-+	for (i = 1; i < ARRAY_SIZE(counts); i++) {
-+		if (!counts[i])
-+			continue;
-+		seq_printf(seq, "Conn buckets len-%d:\t%u (%lu%%)\n",
-+			   i, counts[i],
-+			   (unsigned long)counts[i] * 100 / max(sum1, 1U));
-+	}
-+
-+after_conns:
-+	t = rcu_dereference(ipvs->svc_table);
-+
-+	count = ip_vs_get_num_services(ipvs);
-+	seq_printf(seq, "Services:\t%d\n", count);
-+	seq_printf(seq, "Service buckets:\t%d (%d bits, lfactor %d)\n",
-+		   t ? t->size : 0, t ? t->bits : 0, t ? t->lfactor : 0);
-+
-+	if (!count)
-+		goto after_svc;
-+	old_gen = atomic_read(&ipvs->svc_table_changes);
-+
-+repeat_svc:
-+	smp_rmb(); /* ipvs->svc_table and svc_table_changes */
-+	memset(counts, 0, sizeof(counts));
-+	ip_vs_rht_for_each_table_rcu(ipvs->svc_table, t, pt) {
-+		for (bucket = 0; bucket < t->size; bucket++) {
-+			DECLARE_IP_VS_RHT_WALK_BUCKET_RCU();
-+
-+			count = 0;
-+			resched_score++;
-+			ip_vs_rht_walk_bucket_rcu(t, bucket, head) {
-+				count = 0;
-+				hlist_bl_for_each_entry_rcu(svc, e, head,
-+							    s_list)
-+					count++;
-+			}
-+			resched_score += count;
-+			if (resched_score >= 100) {
-+				resched_score = 0;
-+				cond_resched_rcu();
-+				new_gen = atomic_read(&ipvs->svc_table_changes);
-+				/* New table installed ? */
-+				if (old_gen != new_gen) {
-+					old_gen = new_gen;
-+					goto repeat_svc;
-+				}
-+			}
-+			counts[min(count, (int)ARRAY_SIZE(counts) - 1)]++;
-+		}
-+	}
-+	for (sum = 0, i = 0; i < ARRAY_SIZE(counts); i++)
-+		sum += counts[i];
-+	sum1 = sum - counts[0];
-+	seq_printf(seq, "Service buckets empty:\t%u (%lu%%)\n",
-+		   counts[0], (unsigned long)counts[0] * 100 / max(sum, 1U));
-+	for (i = 1; i < ARRAY_SIZE(counts); i++) {
-+		if (!counts[i])
-+			continue;
-+		seq_printf(seq, "Service buckets len-%d:\t%u (%lu%%)\n",
-+			   i, counts[i],
-+			   (unsigned long)counts[i] * 100 / max(sum1, 1U));
-+	}
-+
-+after_svc:
-+	seq_printf(seq, "Stats thread slots:\t%d (max %lu)\n",
-+		   ipvs->est_kt_count, ipvs->est_max_threads);
-+	seq_printf(seq, "Stats chain max len:\t%d\n", ipvs->est_chain_max);
-+	seq_printf(seq, "Stats thread ests:\t%d\n",
-+		   ipvs->est_chain_max * IPVS_EST_CHAIN_FACTOR *
-+		   IPVS_EST_NTICKS);
-+
-+	rcu_read_unlock();
-+	return 0;
-+}
-+
- #endif
- 
- /*
-@@ -4836,6 +4974,9 @@ int __net_init ip_vs_control_net_init(struct netns_ipvs *ipvs)
- 				    ipvs->net->proc_net,
- 				    ip_vs_stats_percpu_show, NULL))
- 		goto err_percpu;
-+	if (!proc_create_net_single("ip_vs_status", 0, ipvs->net->proc_net,
-+				    ip_vs_status_show, NULL))
-+		goto err_status;
- #endif
- 
- 	ret = ip_vs_control_net_init_sysctl(ipvs);
-@@ -4846,6 +4987,9 @@ int __net_init ip_vs_control_net_init(struct netns_ipvs *ipvs)
- 
- err:
- #ifdef CONFIG_PROC_FS
-+	remove_proc_entry("ip_vs_status", ipvs->net->proc_net);
-+
-+err_status:
- 	remove_proc_entry("ip_vs_stats_percpu", ipvs->net->proc_net);
- 
- err_percpu:
-@@ -4871,6 +5015,7 @@ void __net_exit ip_vs_control_net_cleanup(struct netns_ipvs *ipvs)
- 	ip_vs_control_net_cleanup_sysctl(ipvs);
- 	cancel_delayed_work_sync(&ipvs->est_reload_work);
- #ifdef CONFIG_PROC_FS
-+	remove_proc_entry("ip_vs_status", ipvs->net->proc_net);
- 	remove_proc_entry("ip_vs_stats_percpu", ipvs->net->proc_net);
- 	remove_proc_entry("ip_vs_stats", ipvs->net->proc_net);
- 	remove_proc_entry("ip_vs", ipvs->net->proc_net);
+On Mon, 27 May 2024 19:04:18 +0200 you wrote:
+> The sysctl core is preparing to only expose instances of
+> struct ctl_table as "const".
+> This will also affect the ctl_table argument of sysctl handlers.
+> 
+> As the function prototype of all sysctl handlers throughout the tree
+> needs to stay consistent that change will be done in one commit.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/5] net/neighbour: constify ctl_table arguments of utility function
+    https://git.kernel.org/netdev/net-next/c/874aa96d78c7
+  - [net-next,2/5] net/ipv4/sysctl: constify ctl_table arguments of utility functions
+    https://git.kernel.org/netdev/net-next/c/551814313f11
+  - [net-next,3/5] net/ipv6/addrconf: constify ctl_table arguments of utility functions
+    https://git.kernel.org/netdev/net-next/c/c55eb03765f4
+  - [net-next,4/5] net/ipv6/ndisc: constify ctl_table arguments of utility function
+    https://git.kernel.org/netdev/net-next/c/7a20cd1e71d8
+  - [net-next,5/5] ipvs: constify ctl_table arguments of utility functions
+    https://git.kernel.org/netdev/net-next/c/0a9f788fdde4
+
+You are awesome, thank you!
 -- 
-2.44.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
 
