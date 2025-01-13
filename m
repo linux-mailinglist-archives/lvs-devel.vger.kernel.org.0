@@ -1,64 +1,64 @@
-Return-Path: <lvs-devel+bounces-294-lists+lvs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <lvs-devel+bounces-292-lists+lvs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 257E9A0C156
-	for <lists+lvs-devel@lfdr.de>; Mon, 13 Jan 2025 20:25:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CDA2A0C154
+	for <lists+lvs-devel@lfdr.de>; Mon, 13 Jan 2025 20:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E2751885F0B
-	for <lists+lvs-devel@lfdr.de>; Mon, 13 Jan 2025 19:25:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42834162098
+	for <lists+lvs-devel@lfdr.de>; Mon, 13 Jan 2025 19:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340A71C7B62;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB861C5D7E;
 	Mon, 13 Jan 2025 19:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="t8xYnDdf"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="OzU1+oCZ"
 X-Original-To: lvs-devel@vger.kernel.org
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320B41C5F26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321B01C7B62
 	for <lvs-devel@vger.kernel.org>; Mon, 13 Jan 2025 19:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736796303; cv=none; b=MmvJMzi3JNsChmCt7SUOeqYBsH6tbfx6DZ1WA2IqgoKPjg77PIR9fUUvDpNOMu3s09QqMNnJhkOBEDSoCrkt9s+mbDqkOsqQIHA/zqn0bGBabDtYoHYk0L9YWtZkYzSZL8NfTn8++qfEKPMargq1fqd+GaTMYVEEHb0GYkJGofk=
+	t=1736796303; cv=none; b=DDJBrxMjhTwPEJthMh5TCQef5hZMEOg8Yt/A5aIs6d8iIW07y0C7duYU4dahFGs23OiXKMAkLCaDQOFFmwCRBiAQnWGG8RFaaRz7c8UwKZsup2j+3IuTG6luzXOeAg6XpH6qD6MQUToFoH+uN3TnbQPZTE315VokDB+Ar1dodP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736796303; c=relaxed/simple;
-	bh=Mmzd/Qs/6PMLmyl6rAemU14Pbu8UQrnl5P2kH97dC/U=;
+	bh=+Beei2pa8xBI4e9sVBiRXvb2qXcFLE4qRlemXzOPDe0=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a1m7ZKjtueVgAwGFuDEmKNu8CeuCZkIJs03E/ymLFWj5Z1/hqdv8JcEskadNQwz+rlcxCdhhLIualEUdLBaobJ0Rq3eL8VbvSxwAGtPL8Gta5jjSwHXuUIQwOeJH6+fnnjYTgOyJ4cyRRl8q1bByj4WKQkcaDOTl2p5kqJ1mXu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=t8xYnDdf; arc=none smtp.client-ip=82.195.75.108
+	 MIME-Version; b=ciKf9EIS4g1qBy0HgNgdXPoSLpuwNDy+YSk8BkqJUDca1R2hknPAlWfi5HjVVYhWIU5LHXoE6l/p2ZVqcWJHjlZYLNNw0XTIqpHlq7b2WBZ3ZscsoBwjVJsD0jPLDPTqyaA0Oxhvqefo6iPI/ZE3sOV6OUE+Gob/anEKmcHhIX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=OzU1+oCZ; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
 	:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:Cc:
 	Content-Type:Content-ID:Content-Description;
-	bh=ewv8G3kcFGkD6EdxHcr5N72+DovT78ZIeujWS9V24p4=; b=t8xYnDdff4mZO6Dqfe2B1p1SC5
-	vrib//TDH2vskGRz2CrQYB8zB2o813fnmGOw4TJFl2VFO9dZi59C5R6eZhCGfiZGW2JDayMs5Bo9W
-	g8iOr8AWbAFbGJWQKBX65d7/JflQGdvZHJF/krHhFWBSm3SVB4LgFKxKdIos2MaSVMRX6XXD9eR9m
-	p+rtEzQZMdPrvhiyR28BRosY9AHm4Lyb376YERqpQwoFjmYxm3BpADvvo1VZJkaId7jDKITi2XDnA
-	9o5Mdc4UL2KHl4IZ6jZ3MpkCQ8FqhzLwGTS+9KN0OFzrPI160diFR6IMzlc40c9+pXVHQxwuPkHoK
-	QUJBZIbg==;
+	bh=PD/X8iew7OgXoYEZvHUdOKEcH/Xy5h8jGkOetENpahk=; b=OzU1+oCZCgyhzfM9FxDHbwwuAK
+	q87qoCYtlo0fQwHQOSXrKkS1H9Lff/6W/AsKzcg+R/RAZvWDxYMoiZjivI9mqMGbi61vGUXeTE+Sk
+	+gKmfWjdeQ35DFBLthmmJmpOXBJ09csTu/na3GREdAhUwtiIZjF6ldZAG9eCqhBfsaZcQLt5PXxNQ
+	I91lO6TY2apMNF9P21vExsXwmEEezAjuijpKjD1r96sojA0DB/NUFrJbPAh1LuMMSSq9LXF++FY/s
+	7INcGiamdF6xraVIVD45PUb8f2yAIcVELE1d81JihF6lnSVAkWyxDG9ocaeSy83KbFBkyNHoGrKn3
+	3s2oDenw==;
 Received: from authenticated user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.94.2)
 	(envelope-from <azazel@debian.org>)
-	id 1tXQ3X-000JbQ-6Y
+	id 1tXQ3X-000JbR-8L
 	for lvs-devel@vger.kernel.org; Mon, 13 Jan 2025 19:24:59 +0000
 Received: from ulthar.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae])
 	by taras.nevrast.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <azazel@debian.org>)
-	id 1tXQ3W-001Uuz-1T
+	id 1tXQ3W-001Uuz-1d
 	for lvs-devel@vger.kernel.org;
 	Mon, 13 Jan 2025 19:24:58 +0000
 From: Jeremy Sowden <azazel@debian.org>
 To: LVS Devel <lvs-devel@vger.kernel.org>
-Subject: [PATCH ipvsadm v2 4/5] Support environmental and command-line `*FLAGS` variable in Makefiles
-Date: Mon, 13 Jan 2025 19:24:49 +0000
-Message-ID: <20250113192450.3302635-5-azazel@debian.org>
+Subject: [PATCH ipvsadm v2 5/5] Make sure libipvs.a is built before ipvsadm
+Date: Mon, 13 Jan 2025 19:24:50 +0000
+Message-ID: <20250113192450.3302635-6-azazel@debian.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250113192450.3302635-1-azazel@debian.org>
 References: <20250113192450.3302635-1-azazel@debian.org>
@@ -74,88 +74,31 @@ X-SA-Exim-Mail-From: azazel@debian.org
 X-SA-Exim-Scanned: No (on taras.nevrast.org); SAEximRunCond expanded to false
 X-Debian-User: azazel
 
-The Makefiles don't use `CPPFLAGS` or `LDFLAGS`, and set `CFLAGS`
-unconditionally.  Rename `CFLAGS`, and add `CPPFLAGS` and `LDFLAGS` to the
-compilation and linking recipes in order to support the common patterns of
-providing these flags via the command-line and the environment.
+There is no explicit rule in the top-level Makefile to build libipvs.a.  It is
+built by the phony target `libs`.  However, there is no guarantee of the order
+in which the prerequisites of the `all` target are built, so make may attempt to
+link ipvsadm to libipvs.a before it has finished building libipvs.a.
+
+Add a rule to express the dependency of `$(STATIC_LIBS)` on `libs`.
 
 Signed-off-by: Jeremy Sowden <azazel@debian.org>
 ---
- Makefile         |  8 ++++----
- libipvs/Makefile | 12 ++++++------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index d247d4075160..d79f72496000 100644
+index d79f72496000..2dda19072365 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -47,9 +47,9 @@ INSTALL		= install
- STATIC_LIBS	= libipvs/libipvs.a
- 
- ifeq "${ARCH}" "sparc64"
--    CFLAGS = -Wall -Wunused -Wstrict-prototypes -g -m64 -pipe -mcpu=ultrasparc -mcmodel=medlow
-+    DEFAULT_CFLAGS = -Wall -Wunused -Wstrict-prototypes -g -m64 -pipe -mcpu=ultrasparc -mcmodel=medlow
- else
--    CFLAGS = -Wall -Wunused -Wstrict-prototypes -g
-+    DEFAULT_CFLAGS = -Wall -Wunused -Wstrict-prototypes -g
- endif
- 
- 
-@@ -88,7 +88,7 @@ libs:
- 		make -C libipvs
- 
+@@ -90,6 +90,8 @@ libs:
  ipvsadm:	$(OBJS) $(STATIC_LIBS)
--		$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
-+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+ 		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
  
++$(STATIC_LIBS): libs
++
  install:        all
  		if [ ! -d $(SBIN) ]; then $(MKDIR) -p $(SBIN); fi
-@@ -140,4 +140,4 @@ debs:
- 		dpkg-buildpackage
- 
- %.o:	%.c
--		$(CC) $(CFLAGS) $(INCLUDE) $(DEFINES) -c -o $@ $<
-+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDE) $(DEFINES) $(CPPFLAGS) -c -o $@ $<
-diff --git a/libipvs/Makefile b/libipvs/Makefile
-index b31c8eac514d..f29671178422 100644
---- a/libipvs/Makefile
-+++ b/libipvs/Makefile
-@@ -2,10 +2,10 @@
- 
- CC		= gcc
- PKG_CONFIG	?= pkg-config
--CFLAGS		= -Wall -Wunused -Wstrict-prototypes -g -fPIC
-+DEFAULT_CFLAGS	= -Wall -Wunused -Wstrict-prototypes -g -fPIC
- ifneq (0,$(HAVE_NL))
--CFLAGS		+= -DLIBIPVS_USE_NL
--CFLAGS		+= $(shell \
-+DEFINES		+= -DLIBIPVS_USE_NL
-+DEFAULT_CFLAGS	+= $(shell \
- 		if which $(PKG_CONFIG) > /dev/null 2>&1; then \
- 		  if   $(PKG_CONFIG) --cflags libnl-3.0  2> /dev/null; then :; \
- 		  elif $(PKG_CONFIG) --cflags libnl-2.0  2> /dev/null; then :; \
-@@ -16,7 +16,7 @@ endif
- 
- INCLUDE		+= $(shell if [ -f ../../ip_vs.h ]; then	\
- 		     echo "-I../../."; fi;)
--DEFINES		= $(shell if [ ! -f ../../ip_vs.h ]; then	\
-+DEFINES		+= $(shell if [ ! -f ../../ip_vs.h ]; then	\
- 		    echo "-DHAVE_NET_IP_VS_H"; fi;)
- DEFINES		+= $(shell if which $(PKG_CONFIG) > /dev/null 2>&1; then \
- 			 if   $(PKG_CONFIG) --exists libnl-3.0; then :; \
-@@ -34,10 +34,10 @@ $(STATIC_LIB):	libipvs.o ip_vs_nl_policy.o
- 		ar rv $@ $^
- 
- $(SHARED_LIB):	libipvs.o ip_vs_nl_policy.o
--		$(CC) -shared -Wl,-soname,$@ -o $@ $^
-+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) -shared -Wl,-soname,$@ $(LDFLAGS) -o $@ $^
- 
- %.o:		%.c
--		$(CC) $(CFLAGS) $(INCLUDE) $(DEFINES) -c -o $@ $<
-+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDE) $(DEFINES) $(CPPFLAGS) -c -o $@ $<
- 
- clean:
- 		rm -f *.[ao] *~ *.orig *.rej core *.so
+ 		$(INSTALL) -m 0755 ipvsadm $(SBIN)
 -- 
 2.45.2
 
