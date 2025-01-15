@@ -1,66 +1,70 @@
-Return-Path: <lvs-devel+bounces-292-lists+lvs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <lvs-devel+bounces-298-lists+lvs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CDA2A0C154
-	for <lists+lvs-devel@lfdr.de>; Mon, 13 Jan 2025 20:25:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E8FCA12A22
+	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jan 2025 18:50:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42834162098
-	for <lists+lvs-devel@lfdr.de>; Mon, 13 Jan 2025 19:25:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62BFE188B0F4
+	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jan 2025 17:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB861C5D7E;
-	Mon, 13 Jan 2025 19:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1EC14A630;
+	Wed, 15 Jan 2025 17:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="OzU1+oCZ"
+	dkim=pass (4096-bit key) header.d=ssi.bg header.i=@ssi.bg header.b="upMkW51G"
 X-Original-To: lvs-devel@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mx.ssi.bg (mx.ssi.bg [193.238.174.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321B01C7B62
-	for <lvs-devel@vger.kernel.org>; Mon, 13 Jan 2025 19:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F188150994
+	for <lvs-devel@vger.kernel.org>; Wed, 15 Jan 2025 17:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.238.174.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736796303; cv=none; b=DDJBrxMjhTwPEJthMh5TCQef5hZMEOg8Yt/A5aIs6d8iIW07y0C7duYU4dahFGs23OiXKMAkLCaDQOFFmwCRBiAQnWGG8RFaaRz7c8UwKZsup2j+3IuTG6luzXOeAg6XpH6qD6MQUToFoH+uN3TnbQPZTE315VokDB+Ar1dodP4=
+	t=1736963416; cv=none; b=ctStD22NEe9jR0dOidTxHDnQ0vrMc/yc4FAGsurhDw2iC67jh0WXjDBMTwpOMqLCpQiWwC8zROqzaXGGUyePNovwl735UBrQUJO6Yl7pJNqvJbY+bV6FSxSDQyS/m/dZ/sM8h+CGnp6UEF50VZ7zWw/7Bd9YMHl/kgIiYrFVFrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736796303; c=relaxed/simple;
-	bh=+Beei2pa8xBI4e9sVBiRXvb2qXcFLE4qRlemXzOPDe0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ciKf9EIS4g1qBy0HgNgdXPoSLpuwNDy+YSk8BkqJUDca1R2hknPAlWfi5HjVVYhWIU5LHXoE6l/p2ZVqcWJHjlZYLNNw0XTIqpHlq7b2WBZ3ZscsoBwjVJsD0jPLDPTqyaA0Oxhvqefo6iPI/ZE3sOV6OUE+Gob/anEKmcHhIX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=OzU1+oCZ; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
-	:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:Cc:
-	Content-Type:Content-ID:Content-Description;
-	bh=PD/X8iew7OgXoYEZvHUdOKEcH/Xy5h8jGkOetENpahk=; b=OzU1+oCZCgyhzfM9FxDHbwwuAK
-	q87qoCYtlo0fQwHQOSXrKkS1H9Lff/6W/AsKzcg+R/RAZvWDxYMoiZjivI9mqMGbi61vGUXeTE+Sk
-	+gKmfWjdeQ35DFBLthmmJmpOXBJ09csTu/na3GREdAhUwtiIZjF6ldZAG9eCqhBfsaZcQLt5PXxNQ
-	I91lO6TY2apMNF9P21vExsXwmEEezAjuijpKjD1r96sojA0DB/NUFrJbPAh1LuMMSSq9LXF++FY/s
-	7INcGiamdF6xraVIVD45PUb8f2yAIcVELE1d81JihF6lnSVAkWyxDG9ocaeSy83KbFBkyNHoGrKn3
-	3s2oDenw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <azazel@debian.org>)
-	id 1tXQ3X-000JbR-8L
-	for lvs-devel@vger.kernel.org; Mon, 13 Jan 2025 19:24:59 +0000
-Received: from ulthar.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae])
-	by taras.nevrast.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <azazel@debian.org>)
-	id 1tXQ3W-001Uuz-1d
-	for lvs-devel@vger.kernel.org;
-	Mon, 13 Jan 2025 19:24:58 +0000
-From: Jeremy Sowden <azazel@debian.org>
-To: LVS Devel <lvs-devel@vger.kernel.org>
-Subject: [PATCH ipvsadm v2 5/5] Make sure libipvs.a is built before ipvsadm
-Date: Mon, 13 Jan 2025 19:24:50 +0000
-Message-ID: <20250113192450.3302635-6-azazel@debian.org>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1736963416; c=relaxed/simple;
+	bh=/etH3aBu057l8BEmBFmPbXog47UYoXGL9r8RHjn/Ed8=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=ns2KsWUfrSWdEtxYPR53+kJ1zMTbgbn9OqOruetnVKQNi6ijvIWy6VTrUl9yl3nZqIIPOTXXp4hbl8oj0Debota9TTiyfUFGuke/LGR3FjZEeCXf1F2nfCGuxwxuoJ1zsSsvSb6Ee6wMXGBTrrwNfqrGn0waccu5qDubQgj+vaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg; spf=pass smtp.mailfrom=ssi.bg; dkim=pass (4096-bit key) header.d=ssi.bg header.i=@ssi.bg header.b=upMkW51G; arc=none smtp.client-ip=193.238.174.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ssi.bg
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ssi.bg
+Received: from mx.ssi.bg (localhost [127.0.0.1])
+	by mx.ssi.bg (Potsfix) with ESMTP id BAAF2210A9;
+	Wed, 15 Jan 2025 19:50:03 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ssi.bg; h=cc:cc
+	:content-type:content-type:date:from:from:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=ssi;
+	 bh=iRfM7mAGpmZCFcZCyr7ojF926HWj4Xu/0HZ+kj1xRWo=; b=upMkW51G+JLd
+	Jkswv9rzQbOIkPRAdpL0t3ZHAhp+lDVNbPqg+wrfp8ey3H6hb+HlTi5Rh+h++rJk
+	o15UMfbDiJhIpee/pQVZj2mUM2sNeHIfOiMk0bQXueLakx8rgiryqZmEljwNIiAL
+	oWU3izTc2ScgdLNkPMISEMc65zT/P0NrfeUoAe37pIT8QeSCTs1hN0F1lCKYDtyM
+	q/I0YzHhxwHd1bQHbNZ25OoFzWgAy0SYk7Kmd0jM6bYU5/08ZbKQU2A5feG24Ril
+	1tnRseOvBZI7LU2Q+yZYfxDEj2bqvtTXHUuTLK2Sy/lZOuTZ+fVGz63ptwvcHl8L
+	ETdgKWCn4A8hsOHdYeChb91h2Kq7FpE5rvVQPta6nUw0CAE3zwJ+KIm2JiTWEbdZ
+	gTYEp9JGHondtUAcZJpRJCqukpdzUCvVtWr4B+TXg9H4Pl7tvQndm4p+JL5d0zyR
+	5yRx1+aRNHlcf6WA/00SCMY+qAkBzw2XvDljemOyTJqNLaIE1EH7T5HZLqKPoLEN
+	znJ8d+IZisnzOG5dVSW3+m4epeQCecwVUOz6+TTTWPCrqgk4jHmRnuhMLL5o5JrZ
+	L7uLx1SJ4v0SdaJ8OhUaYbEVGCPGR6TARBYdkspdpsMh/LjCScD2ceGAi/x1qhJ9
+	AhoG7/UAl55PyznrPPWmuZovx63to0w=
+Received: from ink.ssi.bg (ink.ssi.bg [193.238.174.40])
+	by mx.ssi.bg (Potsfix) with ESMTPS;
+	Wed, 15 Jan 2025 19:50:02 +0200 (EET)
+Received: from ja.ssi.bg (unknown [213.16.62.126])
+	by ink.ssi.bg (Postfix) with ESMTPSA id D0CE415EB8;
+	Wed, 15 Jan 2025 19:50:02 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by ja.ssi.bg (8.18.1/8.17.1) with ESMTP id 50FHo00U066420;
+	Wed, 15 Jan 2025 19:50:02 +0200
+Date: Wed, 15 Jan 2025 19:50:00 +0200 (EET)
+From: Julian Anastasov <ja@ssi.bg>
+To: Jeremy Sowden <azazel@debian.org>
+cc: LVS Devel <lvs-devel@vger.kernel.org>
+Subject: Re: [PATCH ipvsadm v2 0/5] Debian package fixes
 In-Reply-To: <20250113192450.3302635-1-azazel@debian.org>
+Message-ID: <97803840-06f3-8f28-98c8-f6b47dd83e6c@ssi.bg>
 References: <20250113192450.3302635-1-azazel@debian.org>
 Precedence: bulk
 X-Mailing-List: lvs-devel@vger.kernel.org
@@ -68,38 +72,54 @@ List-Id: <lvs-devel.vger.kernel.org>
 List-Subscribe: <mailto:lvs-devel+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:lvs-devel+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae
-X-SA-Exim-Mail-From: azazel@debian.org
-X-SA-Exim-Scanned: No (on taras.nevrast.org); SAEximRunCond expanded to false
-X-Debian-User: azazel
+Content-Type: text/plain; charset=US-ASCII
 
-There is no explicit rule in the top-level Makefile to build libipvs.a.  It is
-built by the phony target `libs`.  However, there is no guarantee of the order
-in which the prerequisites of the `all` target are built, so make may attempt to
-link ipvsadm to libipvs.a before it has finished building libipvs.a.
 
-Add a rule to express the dependency of `$(STATIC_LIBS)` on `libs`.
+	Hello,
 
-Signed-off-by: Jeremy Sowden <azazel@debian.org>
----
- Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+On Mon, 13 Jan 2025, Jeremy Sowden wrote:
 
-diff --git a/Makefile b/Makefile
-index d79f72496000..2dda19072365 100644
---- a/Makefile
-+++ b/Makefile
-@@ -90,6 +90,8 @@ libs:
- ipvsadm:	$(OBJS) $(STATIC_LIBS)
- 		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
- 
-+$(STATIC_LIBS): libs
-+
- install:        all
- 		if [ ! -d $(SBIN) ]; then $(MKDIR) -p $(SBIN); fi
- 		$(INSTALL) -m 0755 ipvsadm $(SBIN)
--- 
-2.45.2
+> The Debian package of ipvsadm carries a few patches.  Some of them have been
+> around for years.  None of them is specific to Debian, so I'm forwarding them
+> upstream.
+> 
+> Patch 1 bumps the maximum weight accepted by ipvsadm.
+> Patch 2 fixes an unclear usage error message.
+> Patches 3-5 make some improvements to the Makefiles.
+
+	Applying the kernel rules here, the commit description
+in patch 1, 2 and 5 should not exceed the maximum of 75 chars
+per line:
+
+scripts/checkpatch.pl --strict /tmp/file.patch
+
+	Can you wrap the texts in a new v3?
+
+> Changes since v1:
+> 
+> * The previous version of patch 2 changed the logic of the option parsing in
+>   such a way that using `-M` after `-6` no longer worked correctly.  This version 
+>   just rewords the error message.
+> 
+> Jeremy Sowden (5):
+>   ipvsadm: increase maximum weight value
+>   ipvsadm: fix ambiguous usage error message
+>   Use variable for pkg-config in Makefiles
+>   Support environmental and command-line `*FLAGS` variable in Makefiles
+>   Make sure libipvs.a is built before ipvsadm
+> 
+>  Makefile         | 19 +++++++++++--------
+>  ipvsadm.8        |  2 +-
+>  ipvsadm.c        |  4 ++--
+>  libipvs/Makefile | 29 +++++++++++++++--------------
+>  4 files changed, 29 insertions(+), 25 deletions(-)
+> 
+> -- 
+> 2.45.2
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
 
 
