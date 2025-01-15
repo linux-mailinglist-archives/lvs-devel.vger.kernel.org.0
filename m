@@ -1,64 +1,64 @@
-Return-Path: <lvs-devel+bounces-299-lists+lvs-devel=lfdr.de@vger.kernel.org>
+Return-Path: <lvs-devel+bounces-302-lists+lvs-devel=lfdr.de@vger.kernel.org>
 X-Original-To: lists+lvs-devel@lfdr.de
 Delivered-To: lists+lvs-devel@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9C0BA12B03
-	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jan 2025 19:34:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4A21A12AFF
+	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jan 2025 19:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C37EE3A7088
-	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jan 2025 18:34:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F07E188B2AB
+	for <lists+lvs-devel@lfdr.de>; Wed, 15 Jan 2025 18:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835691922F9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B1E1D6DA3;
 	Wed, 15 Jan 2025 18:33:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="D8/3vzY/"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="KekFRvBq"
 X-Original-To: lvs-devel@vger.kernel.org
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F83D1D63FB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFB61D63F9
 	for <lvs-devel@vger.kernel.org>; Wed, 15 Jan 2025 18:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736966029; cv=none; b=lSi2dLi/z3bKE/CKN+WC0mDv5sX0wSM2UgYeLVTIt1wUlYIlqrZW3y++Y6YGuMr29gsVxNaOaoPP830ohS0zPdzvcGIWSqHcQmUJ/yYGYNvaHgr9SW+cbf9EzZr8xjGoRt1KAryIcpoIK0/LpM9P+x9WM9cWx/bKE5E2Qrj7geU=
+	t=1736966029; cv=none; b=nO0O8ewmDATti7A49Y4/xfDMhmJ7Z9hUARecmMrjA953ChrW80DxA30OlE3Stb92lY0G4XSI3UuaOZxnn1FT+xJTrlXw2/qBfoTjt4RdDDK6FLpnbVKPGF+j4YsrzRvSXZhLXIz8bUWH0jYvXkZWaVsxJaLXnZ3RWX8sVJsLv/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736966029; c=relaxed/simple;
-	bh=JePOmTSNwdiHR6DIDCk+mp0Wyuh6PQNnaokvR7u1JbE=;
+	bh=MBNBD9utT1iUzOW88KQUi/YdduqG2srWbICTuogTIs0=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qtx3Dz7Pl6pTBISv7R9x+q0JQwB+wiJjeQ1pCBOzUAQYOgBfwo6OhKvnc2k999VStarD3LSvlF/Tl2MB8xO9lGGgHLh452KpgVl9oT0tGdsw9CEemh7ZSOBPDr2KOyCdHEx/SJisQLK08s2yitEgEp9UghAtJ9MUbmTUuoy6KfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=D8/3vzY/; arc=none smtp.client-ip=82.195.75.108
+	 MIME-Version; b=aOPNi8dvaYD6T4kFx6ALortw75mQA8PkJP7nfdJV7UnSH8Vo3q4zA6sMhysYsbP5H4Ic7TLET1EIFy9MPdgPmPMHRVvEFyyDvwNN2U3fuJxKXUR/t9+OPXfRO+ttM4HGtnEjVW+/DTcwrosa3kuPbi+Ogqp2/Ow0WLoOMGggNvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=KekFRvBq; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
 	:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:Cc:
 	Content-Type:Content-ID:Content-Description;
-	bh=ZcTy95mNCO9xs5f4o/qfxHKK2Xc8pPoKlt0fwOD9Rnc=; b=D8/3vzY/jlSOME0lt0Nmt1Csf2
-	BKAIsvBzZ6Zj0/9BgZWGsNPeT09HXkSkMfQH41Jr61Oki2HeJeqY3EzKfg0cFr6n53AVlr2hjTGJi
-	70rcNLY29e9oLPNy9BIi0he9PWGmdjlViViRDuEZ9+hRblO0GB+2t4g2YebJNY9gapPjiH7GZ/Mda
-	rshUGeySPuuZma5oO5v5Kq/G3Y1V6B/PU96iqc7pNxHnIuTE5AwpnFgT9F/6OwoZd4dKs0ZUlZUkf
-	OOgRwBNXrRH6X+cw8fb8I9YREF5HkYhROA4BqU/Lo1rSxPRqXSS73OS4NyfMnSpErF/X4OUjdddat
-	eVVjPujA==;
+	bh=piaBvGt8fEC0FXKaF8yH4epboCiQ2Yfqvdqol7NaZls=; b=KekFRvBqPodwSg8MHdO7nrSA5R
+	EnDXgT9tGkPdc2/dgu6SSpZNgsJ2pNPJ6OSaI/8lCDY2yOMPnVHbYHyZ1zq+UfGFds2w8Kvj1amug
+	NJb9TD0fEzb+/nsTyLZyIezacNYmdlYEvhs8Z6bJCnYpkektfwPh0XMilp5Gtq1k17WyQzLv3nEKu
+	RhPwuNoxnsNWKpeuLtVzM4csy2pNH4BXy9hN5FVJC1IEGfNxxl41vxSt1hxhiL4xgNO2BzjTJ2U8K
+	Xt+okkzi7p5PEKvhqJb3VGcBSzafYY310gpjDx2XcCA3Sw8ujZ9hln4tIZuKJxuf+qTuFoCJvz+iP
+	g9k4M1Qg==;
 Received: from authenticated user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.94.2)
 	(envelope-from <azazel@debian.org>)
-	id 1tY8Cx-001zdI-Rb
-	for lvs-devel@vger.kernel.org; Wed, 15 Jan 2025 18:33:40 +0000
+	id 1tY8Cx-001zdJ-R6
+	for lvs-devel@vger.kernel.org; Wed, 15 Jan 2025 18:33:39 +0000
 Received: from ulthar.dreamlands.azazel.net ([2001:8b0:fb7d:d6d7:2e4d:54ff:fe4b:a9ae])
 	by taras.nevrast.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <azazel@debian.org>)
-	id 1tY8Cn-000D3I-0o
+	id 1tY8Cn-000D3I-0x
 	for lvs-devel@vger.kernel.org;
 	Wed, 15 Jan 2025 18:33:29 +0000
 From: Jeremy Sowden <azazel@debian.org>
 To: LVS Devel <lvs-devel@vger.kernel.org>
-Subject: [PATCH ipvsadm v3 2/5] ipvsadm: fix ambiguous usage error message
-Date: Wed, 15 Jan 2025 18:33:08 +0000
-Message-ID: <20250115183311.3386192-3-azazel@debian.org>
+Subject: [PATCH ipvsadm v3 3/5] Use variable for pkg-config in Makefiles
+Date: Wed, 15 Jan 2025 18:33:09 +0000
+Message-ID: <20250115183311.3386192-4-azazel@debian.org>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250115183311.3386192-1-azazel@debian.org>
 References: <20250115183311.3386192-1-azazel@debian.org>
@@ -74,29 +74,82 @@ X-SA-Exim-Mail-From: azazel@debian.org
 X-SA-Exim-Scanned: No (on taras.nevrast.org); SAEximRunCond expanded to false
 X-Debian-User: azazel
 
-If `-6` is used without `-f`, the usage error message is "-6 used before
--f", which can be misconstrued as warning that both options were used but
-in the wrong order.  Reword it.
+Replace hard-coded `pkg-config` with a variable to allow it to be
+overridden, which is helpful for cross-building.
 
-Link: http://bugs.debian.org/610596
+Link: https://bugs.debian.org/901275
 Signed-off-by: Jeremy Sowden <azazel@debian.org>
 ---
- ipvsadm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile         |  9 +++++----
+ libipvs/Makefile | 17 +++++++++--------
+ 2 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/ipvsadm.c b/ipvsadm.c
-index 42f31a20e596..10bf84c85fbe 100644
---- a/ipvsadm.c
-+++ b/ipvsadm.c
-@@ -833,7 +833,7 @@ parse_options(int argc, char **argv, struct ipvs_command_entry *ce,
- 				ce->svc.af = AF_INET6;
- 				ce->svc.netmask = 128;
- 			} else {
--				fail(2, "-6 used before -f\n");
-+				fail(2, "-6 must follow -f\n");
- 			}
- 			break;
- 		case 'o':
+diff --git a/Makefile b/Makefile
+index 91a2991f6746..d247d4075160 100644
+--- a/Makefile
++++ b/Makefile
+@@ -36,6 +36,7 @@ RPMSOURCEDIR	= $(shell rpm --eval '%_sourcedir')
+ RPMSPECDIR	= $(shell rpm --eval '%_specdir')
+ 
+ CC		= gcc
++PKG_CONFIG	?= pkg-config
+ INCLUDE		=
+ SBIN		= $(BUILD_ROOT)/sbin
+ MANDIR		= usr/man
+@@ -66,10 +67,10 @@ OBJS		= ipvsadm.o config_stream.o dynamic_array.o
+ LIBS		= -lpopt
+ ifneq (0,$(HAVE_NL))
+ LIBS		+= $(shell \
+-		if which pkg-config > /dev/null 2>&1; then \
+-		  if   pkg-config --libs libnl-genl-3.0  2> /dev/null; then :;\
+-		  elif pkg-config --libs libnl-2.0       2> /dev/null; then :;\
+-		  elif pkg-config --libs libnl-1         2> /dev/null; then :;\
++		if which $(PKG_CONFIG) > /dev/null 2>&1; then \
++		  if   $(PKG_CONFIG) --libs libnl-genl-3.0  2> /dev/null; then :;\
++		  elif $(PKG_CONFIG) --libs libnl-2.0       2> /dev/null; then :;\
++		  elif $(PKG_CONFIG) --libs libnl-1         2> /dev/null; then :;\
+ 		  fi; \
+ 		else echo "-lnl"; fi)
+ endif
+diff --git a/libipvs/Makefile b/libipvs/Makefile
+index f845c8b1675b..b31c8eac514d 100644
+--- a/libipvs/Makefile
++++ b/libipvs/Makefile
+@@ -1,14 +1,15 @@
+ # Makefile for libipvs
+ 
+ CC		= gcc
++PKG_CONFIG	?= pkg-config
+ CFLAGS		= -Wall -Wunused -Wstrict-prototypes -g -fPIC
+ ifneq (0,$(HAVE_NL))
+ CFLAGS		+= -DLIBIPVS_USE_NL
+ CFLAGS		+= $(shell \
+-		if which pkg-config > /dev/null 2>&1; then \
+-		  if   pkg-config --cflags libnl-3.0  2> /dev/null; then :; \
+-		  elif pkg-config --cflags libnl-2.0  2> /dev/null; then :; \
+-		  elif pkg-config --cflags libnl-1    2> /dev/null; then :; \
++		if which $(PKG_CONFIG) > /dev/null 2>&1; then \
++		  if   $(PKG_CONFIG) --cflags libnl-3.0  2> /dev/null; then :; \
++		  elif $(PKG_CONFIG) --cflags libnl-2.0  2> /dev/null; then :; \
++		  elif $(PKG_CONFIG) --cflags libnl-1    2> /dev/null; then :; \
+ 		  fi; \
+ 		fi)
+ endif
+@@ -17,10 +18,10 @@ INCLUDE		+= $(shell if [ -f ../../ip_vs.h ]; then	\
+ 		     echo "-I../../."; fi;)
+ DEFINES		= $(shell if [ ! -f ../../ip_vs.h ]; then	\
+ 		    echo "-DHAVE_NET_IP_VS_H"; fi;)
+-DEFINES		+= $(shell if which pkg-config > /dev/null 2>&1; then \
+-			 if   pkg-config --exists libnl-3.0; then :; \
+-			 elif pkg-config --exists libnl-2.0; then :; \
+-			 elif pkg-config --exists libnl-1; \
++DEFINES		+= $(shell if which $(PKG_CONFIG) > /dev/null 2>&1; then \
++			 if   $(PKG_CONFIG) --exists libnl-3.0; then :; \
++			 elif $(PKG_CONFIG) --exists libnl-2.0; then :; \
++			 elif $(PKG_CONFIG) --exists libnl-1; \
+ 			 then echo "-DFALLBACK_LIBNL1"; fi; fi)
+ 
+ .PHONY		= all clean install dist distclean rpm rpms
 -- 
 2.45.2
 
